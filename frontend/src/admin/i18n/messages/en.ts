@@ -200,6 +200,20 @@ export const en = {
     'actionLogs.executedAt':   'Executed at',
     'actionLogs.error':        'Error',
 
+    // ── Dashboard ────────────────────────────────────────────────────────────
+    'nav.dashboard':                  'Dashboard',
+    'dashboard.pageTitle':            'Dashboard',
+    'dashboard.loadError':            'Failed to load dashboard.',
+    'dashboard.sessions7d':           'Sessions (7d)',
+    'dashboard.converted7d':          'Converted (7d)',
+    'dashboard.conversionRate':       'Conversion Rate',
+    'dashboard.activeSessions':       'Active Sessions',
+    'dashboard.publishedScenarios':   'Published Scenarios',
+    'dashboard.actionFailures24h':    'Action Failures (24h)',
+    'dashboard.dailySessions':        'Daily Sessions (7d)',
+    'dashboard.noData':               'No data yet.',
+    'dashboard.failuresAlert':        '{{count}} action failure(s) in the last 24 hours.',
+
     // ── Sessions ─────────────────────────────────────────────────────────────
     'nav.sessions':              'Sessions',
     'sessions.pageTitle':        'Sessions',

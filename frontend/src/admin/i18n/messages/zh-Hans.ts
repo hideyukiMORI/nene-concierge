@@ -135,6 +135,19 @@ export const zhHans: Partial<MessageCatalog> = {
     // ── Theme ─────────────────────────────────────────────────────────────────
     'theme.toggleLight': '切换到浅色模式',
     'theme.toggleDark':  '切换到深色模式',
+    // ── Dashboard ────────────────────────────────────────────────────────────
+    'nav.dashboard':                  '仪表板',
+    'dashboard.pageTitle':            '仪表板',
+    'dashboard.loadError':            '仪表板加载失败。',
+    'dashboard.sessions7d':           '会话数（7天）',
+    'dashboard.converted7d':          '转化数（7天）',
+    'dashboard.conversionRate':       '转化率',
+    'dashboard.activeSessions':       '活跃会话',
+    'dashboard.publishedScenarios':   '已发布场景',
+    'dashboard.actionFailures24h':    '操作失败（24小时）',
+    'dashboard.dailySessions':        '日会话数（7天）',
+    'dashboard.noData':               '暂无数据。',
+    'dashboard.failuresAlert':        '过去24小时内有 {{count}} 次操作失败。',
     // ── Sessions ─────────────────────────────────────────────────────────────
     'nav.sessions':              '会话',
     'sessions.pageTitle':        '会话',

@@ -197,6 +197,19 @@ export const ja: Partial<MessageCatalog> = {
     // ── Theme ─────────────────────────────────────────────────────────────────
     'theme.toggleLight': 'ライトモードに切り替え',
     'theme.toggleDark':  'ダークモードに切り替え',
+    // ── Dashboard ────────────────────────────────────────────────────────────
+    'nav.dashboard':                  'ダッシュボード',
+    'dashboard.pageTitle':            'ダッシュボード',
+    'dashboard.loadError':            'ダッシュボードの読み込みに失敗しました。',
+    'dashboard.sessions7d':           'セッション数（7日）',
+    'dashboard.converted7d':          'コンバージョン数（7日）',
+    'dashboard.conversionRate':       'CV 率',
+    'dashboard.activeSessions':       'アクティブセッション',
+    'dashboard.publishedScenarios':   '公開中シナリオ',
+    'dashboard.actionFailures24h':    'アクション失敗（24時間）',
+    'dashboard.dailySessions':        '日別セッション数（7日）',
+    'dashboard.noData':               'データがまだありません。',
+    'dashboard.failuresAlert':        '直近24時間に {{count}} 件のアクション失敗があります。',
     // ── Sessions ─────────────────────────────────────────────────────────────
     'nav.sessions':              'セッション',
     'sessions.pageTitle':        'セッション',

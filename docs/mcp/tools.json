@@ -3,6 +3,24 @@
   "source": "docs/openapi/openapi.yaml",
   "tools": [
     {
+      "name": "getDashboard",
+      "title": "Get Dashboard Statistics",
+      "description": "Returns aggregated KPI statistics: 7-day sessions, conversion rate, active sessions, published scenarios, 24-hour action failures, and a daily sparkline. Use this as a quick health check for the organization.",
+      "safety": "read",
+      "source": {
+        "type": "openapi",
+        "operationId": "getDashboard",
+        "method": "GET",
+        "path": "/api/v1/dashboard"
+      },
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "responseSchemaRef": "#/components/schemas/DashboardResponse"
+    },
+    {
       "name": "getHealth",
       "title": "Health Check",
       "description": "Returns the operational status of the NeNe Concierge API. Use this as a first call to verify the server is reachable.",

@@ -135,6 +135,19 @@ export const ptBR: Partial<MessageCatalog> = {
     // ── Theme ─────────────────────────────────────────────────────────────────
     'theme.toggleLight': 'Mudar para modo claro',
     'theme.toggleDark':  'Mudar para modo escuro',
+    // ── Dashboard ────────────────────────────────────────────────────────────
+    'nav.dashboard':                  'Painel',
+    'dashboard.pageTitle':            'Painel',
+    'dashboard.loadError':            'Falha ao carregar o painel.',
+    'dashboard.sessions7d':           'Sessões (7d)',
+    'dashboard.converted7d':          'Convertidas (7d)',
+    'dashboard.conversionRate':       'Taxa de conversão',
+    'dashboard.activeSessions':       'Sessões ativas',
+    'dashboard.publishedScenarios':   'Cenários publicados',
+    'dashboard.actionFailures24h':    'Falhas de ação (24h)',
+    'dashboard.dailySessions':        'Sessões diárias (7d)',
+    'dashboard.noData':               'Ainda sem dados.',
+    'dashboard.failuresAlert':        '{{count}} falha(s) de ação nas últimas 24 horas.',
     // ── Sessions ─────────────────────────────────────────────────────────────
     'nav.sessions':              'Sessões',
     'sessions.pageTitle':        'Sessões',
