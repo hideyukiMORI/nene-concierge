@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import { login, ApiError } from '../api.js';
 import { setToken } from '../auth.js';
 import { Btn, ErrorMsg, Field } from './Layout.js';
+import { T } from '../theme.js';
 
 export default function LoginPage() {
     const nav = useNavigate();
@@ -30,17 +31,18 @@ export default function LoginPage() {
         <div style={{
             minHeight: '100vh', display: 'flex',
             alignItems: 'center', justifyContent: 'center',
-            background: '#f1f5f9',
+            background: T.bg,
         }}>
             <div style={{
-                background: '#fff', borderRadius: 12, padding: '40px 36px',
-                width: 380, boxShadow: '0 4px 24px rgba(0,0,0,0.08)',
-                border: '1px solid #e2e8f0',
+                background: T.surface, borderRadius: T.radiusLg,
+                padding: '40px 36px', width: 380,
+                boxShadow: '0 4px 24px rgba(0,0,0,0.08)',
+                border: `1px solid ${T.border}`,
             }}>
-                <h1 style={{ fontSize: 22, fontWeight: 700, marginBottom: 8 }}>
+                <h1 style={{ fontSize: T.font2xl, fontWeight: 700, marginBottom: 8 }}>
                     NeNe Concierge
                 </h1>
-                <p style={{ color: '#64748b', marginBottom: 28, fontSize: 14 }}>
+                <p style={{ color: T.textMuted, marginBottom: 28, fontSize: T.fontMd }}>
                     管理画面にログイン
                 </p>
                 <ErrorMsg msg={error} />

@@ -7,6 +7,7 @@ import {
     type ScenarioNode, type ScenarioEdge, type CredentialSummary,
 } from '../api.js';
 import { PageTitle, Btn, Badge, ErrorMsg } from './Layout.js';
+import { T } from '../theme.js';
 import ScenarioCanvas from './editor/ScenarioCanvas.js';
 
 // React Flow の CSS を読み込む（esbuild がバンドル時に app.css へ出力する）
@@ -34,10 +35,10 @@ export default function ScenarioFormPage() {
     const [credentials, setCredentials] = useState<CredentialSummary[]>([]);
 
     // ── UI 状態 ─────────────────────────────────────────────────────────────
-    const [loading, setLoading]         = useState(!isNew);
-    const [saving, setSaving]           = useState(false);
-    const [error, setError]             = useState<string | null>(null);
-    const [savedMsg, setSavedMsg]       = useState('');
+    const [loading, setLoading]   = useState(!isNew);
+    const [saving, setSaving]     = useState(false);
+    const [error, setError]       = useState<string | null>(null);
+    const [savedMsg, setSavedMsg] = useState('');
 
     // ── ロード ──────────────────────────────────────────────────────────────
     useEffect(() => {
@@ -112,7 +113,7 @@ export default function ScenarioFormPage() {
         setTimeout(() => setSavedMsg(''), 2500);
     }
 
-    if (loading) return <p style={{ color: '#6b7280', marginTop: 40 }}>読み込み中…</p>;
+    if (loading) return <p style={{ color: T.textMuted, marginTop: 40 }}>読み込み中…</p>;
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 64px)', gap: 0 }}>
@@ -120,16 +121,16 @@ export default function ScenarioFormPage() {
             {/* ── ヘッダーバー ── */}
             <div style={{
                 display: 'flex', alignItems: 'center', gap: 12,
-                padding: '10px 16px', borderBottom: '1px solid #e5e7eb',
-                background: '#fff', flexShrink: 0,
+                padding: '10px 16px', borderBottom: `1px solid ${T.border}`,
+                background: T.surface, flexShrink: 0,
             }}>
-                <PageTitle style={{ margin: 0, fontSize: 18 }}>
+                <PageTitle style={{ margin: 0, fontSize: T.fontXl }}>
                     {isNew ? '新規シナリオ' : name}
                 </PageTitle>
                 {!isNew && <Badge status={status} />}
                 <div style={{ flex: 1 }} />
                 {savedMsg && (
-                    <span style={{ fontSize: 13, color: '#16a34a', fontWeight: 600 }}>
+                    <span style={{ fontSize: T.fontBase, color: T.successText, fontWeight: 600 }}>
                         ✓ {savedMsg}
                     </span>
                 )}
@@ -141,7 +142,7 @@ export default function ScenarioFormPage() {
 
             {/* ── エラー表示 ── */}
             {error && (
-                <div style={{ padding: '8px 16px', background: '#fef2f2', flexShrink: 0 }}>
+                <div style={{ padding: '8px 16px', background: T.dangerBg, flexShrink: 0 }}>
                     <ErrorMsg msg={error} />
                 </div>
             )}
@@ -151,40 +152,52 @@ export default function ScenarioFormPage() {
                 onSubmit={e => { void handleMetaSave(e); }}
                 style={{
                     display: 'flex', gap: 10, alignItems: 'flex-end',
-                    padding: '10px 16px', background: '#f9fafb',
-                    borderBottom: '1px solid #e5e7eb', flexShrink: 0,
+                    padding: '10px 16px', background: T.bg,
+                    borderBottom: `1px solid ${T.border}`, flexShrink: 0,
                     flexWrap: 'wrap',
                 }}
             >
                 <div style={{ flex: '1 1 200px' }}>
-                    <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: '#6b7280', marginBottom: 3 }}>
+                    <label style={{ display: 'block', fontSize: T.fontXs, fontWeight: 600, color: T.textMuted, marginBottom: 3 }}>
                         シナリオ名 *
                     </label>
                     <input
                         value={name} onChange={e => setName(e.target.value)}
                         required placeholder="例: 問い合わせ対応フロー"
-                        style={{ width: '100%', padding: '7px 10px', borderRadius: 6, border: '1.5px solid #d1d5db', fontSize: 13, boxSizing: 'border-box' }}
+                        style={{
+                            width: '100%', padding: '7px 10px',
+                            borderRadius: T.radiusSm, border: `1.5px solid ${T.borderInput}`,
+                            fontSize: T.fontBase, boxSizing: 'border-box',
+                        }}
                     />
                 </div>
                 <div style={{ flex: '2 1 300px' }}>
-                    <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: '#6b7280', marginBottom: 3 }}>
+                    <label style={{ display: 'block', fontSize: T.fontXs, fontWeight: 600, color: T.textMuted, marginBottom: 3 }}>
                         説明（任意）
                     </label>
                     <input
                         value={description} onChange={e => setDescription(e.target.value)}
                         placeholder="このシナリオの概要…"
-                        style={{ width: '100%', padding: '7px 10px', borderRadius: 6, border: '1.5px solid #d1d5db', fontSize: 13, boxSizing: 'border-box' }}
+                        style={{
+                            width: '100%', padding: '7px 10px',
+                            borderRadius: T.radiusSm, border: `1.5px solid ${T.borderInput}`,
+                            fontSize: T.fontBase, boxSizing: 'border-box',
+                        }}
                     />
                 </div>
                 {!isNew && (
                     <div style={{ flex: '0 0 120px' }}>
-                        <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: '#6b7280', marginBottom: 3 }}>
+                        <label style={{ display: 'block', fontSize: T.fontXs, fontWeight: 600, color: T.textMuted, marginBottom: 3 }}>
                             ステータス
                         </label>
                         <select
                             value={status}
                             onChange={e => setStatus(e.target.value as typeof status)}
-                            style={{ width: '100%', padding: '7px 10px', borderRadius: 6, border: '1.5px solid #d1d5db', fontSize: 13, background: '#fff', boxSizing: 'border-box' }}
+                            style={{
+                                width: '100%', padding: '7px 10px',
+                                borderRadius: T.radiusSm, border: `1.5px solid ${T.borderInput}`,
+                                fontSize: T.fontBase, background: T.surface, boxSizing: 'border-box',
+                            }}
                         >
                             {STATUS_OPTIONS.map(o => (
                                 <option key={o.value} value={o.value}>{o.label}</option>
@@ -213,7 +226,7 @@ export default function ScenarioFormPage() {
             {isNew && (
                 <div style={{
                     flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    color: '#9ca3af', fontSize: 14,
+                    color: T.textMuted, fontSize: T.fontMd,
                 }}>
                     シナリオを作成するとキャンバスエディタが開きます
                 </div>
