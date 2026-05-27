@@ -1,6 +1,6 @@
 # Current Work
 
-Last updated: 2026-05-27
+Last updated: 2026-05-28
 
 ## 状態サマリー
 
@@ -157,6 +157,16 @@ Last updated: 2026-05-27
 | NodeConfigPanel: 右パネルでノードタイプ別設定編集 | ✅ | #26 |
 | ScenarioFormPage: メタ情報バー + キャンバス統合レイアウト | ✅ | #26 |
 | app.css バンドル (React Flow スタイル 17.2 KB) | ✅ | #26 |
+
+---
+
+**CSS変数テーマトークン — 完了 ✅**
+
+| 項目 | 状態 | Issue |
+| --- | --- | --- |
+| public_html/admin/index.html: :root ブロックに --nca-* 変数定義 | ✅ | #28 |
+| frontend/src/admin/theme.ts: T.* 定数ファイル（nene-corpus cssVars パターン） | ✅ | #28 |
+| 全8コンポーネントのハードコード値を T.* に置換 | ✅ | #28 |
 
 ---
 
