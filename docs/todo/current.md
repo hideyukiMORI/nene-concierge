@@ -79,6 +79,22 @@ Last updated: 2026-05-27
 
 ---
 
+**Embed Widget — 完了 ✅**
+
+| 項目 | 状態 | Issue |
+| --- | --- | --- |
+| frontend/ セットアップ（TypeScript + esbuild、npm run check） | ✅ | #21 |
+| src/widget/types.ts: API 型定義 | ✅ | #21 |
+| src/widget/api.ts: fetchAppearance / startSession / stepSession | ✅ | #21 |
+| src/widget/style.ts: Shadow DOM CSS（position 4 種・カラーパラメータ化） | ✅ | #21 |
+| src/widget/ui.ts: DOM 構築・メッセージバブル・選択肢ボタン | ✅ | #21 |
+| src/widget/index.ts: エントリポイント（data-scenario-id 読み取り・ライフサイクル） | ✅ | #21 |
+| public_html/widget.js: ビルド成果物（13.4 KB IIFE） | ✅ | #21 |
+| trigger_type: page_load 自動オープン / manual ボタンのみ | ✅ | #21 |
+| is_terminal: true でセッション終了表示 | ✅ | #21 |
+
+---
+
 **Appearance モジュール — 完了 ✅**
 
 | 項目 | 状態 | Issue |
