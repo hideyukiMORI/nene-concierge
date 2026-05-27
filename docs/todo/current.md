@@ -215,6 +215,22 @@ Last updated: 2026-05-27
 
 ---
 
+**管理画面テーマピッカー — 完了 ✅**
+
+| 項目 | 状態 | Issue |
+| --- | --- | --- |
+| admin-theme-config.ts: Default/GitHub/Solarized/Dracula/Monokai 定義 | ✅ | #36 |
+| theme-context.tsx: ThemeProvider / useTheme() / detectAdminTheme() / applyAdminTheme() | ✅ | #36 |
+| index.html: 8テーマ × CSS変数オーバーライドブロック（`[data-nca-theme='...']`） | ✅ | #36 |
+| FOUC 防止早期テーマ検出（index.tsx） | ✅ | #36 |
+| サイドバーテーマスウォッチ + ☀/🌙 トグル | ✅ | #36 |
+| テーマ選択を Settings ページへ移動（サイドバーはトグルのみ残す） | ✅ | #38 |
+| SettingsPage.tsx: ThemeCard ミニプレビュー グリッド | ✅ | #38 |
+| /settings ルート + nav.settings リンク追加 | ✅ | #38 |
+| 全6言語に settings.* / theme.* キー追加 | ✅ | #38 |
+
+---
+
 ## Operating Notes
 
 - このファイルはマイルストーン完了時またはセッション終了時に更新する。
