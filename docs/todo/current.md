@@ -231,6 +231,22 @@ Last updated: 2026-05-27
 
 ---
 
+**Analytics オーバーレイ — 完了 ✅**
+
+| 項目 | 状態 | Issue |
+| --- | --- | --- |
+| NodeAnalyticsData / ScenarioAnalyticsResponse 型 + getScenarioAnalytics() | ✅ | #40 |
+| Edit ↔ Analytics セグメントコントロール | ✅ | #40 |
+| 期間セレクタ 1D / 7D / 30D / 90D | ✅ | #40 |
+| ノードオーバーレイ: 訪問数 + 離脱率色分け (緑/橙/赤) | ✅ | #40 |
+| ボトルネックノード: 赤ボーダー + ⚠ バッジ | ✅ | #40 |
+| ConditionNode: 分岐割合 pill バッジ | ✅ | #40 |
+| Analytics サマリーパネル（右パネル）: 総セッション・完了・CV | ✅ | #40 |
+| Analytics モード中は編集操作を無効化 | ✅ | #40 |
+| 全6言語 analytics i18n キー追加 | ✅ | #40 |
+
+---
+
 ## Operating Notes
 
 - このファイルはマイルストーン完了時またはセッション終了時に更新する。
