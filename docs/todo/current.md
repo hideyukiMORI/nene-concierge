@@ -41,13 +41,16 @@ Last updated: 2026-05-27
 
 ---
 
-**Phase 2 — Scenario Editor UI: バックログ 🔲**
+**Phase 2 — 条件ノード・変数・プレビュー: 完了 ✅**
 
 | 項目 | 状態 | Issue |
 | --- | --- | --- |
-| React ビジュアルエディタ（ノード・エッジ編集） | 🔲 | TBD |
-| エディタ ↔ シナリオ CRUD API 統合 | 🔲 | TBD |
-| フロントエンド CI（型チェック + lint + test） | 🔲 | TBD |
+| `condition` ノードタイプ + ConditionEvaluator（eq/neq/contains/exists/not_exists） | ✅ | #11 |
+| `branch_taken` を `session_node_events` に記録 (ADR 0005) | ✅ | #11 |
+| セッション変数収集（collect_variable + answer） | ✅ | #11 |
+| 変数補間 `{{variable_name}}` | ✅ | #11 |
+| 管理者プレビューエンドポイント（draft/published 両対応） | ✅ | #11 |
+| `SessionOutcome::Preview` 追加・migration 0011 | ✅ | #11 |
 
 ---
 
