@@ -156,6 +156,50 @@ final readonly class ScenarioServiceProvider implements ServiceProviderInterface
                     return new DeleteScenarioUseCase($repo);
                 },
             )
+            ->set(
+                ExportScenarioUseCase::class,
+                static function (ContainerInterface $c): ExportScenarioUseCase {
+                    $scenarios = $c->get(ScenarioRepositoryInterface::class);
+                    $nodes     = $c->get(ScenarioNodeRepositoryInterface::class);
+                    $edges     = $c->get(ScenarioEdgeRepositoryInterface::class);
+
+                    if (!$scenarios instanceof ScenarioRepositoryInterface) {
+                        throw new LogicException('Scenario repository service is invalid.');
+                    }
+
+                    if (!$nodes instanceof ScenarioNodeRepositoryInterface) {
+                        throw new LogicException('Scenario node repository service is invalid.');
+                    }
+
+                    if (!$edges instanceof ScenarioEdgeRepositoryInterface) {
+                        throw new LogicException('Scenario edge repository service is invalid.');
+                    }
+
+                    return new ExportScenarioUseCase($scenarios, $nodes, $edges);
+                },
+            )
+            ->set(
+                ImportScenarioUseCase::class,
+                static function (ContainerInterface $c): ImportScenarioUseCase {
+                    $scenarios = $c->get(ScenarioRepositoryInterface::class);
+                    $nodes     = $c->get(ScenarioNodeRepositoryInterface::class);
+                    $edges     = $c->get(ScenarioEdgeRepositoryInterface::class);
+
+                    if (!$scenarios instanceof ScenarioRepositoryInterface) {
+                        throw new LogicException('Scenario repository service is invalid.');
+                    }
+
+                    if (!$nodes instanceof ScenarioNodeRepositoryInterface) {
+                        throw new LogicException('Scenario node repository service is invalid.');
+                    }
+
+                    if (!$edges instanceof ScenarioEdgeRepositoryInterface) {
+                        throw new LogicException('Scenario edge repository service is invalid.');
+                    }
+
+                    return new ImportScenarioUseCase($scenarios, $nodes, $edges);
+                },
+            )
             // ── Handlers ───────────────────────────────────────────────────────
             ->set(
                 ListScenariosHandler::class,
@@ -242,6 +286,40 @@ final readonly class ScenarioServiceProvider implements ServiceProviderInterface
                     return new DeleteScenarioHandler($uc, $json);
                 },
             )
+            ->set(
+                ExportScenarioHandler::class,
+                static function (ContainerInterface $c): ExportScenarioHandler {
+                    $uc   = $c->get(ExportScenarioUseCase::class);
+                    $json = $c->get(JsonResponseFactory::class);
+
+                    if (!$uc instanceof ExportScenarioUseCase) {
+                        throw new LogicException('ExportScenario use case service is invalid.');
+                    }
+
+                    if (!$json instanceof JsonResponseFactory) {
+                        throw new LogicException('JSON response factory service is invalid.');
+                    }
+
+                    return new ExportScenarioHandler($uc, $json);
+                },
+            )
+            ->set(
+                ImportScenarioHandler::class,
+                static function (ContainerInterface $c): ImportScenarioHandler {
+                    $uc   = $c->get(ImportScenarioUseCase::class);
+                    $json = $c->get(JsonResponseFactory::class);
+
+                    if (!$uc instanceof ImportScenarioUseCase) {
+                        throw new LogicException('ImportScenario use case service is invalid.');
+                    }
+
+                    if (!$json instanceof JsonResponseFactory) {
+                        throw new LogicException('JSON response factory service is invalid.');
+                    }
+
+                    return new ImportScenarioHandler($uc, $json);
+                },
+            )
             // ── Exception handler ──────────────────────────────────────────────
             ->set(
                 ScenarioNotFoundExceptionHandler::class,
@@ -264,6 +342,8 @@ final readonly class ScenarioServiceProvider implements ServiceProviderInterface
                     $create = $c->get(CreateScenarioHandler::class);
                     $update = $c->get(UpdateScenarioHandler::class);
                     $delete = $c->get(DeleteScenarioHandler::class);
+                    $export = $c->get(ExportScenarioHandler::class);
+                    $import = $c->get(ImportScenarioHandler::class);
 
                     if (!$list instanceof ListScenariosHandler) {
                         throw new LogicException('ListScenarios handler service is invalid.');
@@ -285,7 +365,15 @@ final readonly class ScenarioServiceProvider implements ServiceProviderInterface
                         throw new LogicException('DeleteScenario handler service is invalid.');
                     }
 
-                    return new ScenarioRouteRegistrar($list, $get, $create, $update, $delete);
+                    if (!$export instanceof ExportScenarioHandler) {
+                        throw new LogicException('ExportScenario handler service is invalid.');
+                    }
+
+                    if (!$import instanceof ImportScenarioHandler) {
+                        throw new LogicException('ImportScenario handler service is invalid.');
+                    }
+
+                    return new ScenarioRouteRegistrar($list, $get, $create, $update, $delete, $export, $import);
                 },
             );
     }

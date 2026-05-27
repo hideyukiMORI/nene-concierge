@@ -302,6 +302,60 @@
       "responseSchemaRef": "#/components/schemas/SessionStepResponse"
     },
     {
+      "name": "exportScenario",
+      "title": "Export Scenario",
+      "description": "Returns a portable JSON export document of a scenario. The document includes all nodes and edges with their positions, types, labels, and data, but strips internal IDs (organization_id, scenario_id). Use the returned document with importScenario to reproduce the scenario in any organization.",
+      "safety": "read",
+      "source": {
+        "type": "openapi",
+        "operationId": "exportScenario",
+        "method": "GET",
+        "path": "/api/v1/scenarios/{id}/export"
+      },
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer", "description": "Scenario ID to export." }
+        }
+      },
+      "responseSchemaRef": "#/components/schemas/ScenarioExportDocument"
+    },
+    {
+      "name": "importScenario",
+      "title": "Import Scenario",
+      "description": "Accepts a scenario export document and creates a new draft scenario. All node IDs are regenerated so the imported scenario is independent of the source. Edges are remapped accordingly. The created scenario is always in draft status. Use exportScenario first to get the document to import.",
+      "safety": "write",
+      "source": {
+        "type": "openapi",
+        "operationId": "importScenario",
+        "method": "POST",
+        "path": "/api/v1/scenarios/import"
+      },
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["schema_version", "scenario"],
+        "properties": {
+          "schema_version": { "type": "integer", "description": "Export format version. Must be 1." },
+          "exported_at":    { "type": "string",  "description": "ISO 8601 export timestamp (optional)." },
+          "scenario": {
+            "type": "object",
+            "description": "Scenario data from the export document.",
+            "required": ["name"],
+            "properties": {
+              "name":        { "type": "string", "description": "Scenario name." },
+              "description": { "type": "string", "description": "Optional description." },
+              "nodes":       { "type": "array",  "description": "Node list from export.", "items": { "type": "object" } },
+              "edges":       { "type": "array",  "description": "Edge list from export.", "items": { "type": "object" } }
+            }
+          }
+        }
+      },
+      "responseSchemaRef": null
+    },
+    {
       "name": "createActionCredential",
       "title": "Create Action Credential",
       "description": "Creates a new action credential for use in action nodes. The config object holds adapter-specific secrets (webhook URLs, API tokens). Adapter types: http, email, slack, chatwork.",

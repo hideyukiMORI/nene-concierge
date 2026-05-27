@@ -322,6 +322,75 @@ paths:
         "404":
           $ref: "#/components/responses/NotFound"
 
+  /api/v1/scenarios/{id}/export:
+    get:
+      operationId: exportScenario
+      summary: Export scenario
+      description: |
+        Returns a portable JSON export document of the scenario.
+        The document contains all nodes and edges with node positions, types, labels, and data.
+        Internal IDs (organization_id, scenario_id) are stripped.
+
+        The returned document can be passed to `POST /api/v1/scenarios/import`
+        to reproduce the scenario in any organization. Node IDs are preserved in the
+        export and regenerated on import.
+      tags:
+        - Scenarios
+      parameters:
+        - $ref: "#/components/parameters/IntId"
+      responses:
+        "200":
+          description: Scenario export document.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScenarioExportDocument"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /api/v1/scenarios/import:
+    post:
+      operationId: importScenario
+      summary: Import scenario
+      description: |
+        Accepts a scenario export document and creates a new draft scenario.
+
+        All node IDs are regenerated as UUID v4 strings so the imported scenario is
+        fully independent of the source. Edge source/target references are remapped
+        accordingly. Edges that reference unknown nodes are silently skipped.
+
+        The created scenario is always in `draft` status regardless of the
+        original scenario's status.
+      tags:
+        - Scenarios
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ScenarioExportDocument"
+      responses:
+        "201":
+          description: Scenario created from import.
+          headers:
+            Location:
+              schema:
+                type: string
+              description: URL of the created scenario.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
   /api/v1/scenarios/{id}/preview/start:
     post:
       operationId: startPreviewSession
@@ -1174,3 +1243,80 @@ components:
           description: node_ids of nodes with drop_off_rate ≥ 0.5.
           items:
             type: string
+
+    ScenarioExportNodeEntry:
+      type: object
+      required:
+        - node_id
+        - type
+        - label
+      properties:
+        node_id:
+          type: string
+          description: Original node identifier (UUID). Regenerated on import.
+        type:
+          type: string
+          enum: [message, condition, action, end]
+        label:
+          type: string
+        data:
+          type: object
+          additionalProperties: true
+        position_x:
+          type: number
+          default: 0
+        position_y:
+          type: number
+          default: 0
+
+    ScenarioExportEdgeEntry:
+      type: object
+      required:
+        - source_node_id
+        - target_node_id
+      properties:
+        source_node_id:
+          type: string
+        target_node_id:
+          type: string
+        label:
+          type: string
+          nullable: true
+
+    ScenarioExportScenario:
+      type: object
+      required:
+        - name
+        - nodes
+        - edges
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        nodes:
+          type: array
+          items:
+            $ref: "#/components/schemas/ScenarioExportNodeEntry"
+        edges:
+          type: array
+          items:
+            $ref: "#/components/schemas/ScenarioExportEdgeEntry"
+
+    ScenarioExportDocument:
+      type: object
+      required:
+        - schema_version
+        - scenario
+      properties:
+        schema_version:
+          type: integer
+          description: Export format version. Currently always `1`.
+          example: 1
+        exported_at:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp when the document was created. Optional on import.
+        scenario:
+          $ref: "#/components/schemas/ScenarioExportScenario"
