@@ -313,9 +313,9 @@ export default function ScenarioFormPage() {
                                     title={t('node.addToCanvas', { type: label })}
                                     style={{
                                         display: 'flex', alignItems: 'center', gap: 5,
-                                        padding: '4px 9px', borderRadius: T.radiusMd,
-                                        background: c.bg, border: `1.5px solid ${c.border}`,
-                                        color: c.text, fontWeight: 600, fontSize: T.fontSm,
+                                        padding: '4px 10px', borderRadius: T.radiusMd,
+                                        background: c.header, border: 'none',
+                                        color: '#fff', fontWeight: 600, fontSize: T.fontSm,
                                         cursor: 'pointer', flexShrink: 0,
                                         transition: 'filter 0.1s',
                                     }}

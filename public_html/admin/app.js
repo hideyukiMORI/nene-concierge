@@ -35767,10 +35767,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   // src/admin/components/editor/NodeTypes.tsx
   var import_jsx_runtime7 = __toESM(require_jsx_runtime());
   var NODE_COLORS = {
-    message: { bg: "oklch(96% 0.03 248)", border: "oklch(70% 0.12 248)", header: "oklch(52% 0.18 248)", text: "oklch(32% 0.16 248)" },
-    condition: { bg: "oklch(96% 0.04 65)", border: "oklch(74% 0.12 65)", header: "oklch(62% 0.16 65)", text: "oklch(36% 0.14 65)" },
-    action: { bg: "oklch(96% 0.03 192)", border: "oklch(72% 0.10 192)", header: "oklch(56% 0.16 192)", text: "oklch(34% 0.14 192)" },
-    end: { bg: "oklch(96% 0.015 265)", border: "oklch(72% 0.06 265)", header: "oklch(48% 0.10 265)", text: "oklch(32% 0.10 265)" }
+    message: { bg: "oklch(91% 0.06 248)", header: "oklch(52% 0.18 248)", text: "oklch(26% 0.16 248)" },
+    condition: { bg: "oklch(91% 0.09 65)", header: "oklch(62% 0.16 65)", text: "oklch(28% 0.14 65)" },
+    action: { bg: "oklch(91% 0.06 192)", header: "oklch(52% 0.17 192)", text: "oklch(26% 0.14 192)" },
+    end: { bg: "oklch(91% 0.035 265)", header: "oklch(44% 0.10 265)", text: "oklch(24% 0.10 265)" }
   };
   var NODE_ICONS = {
     message: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
@@ -35839,24 +35839,22 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     isBottleneck
   }) {
     const c = NODE_COLORS[type];
-    const borderColor = isBottleneck ? "oklch(52% 0.20 25)" : analytics ? dropOffColor(analytics.drop_off_rate) : selected2 ? "oklch(62% 0.18 265)" : c.border;
-    const boxShadow = isBottleneck ? "0 0 0 3px oklch(52% 0.20 25 / 0.35)" : selected2 ? "0 0 0 3px oklch(80% 0.10 265 / 0.6)" : "0 2px 6px rgba(0,0,0,.10)";
+    const boxShadow = isBottleneck ? "0 0 0 3px oklch(52% 0.20 25 / 0.55), 0 2px 8px rgba(0,0,0,.14)" : analytics ? `0 0 0 2px ${dropOffColor(analytics.drop_off_rate)} , 0 2px 8px rgba(0,0,0,.12)` : selected2 ? "0 0 0 3px oklch(62% 0.18 265 / 0.55), 0 2px 8px rgba(0,0,0,.14)" : "0 2px 8px rgba(0,0,0,.12)";
     return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: {
       background: c.bg,
-      border: `2px solid ${borderColor}`,
       borderRadius: 10,
       minWidth: 200,
       maxWidth: 240,
       boxShadow,
       fontSize: 13,
-      fontFamily: "system-ui, sans-serif",
-      position: "relative"
+      position: "relative",
+      overflow: "hidden"
+      // ヘッダーの角丸クリップ
     }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: {
         background: c.header,
         color: "#fff",
         padding: "6px 10px",
-        borderRadius: "8px 8px 0 0",
         fontWeight: 700,
         fontSize: 12,
         display: "flex",
@@ -35878,12 +35876,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       children2 && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { padding: "8px 10px", color: c.text, lineHeight: 1.4 }, children: children2 }),
       analytics && /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: {
         padding: "5px 10px 6px",
-        borderTop: `1px solid ${c.border}`,
+        borderTop: "1px solid rgba(0,0,0,.10)",
         display: "flex",
         gap: 8,
         alignItems: "center",
-        background: "rgba(0,0,0,.03)",
-        borderRadius: "0 0 8px 8px"
+        background: "rgba(0,0,0,.04)"
       }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("span", { style: {
           display: "flex",
@@ -35891,7 +35888,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           gap: 3,
           fontSize: 11,
           fontWeight: 700,
-          color: "oklch(28% 0.02 75)"
+          color: c.text
         }, children: [
           "\u{1F441} ",
           analytics.visit_count.toLocaleString()
@@ -35932,13 +35929,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           isBottleneck: getIsBottleneck(data2),
           children: [
             d.text && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("p", { style: { margin: 0, fontSize: 12 }, children: truncate(d.text) }),
-            d.choices && d.choices.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { marginTop: 4, display: "flex", flexWrap: "wrap", gap: 4 }, children: d.choices.map((c, i) => /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: {
-              background: "#dbeafe",
-              color: "#1e40af",
+            d.choices && d.choices.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { marginTop: 4, display: "flex", flexWrap: "wrap", gap: 4 }, children: d.choices.map((choice, i) => /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: {
+              background: "oklch(78% 0.11 248)",
+              color: "oklch(22% 0.18 248)",
               borderRadius: 99,
               padding: "2px 8px",
-              fontSize: 11
-            }, children: c }, i)) }),
+              fontSize: 11,
+              fontWeight: 600
+            }, children: choice }, i)) }),
             d.variable_name && /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("p", { style: { margin: "4px 0 0", fontSize: 11, color: "#6b7280" }, children: [
               "\u2192 ",
               /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("code", { children: d.variable_name })
@@ -37094,11 +37092,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                   display: "flex",
                   alignItems: "center",
                   gap: 5,
-                  padding: "4px 9px",
+                  padding: "4px 10px",
                   borderRadius: T.radiusMd,
-                  background: c.bg,
-                  border: `1.5px solid ${c.border}`,
-                  color: c.text,
+                  background: c.header,
+                  border: "none",
+                  color: "#fff",
                   fontWeight: 600,
                   fontSize: T.fontSm,
                   cursor: "pointer",

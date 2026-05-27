@@ -6,11 +6,11 @@ import type { ChatNodeType, NodeAnalyticsData } from '../../api.js';
 // ── カラーパレット (OKLCH) ────────────────────────────────────────────────────
 // Hue 248 = blue, 65 = amber, 192 = teal (primary), 265 = slate
 
-export const NODE_COLORS: Record<ChatNodeType, { bg: string; border: string; header: string; text: string }> = {
-    message:   { bg: 'oklch(96% 0.03 248)',  border: 'oklch(70% 0.12 248)',  header: 'oklch(52% 0.18 248)',  text: 'oklch(32% 0.16 248)'  },
-    condition: { bg: 'oklch(96% 0.04 65)',   border: 'oklch(74% 0.12 65)',   header: 'oklch(62% 0.16 65)',   text: 'oklch(36% 0.14 65)'   },
-    action:    { bg: 'oklch(96% 0.03 192)',  border: 'oklch(72% 0.10 192)',  header: 'oklch(56% 0.16 192)',  text: 'oklch(34% 0.14 192)'  },
-    end:       { bg: 'oklch(96% 0.015 265)', border: 'oklch(72% 0.06 265)',  header: 'oklch(48% 0.10 265)',  text: 'oklch(32% 0.10 265)'  },
+export const NODE_COLORS: Record<ChatNodeType, { bg: string; header: string; text: string }> = {
+    message:   { bg: 'oklch(91% 0.06 248)',  header: 'oklch(52% 0.18 248)',  text: 'oklch(26% 0.16 248)'  },
+    condition: { bg: 'oklch(91% 0.09 65)',   header: 'oklch(62% 0.16 65)',   text: 'oklch(28% 0.14 65)'   },
+    action:    { bg: 'oklch(91% 0.06 192)',  header: 'oklch(52% 0.17 192)',  text: 'oklch(26% 0.14 192)'  },
+    end:       { bg: 'oklch(91% 0.035 265)', header: 'oklch(44% 0.10 265)',  text: 'oklch(24% 0.10 265)'  },
 };
 
 // ── ノードアイコン (inline SVG) ───────────────────────────────────────────────
@@ -84,31 +84,31 @@ function NodeShell({
     isBottleneck?: boolean;
 }) {
     const c = NODE_COLORS[type];
-    const borderColor = isBottleneck
-        ? 'oklch(52% 0.20 25)'
-        : analytics
-            ? dropOffColor(analytics.drop_off_rate)
-            : selected ? 'oklch(62% 0.18 265)' : c.border;
+
+    // 選択・ボトルネック・Analytics 離脱率は boxShadow のみで表現（border なし）
     const boxShadow = isBottleneck
-        ? '0 0 0 3px oklch(52% 0.20 25 / 0.35)'
-        : selected ? '0 0 0 3px oklch(80% 0.10 265 / 0.6)' : '0 2px 6px rgba(0,0,0,.10)';
+        ? '0 0 0 3px oklch(52% 0.20 25 / 0.55), 0 2px 8px rgba(0,0,0,.14)'
+        : analytics
+            ? `0 0 0 2px ${dropOffColor(analytics.drop_off_rate)} , 0 2px 8px rgba(0,0,0,.12)`
+            : selected
+                ? '0 0 0 3px oklch(62% 0.18 265 / 0.55), 0 2px 8px rgba(0,0,0,.14)'
+                : '0 2px 8px rgba(0,0,0,.12)';
 
     return (
         <div style={{
             background:   c.bg,
-            border:       `2px solid ${borderColor}`,
             borderRadius: 10,
             minWidth:     200,
             maxWidth:     240,
             boxShadow,
             fontSize:     13,
-            fontFamily:   'system-ui, sans-serif',
             position:     'relative',
+            overflow:     'hidden',  // ヘッダーの角丸クリップ
         }}>
-            {/* ヘッダー */}
+            {/* ヘッダー (べた塗り) */}
             <div style={{
                 background:   c.header, color: '#fff',
-                padding:      '6px 10px', borderRadius: '8px 8px 0 0',
+                padding:      '6px 10px',
                 fontWeight:   700, fontSize: 12,
                 display:      'flex', alignItems: 'center', gap: 6,
             }}>
@@ -138,15 +138,14 @@ function NodeShell({
             {analytics && (
                 <div style={{
                     padding: '5px 10px 6px',
-                    borderTop: `1px solid ${c.border}`,
+                    borderTop: '1px solid rgba(0,0,0,.10)',
                     display: 'flex', gap: 8, alignItems: 'center',
-                    background: 'rgba(0,0,0,.03)',
-                    borderRadius: '0 0 8px 8px',
+                    background: 'rgba(0,0,0,.04)',
                 }}>
                     {/* 訪問数 */}
                     <span style={{
                         display: 'flex', alignItems: 'center', gap: 3,
-                        fontSize: 11, fontWeight: 700, color: 'oklch(28% 0.02 75)',
+                        fontSize: 11, fontWeight: 700, color: c.text,
                     }}>
                         👁 {analytics.visit_count.toLocaleString()}
                     </span>
@@ -193,12 +192,12 @@ export function MessageNode({ data, selected }: NodeProps) {
                 {d.text && <p style={{ margin: 0, fontSize: 12 }}>{truncate(d.text)}</p>}
                 {d.choices && d.choices.length > 0 && (
                     <div style={{ marginTop: 4, display: 'flex', flexWrap: 'wrap', gap: 4 }}>
-                        {d.choices.map((c, i) => (
+                        {d.choices.map((choice, i) => (
                             <span key={i} style={{
-                                background: '#dbeafe', color: '#1e40af',
-                                borderRadius: 99, padding: '2px 8px', fontSize: 11,
+                                background: 'oklch(78% 0.11 248)', color: 'oklch(22% 0.18 248)',
+                                borderRadius: 99, padding: '2px 8px', fontSize: 11, fontWeight: 600,
                             }}>
-                                {c}
+                                {choice}
                             </span>
                         ))}
                     </div>

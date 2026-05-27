@@ -399,6 +399,8 @@
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    /* ブラウザ UA stylesheet が button/input 等のフォントをリセットするのを防ぐ */
+    button, input, select, textarea { font-family: inherit; font-size: inherit; }
     body {
       /* --nca-font-body は JS (applyLocaleFontFamily) でロケール別に上書きされる */
       font-family: var(--nca-font-body, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif);
