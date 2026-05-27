@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace NeNeConcierge\Tests\Scenario;
 
+use Nene2\Routing\Router;
 use Nene2\Validation\ValidationException;
 use NeNeConcierge\Scenario\SaveScenarioGraphEdgeInput;
 use NeNeConcierge\Scenario\SaveScenarioGraphHandler;
@@ -200,7 +201,7 @@ final class SaveScenarioGraphTest extends TestCase
         $request = $psr17
             ->createServerRequest('PUT', '/api/v1/scenarios/1/graph')
             ->withAttribute('nene2.org.id', 1)
-            ->withAttribute('id', '1')
+            ->withAttribute(Router::PARAMETERS_ATTRIBUTE, ['id' => '1'])
             ->withParsedBody([
                 'nodes' => [
                     [
@@ -227,7 +228,7 @@ final class SaveScenarioGraphTest extends TestCase
         $request = $psr17
             ->createServerRequest('PUT', '/api/v1/scenarios/1/graph')
             ->withAttribute('nene2.org.id', 1)
-            ->withAttribute('id', '1')
+            ->withAttribute(Router::PARAMETERS_ATTRIBUTE, ['id' => '1'])
             ->withParsedBody([
                 'nodes' => [
                     [

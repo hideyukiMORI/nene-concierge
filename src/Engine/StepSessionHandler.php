@@ -6,6 +6,7 @@ namespace NeNeConcierge\Engine;
 
 use Nene2\Http\JsonRequestBodyParser;
 use Nene2\Http\JsonResponseFactory;
+use Nene2\Routing\Router;
 use Nene2\Validation\ValidationError;
 use Nene2\Validation\ValidationException;
 use Psr\Http\Message\ResponseInterface;
@@ -31,7 +32,7 @@ final readonly class StepSessionHandler implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $orgId     = (int) $request->getAttribute('nene2.org.id', 0);
-        $sessionId = (string) $request->getAttribute('session_id', '');
+        $sessionId = (string) Router::param($request, 'session_id');
         $body      = JsonRequestBodyParser::parse($request);
 
         $errors         = [];
