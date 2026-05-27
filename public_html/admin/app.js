@@ -36704,20 +36704,23 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           ]
         }
       ) }),
-      showRightPanel && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: {
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: {
         position: "absolute",
-        top: 8,
-        right: 8,
-        bottom: 8,
-        width: 260,
+        top: 0,
+        right: 0,
+        bottom: 0,
+        width: 264,
         zIndex: 10,
         background: T.surface,
-        borderRadius: T.radiusLg,
-        border: `1px solid ${T.border}`,
-        boxShadow: "0 4px 16px rgba(0,0,0,.12)",
+        borderLeft: `1px solid ${T.border}`,
+        boxShadow: "-6px 0 20px rgba(0,0,0,.07)",
         display: "flex",
         flexDirection: "column",
-        overflow: "hidden"
+        overflow: "hidden",
+        // スライドアニメーション
+        transform: showRightPanel ? "translateX(0)" : "translateX(100%)",
+        transition: "transform 0.20s cubic-bezier(0.4, 0, 0.2, 1)",
+        pointerEvents: showRightPanel ? "auto" : "none"
       }, children: analyticsMode ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
         AnalyticsSummaryPanel,
         {
@@ -36728,30 +36731,43 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           onPeriodChange: setPeriod
         }
       ) : selectedNode ? /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(import_jsx_runtime9.Fragment, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { display: "flex", justifyContent: "flex-end", padding: "4px 6px 0", flexShrink: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
-          "button",
-          {
-            onClick: () => setSelectedNodeId(null),
-            title: t("common.close"),
-            style: {
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              color: T.textMuted,
-              fontSize: 16,
-              lineHeight: 1,
-              padding: "2px 4px",
-              borderRadius: T.radiusSm
-            },
-            onMouseEnter: (e) => {
-              e.currentTarget.style.background = T.border;
-            },
-            onMouseLeave: (e) => {
-              e.currentTarget.style.background = "none";
-            },
-            children: "\xD7"
-          }
-        ) }),
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: {
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "6px 10px",
+          flexShrink: 0,
+          borderBottom: `1px solid ${T.border}`,
+          background: T.tableHeader
+        }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { fontSize: T.fontXs, fontWeight: 600, color: T.textMuted }, children: t("scenarioForm.detailsToggle") }),
+          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+            "button",
+            {
+              onClick: () => setSelectedNodeId(null),
+              title: t("common.close"),
+              style: {
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                color: T.textMuted,
+                fontSize: 14,
+                lineHeight: 1,
+                padding: "1px 4px",
+                borderRadius: T.radiusSm,
+                display: "flex",
+                alignItems: "center"
+              },
+              onMouseEnter: (e) => {
+                e.currentTarget.style.background = T.border;
+              },
+              onMouseLeave: (e) => {
+                e.currentTarget.style.background = "none";
+              },
+              children: "\xD7"
+            }
+          )
+        ] }),
         /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { flex: 1, overflowY: "auto" }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
           NodeConfigPanel,
           {
@@ -36770,7 +36786,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var import_jsx_runtime10 = __toESM(require_jsx_runtime());
   var PencilIcon = () => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("svg", { width: "10", height: "10", viewBox: "0 0 16 16", fill: "currentColor", "aria-hidden": true, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("path", { d: "M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z" }) });
   var ChevronDownIcon = () => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("svg", { width: "9", height: "9", viewBox: "0 0 16 16", fill: "currentColor", "aria-hidden": true, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("path", { d: "M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" }) });
-  var ChevronUpIcon = () => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("svg", { width: "9", height: "9", viewBox: "0 0 16 16", fill: "currentColor", "aria-hidden": true, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("path", { d: "M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z" }) });
+  var DescEditIcon = () => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("svg", { width: "10", height: "10", viewBox: "0 0 16 16", fill: "currentColor", "aria-hidden": true, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("path", { d: "M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12z" }),
+    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("path", { d: "M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" })
+  ] });
   var AnalyticsIcon = () => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("svg", { width: "11", height: "11", viewBox: "0 0 16 16", fill: "currentColor", "aria-hidden": true, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("path", { d: "M1 11a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm5-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1z" }) });
   var SaveIcon = () => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("svg", { width: "11", height: "11", viewBox: "0 0 16 16", fill: "currentColor", "aria-hidden": true, children: [
     /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("path", { d: "M8 0a.5.5 0 0 1 .5.5v9.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 .708-.708L7.5 10.293V.5A.5.5 0 0 1 8 0" }),
@@ -36940,8 +36959,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       height: 22,
       padding: "0 7px",
       borderRadius: T.radiusMd,
-      background: opts.fill ? opts.danger ? T.danger : T.primary : opts.active ? T.primaryLight : "transparent",
-      border: `1px solid ${opts.fill ? opts.danger ? T.danger : T.primary : opts.active ? T.primaryBorder : T.border}`,
+      background: opts.fill ? T.primary : opts.active ? T.primaryLight : "transparent",
+      border: `1px solid ${opts.fill ? T.primary : opts.active ? T.primaryBorder : T.border}`,
       color: opts.fill ? "#fff" : opts.active ? T.primaryText : T.textMuted,
       fontSize: "10px",
       fontWeight: 600,
@@ -37007,7 +37026,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               padding: "2px 7px",
               background: T.surface,
               minWidth: 130,
-              maxWidth: 260,
+              maxWidth: 240,
               outline: "none"
             }
           }
@@ -37028,7 +37047,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               cursor: "text",
               padding: "2px 5px",
               borderRadius: T.radiusSm,
-              maxWidth: 230,
+              maxWidth: 200,
               overflow: "hidden",
               textOverflow: "ellipsis",
               whiteSpace: "nowrap"
@@ -37107,10 +37126,48 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             o.value
           )) })
         ] }),
+        !isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+          "button",
+          {
+            onClick: () => setShowDetails((v) => !v),
+            title: t("scenarioForm.descLabel"),
+            style: {
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: 20,
+              height: 20,
+              padding: 0,
+              borderRadius: T.radiusSm,
+              background: showDetails ? T.primaryLight : "transparent",
+              border: `1px solid ${showDetails ? T.primaryBorder : "transparent"}`,
+              color: showDetails ? T.primaryText : T.textMuted,
+              cursor: "pointer",
+              flexShrink: 0
+            },
+            onMouseEnter: (e) => {
+              if (!showDetails) {
+                e.currentTarget.style.background = T.surfaceHover;
+                e.currentTarget.style.borderColor = T.border;
+              }
+            },
+            onMouseLeave: (e) => {
+              if (!showDetails) {
+                e.currentTarget.style.background = "transparent";
+                e.currentTarget.style.borderColor = "transparent";
+              }
+            },
+            children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(DescEditIcon, {})
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { flex: 1 } }),
+        savedMsg && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "10px", color: T.successText, fontWeight: 600, whiteSpace: "nowrap", flexShrink: 0, marginRight: 4 }, children: [
+          "\u2713 ",
+          savedMsg
+        ] }),
         !isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: divider }),
           analyticsMode ? (
-            /* Analytics モード中: 編集に戻る方法を明示 */
+            /* Analytics モード中: 編集に戻る */
             /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
               "button",
               {
@@ -37168,12 +37225,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 type
               );
             })
-          )
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { flex: 1 } }),
-        savedMsg && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "10px", color: T.successText, fontWeight: 600, whiteSpace: "nowrap", flexShrink: 0 }, children: [
-          "\u2713 ",
-          savedMsg
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: divider })
         ] }),
         !isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
           "button",
@@ -37294,55 +37347,18 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }, children: saving ? t("common.saving") : t("common.save") })
       ] }),
       error && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { padding: "6px 16px", background: T.dangerBg, flexShrink: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(ErrorMsg, { msg: error }) }),
-      !isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { flex: 1, overflow: "hidden", position: "relative" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
-          "button",
-          {
-            onClick: () => setShowDetails((v) => !v),
-            title: t("scenarioForm.detailsToggle"),
-            style: {
-              position: "absolute",
-              top: 8,
-              left: 8,
-              zIndex: 10,
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 3,
-              padding: "2px 8px",
-              borderRadius: T.radiusLg,
-              background: showDetails ? T.primaryLight : T.surface,
-              border: `1px solid ${showDetails ? T.primaryBorder : T.border}`,
-              color: showDetails ? T.primaryText : T.textMuted,
-              boxShadow: showDetails ? "none" : "0 1px 4px rgba(0,0,0,.10)",
-              fontSize: "10px",
-              fontWeight: 500,
-              cursor: "pointer"
-            },
-            onMouseEnter: (e) => {
-              if (!showDetails) e.currentTarget.style.boxShadow = "0 2px 6px rgba(0,0,0,.15)";
-            },
-            onMouseLeave: (e) => {
-              if (!showDetails) e.currentTarget.style.boxShadow = "0 1px 4px rgba(0,0,0,.10)";
-            },
-            children: [
-              t("scenarioForm.detailsToggle"),
-              showDetails ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(ChevronUpIcon, {}) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(ChevronDownIcon, {})
-            ]
-          }
-        ),
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-          ScenarioCanvas_default,
-          {
-            ref: canvasRef,
-            scenarioId: Number(id2),
-            initialNodes: nodes,
-            initialEdges: edges,
-            credentials,
-            onSave: handleGraphSave,
-            analyticsMode
-          }
-        )
-      ] }),
+      !isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { flex: 1, overflow: "hidden" }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+        ScenarioCanvas_default,
+        {
+          ref: canvasRef,
+          scenarioId: Number(id2),
+          initialNodes: nodes,
+          initialEdges: edges,
+          credentials,
+          onSave: handleGraphSave,
+          analyticsMode
+        }
+      ) }),
       isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: {
         flex: 1,
         display: "flex",

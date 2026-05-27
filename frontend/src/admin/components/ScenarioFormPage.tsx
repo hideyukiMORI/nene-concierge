@@ -28,19 +28,22 @@ const ChevronDownIcon = () => (
     </svg>
 );
 
-const ChevronUpIcon = () => (
-    <svg width="9" height="9" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
-        <path d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"/>
+/** 説明フィールドを開く鉛筆+ドキュメントアイコン */
+const DescEditIcon = () => (
+    <svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
+        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12z"/>
+        <path d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
     </svg>
 );
 
-// 単色ベクターアイコン
+/** Analytics — 棒グラフ単色ベクター */
 const AnalyticsIcon = () => (
     <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
         <path d="M1 11a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm5-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1z"/>
     </svg>
 );
 
+/** 保存 — ダウンロード矢印単色ベクター */
 const SaveIcon = () => (
     <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
         <path d="M8 0a.5.5 0 0 1 .5.5v9.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 .708-.708L7.5 10.293V.5A.5.5 0 0 1 8 0"/>
@@ -48,6 +51,7 @@ const SaveIcon = () => (
     </svg>
 );
 
+/** 削除 — ゴミ箱単色ベクター */
 const TrashIcon = () => (
     <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
         <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0"/>
@@ -220,15 +224,11 @@ export default function ScenarioFormPage() {
     const divider: React.CSSProperties = { width: 1, height: 14, background: T.border, flexShrink: 0 };
 
     // コンパクトボタン共通スタイル
-    const cBtn = (opts: { active?: boolean; fill?: boolean; danger?: boolean } = {}): React.CSSProperties => ({
+    const cBtn = (opts: { active?: boolean; fill?: boolean } = {}): React.CSSProperties => ({
         display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 3,
         height: 22, padding: '0 7px', borderRadius: T.radiusMd,
-        background: opts.fill
-            ? (opts.danger ? T.danger : T.primary)
-            : opts.active ? T.primaryLight : 'transparent',
-        border: `1px solid ${opts.fill
-            ? (opts.danger ? T.danger : T.primary)
-            : opts.active ? T.primaryBorder : T.border}`,
+        background: opts.fill ? T.primary : opts.active ? T.primaryLight : 'transparent',
+        border: `1px solid ${opts.fill ? T.primary : opts.active ? T.primaryBorder : T.border}`,
         color: opts.fill ? '#fff' : opts.active ? T.primaryText : T.textMuted,
         fontSize: '10px', fontWeight: 600,
         cursor: 'pointer', flexShrink: 0, letterSpacing: '0.01em',
@@ -237,14 +237,20 @@ export default function ScenarioFormPage() {
     return (
         <div style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
 
-            {/* ══ ヘッダーバー (36px) ══════════════════════════════════════════ */}
+            {/* ══ ヘッダーバー (36px) ══════════════════════════════════════════
+                左: [← Back] | [名前] [Status▾] [✏desc]
+                右: [savedMsg] [Msg][Cond][Action][End] / [← Edit] | [📊] [↓save] [○delete]
+            ════════════════════════════════════════════════════════════════════ */}
             <div style={{
                 display: 'flex', alignItems: 'center', gap: 4,
                 padding: '0 8px', height: 36, flexShrink: 0,
                 borderBottom: `1px solid ${T.border}`,
                 background: T.surface,
             }}>
-                {/* ── 戻る ── */}
+
+                {/* ── 左ブロック ──────────────────────────────────────────── */}
+
+                {/* 戻る */}
                 <button
                     onClick={() => nav('/scenarios')}
                     style={cBtn()}
@@ -256,7 +262,7 @@ export default function ScenarioFormPage() {
 
                 <div style={divider} />
 
-                {/* ── インライン名前編集 ── */}
+                {/* インライン名前編集 */}
                 {editingName ? (
                     <input
                         ref={nameInputRef}
@@ -272,7 +278,7 @@ export default function ScenarioFormPage() {
                             fontSize: T.fontBase, fontWeight: 600, color: T.textStrong,
                             border: `1.5px solid ${T.primary}`, borderRadius: T.radiusSm,
                             padding: '2px 7px', background: T.surface,
-                            minWidth: 130, maxWidth: 260, outline: 'none',
+                            minWidth: 130, maxWidth: 240, outline: 'none',
                         }}
                     />
                 ) : (
@@ -284,7 +290,7 @@ export default function ScenarioFormPage() {
                             fontSize: T.fontBase, fontWeight: 600, color: T.textStrong,
                             background: 'transparent', border: 'none', cursor: 'text',
                             padding: '2px 5px', borderRadius: T.radiusSm,
-                            maxWidth: 230, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                            maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
                         }}
                         onMouseEnter={e => { e.currentTarget.style.background = T.surfaceHover; }}
                         onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; }}
@@ -296,7 +302,7 @@ export default function ScenarioFormPage() {
                     </button>
                 )}
 
-                {/* ── ステータスドロップダウン ── */}
+                {/* ステータスドロップダウン */}
                 {!isNew && (
                     <div ref={statusDropRef} style={{ position: 'relative', flexShrink: 0 }}>
                         <button
@@ -340,12 +346,43 @@ export default function ScenarioFormPage() {
                     </div>
                 )}
 
-                {/* ═══ ノードパレット / Analytics 退出ボタン ══════════════════ */}
+                {/* 説明編集アイコン（ステータス横 → showDetails ドロワーを開閉） */}
+                {!isNew && (
+                    <button
+                        onClick={() => setShowDetails(v => !v)}
+                        title={t('scenarioForm.descLabel')}
+                        style={{
+                            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                            width: 20, height: 20, padding: 0, borderRadius: T.radiusSm,
+                            background: showDetails ? T.primaryLight : 'transparent',
+                            border: `1px solid ${showDetails ? T.primaryBorder : 'transparent'}`,
+                            color: showDetails ? T.primaryText : T.textMuted,
+                            cursor: 'pointer', flexShrink: 0,
+                        }}
+                        onMouseEnter={e => { if (!showDetails) { e.currentTarget.style.background = T.surfaceHover; e.currentTarget.style.borderColor = T.border; } }}
+                        onMouseLeave={e => { if (!showDetails) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'transparent'; } }}
+                    >
+                        <DescEditIcon />
+                    </button>
+                )}
+
+                {/* スペーサー */}
+                <div style={{ flex: 1 }} />
+
+                {/* ── 右ブロック ──────────────────────────────────────────── */}
+
+                {/* 保存フラッシュ */}
+                {savedMsg && (
+                    <span style={{ fontSize: '10px', color: T.successText, fontWeight: 600, whiteSpace: 'nowrap', flexShrink: 0, marginRight: 4 }}>
+                        ✓ {savedMsg}
+                    </span>
+                )}
+
+                {/* ノードパレット / Analytics 退出ボタン */}
                 {!isNew && (
                     <>
-                        <div style={divider} />
                         {analyticsMode ? (
-                            /* Analytics モード中: 編集に戻る方法を明示 */
+                            /* Analytics モード中: 編集に戻る */
                             <button
                                 onClick={() => setAnalyticsMode(false)}
                                 style={{ ...cBtn({ fill: true }), fontWeight: 700 }}
@@ -382,17 +419,9 @@ export default function ScenarioFormPage() {
                                 );
                             })
                         )}
+
+                        <div style={divider} />
                     </>
-                )}
-
-                {/* スペーサー */}
-                <div style={{ flex: 1 }} />
-
-                {/* 保存フラッシュ */}
-                {savedMsg && (
-                    <span style={{ fontSize: '10px', color: T.successText, fontWeight: 600, whiteSpace: 'nowrap', flexShrink: 0 }}>
-                        ✓ {savedMsg}
-                    </span>
                 )}
 
                 {/* Analytics トグル */}
@@ -505,30 +534,7 @@ export default function ScenarioFormPage() {
 
             {/* ══ Canvas ═══════════════════════════════════════════════════════ */}
             {!isNew && (
-                <div style={{ flex: 1, overflow: 'hidden', position: 'relative' }}>
-
-                    {/* Details フローティングトリガー（キャンバス左上） */}
-                    <button
-                        onClick={() => setShowDetails(v => !v)}
-                        title={t('scenarioForm.detailsToggle')}
-                        style={{
-                            position: 'absolute', top: 8, left: 8, zIndex: 10,
-                            display: 'inline-flex', alignItems: 'center', gap: 3,
-                            padding: '2px 8px', borderRadius: T.radiusLg,
-                            background: showDetails ? T.primaryLight : T.surface,
-                            border: `1px solid ${showDetails ? T.primaryBorder : T.border}`,
-                            color: showDetails ? T.primaryText : T.textMuted,
-                            boxShadow: showDetails ? 'none' : '0 1px 4px rgba(0,0,0,.10)',
-                            fontSize: '10px', fontWeight: 500,
-                            cursor: 'pointer',
-                        }}
-                        onMouseEnter={e => { if (!showDetails) e.currentTarget.style.boxShadow = '0 2px 6px rgba(0,0,0,.15)'; }}
-                        onMouseLeave={e => { if (!showDetails) e.currentTarget.style.boxShadow = '0 1px 4px rgba(0,0,0,.10)'; }}
-                    >
-                        {t('scenarioForm.detailsToggle')}
-                        {showDetails ? <ChevronUpIcon /> : <ChevronDownIcon />}
-                    </button>
-
+                <div style={{ flex: 1, overflow: 'hidden' }}>
                     <ScenarioCanvas
                         ref={canvasRef}
                         scenarioId={Number(id)}
