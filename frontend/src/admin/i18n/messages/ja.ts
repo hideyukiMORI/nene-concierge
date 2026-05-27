@@ -18,6 +18,7 @@ export const ja: Partial<MessageCatalog> = {
     'common.delete':        '削除',
     'common.edit':          '編集',
     'common.cancel':        'キャンセル',
+    'common.close':         '閉じる',
     'common.backToList':    '一覧へ戻る',
     'common.new':           '＋ 新規作成',
     'common.add':           '＋ 追加',

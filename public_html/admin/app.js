@@ -21804,9 +21804,9 @@ var NeNeAdmin = (() => {
           return x === y && (0 !== x || 1 / x === 1 / y) || x !== x && y !== y;
         }
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-        var React15 = require_react(), shim = require_shim(), objectIs = "function" === typeof Object.is ? Object.is : is, useSyncExternalStore = shim.useSyncExternalStore, useRef7 = React15.useRef, useEffect17 = React15.useEffect, useMemo6 = React15.useMemo, useDebugValue2 = React15.useDebugValue;
+        var React15 = require_react(), shim = require_shim(), objectIs = "function" === typeof Object.is ? Object.is : is, useSyncExternalStore = shim.useSyncExternalStore, useRef8 = React15.useRef, useEffect17 = React15.useEffect, useMemo6 = React15.useMemo, useDebugValue2 = React15.useDebugValue;
         exports.useSyncExternalStoreWithSelector = function(subscribe, getSnapshot, getServerSnapshot, selector, isEqual) {
-          var instRef = useRef7(null);
+          var instRef = useRef8(null);
           if (null === instRef.current) {
             var inst = { hasValue: false, value: null };
             instRef.current = inst;
@@ -24898,6 +24898,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "common.delete": "Delete",
     "common.edit": "Edit",
     "common.cancel": "Cancel",
+    "common.close": "Close",
     "common.backToList": "Back to list",
     "common.new": "+ New",
     "common.add": "+ Add",
@@ -25123,6 +25124,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "common.delete": "\u524A\u9664",
     "common.edit": "\u7DE8\u96C6",
     "common.cancel": "\u30AD\u30E3\u30F3\u30BB\u30EB",
+    "common.close": "\u9589\u3058\u308B",
     "common.backToList": "\u4E00\u89A7\u3078\u623B\u308B",
     "common.new": "\uFF0B \u65B0\u898F\u4F5C\u6210",
     "common.add": "\uFF0B \u8FFD\u52A0",
@@ -25346,6 +25348,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "common.delete": "Supprimer",
     "common.edit": "Modifier",
     "common.cancel": "Annuler",
+    "common.close": "Close",
     "common.backToList": "Retour \xE0 la liste",
     "common.new": "+ Nouveau",
     "common.add": "+ Ajouter",
@@ -25517,6 +25520,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "common.delete": "\u5220\u9664",
     "common.edit": "\u7F16\u8F91",
     "common.cancel": "\u53D6\u6D88",
+    "common.close": "Close",
     "common.backToList": "\u8FD4\u56DE\u5217\u8868",
     "common.new": "\uFF0B \u65B0\u5EFA",
     "common.add": "\uFF0B \u6DFB\u52A0",
@@ -25688,6 +25692,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "common.delete": "Excluir",
     "common.edit": "Editar",
     "common.cancel": "Cancelar",
+    "common.close": "Close",
     "common.backToList": "Voltar \xE0 lista",
     "common.new": "+ Novo",
     "common.add": "+ Adicionar",
@@ -25859,6 +25864,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "common.delete": "L\xF6schen",
     "common.edit": "Bearbeiten",
     "common.cancel": "Abbrechen",
+    "common.close": "Close",
     "common.backToList": "Zur Liste",
     "common.new": "+ Neu",
     "common.add": "+ Hinzuf\xFCgen",
@@ -26154,7 +26160,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       opacity: 0.5
     } });
   }
-  function Layout() {
+  function Layout({ variant = "default" }) {
     const nav = useNavigate();
     const { t, locale, setLocale } = useTranslation();
     const { themeVariant: themeVariant2, toggleVariant, canToggleVariant: canToggleVariant2 } = useTheme();
@@ -26380,7 +26386,17 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           )
         ] })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("main", { style: {
+      variant === "editor" ? (
+        /* エディタ: padding なし・maxWidth なし・フル高さ */
+        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("main", { style: {
+          flex: 1,
+          minWidth: 0,
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
+          background: T.bg
+        }, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(Outlet, {}) })
+      ) : /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("main", { style: {
         flex: 1,
         minWidth: 0,
         overflowY: "auto",
@@ -36041,9 +36057,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var import_jsx_runtime8 = __toESM(require_jsx_runtime());
   var S = {
     panel: {
-      width: 280,
       background: T.surface,
-      borderLeft: `1px solid ${T.border}`,
       overflowY: "auto",
       padding: "16px",
       display: "flex",
@@ -36594,14 +36608,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ] })
     ] });
   }
-  function ScenarioCanvas({
-    scenarioId,
-    initialNodes,
-    initialEdges,
-    credentials,
-    saving,
-    onSave
-  }) {
+  var ScenarioCanvas = (0, import_react10.forwardRef)(function ScenarioCanvas2({ scenarioId, initialNodes, initialEdges, credentials, onSave }, ref) {
     const { t } = useTranslation();
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes.map(apiNodeToRF));
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges.map(apiEdgeToRF));
@@ -36690,12 +36697,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       setEdges((eds) => eds.filter((e) => e.source !== id2 && e.target !== id2));
       setSelectedNodeId(null);
     }
-    function handleSave() {
-      onSave(
-        nodes.map(rfNodeToApi),
-        edges.map(rfEdgeToApi)
-      );
-    }
+    const handleSave = (0, import_react10.useCallback)(() => {
+      onSave(nodes.map(rfNodeToApi), edges.map(rfEdgeToApi));
+    }, [nodes, edges, onSave]);
+    (0, import_react10.useImperativeHandle)(ref, () => ({ triggerSave: handleSave }), [handleSave]);
     const selectedNode = !analyticsMode ? nodes.find((n) => n.id === selectedNodeId) ?? null : null;
     function segBtn(active) {
       return {
@@ -36705,12 +36710,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         border: "none",
         cursor: "pointer",
         background: active ? T.primary : "transparent",
-        color: active ? "#fff" : T.text,
+        color: active ? T.primaryFg : T.text,
         transition: "background 0.1s, color 0.1s"
       };
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", height: "100%" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { ref: reactFlowWrapper, style: { flex: 1, position: "relative" }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
+    const showRightPanel = analyticsMode || selectedNode !== null;
+    return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { position: "relative", height: "100%" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { ref: reactFlowWrapper, style: { position: "absolute", inset: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
         index,
         {
           nodes,
@@ -36739,11 +36745,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 style: { background: T.tableHeader, border: `1px solid ${T.border}` }
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Panel, { position: "top-left", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: {
-              display: "flex",
-              flexDirection: "column",
-              gap: 6
-            }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Panel, { position: "top-left", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: 6 }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: {
                 display: "flex",
                 borderRadius: T.radiusMd,
@@ -36752,24 +36754,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 background: T.surface,
                 boxShadow: T.shadowCard
               }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("button", { style: segBtn(!analyticsMode), onClick: () => setAnalyticsMode(false), children: [
+                  "\u270F\uFE0F ",
+                  t("canvas.editMode")
+                ] }),
                 /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
                   "button",
                   {
-                    style: segBtn(!analyticsMode),
-                    onClick: () => setAnalyticsMode(false),
-                    children: [
-                      "\u270F\uFE0F ",
-                      t("canvas.editMode")
-                    ]
-                  }
-                ),
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
-                  "button",
-                  {
-                    style: {
-                      ...segBtn(analyticsMode),
-                      borderLeft: `1px solid ${T.border}`
-                    },
+                    style: { ...segBtn(analyticsMode), borderLeft: `1px solid ${T.border}` },
                     onClick: () => setAnalyticsMode(true),
                     children: [
                       "\u{1F4CA} ",
@@ -36780,8 +36772,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               ] }),
               !analyticsMode && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: {
                 display: "flex",
-                gap: 6,
-                padding: 10,
+                gap: 5,
+                padding: 8,
                 background: T.surface,
                 borderRadius: T.radiusLg,
                 border: `1px solid ${T.border}`,
@@ -36797,8 +36789,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                     style: {
                       display: "flex",
                       alignItems: "center",
-                      gap: 5,
-                      padding: "6px 10px",
+                      gap: 4,
+                      padding: "5px 9px",
                       borderRadius: T.radiusMd,
                       background: c.bg,
                       border: `1.5px solid ${c.border}`,
@@ -36836,48 +36828,74 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 },
                 p
               )) })
-            ] }) }),
-            !analyticsMode && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Panel, { position: "top-right", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
-              "button",
-              {
-                onClick: handleSave,
-                disabled: saving,
-                style: {
-                  padding: "6px 14px",
-                  borderRadius: 6,
-                  background: saving ? T.primaryMuted : T.primary,
-                  color: T.primaryFg,
-                  border: "none",
-                  fontWeight: 700,
-                  fontSize: T.fontBase,
-                  cursor: saving ? "not-allowed" : "pointer",
-                  opacity: saving ? 0.65 : 1,
-                  boxShadow: "0 1px 4px rgba(0,0,0,.15)"
-                },
-                children: saving ? t("canvas.saving") : t("canvas.save")
-              }
-            ) })
+            ] }) })
           ]
         }
       ) }),
-      analyticsMode ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+      showRightPanel && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: {
+        position: "absolute",
+        top: 8,
+        right: 8,
+        bottom: 8,
+        width: 260,
+        zIndex: 10,
+        background: T.surface,
+        borderRadius: T.radiusLg,
+        border: `1px solid ${T.border}`,
+        boxShadow: "0 4px 16px rgba(0,0,0,.12)",
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden"
+      }, children: analyticsMode ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
         AnalyticsSummaryPanel,
         {
           report: analyticsReport,
           loading: analyticsLoading,
           noData: analyticsNoData
         }
-      ) : selectedNode && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
-        NodeConfigPanel,
-        {
-          node: selectedNode,
-          credentials,
-          onChange: handleNodeChange,
-          onDelete: handleNodeDelete
-        }
-      )
+      ) : selectedNode && /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(import_jsx_runtime9.Fragment, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: {
+          display: "flex",
+          justifyContent: "flex-end",
+          padding: "4px 6px 0",
+          flexShrink: 0
+        }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+          "button",
+          {
+            onClick: () => setSelectedNodeId(null),
+            title: t("common.close"),
+            style: {
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              color: T.textMuted,
+              fontSize: 16,
+              lineHeight: 1,
+              padding: "2px 4px",
+              borderRadius: T.radiusSm
+            },
+            onMouseEnter: (e) => {
+              e.currentTarget.style.background = T.border;
+            },
+            onMouseLeave: (e) => {
+              e.currentTarget.style.background = "none";
+            },
+            children: "\xD7"
+          }
+        ) }),
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { flex: 1, overflowY: "auto" }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+          NodeConfigPanel,
+          {
+            node: selectedNode,
+            credentials,
+            onChange: handleNodeChange,
+            onDelete: handleNodeDelete
+          }
+        ) })
+      ] }) })
     ] });
-  }
+  });
+  var ScenarioCanvas_default = ScenarioCanvas;
 
   // src/admin/components/ScenarioFormPage.tsx
   var import_jsx_runtime10 = __toESM(require_jsx_runtime());
@@ -36896,6 +36914,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const [saving, setSaving] = (0, import_react11.useState)(false);
     const [error, setError] = (0, import_react11.useState)(null);
     const [savedMsg, setSavedMsg] = (0, import_react11.useState)("");
+    const canvasRef = (0, import_react11.useRef)(null);
     (0, import_react11.useEffect)(() => {
       void listCredentials().then((r) => setCredentials(r.data)).catch(() => {
       });
@@ -36966,7 +36985,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       { value: "archived", label: t("scenario.status.archived") }
     ];
     if (loading) return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { color: T.textMuted, marginTop: 40 }, children: t("common.loading") });
-    return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column", height: "calc(100vh - 64px)", gap: 0 }, children: [
+    return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column", flex: 1, overflow: "hidden" }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: {
         display: "flex",
         alignItems: "center",
@@ -36983,7 +37002,17 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           "\u2713 ",
           savedMsg
         ] }),
-        !isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Btn, { variant: "danger", onClick: () => void handleDelete(), children: t("common.delete") }),
+        !isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+            Btn,
+            {
+              disabled: saving,
+              onClick: () => canvasRef.current?.triggerSave(),
+              children: saving ? t("common.saving") : t("canvas.save")
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Btn, { variant: "danger", onClick: () => void handleDelete(), children: t("common.delete") })
+        ] }),
         /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Btn, { variant: "ghost", onClick: () => nav("/scenarios"), children: t("common.backToList") })
       ] }),
       error && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { padding: "8px 16px", background: T.dangerBg, flexShrink: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(ErrorMsg, { msg: error }) }),
@@ -37071,13 +37100,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }
       ),
       !isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { flex: 1, overflow: "hidden" }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-        ScenarioCanvas,
+        ScenarioCanvas_default,
         {
+          ref: canvasRef,
           scenarioId: Number(id2),
           initialNodes: nodes,
           initialEdges: edges,
           credentials,
-          saving,
           onSave: handleGraphSave
         }
       ) }),
@@ -38444,17 +38473,21 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   function App() {
     return /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(ThemeProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(BrowserRouter, { basename: "/admin", children: /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(Routes, { children: [
       /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Route, { index: true, element: isAuthenticated() ? /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Navigate, { to: "/dashboard", replace: true }) : /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(LoginPage, {}) }),
-      /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Route, { element: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(RequireAuth, {}), children: /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(Route, { element: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Layout, {}), children: [
-        /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Route, { path: "dashboard", element: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(DashboardPage, {}) }),
-        /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Route, { path: "scenarios", element: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(ScenariosPage, {}) }),
-        /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Route, { path: "scenarios/new", element: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(ScenarioFormPage, {}) }),
-        /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Route, { path: "scenarios/:id", element: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(ScenarioFormPage, {}) }),
-        /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Route, { path: "appearance", element: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(AppearancePage, {}) }),
-        /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Route, { path: "credentials", element: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(CredentialsPage, {}) }),
-        /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Route, { path: "action-logs", element: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(ActionLogsPage, {}) }),
-        /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Route, { path: "sessions", element: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(SessionsPage, {}) }),
-        /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Route, { path: "settings", element: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(SettingsPage, {}) })
-      ] }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(Route, { element: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(RequireAuth, {}), children: [
+        /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(Route, { element: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Layout, {}), children: [
+          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Route, { path: "dashboard", element: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(DashboardPage, {}) }),
+          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Route, { path: "scenarios", element: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(ScenariosPage, {}) }),
+          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Route, { path: "appearance", element: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(AppearancePage, {}) }),
+          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Route, { path: "credentials", element: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(CredentialsPage, {}) }),
+          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Route, { path: "action-logs", element: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(ActionLogsPage, {}) }),
+          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Route, { path: "sessions", element: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(SessionsPage, {}) }),
+          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Route, { path: "settings", element: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(SettingsPage, {}) })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(Route, { element: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Layout, { variant: "editor" }), children: [
+          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Route, { path: "scenarios/new", element: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(ScenarioFormPage, {}) }),
+          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Route, { path: "scenarios/:id", element: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(ScenarioFormPage, {}) })
+        ] })
+      ] }),
       /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Route, { path: "*", element: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Navigate, { to: "/", replace: true }) })
     ] }) }) });
   }

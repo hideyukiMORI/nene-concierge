@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import {
     getScenario, createScenario, updateScenario, deleteScenario, saveScenarioGraph,
@@ -9,7 +9,7 @@ import {
 import { PageTitle, Btn, Badge, ErrorMsg } from './Layout.js';
 import { T } from '../theme.js';
 import { useTranslation } from '../i18n/index.js';
-import ScenarioCanvas from './editor/ScenarioCanvas.js';
+import ScenarioCanvas, { type ScenarioCanvasRef } from './editor/ScenarioCanvas.js';
 
 // React Flow の CSS を読み込む（esbuild がバンドル時に app.css へ出力する）
 import '@xyflow/react/dist/style.css';
@@ -35,6 +35,7 @@ export default function ScenarioFormPage() {
     const [saving, setSaving]     = useState(false);
     const [error, setError]       = useState<string | null>(null);
     const [savedMsg, setSavedMsg] = useState('');
+    const canvasRef               = useRef<ScenarioCanvasRef>(null);
 
     // ── ロード ──────────────────────────────────────────────────────────────
     useEffect(() => {
@@ -118,7 +119,7 @@ export default function ScenarioFormPage() {
     if (loading) return <p style={{ color: T.textMuted, marginTop: 40 }}>{t('common.loading')}</p>;
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 64px)', gap: 0 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
 
             {/* ── ヘッダーバー ── */}
             <div style={{
@@ -137,7 +138,15 @@ export default function ScenarioFormPage() {
                     </span>
                 )}
                 {!isNew && (
-                    <Btn variant="danger" onClick={() => void handleDelete()}>{t('common.delete')}</Btn>
+                    <>
+                        <Btn
+                            disabled={saving}
+                            onClick={() => canvasRef.current?.triggerSave()}
+                        >
+                            {saving ? t('common.saving') : t('canvas.save')}
+                        </Btn>
+                        <Btn variant="danger" onClick={() => void handleDelete()}>{t('common.delete')}</Btn>
+                    </>
                 )}
                 <Btn variant="ghost" onClick={() => nav('/scenarios')}>{t('common.backToList')}</Btn>
             </div>
@@ -216,11 +225,11 @@ export default function ScenarioFormPage() {
             {!isNew && (
                 <div style={{ flex: 1, overflow: 'hidden' }}>
                     <ScenarioCanvas
+                        ref={canvasRef}
                         scenarioId={Number(id)}
                         initialNodes={nodes}
                         initialEdges={edges}
                         credentials={credentials}
-                        saving={saving}
                         onSave={handleGraphSave}
                     />
                 </div>

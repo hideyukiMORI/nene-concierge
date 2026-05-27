@@ -29,18 +29,21 @@ export default function App() {
                         : <LoginPage />
                 } />
 
-                {/* Protected */}
+                {/* Protected — 通常レイアウト */}
                 <Route element={<RequireAuth />}>
                     <Route element={<Layout />}>
                         <Route path="dashboard"      element={<DashboardPage />} />
                         <Route path="scenarios"      element={<ScenariosPage />} />
-                        <Route path="scenarios/new"  element={<ScenarioFormPage />} />
-                        <Route path="scenarios/:id"  element={<ScenarioFormPage />} />
                         <Route path="appearance"     element={<AppearancePage />} />
                         <Route path="credentials"    element={<CredentialsPage />} />
                         <Route path="action-logs"    element={<ActionLogsPage />} />
                         <Route path="sessions"       element={<SessionsPage />} />
                         <Route path="settings"       element={<SettingsPage />} />
+                    </Route>
+                    {/* エディタ: padding なし・maxWidth なし・全面 canvas */}
+                    <Route element={<Layout variant="editor" />}>
+                        <Route path="scenarios/new"  element={<ScenarioFormPage />} />
+                        <Route path="scenarios/:id"  element={<ScenarioFormPage />} />
                     </Route>
                 </Route>
 

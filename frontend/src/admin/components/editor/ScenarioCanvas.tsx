@@ -12,7 +12,7 @@ import {
     type NodeTypes,
     Panel,
 } from '@xyflow/react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import type {
@@ -166,6 +166,12 @@ function AnalyticsSummaryPanel({
     );
 }
 
+// ── Public ref handle ─────────────────────────────────────────────────────────
+
+export interface ScenarioCanvasRef {
+    triggerSave: () => void;
+}
+
 // ── Props ─────────────────────────────────────────────────────────────────────
 
 interface Props {
@@ -173,15 +179,15 @@ interface Props {
     initialNodes:  ScenarioNode[];
     initialEdges:  ScenarioEdge[];
     credentials:   CredentialSummary[];
-    saving:        boolean;
     onSave:        (nodes: ScenarioNode[], edges: ScenarioEdge[]) => void;
 }
 
 // ── コンポーネント ──────────────────────────────────────────────────────────────
 
-export default function ScenarioCanvas({
-    scenarioId, initialNodes, initialEdges, credentials, saving, onSave,
-}: Props) {
+const ScenarioCanvas = forwardRef<ScenarioCanvasRef, Props>(function ScenarioCanvas(
+    { scenarioId, initialNodes, initialEdges, credentials, onSave },
+    ref,
+) {
     const { t } = useTranslation();
     const [nodes, setNodes, onNodesChange] = useNodesState<Node>(initialNodes.map(apiNodeToRF));
     const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>(initialEdges.map(apiEdgeToRF));
@@ -295,13 +301,12 @@ export default function ScenarioCanvas({
         setSelectedNodeId(null);
     }
 
-    // ── 保存 ──────────────────────────────────────────────────────────────────
-    function handleSave() {
-        onSave(
-            nodes.map(rfNodeToApi),
-            edges.map(rfEdgeToApi),
-        );
-    }
+    // ── 保存 (外部から ref.triggerSave() で呼び出し可能) ──────────────────────
+    const handleSave = useCallback(() => {
+        onSave(nodes.map(rfNodeToApi), edges.map(rfEdgeToApi));
+    }, [nodes, edges, onSave]);
+
+    useImperativeHandle(ref, () => ({ triggerSave: handleSave }), [handleSave]);
 
     const selectedNode = !analyticsMode
         ? (nodes.find(n => n.id === selectedNodeId) ?? null)
@@ -313,15 +318,17 @@ export default function ScenarioCanvas({
             padding: '5px 12px', fontSize: T.fontSm, fontWeight: active ? 700 : 400,
             border: 'none', cursor: 'pointer',
             background: active ? T.primary : 'transparent',
-            color: active ? '#fff' : T.text,
+            color: active ? T.primaryFg : T.text,
             transition: 'background 0.1s, color 0.1s',
         };
     }
 
+    const showRightPanel = analyticsMode || (selectedNode !== null);
+
     return (
-        <div style={{ display: 'flex', height: '100%' }}>
-            {/* キャンバス */}
-            <div ref={reactFlowWrapper} style={{ flex: 1, position: 'relative' }}>
+        <div style={{ position: 'relative', height: '100%' }}>
+            {/* キャンバス — 全面 */}
+            <div ref={reactFlowWrapper} style={{ position: 'absolute', inset: 0 }}>
                 <ReactFlow
                     nodes={nodes}
                     edges={edges}
@@ -347,9 +354,7 @@ export default function ScenarioCanvas({
 
                     {/* ツールバー (React Flow Panel) */}
                     <Panel position="top-left">
-                        <div style={{
-                            display: 'flex', flexDirection: 'column', gap: 6,
-                        }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                             {/* Edit / Analytics トグル */}
                             <div style={{
                                 display: 'flex', borderRadius: T.radiusMd,
@@ -358,17 +363,11 @@ export default function ScenarioCanvas({
                                 background: T.surface,
                                 boxShadow: T.shadowCard,
                             }}>
-                                <button
-                                    style={segBtn(!analyticsMode)}
-                                    onClick={() => setAnalyticsMode(false)}
-                                >
+                                <button style={segBtn(!analyticsMode)} onClick={() => setAnalyticsMode(false)}>
                                     ✏️ {t('canvas.editMode')}
                                 </button>
                                 <button
-                                    style={{
-                                        ...segBtn(analyticsMode),
-                                        borderLeft: `1px solid ${T.border}`,
-                                    }}
+                                    style={{ ...segBtn(analyticsMode), borderLeft: `1px solid ${T.border}` }}
                                     onClick={() => setAnalyticsMode(true)}
                                 >
                                     📊 {t('canvas.analyticsMode')}
@@ -378,7 +377,7 @@ export default function ScenarioCanvas({
                             {/* ノードパレット (Edit モードのみ) */}
                             {!analyticsMode && (
                                 <div style={{
-                                    display: 'flex', gap: 6, padding: 10,
+                                    display: 'flex', gap: 5, padding: 8,
                                     background: T.surface, borderRadius: T.radiusLg,
                                     border: `1px solid ${T.border}`,
                                     boxShadow: T.shadowCard,
@@ -392,8 +391,8 @@ export default function ScenarioCanvas({
                                                 onClick={() => addNode(type)}
                                                 title={t('node.addToCanvas', { type: label })}
                                                 style={{
-                                                    display: 'flex', alignItems: 'center', gap: 5,
-                                                    padding: '6px 10px', borderRadius: T.radiusMd,
+                                                    display: 'flex', alignItems: 'center', gap: 4,
+                                                    padding: '5px 9px', borderRadius: T.radiusMd,
                                                     background: c.bg, border: `1.5px solid ${c.border}`,
                                                     color: c.text, fontWeight: 600, fontSize: T.fontSm,
                                                     cursor: 'pointer',
@@ -433,47 +432,67 @@ export default function ScenarioCanvas({
                             )}
                         </div>
                     </Panel>
-
-                    {/* 保存ボタン (Edit モードのみ) */}
-                    {!analyticsMode && (
-                        <Panel position="top-right">
-                            <button
-                                onClick={handleSave}
-                                disabled={saving}
-                                style={{
-                                    padding: '6px 14px', borderRadius: 6,
-                                    background: saving ? T.primaryMuted : T.primary,
-                                    color: T.primaryFg, border: 'none',
-                                    fontWeight: 700, fontSize: T.fontBase,
-                                    cursor: saving ? 'not-allowed' : 'pointer',
-                                    opacity: saving ? 0.65 : 1,
-                                    boxShadow: '0 1px 4px rgba(0,0,0,.15)',
-                                }}
-                            >
-                                {saving ? t('canvas.saving') : t('canvas.save')}
-                            </button>
-                        </Panel>
-                    )}
                 </ReactFlow>
             </div>
 
-            {/* 右パネル: Analytics モード → サマリー / Edit モード → ノード設定 */}
-            {analyticsMode ? (
-                <AnalyticsSummaryPanel
-                    report={analyticsReport}
-                    loading={analyticsLoading}
-                    noData={analyticsNoData}
-                />
-            ) : (
-                selectedNode && (
-                    <NodeConfigPanel
-                        node={selectedNode}
-                        credentials={credentials}
-                        onChange={handleNodeChange}
-                        onDelete={handleNodeDelete}
-                    />
-                )
+            {/* 右フローティングパネル (ノード設定 / Analytics サマリー) */}
+            {showRightPanel && (
+                <div style={{
+                    position: 'absolute',
+                    top: 8, right: 8, bottom: 8,
+                    width: 260,
+                    zIndex: 10,
+                    background: T.surface,
+                    borderRadius: T.radiusLg,
+                    border: `1px solid ${T.border}`,
+                    boxShadow: '0 4px 16px rgba(0,0,0,.12)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    overflow: 'hidden',
+                }}>
+                    {analyticsMode ? (
+                        <AnalyticsSummaryPanel
+                            report={analyticsReport}
+                            loading={analyticsLoading}
+                            noData={analyticsNoData}
+                        />
+                    ) : (
+                        selectedNode && (
+                            <>
+                                {/* × 閉じるボタン */}
+                                <div style={{
+                                    display: 'flex', justifyContent: 'flex-end',
+                                    padding: '4px 6px 0', flexShrink: 0,
+                                }}>
+                                    <button
+                                        onClick={() => setSelectedNodeId(null)}
+                                        title={t('common.close')}
+                                        style={{
+                                            background: 'none', border: 'none', cursor: 'pointer',
+                                            color: T.textMuted, fontSize: 16, lineHeight: 1,
+                                            padding: '2px 4px', borderRadius: T.radiusSm,
+                                        }}
+                                        onMouseEnter={e => { e.currentTarget.style.background = T.border; }}
+                                        onMouseLeave={e => { e.currentTarget.style.background = 'none'; }}
+                                    >
+                                        ×
+                                    </button>
+                                </div>
+                                <div style={{ flex: 1, overflowY: 'auto' }}>
+                                    <NodeConfigPanel
+                                        node={selectedNode}
+                                        credentials={credentials}
+                                        onChange={handleNodeChange}
+                                        onDelete={handleNodeDelete}
+                                    />
+                                </div>
+                            </>
+                        )
+                    )}
+                </div>
             )}
         </div>
     );
-}
+});
+
+export default ScenarioCanvas;

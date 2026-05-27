@@ -88,7 +88,7 @@ function NavDivider() {
 
 // ── Layout ────────────────────────────────────────────────────────────────────
 
-export default function Layout() {
+export default function Layout({ variant = 'default' }: { variant?: 'default' | 'editor' }) {
     const nav = useNavigate();
     const { t, locale, setLocale } = useTranslation();
     const { themeVariant, toggleVariant, canToggleVariant } = useTheme();
@@ -307,14 +307,25 @@ export default function Layout() {
             </aside>
 
             {/* ── Main content ── */}
-            <main style={{
-                flex: 1, minWidth: 0, overflowY: 'auto',
-                background: T.bg, padding: '32px 40px',
-            }}>
-                <div style={{ maxWidth: 960, margin: '0 auto' }}>
+            {variant === 'editor' ? (
+                /* エディタ: padding なし・maxWidth なし・フル高さ */
+                <main style={{
+                    flex: 1, minWidth: 0,
+                    display: 'flex', flexDirection: 'column',
+                    overflow: 'hidden', background: T.bg,
+                }}>
                     <Outlet />
-                </div>
-            </main>
+                </main>
+            ) : (
+                <main style={{
+                    flex: 1, minWidth: 0, overflowY: 'auto',
+                    background: T.bg, padding: '32px 40px',
+                }}>
+                    <div style={{ maxWidth: 960, margin: '0 auto' }}>
+                        <Outlet />
+                    </div>
+                </main>
+            )}
         </div>
     );
 }

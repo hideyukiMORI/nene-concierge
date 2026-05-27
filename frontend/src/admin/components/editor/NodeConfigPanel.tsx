@@ -21,7 +21,7 @@ interface Props {
 
 const S = {
     panel: {
-        width: 280, background: T.surface, borderLeft: `1px solid ${T.border}`,
+        background: T.surface,
         overflowY: 'auto' as const, padding: '16px',
         display: 'flex', flexDirection: 'column' as const, gap: 14,
     },

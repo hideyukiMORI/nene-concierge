@@ -25,6 +25,7 @@ export const en = {
     'common.delete':        'Delete',
     'common.edit':          'Edit',
     'common.cancel':        'Cancel',
+    'common.close':         'Close',
     'common.backToList':    'Back to list',
     'common.new':           '+ New',
     'common.add':           '+ Add',
