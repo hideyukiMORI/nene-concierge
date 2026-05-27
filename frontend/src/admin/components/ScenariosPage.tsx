@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { listScenarios, deleteScenario, ScenarioSummary, ApiError } from '../api.js';
 import { PageTitle, Card, Btn, Badge, ErrorMsg } from './Layout.js';
+import { T } from '../theme.js';
 
 export default function ScenariosPage() {
     const [scenarios, setScenarios] = useState<ScenarioSummary[]>([]);
@@ -43,10 +44,10 @@ export default function ScenariosPage() {
             </div>
             <ErrorMsg msg={error} />
             {loading ? (
-                <p style={{ color:'#6b7280' }}>読み込み中…</p>
+                <p style={{ color: T.textMuted }}>読み込み中…</p>
             ) : scenarios.length === 0 ? (
                 <Card>
-                    <p style={{ color:'#6b7280', textAlign:'center', padding:'40px 0' }}>
+                    <p style={{ color: T.textMuted, textAlign:'center', padding:'40px 0' }}>
                         シナリオがありません。「新規作成」から始めましょう。
                     </p>
                 </Card>
@@ -54,25 +55,25 @@ export default function ScenariosPage() {
                 <Card style={{ padding: 0 }}>
                     <table style={{ width:'100%', borderCollapse:'collapse' }}>
                         <thead>
-                            <tr style={{ borderBottom:'1px solid #f3f4f6', background:'#f9fafb' }}>
+                            <tr style={{ borderBottom: `1px solid ${T.borderLight}`, background: T.tableHeader }}>
                                 {['ID','名前','説明','ステータス','操作'].map(h => (
                                     <th key={h} style={{
                                         padding:'10px 16px', textAlign:'left',
-                                        fontSize:12, fontWeight:600, color:'#6b7280',
+                                        fontSize: T.fontSm, fontWeight: 600, color: T.textMuted,
                                     }}>{h}</th>
                                 ))}
                             </tr>
                         </thead>
                         <tbody>
                             {scenarios.map(s => (
-                                <tr key={s.id} style={{ borderBottom:'1px solid #f3f4f6' }}>
-                                    <td style={{ padding:'12px 16px', color:'#6b7280', fontSize:13 }}>{s.id}</td>
+                                <tr key={s.id} style={{ borderBottom: `1px solid ${T.borderLight}` }}>
+                                    <td style={{ padding:'12px 16px', color: T.textMuted, fontSize: T.fontBase }}>{s.id}</td>
                                     <td style={{ padding:'12px 16px', fontWeight:500 }}>
-                                        <Link to={`/scenarios/${s.id}`} style={{ color:'#2563eb', textDecoration:'none' }}>
+                                        <Link to={`/scenarios/${s.id}`} style={{ color: T.primary, textDecoration:'none' }}>
                                             {s.name}
                                         </Link>
                                     </td>
-                                    <td style={{ padding:'12px 16px', color:'#6b7280', fontSize:13, maxWidth:200 }}>
+                                    <td style={{ padding:'12px 16px', color: T.textMuted, fontSize: T.fontBase, maxWidth:200 }}>
                                         {s.description ?? '—'}
                                     </td>
                                     <td style={{ padding:'12px 16px' }}>

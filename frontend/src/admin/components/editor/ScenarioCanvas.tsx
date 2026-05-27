@@ -18,6 +18,7 @@ import { v4 as uuidv4 } from 'uuid';
 import type { ScenarioNode, ScenarioEdge, CredentialSummary, ChatNodeType } from '../../api.js';
 import { NODE_COLORS, NODE_ICONS, NODE_LABELS, MessageNode, ConditionNode, ActionNode, EndNode } from './NodeTypes.js';
 import NodeConfigPanel from './NodeConfigPanel.js';
+import { T } from '../../theme.js';
 
 // ── React Flow ノードタイプ登録 ───────────────────────────────────────────────
 
@@ -159,20 +160,20 @@ export default function ScenarioCanvas({ initialNodes, initialEdges, credentials
                     fitViewOptions={{ padding: 0.2 }}
                     deleteKeyCode="Delete"
                 >
-                    <Background gap={20} color="#e5e7eb" />
+                    <Background gap={20} color={T.border} />
                     <Controls />
                     <MiniMap
-                        nodeColor={n => NODE_COLORS[n.type as ChatNodeType]?.header ?? '#94a3b8'}
-                        style={{ background: '#f9fafb', border: '1px solid #e5e7eb' }}
+                        nodeColor={n => NODE_COLORS[n.type as ChatNodeType]?.header ?? T.sidebarMuted}
+                        style={{ background: T.tableHeader, border: `1px solid ${T.border}` }}
                     />
 
                     {/* ツールバー (React Flow Panel) */}
                     <Panel position="top-left">
                         <div style={{
                             display: 'flex', gap: 6, padding: 10,
-                            background: '#fff', borderRadius: 10,
-                            border: '1px solid #e5e7eb',
-                            boxShadow: '0 2px 8px rgba(0,0,0,.08)',
+                            background: T.surface, borderRadius: T.radiusLg,
+                            border: `1px solid ${T.border}`,
+                            boxShadow: T.shadowCard,
                         }}>
                             {(['message', 'condition', 'action', 'end'] as ChatNodeType[]).map(type => {
                                 const c = NODE_COLORS[type];
@@ -183,9 +184,9 @@ export default function ScenarioCanvas({ initialNodes, initialEdges, credentials
                                         title={`${NODE_LABELS[type]}ノードを追加`}
                                         style={{
                                             display: 'flex', alignItems: 'center', gap: 5,
-                                            padding: '6px 10px', borderRadius: 7,
+                                            padding: '6px 10px', borderRadius: T.radiusMd,
                                             background: c.bg, border: `1.5px solid ${c.border}`,
-                                            color: c.text, fontWeight: 600, fontSize: 12,
+                                            color: c.text, fontWeight: 600, fontSize: T.fontSm,
                                             cursor: 'pointer',
                                         }}
                                     >
@@ -203,9 +204,9 @@ export default function ScenarioCanvas({ initialNodes, initialEdges, credentials
                             disabled={saving}
                             style={{
                                 padding: '8px 20px', borderRadius: 8,
-                                background: saving ? '#93c5fd' : '#2563eb',
+                                background: saving ? T.primaryMuted : T.primary,
                                 color: '#fff', border: 'none',
-                                fontWeight: 700, fontSize: 14,
+                                fontWeight: 700, fontSize: T.fontMd,
                                 cursor: saving ? 'not-allowed' : 'pointer',
                                 boxShadow: '0 2px 6px rgba(37,99,235,.35)',
                             }}

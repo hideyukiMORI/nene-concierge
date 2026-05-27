@@ -2,41 +2,43 @@ import type { Node } from '@xyflow/react';
 import type { CredentialSummary, ChatNodeType } from '../../api.js';
 import { NODE_COLORS, NODE_ICONS, NODE_LABELS } from './NodeTypes.js';
 import type { MessageData, ConditionData, ActionData, EndData } from './NodeTypes.js';
+import { T } from '../../theme.js';
 
 interface Props {
-    node:         Node;
-    credentials:  CredentialSummary[];
-    onChange:     (id: string, label: string, data: Record<string, unknown>) => void;
-    onDelete:     (id: string) => void;
+    node:        Node;
+    credentials: CredentialSummary[];
+    onChange:    (id: string, label: string, data: Record<string, unknown>) => void;
+    onDelete:    (id: string) => void;
 }
 
 const S = {
     panel: {
-        width: 280, background: '#fff', borderLeft: '1px solid #e5e7eb',
+        width: 280, background: T.surface, borderLeft: `1px solid ${T.border}`,
         overflowY: 'auto' as const, padding: '16px 16px',
         display: 'flex', flexDirection: 'column' as const, gap: 12,
     },
-    label: { display: 'block', fontWeight: 600, fontSize: 12, marginBottom: 3, color: '#374151' },
-    input: {
-        width: '100%', padding: '7px 10px', borderRadius: 6,
-        border: '1.5px solid #d1d5db', fontSize: 13, outline: 'none',
-        boxSizing: 'border-box' as const,
+    label:    { display: 'block', fontWeight: 600, fontSize: T.fontSm, marginBottom: 3, color: T.textStrong },
+    input:    {
+        width: '100%', padding: '7px 10px', borderRadius: T.radiusSm,
+        border: `1.5px solid ${T.borderInput}`, fontSize: T.fontBase,
+        outline: 'none', boxSizing: 'border-box' as const,
     },
-    select: {
-        width: '100%', padding: '7px 10px', borderRadius: 6,
-        border: '1.5px solid #d1d5db', fontSize: 13, background: '#fff',
-        boxSizing: 'border-box' as const,
+    select:   {
+        width: '100%', padding: '7px 10px', borderRadius: T.radiusSm,
+        border: `1.5px solid ${T.borderInput}`, fontSize: T.fontBase,
+        background: T.surface, boxSizing: 'border-box' as const,
     },
     textarea: {
-        width: '100%', padding: '7px 10px', borderRadius: 6,
-        border: '1.5px solid #d1d5db', fontSize: 13, resize: 'vertical' as const,
-        outline: 'none', boxSizing: 'border-box' as const, minHeight: 80,
+        width: '100%', padding: '7px 10px', borderRadius: T.radiusSm,
+        border: `1.5px solid ${T.borderInput}`, fontSize: T.fontBase,
+        resize: 'vertical' as const, outline: 'none',
+        boxSizing: 'border-box' as const, minHeight: 80,
     },
-    section: { borderTop: '1px solid #f3f4f6', paddingTop: 10 },
-    tag: {
+    section: { borderTop: `1px solid ${T.borderLight}`, paddingTop: 10 },
+    tag:     {
         display: 'inline-flex', alignItems: 'center', gap: 4,
-        background: '#dbeafe', color: '#1e40af',
-        borderRadius: 99, padding: '3px 10px', fontSize: 12,
+        background: T.primaryBg, color: T.primaryText,
+        borderRadius: T.radiusXl, padding: '3px 10px', fontSize: T.fontSm,
     },
     tagList: { display: 'flex', flexWrap: 'wrap' as const, gap: 6 },
 };
@@ -53,9 +55,9 @@ function LabelInput({ label, value, onChange }: {
 }
 
 export default function NodeConfigPanel({ node, credentials, onChange, onDelete }: Props) {
-    const type = node.type as ChatNodeType;
-    const data = node.data as Record<string, unknown>;
-    const label = String(data['label'] ?? '');
+    const type   = node.type as ChatNodeType;
+    const data   = node.data as Record<string, unknown>;
+    const label  = String(data['label'] ?? '');
     const colors = NODE_COLORS[type];
 
     function setLabel(v: string) {
@@ -98,7 +100,10 @@ export default function NodeConfigPanel({ node, credentials, onChange, onDelete 
                                 {c}
                                 <button
                                     onClick={() => removeChoice(i)}
-                                    style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: '#1e40af', fontSize: 14, lineHeight: 1 }}
+                                    style={{
+                                        background: 'none', border: 'none', cursor: 'pointer',
+                                        padding: 0, color: T.primaryText, fontSize: 14, lineHeight: 1,
+                                    }}
                                 >×</button>
                             </span>
                         ))}
@@ -106,9 +111,10 @@ export default function NodeConfigPanel({ node, credentials, onChange, onDelete 
                     <button
                         onClick={addChoice}
                         style={{
-                            marginTop: 6, fontSize: 12, color: '#2563eb',
-                            background: 'none', border: '1px dashed #93c5fd',
-                            borderRadius: 6, padding: '4px 10px', cursor: 'pointer', width: '100%',
+                            marginTop: 6, fontSize: T.fontSm, color: T.primary,
+                            background: 'none', border: `1px dashed ${T.primaryMuted}`,
+                            borderRadius: T.radiusSm, padding: '4px 10px',
+                            cursor: 'pointer', width: '100%',
                         }}
                     >
                         ＋ 選択肢を追加
@@ -167,7 +173,7 @@ export default function NodeConfigPanel({ node, credentials, onChange, onDelete 
                         />
                     </div>
                 )}
-                <p style={{ fontSize: 11, color: '#6b7280', margin: 0 }}>
+                <p style={{ fontSize: T.fontXs, color: T.textMuted, margin: 0 }}>
                     下のハンドル: 左=true / 右=false
                 </p>
             </>
@@ -239,7 +245,7 @@ export default function NodeConfigPanel({ node, credentials, onChange, onDelete 
             <div style={{
                 padding: '8px 12px', borderRadius: 8, marginBottom: 4,
                 background: colors.header, color: '#fff',
-                fontWeight: 700, fontSize: 13,
+                fontWeight: 700, fontSize: T.fontBase,
                 display: 'flex', alignItems: 'center', gap: 8,
             }}>
                 <span>{NODE_ICONS[type]}</span>
@@ -253,14 +259,14 @@ export default function NodeConfigPanel({ node, credentials, onChange, onDelete 
             {type === 'end'       && <EndConfig />}
 
             {/* 削除ボタン */}
-            <div style={{ borderTop: '1px solid #f3f4f6', paddingTop: 12, marginTop: 4 }}>
+            <div style={{ borderTop: `1px solid ${T.borderLight}`, paddingTop: 12, marginTop: 4 }}>
                 <button
                     onClick={() => onDelete(node.id)}
                     style={{
                         width: '100%', padding: '7px 0',
-                        background: '#fef2f2', border: '1px solid #fca5a5',
-                        color: '#b91c1c', borderRadius: 6, cursor: 'pointer',
-                        fontSize: 13, fontWeight: 600,
+                        background: T.dangerBg, border: `1px solid ${T.dangerBorder}`,
+                        color: T.dangerText, borderRadius: T.radiusSm,
+                        cursor: 'pointer', fontSize: T.fontBase, fontWeight: 600,
                     }}
                 >
                     🗑 このノードを削除

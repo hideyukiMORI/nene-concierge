@@ -6,13 +6,94 @@
   <title>NeNe Concierge — 管理画面</title>
   <link rel="stylesheet" href="app.css" />
   <style>
+    /* ── NeNe Concierge Admin — Design Tokens ──────────────────────────────
+       このブロックを差し替えるだけで全テーマが変わります。
+       変数名は nene-corpus の --nc-* 命名規約に準拠し、管理画面固有は --nca-* です。
+    ──────────────────────────────────────────────────────────────────────── */
+    :root {
+      /* Primary (ブランドカラー) */
+      --nca-color-primary:        #2563eb;
+      --nca-color-primary-hover:  #1d4ed8;
+      --nca-color-primary-light:  #eff6ff;
+      --nca-color-primary-border: #3b82f6;
+      --nca-color-primary-muted:  #93c5fd;
+      --nca-color-primary-text:   #1e3a8a;
+      --nca-color-primary-bg:     #dbeafe;
+
+      /* Danger */
+      --nca-color-danger:         #ef4444;
+      --nca-color-danger-bg:      #fef2f2;
+      --nca-color-danger-border:  #fca5a5;
+      --nca-color-danger-text:    #b91c1c;
+
+      /* Success */
+      --nca-color-success-bg:     #f0fdf4;
+      --nca-color-success-border: #86efac;
+      --nca-color-success-text:   #166534;
+
+      /* Surface & Background */
+      --nca-color-bg:             #f9fafb;
+      --nca-color-surface:        #ffffff;
+
+      /* Sidebar */
+      --nca-color-sidebar:        #1e293b;
+      --nca-color-sidebar-active: #334155;
+      --nca-color-sidebar-border: #334155;
+      --nca-color-sidebar-text:   #e2e8f0;
+      --nca-color-sidebar-muted:  #94a3b8;
+      --nca-color-sidebar-title:  #f8fafc;
+
+      /* Text */
+      --nca-color-text:           #111827;
+      --nca-color-text-strong:    #374151;
+      --nca-color-text-muted:     #6b7280;
+
+      /* Border */
+      --nca-color-border:         #e5e7eb;
+      --nca-color-border-input:   #d1d5db;
+      --nca-color-border-light:   #f3f4f6;
+
+      /* Table */
+      --nca-color-table-header:   #f9fafb;
+      --nca-color-table-row-hover:#f8fafc;
+
+      /* Badge */
+      --nca-badge-draft-bg:       #f3f4f6;
+      --nca-badge-draft-color:    #374151;
+      --nca-badge-pub-bg:         #dcfce7;
+      --nca-badge-pub-color:      #166534;
+      --nca-badge-arch-bg:        #fee2e2;
+      --nca-badge-arch-color:     #991b1b;
+
+      /* Border radius */
+      --nca-radius-sm:  6px;
+      --nca-radius-md:  7px;
+      --nca-radius-lg:  10px;
+      --nca-radius-xl:  99px;
+
+      /* Font size */
+      --nca-font-xs:    11px;
+      --nca-font-sm:    12px;
+      --nca-font-base:  13px;
+      --nca-font-md:    14px;
+      --nca-font-lg:    16px;
+      --nca-font-xl:    18px;
+      --nca-font-2xl:   22px;
+
+      /* Sidebar */
+      --nca-sidebar-width: 220px;
+
+      /* Shadow */
+      --nca-shadow-card: 0 1px 3px rgba(0, 0, 0, .08);
+    }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-      font-size: 14px;
+      font-size: var(--nca-font-md);
       line-height: 1.6;
-      color: #111827;
-      background: #f9fafb;
+      color: var(--nca-color-text);
+      background: var(--nca-color-bg);
     }
     #root { min-height: 100vh; }
   </style>

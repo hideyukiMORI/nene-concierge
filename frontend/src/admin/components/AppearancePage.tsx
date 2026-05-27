@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getAppearance, upsertAppearance, AppearanceData, ApiError } from '../api.js';
 import { PageTitle, Card, Btn, ErrorMsg, Field, Select } from './Layout.js';
+import { T } from '../theme.js';
 
 const POSITION_OPTIONS = [
     { value: 'bottom-right', label: '右下' },
@@ -20,7 +21,7 @@ function ColorSwatch({ color }: { color: string }) {
         <span style={{
             display: 'inline-block', width: 20, height: 20,
             borderRadius: 4, background: color,
-            border: '1px solid #d1d5db', verticalAlign: 'middle',
+            border: `1px solid ${T.borderInput}`, verticalAlign: 'middle',
             marginRight: 6,
         }} />
     );
@@ -67,7 +68,7 @@ export default function AppearancePage() {
         }
     }
 
-    if (loading) return <p style={{ color:'#6b7280', marginTop:40 }}>読み込み中…</p>;
+    if (loading) return <p style={{ color: T.textMuted, marginTop: 40 }}>読み込み中…</p>;
     if (!form)   return <ErrorMsg msg={error} />;
 
     return (
@@ -77,16 +78,16 @@ export default function AppearancePage() {
                 <ErrorMsg msg={error} />
                 {saved && (
                     <div style={{
-                        background:'#f0fdf4', border:'1px solid #86efac',
-                        color:'#166534', borderRadius:7, padding:'10px 14px',
-                        marginBottom:16, fontSize:13,
+                        background: T.successBg, border: `1px solid ${T.successBorder}`,
+                        color: T.successText, borderRadius: T.radiusMd,
+                        padding: '10px 14px', marginBottom: 16, fontSize: T.fontBase,
                     }}>
                         ✓ 保存しました。
                     </div>
                 )}
                 <form onSubmit={e => { void handleSubmit(e); }}>
                     <label style={{ display:'block', marginBottom:16 }}>
-                        <span style={{ display:'block', fontWeight:600, marginBottom:4, fontSize:13 }}>
+                        <span style={{ display:'block', fontWeight:600, marginBottom:4, fontSize: T.fontBase }}>
                             プライマリカラー
                         </span>
                         <div style={{ display:'flex', alignItems:'center', gap:8 }}>
@@ -94,21 +95,21 @@ export default function AppearancePage() {
                             <input
                                 type="color" value={form.color_primary}
                                 onChange={e => set('color_primary', e.target.value)}
-                                style={{ width:48, height:36, border:'none', cursor:'pointer', borderRadius:6 }}
+                                style={{ width:48, height:36, border:'none', cursor:'pointer', borderRadius: T.radiusSm }}
                             />
                             <input
                                 type="text" value={form.color_primary}
                                 onChange={e => set('color_primary', e.target.value)}
                                 maxLength={7} placeholder="#2563eb"
                                 style={{
-                                    width:100, padding:'6px 10px', borderRadius:6,
-                                    border:'1.5px solid #d1d5db', fontSize:13,
+                                    width:100, padding:'6px 10px', borderRadius: T.radiusSm,
+                                    border: `1.5px solid ${T.borderInput}`, fontSize: T.fontBase,
                                 }}
                             />
                         </div>
                     </label>
                     <label style={{ display:'block', marginBottom:16 }}>
-                        <span style={{ display:'block', fontWeight:600, marginBottom:4, fontSize:13 }}>
+                        <span style={{ display:'block', fontWeight:600, marginBottom:4, fontSize: T.fontBase }}>
                             セカンダリカラー（文字色）
                         </span>
                         <div style={{ display:'flex', alignItems:'center', gap:8 }}>
@@ -116,15 +117,15 @@ export default function AppearancePage() {
                             <input
                                 type="color" value={form.color_secondary}
                                 onChange={e => set('color_secondary', e.target.value)}
-                                style={{ width:48, height:36, border:'none', cursor:'pointer', borderRadius:6 }}
+                                style={{ width:48, height:36, border:'none', cursor:'pointer', borderRadius: T.radiusSm }}
                             />
                             <input
                                 type="text" value={form.color_secondary}
                                 onChange={e => set('color_secondary', e.target.value)}
                                 maxLength={7} placeholder="#ffffff"
                                 style={{
-                                    width:100, padding:'6px 10px', borderRadius:6,
-                                    border:'1.5px solid #d1d5db', fontSize:13,
+                                    width:100, padding:'6px 10px', borderRadius: T.radiusSm,
+                                    border: `1.5px solid ${T.borderInput}`, fontSize: T.fontBase,
                                 }}
                             />
                         </div>

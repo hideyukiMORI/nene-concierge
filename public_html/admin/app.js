@@ -24615,14 +24615,79 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return getToken() !== null;
   }
 
+  // src/admin/theme.ts
+  var T = {
+    // ── Primary ──────────────────────────────────────────────────────────────
+    primary: "var(--nca-color-primary)",
+    primaryHover: "var(--nca-color-primary-hover)",
+    primaryLight: "var(--nca-color-primary-light)",
+    primaryBorder: "var(--nca-color-primary-border)",
+    primaryMuted: "var(--nca-color-primary-muted)",
+    primaryText: "var(--nca-color-primary-text)",
+    primaryBg: "var(--nca-color-primary-bg)",
+    // ── Danger ───────────────────────────────────────────────────────────────
+    danger: "var(--nca-color-danger)",
+    dangerBg: "var(--nca-color-danger-bg)",
+    dangerBorder: "var(--nca-color-danger-border)",
+    dangerText: "var(--nca-color-danger-text)",
+    // ── Success ──────────────────────────────────────────────────────────────
+    successBg: "var(--nca-color-success-bg)",
+    successBorder: "var(--nca-color-success-border)",
+    successText: "var(--nca-color-success-text)",
+    // ── Surface & Background ─────────────────────────────────────────────────
+    bg: "var(--nca-color-bg)",
+    surface: "var(--nca-color-surface)",
+    // ── Sidebar ──────────────────────────────────────────────────────────────
+    sidebar: "var(--nca-color-sidebar)",
+    sidebarActive: "var(--nca-color-sidebar-active)",
+    sidebarBorder: "var(--nca-color-sidebar-border)",
+    sidebarText: "var(--nca-color-sidebar-text)",
+    sidebarMuted: "var(--nca-color-sidebar-muted)",
+    sidebarTitle: "var(--nca-color-sidebar-title)",
+    // ── Text ─────────────────────────────────────────────────────────────────
+    text: "var(--nca-color-text)",
+    textStrong: "var(--nca-color-text-strong)",
+    textMuted: "var(--nca-color-text-muted)",
+    // ── Border ───────────────────────────────────────────────────────────────
+    border: "var(--nca-color-border)",
+    borderInput: "var(--nca-color-border-input)",
+    borderLight: "var(--nca-color-border-light)",
+    // ── Table ────────────────────────────────────────────────────────────────
+    tableHeader: "var(--nca-color-table-header)",
+    // ── Badge ────────────────────────────────────────────────────────────────
+    badgeDraftBg: "var(--nca-badge-draft-bg)",
+    badgeDraftColor: "var(--nca-badge-draft-color)",
+    badgePubBg: "var(--nca-badge-pub-bg)",
+    badgePubColor: "var(--nca-badge-pub-color)",
+    badgeArchBg: "var(--nca-badge-arch-bg)",
+    badgeArchColor: "var(--nca-badge-arch-color)",
+    // ── Border radius ────────────────────────────────────────────────────────
+    radiusSm: "var(--nca-radius-sm)",
+    radiusMd: "var(--nca-radius-md)",
+    radiusLg: "var(--nca-radius-lg)",
+    radiusXl: "var(--nca-radius-xl)",
+    // ── Font size ────────────────────────────────────────────────────────────
+    fontXs: "var(--nca-font-xs)",
+    fontSm: "var(--nca-font-sm)",
+    fontBase: "var(--nca-font-base)",
+    fontMd: "var(--nca-font-md)",
+    fontLg: "var(--nca-font-lg)",
+    fontXl: "var(--nca-font-xl)",
+    font2xl: "var(--nca-font-2xl)",
+    // ── Sidebar width ────────────────────────────────────────────────────────
+    sidebarWidth: "var(--nca-sidebar-width)",
+    // ── Shadow ───────────────────────────────────────────────────────────────
+    shadowCard: "var(--nca-shadow-card)"
+  };
+
   // src/admin/components/Layout.tsx
   var import_jsx_runtime = __toESM(require_jsx_runtime());
   var S = {
     shell: { display: "flex", minHeight: "100vh" },
     sidebar: {
-      width: 220,
-      background: "#1e293b",
-      color: "#e2e8f0",
+      width: T.sidebarWidth,
+      background: T.sidebar,
+      color: T.sidebarText,
       display: "flex",
       flexDirection: "column",
       flexShrink: 0
@@ -24630,13 +24695,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     logo: {
       padding: "20px 16px 16px",
       fontWeight: 700,
-      fontSize: 16,
-      borderBottom: "1px solid #334155",
-      color: "#f8fafc"
+      fontSize: T.fontLg,
+      borderBottom: `1px solid ${T.sidebarBorder}`,
+      color: T.sidebarTitle
     },
     nav: { flex: 1, padding: "12px 0" },
     main: { flex: 1, padding: "32px 40px", overflowY: "auto" },
-    footer: { padding: "16px", borderTop: "1px solid #334155" }
+    footer: { padding: "16px", borderTop: `1px solid ${T.sidebarBorder}` }
   };
   var navItems = [
     { to: "/scenarios", label: "\u30B7\u30CA\u30EA\u30AA" },
@@ -24649,11 +24714,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, { to, style: {
       display: "block",
       padding: "9px 16px",
-      color: active ? "#f8fafc" : "#94a3b8",
+      color: active ? T.sidebarTitle : T.sidebarMuted,
       textDecoration: "none",
-      borderRadius: 6,
+      borderRadius: T.radiusSm,
       margin: "2px 8px",
-      background: active ? "#334155" : "transparent",
+      background: active ? T.sidebarActive : "transparent",
       fontWeight: active ? 600 : 400,
       transition: "background 0.12s, color 0.12s"
     }, children: label });
@@ -24670,12 +24735,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("nav", { style: S.nav, children: navItems.map((i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(NavLink2, { ...i }, i.to)) }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: S.footer, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: logout, style: {
           background: "none",
-          border: "1px solid #475569",
-          color: "#94a3b8",
+          border: `1px solid ${T.sidebarBorder}`,
+          color: T.sidebarMuted,
           padding: "6px 12px",
-          borderRadius: 6,
+          borderRadius: T.radiusSm,
           cursor: "pointer",
-          fontSize: 13,
+          fontSize: T.fontBase,
           width: "100%"
         }, children: "\u30ED\u30B0\u30A2\u30A6\u30C8" }) })
       ] }),
@@ -24683,14 +24748,15 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     ] });
   }
   function PageTitle({ children: children2, style: style2 }) {
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", { style: { fontSize: 22, fontWeight: 700, marginBottom: 24, ...style2 }, children: children2 });
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", { style: { fontSize: T.font2xl, fontWeight: 700, marginBottom: 24, ...style2 }, children: children2 });
   }
   function Card({ children: children2, style: style2 }) {
     return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: {
-      background: "#fff",
-      border: "1px solid #e5e7eb",
-      borderRadius: 10,
+      background: T.surface,
+      border: `1px solid ${T.border}`,
+      borderRadius: T.radiusLg,
       padding: "20px 24px",
+      boxShadow: T.shadowCard,
       ...style2
     }, children: children2 });
   }
@@ -24704,18 +24770,18 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }) {
     const base = {
       padding: "8px 16px",
-      borderRadius: 7,
+      borderRadius: T.radiusMd,
       fontWeight: 600,
-      fontSize: 13,
+      fontSize: T.fontBase,
       cursor: disabled ? "not-allowed" : "pointer",
       border: "none",
       opacity: disabled ? 0.55 : 1,
       transition: "opacity 0.12s"
     };
     const variants = {
-      primary: { background: "#2563eb", color: "#fff" },
-      danger: { background: "#ef4444", color: "#fff" },
-      ghost: { background: "transparent", color: "#2563eb", border: "1.5px solid #2563eb" }
+      primary: { background: T.primary, color: "#fff" },
+      danger: { background: T.danger, color: "#fff" },
+      ghost: { background: "transparent", color: T.primary, border: `1.5px solid ${T.primary}` }
     };
     return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
       "button",
@@ -24730,30 +24796,30 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
   function Badge({ status }) {
     const cfg = {
-      draft: { bg: "#f3f4f6", color: "#374151", label: "\u30C9\u30E9\u30D5\u30C8" },
-      published: { bg: "#dcfce7", color: "#166534", label: "\u516C\u958B\u4E2D" },
-      archived: { bg: "#fee2e2", color: "#991b1b", label: "\u30A2\u30FC\u30AB\u30A4\u30D6" }
+      draft: { bg: T.badgeDraftBg, color: T.badgeDraftColor, label: "\u30C9\u30E9\u30D5\u30C8" },
+      published: { bg: T.badgePubBg, color: T.badgePubColor, label: "\u516C\u958B\u4E2D" },
+      archived: { bg: T.badgeArchBg, color: T.badgeArchColor, label: "\u30A2\u30FC\u30AB\u30A4\u30D6" }
     };
     const { bg, color: color2, label } = cfg[status];
     return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: {
       background: bg,
       color: color2,
       padding: "2px 10px",
-      borderRadius: 99,
-      fontSize: 12,
+      borderRadius: T.radiusXl,
+      fontSize: T.fontSm,
       fontWeight: 600
     }, children: label });
   }
   function ErrorMsg({ msg }) {
     if (!msg) return null;
     return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: {
-      background: "#fef2f2",
-      border: "1px solid #fca5a5",
-      color: "#b91c1c",
-      borderRadius: 7,
+      background: T.dangerBg,
+      border: `1px solid ${T.dangerBorder}`,
+      color: T.dangerText,
+      borderRadius: T.radiusMd,
       padding: "10px 14px",
       marginBottom: 16,
-      fontSize: 13
+      fontSize: T.fontBase
     }, children: msg });
   }
   function Field({
@@ -24765,9 +24831,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     required
   }) {
     return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { style: { display: "block", marginBottom: 16 }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { display: "block", fontWeight: 600, marginBottom: 4, fontSize: 13 }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { display: "block", fontWeight: 600, marginBottom: 4, fontSize: T.fontBase }, children: [
         label,
-        required && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: "#ef4444" }, children: " *" })
+        required && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: T.danger }, children: " *" })
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
         "input",
@@ -24780,11 +24846,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           style: {
             width: "100%",
             padding: "8px 12px",
-            borderRadius: 7,
-            border: "1.5px solid #d1d5db",
-            fontSize: 14,
+            borderRadius: T.radiusMd,
+            border: `1.5px solid ${T.borderInput}`,
+            fontSize: T.fontMd,
             outline: "none",
-            background: "#fff"
+            background: T.surface
           }
         }
       )
@@ -24797,7 +24863,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     options
   }) {
     return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { style: { display: "block", marginBottom: 16 }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { display: "block", fontWeight: 600, marginBottom: 4, fontSize: 13 }, children: label }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { display: "block", fontWeight: 600, marginBottom: 4, fontSize: T.fontBase }, children: label }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
         "select",
         {
@@ -24806,10 +24872,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           style: {
             width: "100%",
             padding: "8px 12px",
-            borderRadius: 7,
-            border: "1.5px solid #d1d5db",
-            fontSize: 14,
-            background: "#fff"
+            borderRadius: T.radiusMd,
+            border: `1.5px solid ${T.borderInput}`,
+            fontSize: T.fontMd,
+            background: T.surface
           },
           children: options.map((o) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { value: o.value, children: o.label }, o.value))
         }
@@ -24920,17 +24986,17 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      background: "#f1f5f9"
+      background: T.bg
     }, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: {
-      background: "#fff",
-      borderRadius: 12,
+      background: T.surface,
+      borderRadius: T.radiusLg,
       padding: "40px 36px",
       width: 380,
       boxShadow: "0 4px 24px rgba(0,0,0,0.08)",
-      border: "1px solid #e2e8f0"
+      border: `1px solid ${T.border}`
     }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("h1", { style: { fontSize: 22, fontWeight: 700, marginBottom: 8 }, children: "NeNe Concierge" }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { style: { color: "#64748b", marginBottom: 28, fontSize: 14 }, children: "\u7BA1\u7406\u753B\u9762\u306B\u30ED\u30B0\u30A4\u30F3" }),
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("h1", { style: { fontSize: T.font2xl, fontWeight: 700, marginBottom: 8 }, children: "NeNe Concierge" }),
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { style: { color: T.textMuted, marginBottom: 28, fontSize: T.fontMd }, children: "\u7BA1\u7406\u753B\u9762\u306B\u30ED\u30B0\u30A4\u30F3" }),
       /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(ErrorMsg, { msg: error }),
       /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("form", { onSubmit: (e) => {
         void handleSubmit(e);
@@ -24999,18 +25065,18 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(Link, { to: "/scenarios/new", children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(Btn, { children: "\uFF0B \u65B0\u898F\u4F5C\u6210" }) })
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(ErrorMsg, { msg: error }),
-      loading ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { style: { color: "#6b7280" }, children: "\u8AAD\u307F\u8FBC\u307F\u4E2D\u2026" }) : scenarios.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(Card, { children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { style: { color: "#6b7280", textAlign: "center", padding: "40px 0" }, children: "\u30B7\u30CA\u30EA\u30AA\u304C\u3042\u308A\u307E\u305B\u3093\u3002\u300C\u65B0\u898F\u4F5C\u6210\u300D\u304B\u3089\u59CB\u3081\u307E\u3057\u3087\u3046\u3002" }) }) : /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(Card, { style: { padding: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("table", { style: { width: "100%", borderCollapse: "collapse" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("tr", { style: { borderBottom: "1px solid #f3f4f6", background: "#f9fafb" }, children: ["ID", "\u540D\u524D", "\u8AAC\u660E", "\u30B9\u30C6\u30FC\u30BF\u30B9", "\u64CD\u4F5C"].map((h) => /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("th", { style: {
+      loading ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { style: { color: T.textMuted }, children: "\u8AAD\u307F\u8FBC\u307F\u4E2D\u2026" }) : scenarios.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(Card, { children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { style: { color: T.textMuted, textAlign: "center", padding: "40px 0" }, children: "\u30B7\u30CA\u30EA\u30AA\u304C\u3042\u308A\u307E\u305B\u3093\u3002\u300C\u65B0\u898F\u4F5C\u6210\u300D\u304B\u3089\u59CB\u3081\u307E\u3057\u3087\u3046\u3002" }) }) : /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(Card, { style: { padding: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("table", { style: { width: "100%", borderCollapse: "collapse" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("tr", { style: { borderBottom: `1px solid ${T.borderLight}`, background: T.tableHeader }, children: ["ID", "\u540D\u524D", "\u8AAC\u660E", "\u30B9\u30C6\u30FC\u30BF\u30B9", "\u64CD\u4F5C"].map((h) => /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("th", { style: {
           padding: "10px 16px",
           textAlign: "left",
-          fontSize: 12,
+          fontSize: T.fontSm,
           fontWeight: 600,
-          color: "#6b7280"
+          color: T.textMuted
         }, children: h }, h)) }) }),
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("tbody", { children: scenarios.map((s) => /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("tr", { style: { borderBottom: "1px solid #f3f4f6" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("td", { style: { padding: "12px 16px", color: "#6b7280", fontSize: 13 }, children: s.id }),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("td", { style: { padding: "12px 16px", fontWeight: 500 }, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(Link, { to: `/scenarios/${s.id}`, style: { color: "#2563eb", textDecoration: "none" }, children: s.name }) }),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("td", { style: { padding: "12px 16px", color: "#6b7280", fontSize: 13, maxWidth: 200 }, children: s.description ?? "\u2014" }),
+        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("tbody", { children: scenarios.map((s) => /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("tr", { style: { borderBottom: `1px solid ${T.borderLight}` }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("td", { style: { padding: "12px 16px", color: T.textMuted, fontSize: T.fontBase }, children: s.id }),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("td", { style: { padding: "12px 16px", fontWeight: 500 }, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(Link, { to: `/scenarios/${s.id}`, style: { color: T.primary, textDecoration: "none" }, children: s.name }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("td", { style: { padding: "12px 16px", color: T.textMuted, fontSize: T.fontBase, maxWidth: 200 }, children: s.description ?? "\u2014" }),
           /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("td", { style: { padding: "12px 16px" }, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(Badge, { status: s.status }) }),
           /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("td", { style: { padding: "12px 16px" }, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { style: { display: "flex", gap: 8 }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(Link, { to: `/scenarios/${s.id}`, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(Btn, { variant: "ghost", children: "\u7DE8\u96C6" }) }),
@@ -25070,14 +25136,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   Dispatch.prototype = dispatch.prototype = {
     constructor: Dispatch,
     on: function(typename, callback) {
-      var _ = this._, T = parseTypenames(typename + "", _), t, i = -1, n = T.length;
+      var _ = this._, T2 = parseTypenames(typename + "", _), t, i = -1, n = T2.length;
       if (arguments.length < 2) {
-        while (++i < n) if ((t = (typename = T[i]).type) && (t = get(_[t], typename.name))) return t;
+        while (++i < n) if ((t = (typename = T2[i]).type) && (t = get(_[t], typename.name))) return t;
         return;
       }
       if (callback != null && typeof callback !== "function") throw new Error("invalid callback: " + callback);
       while (++i < n) {
-        if (t = (typename = T[i]).type) _[t] = set(_[t], typename.name, callback);
+        if (t = (typename = T2[i]).type) _[t] = set(_[t], typename.name, callback);
         else if (callback == null) for (t in _) _[t] = set(_[t], typename.name, null);
       }
       return this;
@@ -34042,54 +34108,54 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var S2 = {
     panel: {
       width: 280,
-      background: "#fff",
-      borderLeft: "1px solid #e5e7eb",
+      background: T.surface,
+      borderLeft: `1px solid ${T.border}`,
       overflowY: "auto",
       padding: "16px 16px",
       display: "flex",
       flexDirection: "column",
       gap: 12
     },
-    label: { display: "block", fontWeight: 600, fontSize: 12, marginBottom: 3, color: "#374151" },
+    label: { display: "block", fontWeight: 600, fontSize: T.fontSm, marginBottom: 3, color: T.textStrong },
     input: {
       width: "100%",
       padding: "7px 10px",
-      borderRadius: 6,
-      border: "1.5px solid #d1d5db",
-      fontSize: 13,
+      borderRadius: T.radiusSm,
+      border: `1.5px solid ${T.borderInput}`,
+      fontSize: T.fontBase,
       outline: "none",
       boxSizing: "border-box"
     },
     select: {
       width: "100%",
       padding: "7px 10px",
-      borderRadius: 6,
-      border: "1.5px solid #d1d5db",
-      fontSize: 13,
-      background: "#fff",
+      borderRadius: T.radiusSm,
+      border: `1.5px solid ${T.borderInput}`,
+      fontSize: T.fontBase,
+      background: T.surface,
       boxSizing: "border-box"
     },
     textarea: {
       width: "100%",
       padding: "7px 10px",
-      borderRadius: 6,
-      border: "1.5px solid #d1d5db",
-      fontSize: 13,
+      borderRadius: T.radiusSm,
+      border: `1.5px solid ${T.borderInput}`,
+      fontSize: T.fontBase,
       resize: "vertical",
       outline: "none",
       boxSizing: "border-box",
       minHeight: 80
     },
-    section: { borderTop: "1px solid #f3f4f6", paddingTop: 10 },
+    section: { borderTop: `1px solid ${T.borderLight}`, paddingTop: 10 },
     tag: {
       display: "inline-flex",
       alignItems: "center",
       gap: 4,
-      background: "#dbeafe",
-      color: "#1e40af",
-      borderRadius: 99,
+      background: T.primaryBg,
+      color: T.primaryText,
+      borderRadius: T.radiusXl,
       padding: "3px 10px",
-      fontSize: 12
+      fontSize: T.fontSm
     },
     tagList: { display: "flex", flexWrap: "wrap", gap: 6 }
   };
@@ -34142,7 +34208,15 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               "button",
               {
                 onClick: () => removeChoice(i),
-                style: { background: "none", border: "none", cursor: "pointer", padding: 0, color: "#1e40af", fontSize: 14, lineHeight: 1 },
+                style: {
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  padding: 0,
+                  color: T.primaryText,
+                  fontSize: 14,
+                  lineHeight: 1
+                },
                 children: "\xD7"
               }
             )
@@ -34153,11 +34227,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               onClick: addChoice,
               style: {
                 marginTop: 6,
-                fontSize: 12,
-                color: "#2563eb",
+                fontSize: T.fontSm,
+                color: T.primary,
                 background: "none",
-                border: "1px dashed #93c5fd",
-                borderRadius: 6,
+                border: `1px dashed ${T.primaryMuted}`,
+                borderRadius: T.radiusSm,
                 padding: "4px 10px",
                 cursor: "pointer",
                 width: "100%"
@@ -34226,7 +34300,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             }
           )
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("p", { style: { fontSize: 11, color: "#6b7280", margin: 0 }, children: "\u4E0B\u306E\u30CF\u30F3\u30C9\u30EB: \u5DE6=true / \u53F3=false" })
+        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("p", { style: { fontSize: T.fontXs, color: T.textMuted, margin: 0 }, children: "\u4E0B\u306E\u30CF\u30F3\u30C9\u30EB: \u5DE6=true / \u53F3=false" })
       ] });
     }
     function ActionConfig() {
@@ -34296,7 +34370,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         background: colors.header,
         color: "#fff",
         fontWeight: 700,
-        fontSize: 13,
+        fontSize: T.fontBase,
         display: "flex",
         alignItems: "center",
         gap: 8
@@ -34308,19 +34382,19 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       type === "condition" && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(ConditionConfig, {}),
       type === "action" && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(ActionConfig, {}),
       type === "end" && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(EndConfig, {}),
-      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { style: { borderTop: "1px solid #f3f4f6", paddingTop: 12, marginTop: 4 }, children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { style: { borderTop: `1px solid ${T.borderLight}`, paddingTop: 12, marginTop: 4 }, children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
         "button",
         {
           onClick: () => onDelete(node.id),
           style: {
             width: "100%",
             padding: "7px 0",
-            background: "#fef2f2",
-            border: "1px solid #fca5a5",
-            color: "#b91c1c",
-            borderRadius: 6,
+            background: T.dangerBg,
+            border: `1px solid ${T.dangerBorder}`,
+            color: T.dangerText,
+            borderRadius: T.radiusSm,
             cursor: "pointer",
-            fontSize: 13,
+            fontSize: T.fontBase,
             fontWeight: 600
           },
           children: "\u{1F5D1} \u3053\u306E\u30CE\u30FC\u30C9\u3092\u524A\u9664"
@@ -34434,23 +34508,23 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           fitViewOptions: { padding: 0.2 },
           deleteKeyCode: "Delete",
           children: [
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Background, { gap: 20, color: "#e5e7eb" }),
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Background, { gap: 20, color: T.border }),
             /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Controls, {}),
             /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
               MiniMap,
               {
-                nodeColor: (n) => NODE_COLORS[n.type]?.header ?? "#94a3b8",
-                style: { background: "#f9fafb", border: "1px solid #e5e7eb" }
+                nodeColor: (n) => NODE_COLORS[n.type]?.header ?? T.sidebarMuted,
+                style: { background: T.tableHeader, border: `1px solid ${T.border}` }
               }
             ),
             /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Panel, { position: "top-left", children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: {
               display: "flex",
               gap: 6,
               padding: 10,
-              background: "#fff",
-              borderRadius: 10,
-              border: "1px solid #e5e7eb",
-              boxShadow: "0 2px 8px rgba(0,0,0,.08)"
+              background: T.surface,
+              borderRadius: T.radiusLg,
+              border: `1px solid ${T.border}`,
+              boxShadow: T.shadowCard
             }, children: ["message", "condition", "action", "end"].map((type) => {
               const c = NODE_COLORS[type];
               return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
@@ -34463,12 +34537,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                     alignItems: "center",
                     gap: 5,
                     padding: "6px 10px",
-                    borderRadius: 7,
+                    borderRadius: T.radiusMd,
                     background: c.bg,
                     border: `1.5px solid ${c.border}`,
                     color: c.text,
                     fontWeight: 600,
-                    fontSize: 12,
+                    fontSize: T.fontSm,
                     cursor: "pointer"
                   },
                   children: [
@@ -34488,11 +34562,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 style: {
                   padding: "8px 20px",
                   borderRadius: 8,
-                  background: saving ? "#93c5fd" : "#2563eb",
+                  background: saving ? T.primaryMuted : T.primary,
                   color: "#fff",
                   border: "none",
                   fontWeight: 700,
-                  fontSize: 14,
+                  fontSize: T.fontMd,
                   cursor: saving ? "not-allowed" : "pointer",
                   boxShadow: "0 2px 6px rgba(37,99,235,.35)"
                 },
@@ -34599,28 +34673,28 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       setSavedMsg(msg);
       setTimeout(() => setSavedMsg(""), 2500);
     }
-    if (loading) return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { style: { color: "#6b7280", marginTop: 40 }, children: "\u8AAD\u307F\u8FBC\u307F\u4E2D\u2026" });
+    if (loading) return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { style: { color: T.textMuted, marginTop: 40 }, children: "\u8AAD\u307F\u8FBC\u307F\u4E2D\u2026" });
     return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", height: "calc(100vh - 64px)", gap: 0 }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: {
         display: "flex",
         alignItems: "center",
         gap: 12,
         padding: "10px 16px",
-        borderBottom: "1px solid #e5e7eb",
-        background: "#fff",
+        borderBottom: `1px solid ${T.border}`,
+        background: T.surface,
         flexShrink: 0
       }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(PageTitle, { style: { margin: 0, fontSize: 18 }, children: isNew ? "\u65B0\u898F\u30B7\u30CA\u30EA\u30AA" : name }),
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(PageTitle, { style: { margin: 0, fontSize: T.fontXl }, children: isNew ? "\u65B0\u898F\u30B7\u30CA\u30EA\u30AA" : name }),
         !isNew && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Badge, { status }),
         /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { flex: 1 } }),
-        savedMsg && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: { fontSize: 13, color: "#16a34a", fontWeight: 600 }, children: [
+        savedMsg && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: { fontSize: T.fontBase, color: T.successText, fontWeight: 600 }, children: [
           "\u2713 ",
           savedMsg
         ] }),
         !isNew && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Btn, { variant: "danger", onClick: () => void handleDelete(), children: "\u524A\u9664" }),
         /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Btn, { variant: "ghost", onClick: () => nav("/scenarios"), children: "\u4E00\u89A7\u3078\u623B\u308B" })
       ] }),
-      error && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { padding: "8px 16px", background: "#fef2f2", flexShrink: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(ErrorMsg, { msg: error }) }),
+      error && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { padding: "8px 16px", background: T.dangerBg, flexShrink: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(ErrorMsg, { msg: error }) }),
       /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
         "form",
         {
@@ -34632,14 +34706,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             gap: 10,
             alignItems: "flex-end",
             padding: "10px 16px",
-            background: "#f9fafb",
-            borderBottom: "1px solid #e5e7eb",
+            background: T.bg,
+            borderBottom: `1px solid ${T.border}`,
             flexShrink: 0,
             flexWrap: "wrap"
           },
           children: [
             /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { flex: "1 1 200px" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { style: { display: "block", fontSize: 11, fontWeight: 600, color: "#6b7280", marginBottom: 3 }, children: "\u30B7\u30CA\u30EA\u30AA\u540D *" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { style: { display: "block", fontSize: T.fontXs, fontWeight: 600, color: T.textMuted, marginBottom: 3 }, children: "\u30B7\u30CA\u30EA\u30AA\u540D *" }),
               /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
                 "input",
                 {
@@ -34647,30 +34721,52 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                   onChange: (e) => setName(e.target.value),
                   required: true,
                   placeholder: "\u4F8B: \u554F\u3044\u5408\u308F\u305B\u5BFE\u5FDC\u30D5\u30ED\u30FC",
-                  style: { width: "100%", padding: "7px 10px", borderRadius: 6, border: "1.5px solid #d1d5db", fontSize: 13, boxSizing: "border-box" }
+                  style: {
+                    width: "100%",
+                    padding: "7px 10px",
+                    borderRadius: T.radiusSm,
+                    border: `1.5px solid ${T.borderInput}`,
+                    fontSize: T.fontBase,
+                    boxSizing: "border-box"
+                  }
                 }
               )
             ] }),
             /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { flex: "2 1 300px" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { style: { display: "block", fontSize: 11, fontWeight: 600, color: "#6b7280", marginBottom: 3 }, children: "\u8AAC\u660E\uFF08\u4EFB\u610F\uFF09" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { style: { display: "block", fontSize: T.fontXs, fontWeight: 600, color: T.textMuted, marginBottom: 3 }, children: "\u8AAC\u660E\uFF08\u4EFB\u610F\uFF09" }),
               /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
                 "input",
                 {
                   value: description,
                   onChange: (e) => setDescription(e.target.value),
                   placeholder: "\u3053\u306E\u30B7\u30CA\u30EA\u30AA\u306E\u6982\u8981\u2026",
-                  style: { width: "100%", padding: "7px 10px", borderRadius: 6, border: "1.5px solid #d1d5db", fontSize: 13, boxSizing: "border-box" }
+                  style: {
+                    width: "100%",
+                    padding: "7px 10px",
+                    borderRadius: T.radiusSm,
+                    border: `1.5px solid ${T.borderInput}`,
+                    fontSize: T.fontBase,
+                    boxSizing: "border-box"
+                  }
                 }
               )
             ] }),
             !isNew && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { flex: "0 0 120px" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { style: { display: "block", fontSize: 11, fontWeight: 600, color: "#6b7280", marginBottom: 3 }, children: "\u30B9\u30C6\u30FC\u30BF\u30B9" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { style: { display: "block", fontSize: T.fontXs, fontWeight: 600, color: T.textMuted, marginBottom: 3 }, children: "\u30B9\u30C6\u30FC\u30BF\u30B9" }),
               /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
                 "select",
                 {
                   value: status,
                   onChange: (e) => setStatus(e.target.value),
-                  style: { width: "100%", padding: "7px 10px", borderRadius: 6, border: "1.5px solid #d1d5db", fontSize: 13, background: "#fff", boxSizing: "border-box" },
+                  style: {
+                    width: "100%",
+                    padding: "7px 10px",
+                    borderRadius: T.radiusSm,
+                    border: `1.5px solid ${T.borderInput}`,
+                    fontSize: T.fontBase,
+                    background: T.surface,
+                    boxSizing: "border-box"
+                  },
                   children: STATUS_OPTIONS.map((o) => /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: o.value, children: o.label }, o.value))
                 }
               )
@@ -34694,8 +34790,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        color: "#9ca3af",
-        fontSize: 14
+        color: T.textMuted,
+        fontSize: T.fontMd
       }, children: "\u30B7\u30CA\u30EA\u30AA\u3092\u4F5C\u6210\u3059\u308B\u3068\u30AD\u30E3\u30F3\u30D0\u30B9\u30A8\u30C7\u30A3\u30BF\u304C\u958B\u304D\u307E\u3059" })
     ] });
   }
@@ -34722,7 +34818,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       height: 20,
       borderRadius: 4,
       background: color2,
-      border: "1px solid #d1d5db",
+      border: `1px solid ${T.borderInput}`,
       verticalAlign: "middle",
       marginRight: 6
     } });
@@ -34764,26 +34860,26 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         setSaving(false);
       }
     }
-    if (loading) return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("p", { style: { color: "#6b7280", marginTop: 40 }, children: "\u8AAD\u307F\u8FBC\u307F\u4E2D\u2026" });
+    if (loading) return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("p", { style: { color: T.textMuted, marginTop: 40 }, children: "\u8AAD\u307F\u8FBC\u307F\u4E2D\u2026" });
     if (!form) return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(ErrorMsg, { msg: error });
     return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { maxWidth: 560 }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(PageTitle, { children: "\u5916\u89B3\u8A2D\u5B9A" }),
       /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(Card, { children: [
         /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(ErrorMsg, { msg: error }),
         saved && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: {
-          background: "#f0fdf4",
-          border: "1px solid #86efac",
-          color: "#166534",
-          borderRadius: 7,
+          background: T.successBg,
+          border: `1px solid ${T.successBorder}`,
+          color: T.successText,
+          borderRadius: T.radiusMd,
           padding: "10px 14px",
           marginBottom: 16,
-          fontSize: 13
+          fontSize: T.fontBase
         }, children: "\u2713 \u4FDD\u5B58\u3057\u307E\u3057\u305F\u3002" }),
         /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("form", { onSubmit: (e) => {
           void handleSubmit(e);
         }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("label", { style: { display: "block", marginBottom: 16 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { display: "block", fontWeight: 600, marginBottom: 4, fontSize: 13 }, children: "\u30D7\u30E9\u30A4\u30DE\u30EA\u30AB\u30E9\u30FC" }),
+            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { display: "block", fontWeight: 600, marginBottom: 4, fontSize: T.fontBase }, children: "\u30D7\u30E9\u30A4\u30DE\u30EA\u30AB\u30E9\u30FC" }),
             /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 8 }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(ColorSwatch, { color: form.color_primary }),
               /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
@@ -34792,7 +34888,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                   type: "color",
                   value: form.color_primary,
                   onChange: (e) => set3("color_primary", e.target.value),
-                  style: { width: 48, height: 36, border: "none", cursor: "pointer", borderRadius: 6 }
+                  style: { width: 48, height: 36, border: "none", cursor: "pointer", borderRadius: T.radiusSm }
                 }
               ),
               /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
@@ -34806,16 +34902,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                   style: {
                     width: 100,
                     padding: "6px 10px",
-                    borderRadius: 6,
-                    border: "1.5px solid #d1d5db",
-                    fontSize: 13
+                    borderRadius: T.radiusSm,
+                    border: `1.5px solid ${T.borderInput}`,
+                    fontSize: T.fontBase
                   }
                 }
               )
             ] })
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("label", { style: { display: "block", marginBottom: 16 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { display: "block", fontWeight: 600, marginBottom: 4, fontSize: 13 }, children: "\u30BB\u30AB\u30F3\u30C0\u30EA\u30AB\u30E9\u30FC\uFF08\u6587\u5B57\u8272\uFF09" }),
+            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { display: "block", fontWeight: 600, marginBottom: 4, fontSize: T.fontBase }, children: "\u30BB\u30AB\u30F3\u30C0\u30EA\u30AB\u30E9\u30FC\uFF08\u6587\u5B57\u8272\uFF09" }),
             /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 8 }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(ColorSwatch, { color: form.color_secondary }),
               /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
@@ -34824,7 +34920,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                   type: "color",
                   value: form.color_secondary,
                   onChange: (e) => set3("color_secondary", e.target.value),
-                  style: { width: 48, height: 36, border: "none", cursor: "pointer", borderRadius: 6 }
+                  style: { width: 48, height: 36, border: "none", cursor: "pointer", borderRadius: T.radiusSm }
                 }
               ),
               /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
@@ -34838,9 +34934,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                   style: {
                     width: 100,
                     padding: "6px 10px",
-                    borderRadius: 6,
-                    border: "1.5px solid #d1d5db",
-                    fontSize: 13
+                    borderRadius: T.radiusSm,
+                    border: `1.5px solid ${T.borderInput}`,
+                    fontSize: T.fontBase
                   }
                 }
               )
@@ -34897,15 +34993,22 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     { value: "slack", label: "Slack" },
     { value: "chatwork", label: "Chatwork" }
   ];
+  var ADAPTER_COLORS = {
+    http: { bg: "#e0f2fe", color: "#0369a1" },
+    email: { bg: "#fef3c7", color: "#92400e" },
+    slack: { bg: "#f0fdf4", color: "#166534" },
+    chatwork: { bg: "#fdf4ff", color: "#7e22ce" }
+  };
   function AdapterBadge({ adapter }) {
-    const colors = {
-      http: { bg: "#e0f2fe", color: "#0369a1" },
-      email: { bg: "#fef3c7", color: "#92400e" },
-      slack: { bg: "#f0fdf4", color: "#166534" },
-      chatwork: { bg: "#fdf4ff", color: "#7e22ce" }
-    };
-    const { bg, color: color2 } = colors[adapter] ?? { bg: "#f3f4f6", color: "#374151" };
-    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { background: bg, color: color2, padding: "2px 10px", borderRadius: 99, fontSize: 12, fontWeight: 600 }, children: adapter });
+    const { bg, color: color2 } = ADAPTER_COLORS[adapter] ?? { bg: T.badgeDraftBg, color: T.badgeDraftColor };
+    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: {
+      background: bg,
+      color: color2,
+      padding: "2px 10px",
+      borderRadius: T.radiusXl,
+      fontSize: T.fontSm,
+      fontWeight: 600
+    }, children: adapter });
   }
   function CredentialsPage() {
     const [creds, setCreds] = (0, import_react10.useState)([]);
@@ -34962,23 +35065,29 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(ErrorMsg, { msg: error }),
       showForm && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(Card, { style: { marginBottom: 24 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("h2", { style: { fontWeight: 700, marginBottom: 16, fontSize: 16 }, children: "\u65B0\u898F\u30AF\u30EC\u30C7\u30F3\u30B7\u30E3\u30EB" }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("h2", { style: { fontWeight: 700, marginBottom: 16, fontSize: T.fontLg }, children: "\u65B0\u898F\u30AF\u30EC\u30C7\u30F3\u30B7\u30E3\u30EB" }),
         /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("form", { onSubmit: (e) => {
           void handleCreate(e);
         }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Field, { label: "\u540D\u524D", value: name, onChange: setName, required: true, placeholder: "\u4F8B: Slack \u901A\u77E5 webhook" }),
           /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Select, { label: "\u30A2\u30C0\u30D7\u30BF\u30FC", value: adapter, onChange: setAdapter, options: ADAPTER_OPTIONS }),
-          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { color: "#6b7280", fontSize: 12, marginBottom: 16 }, children: "\u203B \u6A5F\u5BC6\u8A2D\u5B9A\uFF08URL\u30FB\u30C8\u30FC\u30AF\u30F3\u7B49\uFF09\u306F\u4F5C\u6210\u5F8C\u306B API \u3067\u5225\u9014\u66F4\u65B0\u3057\u3066\u304F\u3060\u3055\u3044\u3002" }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { color: T.textMuted, fontSize: T.fontSm, marginBottom: 16 }, children: "\u203B \u6A5F\u5BC6\u8A2D\u5B9A\uFF08URL\u30FB\u30C8\u30FC\u30AF\u30F3\u7B49\uFF09\u306F\u4F5C\u6210\u5F8C\u306B API \u3067\u5225\u9014\u66F4\u65B0\u3057\u3066\u304F\u3060\u3055\u3044\u3002" }),
           /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Btn, { type: "submit", disabled: saving, children: saving ? "\u4F5C\u6210\u4E2D\u2026" : "\u4F5C\u6210" })
         ] })
       ] }),
-      loading ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { color: "#6b7280" }, children: "\u8AAD\u307F\u8FBC\u307F\u4E2D\u2026" }) : creds.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Card, { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { color: "#6b7280", textAlign: "center", padding: "40px 0" }, children: "\u30AF\u30EC\u30C7\u30F3\u30B7\u30E3\u30EB\u304C\u3042\u308A\u307E\u305B\u3093\u3002" }) }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Card, { style: { padding: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("table", { style: { width: "100%", borderCollapse: "collapse" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("tr", { style: { borderBottom: "1px solid #f3f4f6", background: "#f9fafb" }, children: ["ID", "\u540D\u524D", "\u30A2\u30C0\u30D7\u30BF\u30FC", "\u4F5C\u6210\u65E5", "\u64CD\u4F5C"].map((h) => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("th", { style: { padding: "10px 16px", textAlign: "left", fontSize: 12, fontWeight: 600, color: "#6b7280" }, children: h }, h)) }) }),
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("tbody", { children: creds.map((c) => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("tr", { style: { borderBottom: "1px solid #f3f4f6" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { style: { padding: "12px 16px", color: "#6b7280", fontSize: 13 }, children: c.id }),
+      loading ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { color: T.textMuted }, children: "\u8AAD\u307F\u8FBC\u307F\u4E2D\u2026" }) : creds.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Card, { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { color: T.textMuted, textAlign: "center", padding: "40px 0" }, children: "\u30AF\u30EC\u30C7\u30F3\u30B7\u30E3\u30EB\u304C\u3042\u308A\u307E\u305B\u3093\u3002" }) }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Card, { style: { padding: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("table", { style: { width: "100%", borderCollapse: "collapse" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("tr", { style: { borderBottom: `1px solid ${T.borderLight}`, background: T.tableHeader }, children: ["ID", "\u540D\u524D", "\u30A2\u30C0\u30D7\u30BF\u30FC", "\u4F5C\u6210\u65E5", "\u64CD\u4F5C"].map((h) => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("th", { style: {
+          padding: "10px 16px",
+          textAlign: "left",
+          fontSize: T.fontSm,
+          fontWeight: 600,
+          color: T.textMuted
+        }, children: h }, h)) }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("tbody", { children: creds.map((c) => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("tr", { style: { borderBottom: `1px solid ${T.borderLight}` }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { style: { padding: "12px 16px", color: T.textMuted, fontSize: T.fontBase }, children: c.id }),
           /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { style: { padding: "12px 16px", fontWeight: 500 }, children: c.name }),
           /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { style: { padding: "12px 16px" }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(AdapterBadge, { adapter: c.adapter }) }),
-          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { style: { padding: "12px 16px", color: "#6b7280", fontSize: 13 }, children: c.created_at ? c.created_at.slice(0, 10) : "\u2014" }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { style: { padding: "12px 16px", color: T.textMuted, fontSize: T.fontBase }, children: c.created_at ? c.created_at.slice(0, 10) : "\u2014" }),
           /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { style: { padding: "12px 16px" }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Btn, { variant: "danger", onClick: () => void handleDelete(c.id, c.name), children: "\u524A\u9664" }) })
         ] }, c.id)) })
       ] }) })
