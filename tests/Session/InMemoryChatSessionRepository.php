@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace NeNeConcierge\Tests\Engine;
+namespace NeNeConcierge\Tests\Session;
 
 use NeNeConcierge\Session\ChatSession;
 use NeNeConcierge\Session\ChatSessionRepositoryInterface;

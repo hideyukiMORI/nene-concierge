@@ -15,6 +15,8 @@ use NeNeConcierge\Scenario\ScenarioEdgeRepositoryInterface;
 use NeNeConcierge\Scenario\ScenarioNodeRepositoryInterface;
 use NeNeConcierge\Scenario\ScenarioRepositoryInterface;
 use NeNeConcierge\Session\ChatSessionRepositoryInterface;
+use NeNeConcierge\Session\GetSessionDetailHandler;
+use NeNeConcierge\Session\ListSessionsHandler;
 use NeNeConcierge\Session\PdoChatSessionRepository;
 use NeNeConcierge\Session\PdoSessionMessageRepository;
 use NeNeConcierge\Session\PdoSessionNodeEventRepository;
@@ -190,6 +192,51 @@ final readonly class EngineServiceProvider implements ServiceProviderInterface
                     return new PreviewStepHandler($engine, $json);
                 },
             )
+            // ── Admin session handlers ─────────────────────────────────────────
+            ->set(
+                ListSessionsHandler::class,
+                static function (ContainerInterface $c): ListSessionsHandler {
+                    $sessions = $c->get(ChatSessionRepositoryInterface::class);
+                    $json     = $c->get(JsonResponseFactory::class);
+
+                    if (!$sessions instanceof ChatSessionRepositoryInterface) {
+                        throw new LogicException('ChatSession repository service is invalid.');
+                    }
+
+                    if (!$json instanceof JsonResponseFactory) {
+                        throw new LogicException('JSON response factory service is invalid.');
+                    }
+
+                    return new ListSessionsHandler($sessions, $json);
+                },
+            )
+            ->set(
+                GetSessionDetailHandler::class,
+                static function (ContainerInterface $c): GetSessionDetailHandler {
+                    $sessions  = $c->get(ChatSessionRepositoryInterface::class);
+                    $messages  = $c->get(SessionMessageRepositoryInterface::class);
+                    $json      = $c->get(JsonResponseFactory::class);
+                    $problem   = $c->get(ProblemDetailsResponseFactory::class);
+
+                    if (!$sessions instanceof ChatSessionRepositoryInterface) {
+                        throw new LogicException('ChatSession repository service is invalid.');
+                    }
+
+                    if (!$messages instanceof SessionMessageRepositoryInterface) {
+                        throw new LogicException('SessionMessage repository service is invalid.');
+                    }
+
+                    if (!$json instanceof JsonResponseFactory) {
+                        throw new LogicException('JSON response factory service is invalid.');
+                    }
+
+                    if (!$problem instanceof ProblemDetailsResponseFactory) {
+                        throw new LogicException('ProblemDetails response factory service is invalid.');
+                    }
+
+                    return new GetSessionDetailHandler($sessions, $messages, $json, $problem);
+                },
+            )
             // ── Exception handler ──────────────────────────────────────────────
             ->set(
                 EngineExceptionHandler::class,
@@ -207,10 +254,12 @@ final readonly class EngineServiceProvider implements ServiceProviderInterface
             ->set(
                 EngineRouteRegistrar::class,
                 static function (ContainerInterface $c): EngineRouteRegistrar {
-                    $start        = $c->get(StartSessionHandler::class);
-                    $step         = $c->get(StepSessionHandler::class);
-                    $previewStart = $c->get(PreviewStartHandler::class);
-                    $previewStep  = $c->get(PreviewStepHandler::class);
+                    $start            = $c->get(StartSessionHandler::class);
+                    $step             = $c->get(StepSessionHandler::class);
+                    $previewStart     = $c->get(PreviewStartHandler::class);
+                    $previewStep      = $c->get(PreviewStepHandler::class);
+                    $listSessions     = $c->get(ListSessionsHandler::class);
+                    $getSessionDetail = $c->get(GetSessionDetailHandler::class);
 
                     if (!$start instanceof StartSessionHandler) {
                         throw new LogicException('StartSession handler service is invalid.');
@@ -228,7 +277,15 @@ final readonly class EngineServiceProvider implements ServiceProviderInterface
                         throw new LogicException('PreviewStep handler service is invalid.');
                     }
 
-                    return new EngineRouteRegistrar($start, $step, $previewStart, $previewStep);
+                    if (!$listSessions instanceof ListSessionsHandler) {
+                        throw new LogicException('ListSessions handler service is invalid.');
+                    }
+
+                    if (!$getSessionDetail instanceof GetSessionDetailHandler) {
+                        throw new LogicException('GetSessionDetail handler service is invalid.');
+                    }
+
+                    return new EngineRouteRegistrar($start, $step, $previewStart, $previewStep, $listSessions, $getSessionDetail);
                 },
             );
     }

@@ -59,6 +59,87 @@ final readonly class PdoChatSessionRepository implements ChatSessionRepositoryIn
         );
     }
 
+    /** @return list<ChatSession> */
+    public function listByOrganization(
+        int     $organizationId,
+        ?string $outcome       = null,
+        ?bool   $hasConversion = null,
+        ?int    $scenarioId    = null,
+        int     $limit         = 50,
+        int     $offset        = 0,
+    ): array {
+        [$sql, $params] = $this->buildListQuery(
+            'SELECT *',
+            $organizationId,
+            $outcome,
+            $hasConversion,
+            $scenarioId,
+        );
+        $sql .= ' ORDER BY started_at DESC LIMIT ? OFFSET ?';
+        $params[] = $limit;
+        $params[] = $offset;
+
+        $rows = $this->query->fetchAll($sql, $params);
+
+        /** @var list<ChatSession> */
+        return array_map($this->hydrate(...), $rows);
+    }
+
+    public function countByOrganization(
+        int     $organizationId,
+        ?string $outcome       = null,
+        ?bool   $hasConversion = null,
+        ?int    $scenarioId    = null,
+    ): int {
+        [$sql, $params] = $this->buildListQuery(
+            'SELECT COUNT(*)',
+            $organizationId,
+            $outcome,
+            $hasConversion,
+            $scenarioId,
+        );
+
+        $row = $this->query->fetchAll($sql, $params);
+
+        return isset($row[0]) ? (int) array_values($row[0])[0] : 0;
+    }
+
+    /**
+     * Build the base query (without ORDER BY / LIMIT / OFFSET).
+     * Always excludes 'preview' outcome sessions.
+     *
+     * @return array{0: string, 1: list<mixed>}
+     */
+    private function buildListQuery(
+        string $select,
+        int    $organizationId,
+        ?string $outcome,
+        ?bool   $hasConversion,
+        ?int    $scenarioId,
+    ): array {
+        $where  = ['organization_id = ?', "outcome != 'preview'"];
+        $params = [$organizationId];
+
+        if ($outcome !== null) {
+            $where[]  = 'outcome = ?';
+            $params[] = $outcome;
+        }
+
+        if ($hasConversion !== null) {
+            $where[]  = 'has_conversion = ?';
+            $params[] = (int) $hasConversion;
+        }
+
+        if ($scenarioId !== null) {
+            $where[]  = 'scenario_id = ?';
+            $params[] = $scenarioId;
+        }
+
+        $sql = "{$select} FROM sessions WHERE " . implode(' AND ', $where);
+
+        return [$sql, $params];
+    }
+
     /** @param array<string, mixed> $row */
     private function hydrate(array $row): ChatSession
     {

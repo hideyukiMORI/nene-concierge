@@ -20,7 +20,7 @@ info:
     - `POST /api/v1/auth/login`
     - `POST /api/v1/public/sessions`
     - `POST /api/v1/public/sessions/{session_id}/step`
-  version: 0.5.0
+  version: 0.6.0
   contact:
     name: NeNe Concierge
     url: https://github.com/hideyukiMORI/nene-concierge
@@ -672,6 +672,92 @@ paths:
               schema:
                 $ref: "#/components/schemas/AppearanceResponse"
 
+  /api/v1/sessions:
+    get:
+      operationId: listSessions
+      summary: List sessions
+      description: |
+        Returns a paginated list of visitor chat sessions for the authenticated operator's organization.
+        Preview sessions are always excluded.
+        Supports optional filtering by outcome, has_conversion, and scenario_id.
+      tags:
+        - Sessions
+      parameters:
+        - name: outcome
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [active, completed, dropped, converted]
+          description: Filter by session outcome.
+        - name: has_conversion
+          in: query
+          required: false
+          schema:
+            type: integer
+            enum: [0, 1]
+          description: Filter by whether the session has a conversion (0 or 1).
+        - name: scenario_id
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: Filter by scenario ID.
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 200
+            default: 50
+          description: Maximum number of records to return.
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          description: Number of records to skip.
+      responses:
+        "200":
+          description: Session list.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionListResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /api/v1/sessions/{session_id}:
+    get:
+      operationId: getSessionDetail
+      summary: Get session detail
+      description: |
+        Returns a single session with its full message history and collected variables.
+      tags:
+        - Sessions
+      parameters:
+        - name: session_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: UUID of the session.
+      responses:
+        "200":
+          description: Session detail.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionDetailResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
   /api/v1/action-logs:
     get:
       operationId: listActionLogs
@@ -855,6 +941,120 @@ components:
             $ref: "#/components/schemas/ProblemDetails"
 
   schemas:
+    SessionSummary:
+      type: object
+      required:
+        - id
+        - scenario_id
+        - outcome
+        - has_conversion
+        - started_at
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Session UUID.
+        scenario_id:
+          type: integer
+          description: ID of the scenario traversed.
+        outcome:
+          type: string
+          enum: [active, completed, dropped, converted]
+          description: Session outcome (preview sessions are excluded from admin listing).
+        has_conversion:
+          type: boolean
+          description: Whether the session triggered a conversion event.
+        started_at:
+          type: string
+          format: date-time
+          description: When the session started.
+        ended_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: When the session ended (null if still active).
+
+    SessionMessage:
+      type: object
+      required:
+        - role
+        - content
+        - created_at
+      properties:
+        id:
+          type: integer
+          nullable: true
+          description: Message row ID.
+        role:
+          type: string
+          enum: [bot, visitor]
+          description: Message sender role.
+        content:
+          type: string
+          description: Message text.
+        node_id:
+          type: string
+          nullable: true
+          description: ID of the node that generated this message (bot only).
+        created_at:
+          type: string
+          format: date-time
+          description: When the message was recorded.
+
+    SessionDetail:
+      allOf:
+        - $ref: "#/components/schemas/SessionSummary"
+        - type: object
+          required:
+            - variables
+            - messages
+          properties:
+            variables:
+              type: object
+              additionalProperties:
+                type: string
+              description: Key-value pairs collected from the visitor during the session.
+            messages:
+              type: array
+              items:
+                $ref: "#/components/schemas/SessionMessage"
+              description: Full chronological message history.
+
+    SessionListResponse:
+      type: object
+      required:
+        - data
+        - meta
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/SessionSummary"
+        meta:
+          type: object
+          required:
+            - total
+            - limit
+            - offset
+          properties:
+            total:
+              type: integer
+              description: Total number of matching records.
+            limit:
+              type: integer
+              description: Records per page.
+            offset:
+              type: integer
+              description: Records skipped.
+
+    SessionDetailResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          $ref: "#/components/schemas/SessionDetail"
+
     ActionLog:
       type: object
       required:

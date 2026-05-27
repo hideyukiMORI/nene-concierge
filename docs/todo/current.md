@@ -1,6 +1,6 @@
 # Current Work
 
-Last updated: 2026-05-27
+Last updated: 2026-05-28
 
 ## 状態サマリー
 
@@ -259,6 +259,26 @@ Last updated: 2026-05-27
 | ActionLogsPage.tsx: フィルター + テーブル + ページネーション | ✅ | #42 |
 | /action-logs ルート + サイドバーナビリンク | ✅ | #42 |
 | tableRow CSS トークン + 全8テーマ変数追加 | ✅ | #42 |
+
+---
+
+**セッションログ一覧・詳細 — PR #45 (feat/44-session-logs) レビュー待ち 🔶**
+
+| 項目 | 状態 | Issue |
+| --- | --- | --- |
+| ChatSessionRepositoryInterface に listByOrganization() / countByOrganization() 追加 | ✅ | #44 |
+| PdoChatSessionRepository 実装（preview 除外・フィルター・ページネーション） | ✅ | #44 |
+| ListSessionsHandler 新規作成（GET /api/v1/sessions） | ✅ | #44 |
+| GetSessionDetailHandler 新規作成（GET /api/v1/sessions/{session_id}） | ✅ | #44 |
+| EngineServiceProvider / EngineRouteRegistrar に両ハンドラー登録 | ✅ | #44 |
+| PHPUnit: ListSessionsHandlerTest 8本 + GetSessionDetailHandlerTest 5本 | ✅ | #44 |
+| OpenAPI v0.6.0: SessionSummary / SessionDetail / SessionMessage スキーマ追加 | ✅ | #44 |
+| MCP catalog: listSessions + getSessionDetail ツール追加（計 26 ツール） | ✅ | #44 |
+| SessionsPage.tsx: フィルターバー・テーブル・詳細サイドパネル | ✅ | #44 |
+| api.ts: SessionSummary / SessionDetail 型 + listSessions() / getSessionDetail() | ✅ | #44 |
+| /sessions ルート + サイドバーナビリンク | ✅ | #44 |
+| surfaceHover CSS トークン + 全8テーマ変数追加 | ✅ | #44 |
+| 全6言語に sessions.* キー追加 | ✅ | #44 |
 
 ---
 
