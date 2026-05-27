@@ -51,8 +51,27 @@ export interface ScenarioSummary {
     status: 'draft' | 'published' | 'archived';
     created_at: string | null; updated_at: string | null;
 }
+
+export type ChatNodeType = 'message' | 'condition' | 'action' | 'end';
+
+export interface ScenarioNode {
+    node_id:    string;
+    type:       ChatNodeType;
+    label:      string;
+    data:       Record<string, unknown>;
+    position_x: number;
+    position_y: number;
+}
+
+export interface ScenarioEdge {
+    source_node_id: string;
+    target_node_id: string;
+    label:          string | null;
+}
+
 export interface ScenarioDetail extends ScenarioSummary {
-    nodes: unknown[]; edges: unknown[];
+    nodes: ScenarioNode[];
+    edges: ScenarioEdge[];
 }
 export interface ScenarioListResponse { data: ScenarioSummary[]; }
 
@@ -70,6 +89,16 @@ export function updateScenario(id: number, body: Partial<{ name: string; descrip
 }
 export function deleteScenario(id: number): Promise<void> {
     return request(`/api/v1/scenarios/${id}`, { method: 'DELETE' });
+}
+export function saveScenarioGraph(
+    id: number,
+    nodes: ScenarioNode[],
+    edges: ScenarioEdge[],
+): Promise<void> {
+    return request(`/api/v1/scenarios/${id}/graph`, {
+        method: 'PUT',
+        body:   JSON.stringify({ nodes, edges }),
+    });
 }
 
 // ── Appearance ────────────────────────────────────────────────────────────────

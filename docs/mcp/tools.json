@@ -399,6 +399,56 @@
       "responseSchemaRef": null
     },
     {
+      "name": "saveScenarioGraph",
+      "title": "Save Scenario Graph",
+      "description": "Replaces the entire node/edge graph for a scenario. All existing nodes and edges are deleted and replaced with the provided data. Node positions are preserved for the visual editor. Use getScenario to read the current graph before editing.",
+      "safety": "write",
+      "source": {
+        "type": "openapi",
+        "operationId": "saveScenarioGraph",
+        "method": "PUT",
+        "path": "/api/v1/scenarios/{id}/graph"
+      },
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "nodes", "edges"],
+        "properties": {
+          "id":    { "type": "integer", "description": "Scenario ID." },
+          "nodes": {
+            "type": "array",
+            "description": "Full list of nodes for the scenario.",
+            "items": {
+              "type": "object",
+              "required": ["node_id", "type", "label"],
+              "properties": {
+                "node_id":    { "type": "string", "description": "UUID of the node." },
+                "type":       { "type": "string", "enum": ["message", "condition", "action", "end"] },
+                "label":      { "type": "string", "description": "Display label." },
+                "data":       { "type": "object", "description": "Node-type-specific payload." },
+                "position_x": { "type": "number", "description": "Canvas X position." },
+                "position_y": { "type": "number", "description": "Canvas Y position." }
+              }
+            }
+          },
+          "edges": {
+            "type": "array",
+            "description": "Full list of edges for the scenario.",
+            "items": {
+              "type": "object",
+              "required": ["source_node_id", "target_node_id"],
+              "properties": {
+                "source_node_id": { "type": "string" },
+                "target_node_id": { "type": "string" },
+                "label":          { "type": "string", "nullable": true }
+              }
+            }
+          }
+        }
+      },
+      "responseSchemaRef": null
+    },
+    {
       "name": "createActionCredential",
       "title": "Create Action Credential",
       "description": "Creates a new action credential for use in action nodes. The config object holds adapter-specific secrets (webhook URLs, API tokens). Adapter types: http, email, slack, chatwork.",

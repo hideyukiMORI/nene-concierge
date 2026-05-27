@@ -20,7 +20,7 @@ info:
     - `POST /api/v1/auth/login`
     - `POST /api/v1/public/sessions`
     - `POST /api/v1/public/sessions/{session_id}/step`
-  version: 0.3.0
+  version: 0.4.0
   contact:
     name: NeNe Concierge
     url: https://github.com/hideyukiMORI/nene-concierge
@@ -321,6 +321,34 @@ paths:
           $ref: "#/components/responses/Unauthorized"
         "404":
           $ref: "#/components/responses/NotFound"
+
+  /api/v1/scenarios/{id}/graph:
+    put:
+      operationId: saveScenarioGraph
+      summary: Save scenario graph
+      description: |
+        Replaces the entire node/edge graph for a scenario.
+        All existing nodes and edges are deleted and replaced with the provided data.
+        Node positions are preserved for the visual editor.
+      tags:
+        - Scenarios
+      parameters:
+        - $ref: "#/components/parameters/IntId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SaveScenarioGraphRequest"
+      responses:
+        "204":
+          description: Graph saved successfully.
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/ValidationError"
 
   /api/v1/scenarios/{id}/export:
     get:
@@ -1430,6 +1458,54 @@ components:
           type: string
           nullable: true
           description: Pre-chat bubble text, or null to clear.
+
+    SaveScenarioGraphRequest:
+      type: object
+      required:
+        - nodes
+        - edges
+      properties:
+        nodes:
+          type: array
+          items:
+            type: object
+            required:
+              - node_id
+              - type
+              - label
+            properties:
+              node_id:
+                type: string
+                description: UUID of the node.
+              type:
+                type: string
+                enum: [message, condition, action, end]
+              label:
+                type: string
+              data:
+                type: object
+                additionalProperties: true
+              position_x:
+                type: number
+                default: 0
+              position_y:
+                type: number
+                default: 0
+        edges:
+          type: array
+          items:
+            type: object
+            required:
+              - source_node_id
+              - target_node_id
+            properties:
+              source_node_id:
+                type: string
+              target_node_id:
+                type: string
+              label:
+                type: string
+                nullable: true
 
     ScenarioExportDocument:
       type: object

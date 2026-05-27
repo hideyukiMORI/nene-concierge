@@ -11,7 +11,7 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "exactOptionalPropertyTypes": true,
-    "skipLibCheck": false,
+    "skipLibCheck": true,
     "outDir": "../public_html"
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"]

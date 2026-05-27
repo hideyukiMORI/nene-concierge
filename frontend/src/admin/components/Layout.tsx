@@ -69,8 +69,8 @@ export default function Layout() {
 
 // ── Shared UI primitives ──────────────────────────────────────────────────────
 
-export function PageTitle({ children }: { children: React.ReactNode }) {
-    return <h1 style={{ fontSize: 22, fontWeight: 700, marginBottom: 24 }}>{children}</h1>;
+export function PageTitle({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
+    return <h1 style={{ fontSize: 22, fontWeight: 700, marginBottom: 24, ...style }}>{children}</h1>;
 }
 
 export function Card({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {

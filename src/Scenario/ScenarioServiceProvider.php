@@ -320,6 +320,45 @@ final readonly class ScenarioServiceProvider implements ServiceProviderInterface
                     return new ImportScenarioHandler($uc, $json);
                 },
             )
+            ->set(
+                SaveScenarioGraphUseCase::class,
+                static function (ContainerInterface $c): SaveScenarioGraphUseCase {
+                    $scenarios = $c->get(ScenarioRepositoryInterface::class);
+                    $nodes     = $c->get(ScenarioNodeRepositoryInterface::class);
+                    $edges     = $c->get(ScenarioEdgeRepositoryInterface::class);
+
+                    if (!$scenarios instanceof ScenarioRepositoryInterface) {
+                        throw new LogicException('Scenario repository service is invalid.');
+                    }
+
+                    if (!$nodes instanceof ScenarioNodeRepositoryInterface) {
+                        throw new LogicException('Scenario node repository service is invalid.');
+                    }
+
+                    if (!$edges instanceof ScenarioEdgeRepositoryInterface) {
+                        throw new LogicException('Scenario edge repository service is invalid.');
+                    }
+
+                    return new SaveScenarioGraphUseCase($scenarios, $nodes, $edges);
+                },
+            )
+            ->set(
+                SaveScenarioGraphHandler::class,
+                static function (ContainerInterface $c): SaveScenarioGraphHandler {
+                    $uc   = $c->get(SaveScenarioGraphUseCase::class);
+                    $json = $c->get(JsonResponseFactory::class);
+
+                    if (!$uc instanceof SaveScenarioGraphUseCase) {
+                        throw new LogicException('SaveScenarioGraph use case service is invalid.');
+                    }
+
+                    if (!$json instanceof JsonResponseFactory) {
+                        throw new LogicException('JSON response factory service is invalid.');
+                    }
+
+                    return new SaveScenarioGraphHandler($uc, $json);
+                },
+            )
             // ── Exception handler ──────────────────────────────────────────────
             ->set(
                 ScenarioNotFoundExceptionHandler::class,
@@ -373,7 +412,13 @@ final readonly class ScenarioServiceProvider implements ServiceProviderInterface
                         throw new LogicException('ImportScenario handler service is invalid.');
                     }
 
-                    return new ScenarioRouteRegistrar($list, $get, $create, $update, $delete, $export, $import);
+                    $saveGraph = $c->get(SaveScenarioGraphHandler::class);
+
+                    if (!$saveGraph instanceof SaveScenarioGraphHandler) {
+                        throw new LogicException('SaveScenarioGraph handler service is invalid.');
+                    }
+
+                    return new ScenarioRouteRegistrar($list, $get, $create, $update, $delete, $export, $import, $saveGraph);
                 },
             );
     }

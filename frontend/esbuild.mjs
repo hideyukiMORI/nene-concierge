@@ -22,7 +22,7 @@ await build({
     globalName:  'NeNeWidget',
 });
 
-// ── admin SPA (modern browsers only — no transpilation needed) ────────────────
+// ── admin SPA (modern browsers only — CSS bundled separately) ─────────────────
 await build({
     ...common,
     target:      ['esnext'],   // admin served from own server, always modern browser
