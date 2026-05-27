@@ -282,6 +282,23 @@ Last updated: 2026-05-28
 
 ---
 
+**フロントエンド品質基盤 — バックログ 🔲**
+
+| 項目 | 状態 | Issue |
+| --- | --- | --- |
+| `.github/workflows/frontend-ci.yml` 新設（type-check + build ステップ） | 🔲 | #57 |
+| `tsconfig.json` の `noEmit` + `strict` 設定確認 | 🔲 | #57 |
+| `npm run type-check` / `npm run build` スクリプト整備 | 🔲 | #57 |
+| Vitest + @testing-library/react セットアップ | 🔲 | #58 |
+| ScenarioCanvas コンポーネントテスト | 🔲 | #58 |
+| NodeConfigPanel コンポーネントテスト | 🔲 | #58 |
+| SessionsPage コンポーネントテスト | 🔲 | #58 |
+| ScenarioFormPage コンポーネントテスト | 🔲 | #58 |
+| DashboardPage コンポーネントテスト | 🔲 | #58 |
+| CI に `npm run test` ステップ追加 | 🔲 | #57 #58 |
+
+---
+
 ## Operating Notes
 
 - このファイルはマイルストーン完了時またはセッション終了時に更新する。
