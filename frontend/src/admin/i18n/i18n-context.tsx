@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react'
 import { LOCALES, resolveLocale, type SupportedLocale } from './locales'
+import { applyLocaleFontFamily } from './locale-fonts'
 import { getMessages } from './messages/index'
 import { translate, type MessageKey, type MessageParams } from './translate'
 
@@ -17,18 +18,6 @@ const I18nContext = createContext<I18nContextValue | null>(null)
 
 const STORAGE_KEY = 'nca-locale'
 
-// ── Font stacks per locale ────────────────────────────────────────────────────
-// System fonts cover all locales without external font loading.
-
-const FONT_STACKS: Record<SupportedLocale, string> = {
-    en:        '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
-    ja:        '"Hiragino Sans", "Yu Gothic UI", "Meiryo", sans-serif',
-    fr:        '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
-    'zh-Hans': '"PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif',
-    'pt-BR':   '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
-    de:        '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
-}
-
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 function detectLocale(): SupportedLocale {
@@ -44,7 +33,7 @@ function detectLocale(): SupportedLocale {
 function applyLocaleToDocument(locale: SupportedLocale): void {
     document.documentElement.lang = locale
     document.documentElement.dir  = LOCALES[locale].dir
-    document.body.style.fontFamily = FONT_STACKS[locale]
+    applyLocaleFontFamily(locale)
 }
 
 // ── Provider ──────────────────────────────────────────────────────────────────
