@@ -247,6 +247,21 @@ Last updated: 2026-05-27
 
 ---
 
+**action_logs 監査テーブル + 管理画面 UI — 完了 ✅**
+
+| 項目 | 状態 | Issue |
+| --- | --- | --- |
+| ActionLogRepositoryInterface に listByOrganization() / countByOrganization() 追加 | ✅ | #42 |
+| PdoActionLogRepository 実装（フィルター + ページネーション） | ✅ | #42 |
+| ListActionLogsHandler 新規作成（GET /api/v1/action-logs） | ✅ | #42 |
+| OpenAPI v0.5.0 + MCP catalog listActionLogs ツール（計 23 ツール） | ✅ | #42 |
+| ListActionLogsHandlerTest 7 本 | ✅ | #42 |
+| ActionLogsPage.tsx: フィルター + テーブル + ページネーション | ✅ | #42 |
+| /action-logs ルート + サイドバーナビリンク | ✅ | #42 |
+| tableRow CSS トークン + 全8テーマ変数追加 | ✅ | #42 |
+
+---
+
 ## Operating Notes
 
 - このファイルはマイルストーン完了時またはセッション終了時に更新する。
