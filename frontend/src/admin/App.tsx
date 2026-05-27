@@ -9,6 +9,7 @@ import AppearancePage    from './components/AppearancePage.js';
 import CredentialsPage   from './components/CredentialsPage.js';
 import SettingsPage      from './components/SettingsPage.js';
 import ActionLogsPage   from './components/ActionLogsPage.js';
+import SessionsPage     from './components/SessionsPage.js';
 
 function RequireAuth() {
     if (!isAuthenticated()) return <Navigate to="/" replace />;
@@ -36,6 +37,7 @@ export default function App() {
                         <Route path="appearance"     element={<AppearancePage />} />
                         <Route path="credentials"    element={<CredentialsPage />} />
                         <Route path="action-logs"    element={<ActionLogsPage />} />
+                        <Route path="sessions"       element={<SessionsPage />} />
                         <Route path="settings"       element={<SettingsPage />} />
                     </Route>
                 </Route>

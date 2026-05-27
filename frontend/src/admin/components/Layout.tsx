@@ -92,6 +92,7 @@ export default function Layout() {
                     <NavItem to="/appearance"   label={t('nav.appearance')} />
                     <NavItem to="/credentials"  label={t('nav.credentials')} />
                     <NavItem to="/action-logs"  label={t('nav.actionLogs')} />
+                    <NavItem to="/sessions"     label={t('nav.sessions')} />
                     <NavItem to="/settings"     label={t('nav.settings')} />
                 </nav>
 

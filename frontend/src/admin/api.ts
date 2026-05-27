@@ -200,3 +200,61 @@ export function listActionLogs(filter: ActionLogFilter = {}): Promise<ActionLogL
     const qs = params.toString();
     return request(`/api/v1/action-logs${qs ? `?${qs}` : ''}`);
 }
+
+// ── Sessions ──────────────────────────────────────────────────────────────────
+
+export type SessionOutcome = 'active' | 'completed' | 'dropped' | 'converted';
+
+export interface SessionSummary {
+    id:             string;
+    scenario_id:    number;
+    outcome:        SessionOutcome;
+    has_conversion: boolean;
+    started_at:     string;
+    ended_at:       string | null;
+}
+
+export interface SessionMessage {
+    id:         number | null;
+    role:       'bot' | 'visitor';
+    content:    string;
+    node_id:    string | null;
+    created_at: string;
+}
+
+export interface SessionDetail extends SessionSummary {
+    variables: Record<string, string>;
+    messages:  SessionMessage[];
+}
+
+export interface SessionListResponse {
+    data: SessionSummary[];
+    meta: { total: number; limit: number; offset: number };
+}
+
+export interface SessionDetailResponse {
+    data: SessionDetail;
+}
+
+export interface SessionFilter {
+    outcome?:        SessionOutcome;
+    has_conversion?: 0 | 1;
+    scenario_id?:    number;
+    limit?:          number;
+    offset?:         number;
+}
+
+export function listSessions(filter: SessionFilter = {}): Promise<SessionListResponse> {
+    const params = new URLSearchParams();
+    if (filter.outcome        !== undefined) params.set('outcome',         filter.outcome);
+    if (filter.has_conversion !== undefined) params.set('has_conversion',  String(filter.has_conversion));
+    if (filter.scenario_id    !== undefined) params.set('scenario_id',     String(filter.scenario_id));
+    if (filter.limit          !== undefined) params.set('limit',           String(filter.limit));
+    if (filter.offset         !== undefined) params.set('offset',          String(filter.offset));
+    const qs = params.toString();
+    return request(`/api/v1/sessions${qs ? `?${qs}` : ''}`);
+}
+
+export function getSessionDetail(sessionId: string): Promise<SessionDetailResponse> {
+    return request(`/api/v1/sessions/${encodeURIComponent(sessionId)}`);
+}

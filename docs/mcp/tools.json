@@ -52,9 +52,14 @@
       "inputSchema": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id"],
+        "required": [
+          "id"
+        ],
         "properties": {
-          "id": { "type": "integer", "description": "Organization ID." }
+          "id": {
+            "type": "integer",
+            "description": "Organization ID."
+          }
         }
       },
       "responseSchemaRef": "#/components/schemas/OrganizationResponse"
@@ -91,9 +96,14 @@
       "inputSchema": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id"],
+        "required": [
+          "id"
+        ],
         "properties": {
-          "id": { "type": "integer", "description": "Scenario ID." }
+          "id": {
+            "type": "integer",
+            "description": "Scenario ID."
+          }
         }
       },
       "responseSchemaRef": "#/components/schemas/ScenarioDetailResponse"
@@ -112,12 +122,26 @@
       "inputSchema": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id"],
+        "required": [
+          "id"
+        ],
         "properties": {
-          "id":     { "type": "integer", "description": "Scenario ID." },
-          "period": { "type": "string",  "description": "Analysis period: 1d, 7d, 30d, 90d, or custom. Defaults to 7d." },
-          "from":   { "type": "string",  "description": "Start date (YYYY-MM-DD). Required when period=custom." },
-          "to":     { "type": "string",  "description": "End date (YYYY-MM-DD). Required when period=custom." }
+          "id": {
+            "type": "integer",
+            "description": "Scenario ID."
+          },
+          "period": {
+            "type": "string",
+            "description": "Analysis period: 1d, 7d, 30d, 90d, or custom. Defaults to 7d."
+          },
+          "from": {
+            "type": "string",
+            "description": "Start date (YYYY-MM-DD). Required when period=custom."
+          },
+          "to": {
+            "type": "string",
+            "description": "End date (YYYY-MM-DD). Required when period=custom."
+          }
         }
       },
       "responseSchemaRef": "#/components/schemas/ScenarioAnalyticsResponse"
@@ -137,11 +161,39 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "adapter":     { "type": "string", "enum": ["http", "email", "slack", "chatwork"], "description": "Filter by adapter type." },
-          "status":      { "type": "string", "enum": ["success", "failure"], "description": "Filter by execution status." },
-          "scenario_id": { "type": "integer", "description": "Filter by scenario ID." },
-          "limit":       { "type": "integer", "minimum": 1, "maximum": 200, "description": "Max records (default 50)." },
-          "offset":      { "type": "integer", "minimum": 0, "description": "Records to skip (default 0)." }
+          "adapter": {
+            "type": "string",
+            "enum": [
+              "http",
+              "email",
+              "slack",
+              "chatwork"
+            ],
+            "description": "Filter by adapter type."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure"
+            ],
+            "description": "Filter by execution status."
+          },
+          "scenario_id": {
+            "type": "integer",
+            "description": "Filter by scenario ID."
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 200,
+            "description": "Max records (default 50)."
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Records to skip (default 0)."
+          }
         }
       },
       "responseSchemaRef": "#/components/schemas/ActionLogListResponse"
@@ -178,12 +230,27 @@
       "inputSchema": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["name", "slug"],
+        "required": [
+          "name",
+          "slug"
+        ],
         "properties": {
-          "name":          { "type": "string", "description": "Display name of the organization." },
-          "slug":          { "type": "string", "description": "URL-safe slug (lowercase alphanumeric and hyphens, e.g. 'my-company')." },
-          "plan":          { "type": "string", "description": "Subscription plan: free, starter, pro, or enterprise. Defaults to free." },
-          "custom_domain": { "type": "string", "description": "Custom domain for org resolution (optional)." }
+          "name": {
+            "type": "string",
+            "description": "Display name of the organization."
+          },
+          "slug": {
+            "type": "string",
+            "description": "URL-safe slug (lowercase alphanumeric and hyphens, e.g. 'my-company')."
+          },
+          "plan": {
+            "type": "string",
+            "description": "Subscription plan: free, starter, pro, or enterprise. Defaults to free."
+          },
+          "custom_domain": {
+            "type": "string",
+            "description": "Custom domain for org resolution (optional)."
+          }
         }
       },
       "responseSchemaRef": null
@@ -202,14 +269,29 @@
       "inputSchema": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id"],
+        "required": [
+          "id"
+        ],
         "properties": {
-          "id":            { "type": "integer", "description": "Organization ID." },
-          "name":          { "type": "string" },
-          "slug":          { "type": "string" },
-          "plan":          { "type": "string" },
-          "custom_domain": { "type": "string" },
-          "is_active":     { "type": "boolean" }
+          "id": {
+            "type": "integer",
+            "description": "Organization ID."
+          },
+          "name": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "plan": {
+            "type": "string"
+          },
+          "custom_domain": {
+            "type": "string"
+          },
+          "is_active": {
+            "type": "boolean"
+          }
         }
       },
       "responseSchemaRef": null
@@ -228,19 +310,31 @@
       "inputSchema": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["name"],
+        "required": [
+          "name"
+        ],
         "properties": {
-          "name":        { "type": "string", "description": "Scenario display name." },
-          "description": { "type": "string", "description": "Optional description." },
+          "name": {
+            "type": "string",
+            "description": "Scenario display name."
+          },
+          "description": {
+            "type": "string",
+            "description": "Optional description."
+          },
           "nodes": {
             "type": "array",
             "description": "Initial nodes. Each node needs node_id (UUID), type (message/condition/action/end), label.",
-            "items": { "type": "object" }
+            "items": {
+              "type": "object"
+            }
           },
           "edges": {
             "type": "array",
             "description": "Initial edges. Each edge needs source_node_id and target_node_id. Optional label for branch names.",
-            "items": { "type": "object" }
+            "items": {
+              "type": "object"
+            }
           }
         }
       },
@@ -260,21 +354,37 @@
       "inputSchema": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id"],
+        "required": [
+          "id"
+        ],
         "properties": {
-          "id":          { "type": "integer", "description": "Scenario ID." },
-          "name":        { "type": "string" },
-          "description": { "type": "string" },
-          "status":      { "type": "string", "description": "draft, published, or archived." },
+          "id": {
+            "type": "integer",
+            "description": "Scenario ID."
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "description": "draft, published, or archived."
+          },
           "nodes": {
             "type": "array",
             "description": "Full replacement set of nodes.",
-            "items": { "type": "object" }
+            "items": {
+              "type": "object"
+            }
           },
           "edges": {
             "type": "array",
             "description": "Full replacement set of edges.",
-            "items": { "type": "object" }
+            "items": {
+              "type": "object"
+            }
           }
         }
       },
@@ -294,9 +404,14 @@
       "inputSchema": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id"],
+        "required": [
+          "id"
+        ],
         "properties": {
-          "id": { "type": "integer", "description": "Scenario ID to preview." }
+          "id": {
+            "type": "integer",
+            "description": "Scenario ID to preview."
+          }
         }
       },
       "responseSchemaRef": null
@@ -315,12 +430,27 @@
       "inputSchema": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id", "session_id"],
+        "required": [
+          "id",
+          "session_id"
+        ],
         "properties": {
-          "id":             { "type": "integer", "description": "Scenario ID." },
-          "session_id":     { "type": "string",  "description": "Preview session UUID from startPreviewSession." },
-          "target_node_id": { "type": "string",  "description": "Next node ID (required for message nodes, optional for condition nodes)." },
-          "answer":         { "type": "string",  "description": "Visitor answer to collect as a variable." }
+          "id": {
+            "type": "integer",
+            "description": "Scenario ID."
+          },
+          "session_id": {
+            "type": "string",
+            "description": "Preview session UUID from startPreviewSession."
+          },
+          "target_node_id": {
+            "type": "string",
+            "description": "Next node ID (required for message nodes, optional for condition nodes)."
+          },
+          "answer": {
+            "type": "string",
+            "description": "Visitor answer to collect as a variable."
+          }
         }
       },
       "responseSchemaRef": "#/components/schemas/SessionStepResponse"
@@ -358,12 +488,30 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "color_primary":   { "type": "string", "description": "Primary widget colour (6-digit hex, e.g. #2563eb)." },
-          "color_secondary": { "type": "string", "description": "Secondary widget colour (6-digit hex, e.g. #ffffff)." },
-          "position":        { "type": "string", "description": "Widget position: bottom-right, bottom-left, top-right, top-left." },
-          "trigger_type":    { "type": "string", "description": "Auto-open trigger: page_load, scroll, exit_intent, manual." },
-          "icon_url":        { "type": "string", "description": "URL of the widget launcher icon, or null to clear." },
-          "welcome_text":    { "type": "string", "description": "Pre-chat bubble text, or null to clear." }
+          "color_primary": {
+            "type": "string",
+            "description": "Primary widget colour (6-digit hex, e.g. #2563eb)."
+          },
+          "color_secondary": {
+            "type": "string",
+            "description": "Secondary widget colour (6-digit hex, e.g. #ffffff)."
+          },
+          "position": {
+            "type": "string",
+            "description": "Widget position: bottom-right, bottom-left, top-right, top-left."
+          },
+          "trigger_type": {
+            "type": "string",
+            "description": "Auto-open trigger: page_load, scroll, exit_intent, manual."
+          },
+          "icon_url": {
+            "type": "string",
+            "description": "URL of the widget launcher icon, or null to clear."
+          },
+          "welcome_text": {
+            "type": "string",
+            "description": "Pre-chat bubble text, or null to clear."
+          }
         }
       },
       "responseSchemaRef": "#/components/schemas/AppearanceResponse"
@@ -382,9 +530,14 @@
       "inputSchema": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id"],
+        "required": [
+          "id"
+        ],
         "properties": {
-          "id": { "type": "integer", "description": "Scenario ID to export." }
+          "id": {
+            "type": "integer",
+            "description": "Scenario ID to export."
+          }
         }
       },
       "responseSchemaRef": "#/components/schemas/ScenarioExportDocument"
@@ -403,19 +556,48 @@
       "inputSchema": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["schema_version", "scenario"],
+        "required": [
+          "schema_version",
+          "scenario"
+        ],
         "properties": {
-          "schema_version": { "type": "integer", "description": "Export format version. Must be 1." },
-          "exported_at":    { "type": "string",  "description": "ISO 8601 export timestamp (optional)." },
+          "schema_version": {
+            "type": "integer",
+            "description": "Export format version. Must be 1."
+          },
+          "exported_at": {
+            "type": "string",
+            "description": "ISO 8601 export timestamp (optional)."
+          },
           "scenario": {
             "type": "object",
             "description": "Scenario data from the export document.",
-            "required": ["name"],
+            "required": [
+              "name"
+            ],
             "properties": {
-              "name":        { "type": "string", "description": "Scenario name." },
-              "description": { "type": "string", "description": "Optional description." },
-              "nodes":       { "type": "array",  "description": "Node list from export.", "items": { "type": "object" } },
-              "edges":       { "type": "array",  "description": "Edge list from export.", "items": { "type": "object" } }
+              "name": {
+                "type": "string",
+                "description": "Scenario name."
+              },
+              "description": {
+                "type": "string",
+                "description": "Optional description."
+              },
+              "nodes": {
+                "type": "array",
+                "description": "Node list from export.",
+                "items": {
+                  "type": "object"
+                }
+              },
+              "edges": {
+                "type": "array",
+                "description": "Edge list from export.",
+                "items": {
+                  "type": "object"
+                }
+              }
             }
           }
         }
@@ -436,22 +618,56 @@
       "inputSchema": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id", "nodes", "edges"],
+        "required": [
+          "id",
+          "nodes",
+          "edges"
+        ],
         "properties": {
-          "id":    { "type": "integer", "description": "Scenario ID." },
+          "id": {
+            "type": "integer",
+            "description": "Scenario ID."
+          },
           "nodes": {
             "type": "array",
             "description": "Full list of nodes for the scenario.",
             "items": {
               "type": "object",
-              "required": ["node_id", "type", "label"],
+              "required": [
+                "node_id",
+                "type",
+                "label"
+              ],
               "properties": {
-                "node_id":    { "type": "string", "description": "UUID of the node." },
-                "type":       { "type": "string", "enum": ["message", "condition", "action", "end"] },
-                "label":      { "type": "string", "description": "Display label." },
-                "data":       { "type": "object", "description": "Node-type-specific payload." },
-                "position_x": { "type": "number", "description": "Canvas X position." },
-                "position_y": { "type": "number", "description": "Canvas Y position." }
+                "node_id": {
+                  "type": "string",
+                  "description": "UUID of the node."
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "message",
+                    "condition",
+                    "action",
+                    "end"
+                  ]
+                },
+                "label": {
+                  "type": "string",
+                  "description": "Display label."
+                },
+                "data": {
+                  "type": "object",
+                  "description": "Node-type-specific payload."
+                },
+                "position_x": {
+                  "type": "number",
+                  "description": "Canvas X position."
+                },
+                "position_y": {
+                  "type": "number",
+                  "description": "Canvas Y position."
+                }
               }
             }
           },
@@ -460,11 +676,21 @@
             "description": "Full list of edges for the scenario.",
             "items": {
               "type": "object",
-              "required": ["source_node_id", "target_node_id"],
+              "required": [
+                "source_node_id",
+                "target_node_id"
+              ],
               "properties": {
-                "source_node_id": { "type": "string" },
-                "target_node_id": { "type": "string" },
-                "label":          { "type": "string", "nullable": true }
+                "source_node_id": {
+                  "type": "string"
+                },
+                "target_node_id": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string",
+                  "nullable": true
+                }
               }
             }
           }
@@ -486,11 +712,23 @@
       "inputSchema": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["name", "adapter"],
+        "required": [
+          "name",
+          "adapter"
+        ],
         "properties": {
-          "name":    { "type": "string", "description": "Human-readable label (e.g. 'Production Slack webhook')." },
-          "adapter": { "type": "string", "description": "Adapter type: http, email, slack, or chatwork." },
-          "config":  { "type": "object", "description": "Adapter-specific config (secrets)." }
+          "name": {
+            "type": "string",
+            "description": "Human-readable label (e.g. 'Production Slack webhook')."
+          },
+          "adapter": {
+            "type": "string",
+            "description": "Adapter type: http, email, slack, or chatwork."
+          },
+          "config": {
+            "type": "object",
+            "description": "Adapter-specific config (secrets)."
+          }
         }
       },
       "responseSchemaRef": null
@@ -509,12 +747,23 @@
       "inputSchema": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id"],
+        "required": [
+          "id"
+        ],
         "properties": {
-          "id":      { "type": "integer", "description": "Credential ID." },
-          "name":    { "type": "string" },
-          "adapter": { "type": "string" },
-          "config":  { "type": "object" }
+          "id": {
+            "type": "integer",
+            "description": "Credential ID."
+          },
+          "name": {
+            "type": "string"
+          },
+          "adapter": {
+            "type": "string"
+          },
+          "config": {
+            "type": "object"
+          }
         }
       },
       "responseSchemaRef": null
@@ -533,9 +782,14 @@
       "inputSchema": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id"],
+        "required": [
+          "id"
+        ],
         "properties": {
-          "id": { "type": "integer", "description": "Scenario ID to delete." }
+          "id": {
+            "type": "integer",
+            "description": "Scenario ID to delete."
+          }
         }
       },
       "responseSchemaRef": null
@@ -554,9 +808,14 @@
       "inputSchema": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id"],
+        "required": [
+          "id"
+        ],
         "properties": {
-          "id": { "type": "integer", "description": "Credential ID to delete." }
+          "id": {
+            "type": "integer",
+            "description": "Credential ID to delete."
+          }
         }
       },
       "responseSchemaRef": null
@@ -575,12 +834,96 @@
       "inputSchema": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id"],
+        "required": [
+          "id"
+        ],
         "properties": {
-          "id": { "type": "integer", "description": "Organization ID to delete." }
+          "id": {
+            "type": "integer",
+            "description": "Organization ID to delete."
+          }
         }
       },
       "responseSchemaRef": null
+    },
+    {
+      "name": "listSessions",
+      "title": "List Sessions",
+      "description": "Returns a paginated list of visitor chat sessions (preview sessions excluded). Filter by outcome (active/completed/dropped/converted), has_conversion (0/1), or scenario_id. Use this to browse session history and conversion funnels.",
+      "safety": "read",
+      "source": {
+        "type": "openapi",
+        "operationId": "listSessions",
+        "method": "GET",
+        "path": "/api/v1/sessions"
+      },
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "active",
+              "completed",
+              "dropped",
+              "converted"
+            ],
+            "description": "Filter by session outcome."
+          },
+          "has_conversion": {
+            "type": "integer",
+            "enum": [
+              0,
+              1
+            ],
+            "description": "Filter by conversion flag (0=no, 1=yes)."
+          },
+          "scenario_id": {
+            "type": "integer",
+            "description": "Filter by scenario ID."
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 200,
+            "description": "Max records (default 50)."
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Records to skip (default 0)."
+          }
+        }
+      },
+      "responseSchemaRef": "#/components/schemas/SessionListResponse"
+    },
+    {
+      "name": "getSessionDetail",
+      "title": "Get Session Detail",
+      "description": "Returns a single chat session with its full message history and collected variables. Use this to inspect visitor conversation flow and collected form data.",
+      "safety": "read",
+      "source": {
+        "type": "openapi",
+        "operationId": "getSessionDetail",
+        "method": "GET",
+        "path": "/api/v1/sessions/{session_id}"
+      },
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "session_id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "UUID of the session to retrieve."
+          }
+        }
+      },
+      "responseSchemaRef": "#/components/schemas/SessionDetailResponse"
     }
   ]
 }

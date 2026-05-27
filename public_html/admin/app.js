@@ -21738,7 +21738,7 @@ var NeNeAdmin = (() => {
               "The result of getSnapshot should be cached to avoid an infinite loop"
             ), didWarnUncachedGetSnapshot = true);
           }
-          cachedValue = useState15({
+          cachedValue = useState16({
             inst: { value, getSnapshot }
           });
           var inst = cachedValue[0].inst, forceUpdate = cachedValue[1];
@@ -21750,7 +21750,7 @@ var NeNeAdmin = (() => {
             },
             [subscribe, value, getSnapshot]
           );
-          useEffect15(
+          useEffect16(
             function() {
               checkIfSnapshotChanged(inst) && forceUpdate({ inst });
               return subscribe(function() {
@@ -21776,7 +21776,7 @@ var NeNeAdmin = (() => {
           return getSnapshot();
         }
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-        var React15 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState15 = React15.useState, useEffect15 = React15.useEffect, useLayoutEffect5 = React15.useLayoutEffect, useDebugValue2 = React15.useDebugValue, didWarnOld18Alpha = false, didWarnUncachedGetSnapshot = false, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
+        var React15 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState16 = React15.useState, useEffect16 = React15.useEffect, useLayoutEffect5 = React15.useLayoutEffect, useDebugValue2 = React15.useDebugValue, didWarnOld18Alpha = false, didWarnUncachedGetSnapshot = false, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
         exports.useSyncExternalStore = void 0 !== React15.useSyncExternalStore ? React15.useSyncExternalStore : shim;
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(Error());
       })();
@@ -21804,7 +21804,7 @@ var NeNeAdmin = (() => {
           return x === y && (0 !== x || 1 / x === 1 / y) || x !== x && y !== y;
         }
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-        var React15 = require_react(), shim = require_shim(), objectIs = "function" === typeof Object.is ? Object.is : is, useSyncExternalStore = shim.useSyncExternalStore, useRef7 = React15.useRef, useEffect15 = React15.useEffect, useMemo6 = React15.useMemo, useDebugValue2 = React15.useDebugValue;
+        var React15 = require_react(), shim = require_shim(), objectIs = "function" === typeof Object.is ? Object.is : is, useSyncExternalStore = shim.useSyncExternalStore, useRef7 = React15.useRef, useEffect16 = React15.useEffect, useMemo6 = React15.useMemo, useDebugValue2 = React15.useDebugValue;
         exports.useSyncExternalStoreWithSelector = function(subscribe, getSnapshot, getServerSnapshot, selector, isEqual) {
           var instRef = useRef7(null);
           if (null === instRef.current) {
@@ -21847,7 +21847,7 @@ var NeNeAdmin = (() => {
             [getSnapshot, getServerSnapshot, selector, isEqual]
           );
           var value = useSyncExternalStore(subscribe, instRef[0], instRef[1]);
-          useEffect15(
+          useEffect16(
             function() {
               inst.hasValue = true;
               inst.value = value;
@@ -21875,7 +21875,7 @@ var NeNeAdmin = (() => {
   });
 
   // src/admin/index.tsx
-  var import_react14 = __toESM(require_react());
+  var import_react15 = __toESM(require_react());
   var import_client = __toESM(require_client());
 
   // node_modules/react-router/dist/development/chunk-4N6VE7H7.mjs
@@ -24785,6 +24785,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     // ── Table ────────────────────────────────────────────────────────────────
     tableHeader: "var(--nca-color-table-header)",
     tableRow: "var(--nca-color-table-row)",
+    surfaceHover: "var(--nca-color-surface-hover)",
     // ── Badge ────────────────────────────────────────────────────────────────
     badgeDraftBg: "var(--nca-badge-draft-bg)",
     badgeDraftColor: "var(--nca-badge-draft-color)",
@@ -25028,6 +25029,30 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "actionLogs.scenarioId": "Scenario",
     "actionLogs.executedAt": "Executed at",
     "actionLogs.error": "Error",
+    // ── Sessions ─────────────────────────────────────────────────────────────
+    "nav.sessions": "Sessions",
+    "sessions.pageTitle": "Sessions",
+    "sessions.empty": "No sessions yet.",
+    "sessions.loadError": "Failed to load sessions.",
+    "sessions.filterOutcome": "Outcome",
+    "sessions.filterConversion": "Conversion",
+    "sessions.all": "All",
+    "sessions.active": "Active",
+    "sessions.completed": "Completed",
+    "sessions.dropped": "Dropped",
+    "sessions.converted": "Converted",
+    "sessions.yes": "Yes",
+    "sessions.no": "No",
+    "sessions.scenarioId": "Scenario",
+    "sessions.startedAt": "Started",
+    "sessions.endedAt": "Ended",
+    "sessions.outcome": "Outcome",
+    "sessions.conversion": "Conversion",
+    "sessions.detail.title": "Session Detail",
+    "sessions.detail.variables": "Collected Variables",
+    "sessions.detail.messages": "Messages",
+    "sessions.detail.close": "Close",
+    "sessions.detail.loadError": "Failed to load session detail.",
     // ── Settings ──────────────────────────────────────────────────────────────
     "settings.pageTitle": "Settings",
     "settings.adminTheme": "Admin Theme",
@@ -25210,6 +25235,30 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     // ── Theme ─────────────────────────────────────────────────────────────────
     "theme.toggleLight": "\u30E9\u30A4\u30C8\u30E2\u30FC\u30C9\u306B\u5207\u308A\u66FF\u3048",
     "theme.toggleDark": "\u30C0\u30FC\u30AF\u30E2\u30FC\u30C9\u306B\u5207\u308A\u66FF\u3048",
+    // ── Sessions ─────────────────────────────────────────────────────────────
+    "nav.sessions": "\u30BB\u30C3\u30B7\u30E7\u30F3",
+    "sessions.pageTitle": "\u30BB\u30C3\u30B7\u30E7\u30F3",
+    "sessions.empty": "\u30BB\u30C3\u30B7\u30E7\u30F3\u306F\u307E\u3060\u3042\u308A\u307E\u305B\u3093\u3002",
+    "sessions.loadError": "\u30BB\u30C3\u30B7\u30E7\u30F3\u306E\u8AAD\u307F\u8FBC\u307F\u306B\u5931\u6557\u3057\u307E\u3057\u305F\u3002",
+    "sessions.filterOutcome": "\u7D50\u679C",
+    "sessions.filterConversion": "\u30B3\u30F3\u30D0\u30FC\u30B8\u30E7\u30F3",
+    "sessions.all": "\u3059\u3079\u3066",
+    "sessions.active": "\u30A2\u30AF\u30C6\u30A3\u30D6",
+    "sessions.completed": "\u5B8C\u4E86",
+    "sessions.dropped": "\u96E2\u8131",
+    "sessions.converted": "\u30B3\u30F3\u30D0\u30FC\u30B8\u30E7\u30F3\u6E08\u307F",
+    "sessions.yes": "\u3042\u308A",
+    "sessions.no": "\u306A\u3057",
+    "sessions.scenarioId": "\u30B7\u30CA\u30EA\u30AA",
+    "sessions.startedAt": "\u958B\u59CB\u65E5\u6642",
+    "sessions.endedAt": "\u7D42\u4E86\u65E5\u6642",
+    "sessions.outcome": "\u7D50\u679C",
+    "sessions.conversion": "\u30B3\u30F3\u30D0\u30FC\u30B8\u30E7\u30F3",
+    "sessions.detail.title": "\u30BB\u30C3\u30B7\u30E7\u30F3\u8A73\u7D30",
+    "sessions.detail.variables": "\u53CE\u96C6\u5909\u6570",
+    "sessions.detail.messages": "\u30E1\u30C3\u30BB\u30FC\u30B8",
+    "sessions.detail.close": "\u9589\u3058\u308B",
+    "sessions.detail.loadError": "\u30BB\u30C3\u30B7\u30E7\u30F3\u8A73\u7D30\u306E\u8AAD\u307F\u8FBC\u307F\u306B\u5931\u6557\u3057\u307E\u3057\u305F\u3002",
     // ── Settings ──────────────────────────────────────────────────────────────
     "settings.pageTitle": "\u8A2D\u5B9A",
     "settings.adminTheme": "\u7BA1\u7406\u753B\u9762\u30C6\u30FC\u30DE",
@@ -25335,6 +25384,30 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     // ── Theme ─────────────────────────────────────────────────────────────────
     "theme.toggleLight": "Passer en mode clair",
     "theme.toggleDark": "Passer en mode sombre",
+    // ── Sessions ─────────────────────────────────────────────────────────────
+    "nav.sessions": "Sessions",
+    "sessions.pageTitle": "Sessions",
+    "sessions.empty": "Aucune session pour le moment.",
+    "sessions.loadError": "\xC9chec du chargement des sessions.",
+    "sessions.filterOutcome": "R\xE9sultat",
+    "sessions.filterConversion": "Conversion",
+    "sessions.all": "Tous",
+    "sessions.active": "Actif",
+    "sessions.completed": "Termin\xE9",
+    "sessions.dropped": "Abandonn\xE9",
+    "sessions.converted": "Converti",
+    "sessions.yes": "Oui",
+    "sessions.no": "Non",
+    "sessions.scenarioId": "Sc\xE9nario",
+    "sessions.startedAt": "D\xE9marr\xE9",
+    "sessions.endedAt": "Termin\xE9 \xE0",
+    "sessions.outcome": "R\xE9sultat",
+    "sessions.conversion": "Conversion",
+    "sessions.detail.title": "D\xE9tail de la session",
+    "sessions.detail.variables": "Variables collect\xE9es",
+    "sessions.detail.messages": "Messages",
+    "sessions.detail.close": "Fermer",
+    "sessions.detail.loadError": "\xC9chec du chargement du d\xE9tail de la session.",
     // ── Settings ──────────────────────────────────────────────────────────────
     "settings.pageTitle": "Param\xE8tres",
     "settings.adminTheme": "Th\xE8me d'administration",
@@ -25460,6 +25533,30 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     // ── Theme ─────────────────────────────────────────────────────────────────
     "theme.toggleLight": "\u5207\u6362\u5230\u6D45\u8272\u6A21\u5F0F",
     "theme.toggleDark": "\u5207\u6362\u5230\u6DF1\u8272\u6A21\u5F0F",
+    // ── Sessions ─────────────────────────────────────────────────────────────
+    "nav.sessions": "\u4F1A\u8BDD",
+    "sessions.pageTitle": "\u4F1A\u8BDD",
+    "sessions.empty": "\u6682\u65E0\u4F1A\u8BDD\u3002",
+    "sessions.loadError": "\u4F1A\u8BDD\u52A0\u8F7D\u5931\u8D25\u3002",
+    "sessions.filterOutcome": "\u7ED3\u679C",
+    "sessions.filterConversion": "\u8F6C\u5316",
+    "sessions.all": "\u5168\u90E8",
+    "sessions.active": "\u6D3B\u8DC3",
+    "sessions.completed": "\u5DF2\u5B8C\u6210",
+    "sessions.dropped": "\u5DF2\u6D41\u5931",
+    "sessions.converted": "\u5DF2\u8F6C\u5316",
+    "sessions.yes": "\u662F",
+    "sessions.no": "\u5426",
+    "sessions.scenarioId": "\u573A\u666F",
+    "sessions.startedAt": "\u5F00\u59CB\u65F6\u95F4",
+    "sessions.endedAt": "\u7ED3\u675F\u65F6\u95F4",
+    "sessions.outcome": "\u7ED3\u679C",
+    "sessions.conversion": "\u8F6C\u5316",
+    "sessions.detail.title": "\u4F1A\u8BDD\u8BE6\u60C5",
+    "sessions.detail.variables": "\u6536\u96C6\u7684\u53D8\u91CF",
+    "sessions.detail.messages": "\u6D88\u606F",
+    "sessions.detail.close": "\u5173\u95ED",
+    "sessions.detail.loadError": "\u4F1A\u8BDD\u8BE6\u60C5\u52A0\u8F7D\u5931\u8D25\u3002",
     // ── Settings ──────────────────────────────────────────────────────────────
     "settings.pageTitle": "\u8BBE\u7F6E",
     "settings.adminTheme": "\u7BA1\u7406\u754C\u9762\u4E3B\u9898",
@@ -25585,6 +25682,30 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     // ── Theme ─────────────────────────────────────────────────────────────────
     "theme.toggleLight": "Mudar para modo claro",
     "theme.toggleDark": "Mudar para modo escuro",
+    // ── Sessions ─────────────────────────────────────────────────────────────
+    "nav.sessions": "Sess\xF5es",
+    "sessions.pageTitle": "Sess\xF5es",
+    "sessions.empty": "Nenhuma sess\xE3o ainda.",
+    "sessions.loadError": "Falha ao carregar sess\xF5es.",
+    "sessions.filterOutcome": "Resultado",
+    "sessions.filterConversion": "Convers\xE3o",
+    "sessions.all": "Todos",
+    "sessions.active": "Ativo",
+    "sessions.completed": "Conclu\xEDdo",
+    "sessions.dropped": "Abandonado",
+    "sessions.converted": "Convertido",
+    "sessions.yes": "Sim",
+    "sessions.no": "N\xE3o",
+    "sessions.scenarioId": "Cen\xE1rio",
+    "sessions.startedAt": "Iniciado",
+    "sessions.endedAt": "Encerrado",
+    "sessions.outcome": "Resultado",
+    "sessions.conversion": "Convers\xE3o",
+    "sessions.detail.title": "Detalhe da sess\xE3o",
+    "sessions.detail.variables": "Vari\xE1veis coletadas",
+    "sessions.detail.messages": "Mensagens",
+    "sessions.detail.close": "Fechar",
+    "sessions.detail.loadError": "Falha ao carregar detalhe da sess\xE3o.",
     // ── Settings ──────────────────────────────────────────────────────────────
     "settings.pageTitle": "Configura\xE7\xF5es",
     "settings.adminTheme": "Tema do painel",
@@ -25710,6 +25831,30 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     // ── Theme ─────────────────────────────────────────────────────────────────
     "theme.toggleLight": "Zum hellen Modus wechseln",
     "theme.toggleDark": "Zum dunklen Modus wechseln",
+    // ── Sessions ─────────────────────────────────────────────────────────────
+    "nav.sessions": "Sitzungen",
+    "sessions.pageTitle": "Sitzungen",
+    "sessions.empty": "Noch keine Sitzungen vorhanden.",
+    "sessions.loadError": "Sitzungen konnten nicht geladen werden.",
+    "sessions.filterOutcome": "Ergebnis",
+    "sessions.filterConversion": "Konversion",
+    "sessions.all": "Alle",
+    "sessions.active": "Aktiv",
+    "sessions.completed": "Abgeschlossen",
+    "sessions.dropped": "Abgebrochen",
+    "sessions.converted": "Konvertiert",
+    "sessions.yes": "Ja",
+    "sessions.no": "Nein",
+    "sessions.scenarioId": "Szenario",
+    "sessions.startedAt": "Gestartet",
+    "sessions.endedAt": "Beendet",
+    "sessions.outcome": "Ergebnis",
+    "sessions.conversion": "Konversion",
+    "sessions.detail.title": "Sitzungsdetail",
+    "sessions.detail.variables": "Gesammelte Variablen",
+    "sessions.detail.messages": "Nachrichten",
+    "sessions.detail.close": "Schlie\xDFen",
+    "sessions.detail.loadError": "Sitzungsdetail konnte nicht geladen werden.",
     // ── Settings ──────────────────────────────────────────────────────────────
     "settings.pageTitle": "Einstellungen",
     "settings.adminTheme": "Admin-Design",
@@ -25881,6 +26026,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/appearance", label: t("nav.appearance") }),
           /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/credentials", label: t("nav.credentials") }),
           /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/action-logs", label: t("nav.actionLogs") }),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/sessions", label: t("nav.sessions") }),
           /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/settings", label: t("nav.settings") })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { style: {
@@ -26206,6 +26352,19 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     if (filter2.offset) params.set("offset", String(filter2.offset));
     const qs = params.toString();
     return request(`/api/v1/action-logs${qs ? `?${qs}` : ""}`);
+  }
+  function listSessions(filter2 = {}) {
+    const params = new URLSearchParams();
+    if (filter2.outcome !== void 0) params.set("outcome", filter2.outcome);
+    if (filter2.has_conversion !== void 0) params.set("has_conversion", String(filter2.has_conversion));
+    if (filter2.scenario_id !== void 0) params.set("scenario_id", String(filter2.scenario_id));
+    if (filter2.limit !== void 0) params.set("limit", String(filter2.limit));
+    if (filter2.offset !== void 0) params.set("offset", String(filter2.offset));
+    const qs = params.toString();
+    return request(`/api/v1/sessions${qs ? `?${qs}` : ""}`);
+  }
+  function getSessionDetail(sessionId) {
+    return request(`/api/v1/sessions/${encodeURIComponent(sessionId)}`);
   }
 
   // src/admin/components/LoginPage.tsx
@@ -37102,30 +37261,433 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     ] });
   }
 
-  // src/admin/App.tsx
+  // src/admin/components/SessionsPage.tsx
+  var import_react14 = __toESM(require_react());
   var import_jsx_runtime15 = __toESM(require_jsx_runtime());
+  var OUTCOME_COLORS = {
+    active: { bg: "oklch(96% 0.05 220)", fg: "oklch(38% 0.15 220)", border: "oklch(83% 0.10 220)" },
+    completed: { bg: "oklch(96% 0.04 150)", fg: "oklch(40% 0.14 150)", border: "oklch(85% 0.09 150)" },
+    dropped: { bg: "oklch(97% 0.04 25)", fg: "oklch(40% 0.14 25)", border: "oklch(87% 0.08 25)" },
+    converted: { bg: "oklch(96% 0.06 290)", fg: "oklch(38% 0.18 290)", border: "oklch(83% 0.12 290)" }
+  };
+  function OutcomeBadge({ outcome }) {
+    const { t } = useTranslation();
+    const c = OUTCOME_COLORS[outcome];
+    const label = {
+      active: t("sessions.active"),
+      completed: t("sessions.completed"),
+      dropped: t("sessions.dropped"),
+      converted: t("sessions.converted")
+    };
+    return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("span", { style: {
+      display: "inline-block",
+      padding: "2px 9px",
+      borderRadius: 99,
+      fontSize: T.fontXs,
+      fontWeight: 700,
+      background: c.bg,
+      color: c.fg,
+      border: `1px solid ${c.border}`
+    }, children: label[outcome] });
+  }
+  function SessionDetailPanel({
+    sessionId,
+    onClose
+  }) {
+    const { t } = useTranslation();
+    const [detail, setDetail] = (0, import_react14.useState)(null);
+    const [loading, setLoading] = (0, import_react14.useState)(true);
+    const [error, setError] = (0, import_react14.useState)(null);
+    (0, import_react14.useEffect)(() => {
+      setLoading(true);
+      setError(null);
+      void getSessionDetail(sessionId).then((res) => setDetail(res.data)).catch((err) => {
+        setError(err instanceof ApiError ? err.message : t("sessions.detail.loadError"));
+      }).finally(() => setLoading(false));
+    }, [sessionId]);
+    return /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { style: {
+      position: "fixed",
+      inset: 0,
+      zIndex: 100,
+      display: "flex",
+      alignItems: "flex-start",
+      justifyContent: "flex-end"
+    }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
+        "div",
+        {
+          onClick: onClose,
+          style: { position: "absolute", inset: 0, background: "oklch(0% 0 0 / 0.35)" }
+        }
+      ),
+      /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { style: {
+        position: "relative",
+        zIndex: 1,
+        width: 480,
+        maxWidth: "95vw",
+        height: "100vh",
+        background: T.surface,
+        boxShadow: "-4px 0 24px oklch(0% 0 0 / 0.12)",
+        overflowY: "auto",
+        display: "flex",
+        flexDirection: "column"
+      }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { style: {
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "16px 20px",
+          borderBottom: `1px solid ${T.border}`,
+          position: "sticky",
+          top: 0,
+          background: T.surface,
+          zIndex: 1
+        }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("span", { style: { fontWeight: 700, fontSize: T.fontMd }, children: t("sessions.detail.title") }),
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
+            "button",
+            {
+              onClick: onClose,
+              "aria-label": t("sessions.detail.close"),
+              style: {
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                fontSize: 20,
+                color: T.textMuted,
+                lineHeight: 1,
+                padding: "2px 6px",
+                borderRadius: T.radiusSm
+              },
+              children: "\u2715"
+            }
+          )
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { style: { padding: "16px 20px", flex: 1 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(ErrorMsg, { msg: error }),
+          loading && /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("p", { style: { color: T.textMuted }, children: t("common.loading") }),
+          detail && /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(import_jsx_runtime15.Fragment, { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { style: {
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: "8px 16px",
+              marginBottom: 20,
+              fontSize: T.fontSm
+            }, children: [
+              [t("sessions.outcome"), /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(OutcomeBadge, { outcome: detail.outcome }, "o")],
+              [t("sessions.conversion"), detail.has_conversion ? `\u2713 ${t("sessions.yes")}` : `\u2014 ${t("sessions.no")}`],
+              [t("sessions.scenarioId"), `#${detail.scenario_id}`],
+              [t("sessions.startedAt"), detail.started_at],
+              [t("sessions.endedAt"), detail.ended_at ?? "\u2014"]
+            ].map(([label, val]) => /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { children: [
+              /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { style: { color: T.textMuted, marginBottom: 2 }, children: label }),
+              /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { style: { color: T.text }, children: val })
+            ] }, String(label))) }),
+            /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { style: { marginBottom: 20 }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { style: { fontSize: T.fontXs, color: T.textMuted, marginBottom: 4 }, children: "ID" }),
+              /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("code", { style: {
+                fontSize: T.fontXs,
+                color: T.textMuted,
+                wordBreak: "break-all"
+              }, children: detail.id })
+            ] }),
+            Object.keys(detail.variables).length > 0 && /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("section", { style: { marginBottom: 20 }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("h3", { style: { fontSize: T.fontSm, fontWeight: 700, marginBottom: 8, color: T.text }, children: t("sessions.detail.variables") }),
+              /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { style: {
+                background: T.bg,
+                borderRadius: T.radiusMd,
+                border: `1px solid ${T.border}`,
+                overflow: "hidden"
+              }, children: Object.entries(detail.variables).map(([key, val], i) => /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(
+                "div",
+                {
+                  style: {
+                    display: "flex",
+                    gap: 12,
+                    padding: "7px 12px",
+                    fontSize: T.fontSm,
+                    background: i % 2 === 1 ? T.tableRow : "transparent",
+                    borderBottom: i < Object.keys(detail.variables).length - 1 ? `1px solid ${T.border}` : "none"
+                  },
+                  children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("span", { style: { color: T.textMuted, minWidth: 100, flexShrink: 0 }, children: key }),
+                    /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("span", { style: { color: T.text, wordBreak: "break-all" }, children: val })
+                  ]
+                },
+                key
+              )) })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("section", { children: [
+              /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("h3", { style: { fontSize: T.fontSm, fontWeight: 700, marginBottom: 10, color: T.text }, children: [
+                t("sessions.detail.messages"),
+                " (",
+                detail.messages.length,
+                ")"
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: 8 }, children: [
+                detail.messages.map((msg, i) => {
+                  const isBot = msg.role === "bot";
+                  return /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(
+                    "div",
+                    {
+                      style: {
+                        display: "flex",
+                        flexDirection: isBot ? "row" : "row-reverse",
+                        gap: 8,
+                        alignItems: "flex-end"
+                      },
+                      children: [
+                        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { style: {
+                          fontSize: T.fontXs,
+                          color: T.textMuted,
+                          flexShrink: 0,
+                          paddingBottom: 4
+                        }, children: isBot ? "\u{1F916}" : "\u{1F464}" }),
+                        /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { style: {
+                          maxWidth: "80%",
+                          padding: "8px 12px",
+                          borderRadius: T.radiusMd,
+                          background: isBot ? T.bg : "oklch(92% 0.08 250)",
+                          border: `1px solid ${T.border}`,
+                          fontSize: T.fontSm,
+                          color: T.text,
+                          lineHeight: 1.5
+                        }, children: [
+                          msg.content,
+                          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { style: {
+                            marginTop: 4,
+                            fontSize: T.fontXs,
+                            color: T.textMuted,
+                            textAlign: isBot ? "left" : "right"
+                          }, children: msg.created_at })
+                        ] })
+                      ]
+                    },
+                    msg.id ?? i
+                  );
+                }),
+                detail.messages.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("p", { style: { color: T.textMuted, fontSize: T.fontSm }, children: "\u2014" })
+              ] })
+            ] })
+          ] })
+        ] })
+      ] })
+    ] });
+  }
+  function SessionsPage() {
+    const { t } = useTranslation();
+    const [sessions, setSessions] = (0, import_react14.useState)([]);
+    const [total, setTotal] = (0, import_react14.useState)(0);
+    const [loading, setLoading] = (0, import_react14.useState)(true);
+    const [error, setError] = (0, import_react14.useState)(null);
+    const [selectedId, setSelectedId] = (0, import_react14.useState)(null);
+    const [outcome, setOutcome] = (0, import_react14.useState)("");
+    const [hasConversion, setHasConversion] = (0, import_react14.useState)("");
+    const [offset, setOffset] = (0, import_react14.useState)(0);
+    const limit = 50;
+    (0, import_react14.useEffect)(() => {
+      setLoading(true);
+      setError(null);
+      void listSessions({
+        ...outcome ? { outcome } : {},
+        ...hasConversion ? { has_conversion: Number(hasConversion) } : {},
+        limit,
+        offset
+      }).then((res) => {
+        setSessions(res.data);
+        setTotal(res.meta.total);
+      }).catch((err) => {
+        setError(err instanceof ApiError ? err.message : t("sessions.loadError"));
+      }).finally(() => setLoading(false));
+    }, [outcome, hasConversion, offset]);
+    const totalPages = Math.ceil(total / limit);
+    const currentPage = Math.floor(offset / limit) + 1;
+    const selectStyle = {
+      padding: "5px 8px",
+      borderRadius: T.radiusMd,
+      border: `1px solid ${T.borderInput}`,
+      background: T.surface,
+      color: T.text,
+      fontSize: T.fontSm
+    };
+    return /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(PageTitle, { children: t("sessions.pageTitle") }),
+      /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { style: { display: "flex", gap: 10, marginBottom: 16, flexWrap: "wrap", alignItems: "center" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("label", { style: { display: "flex", alignItems: "center", gap: 6, fontSize: T.fontSm, color: T.textMuted }, children: [
+          t("sessions.filterOutcome"),
+          ":",
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(
+            "select",
+            {
+              value: outcome,
+              onChange: (e) => {
+                setOutcome(e.target.value);
+                setOffset(0);
+              },
+              style: selectStyle,
+              children: [
+                /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("option", { value: "", children: t("sessions.all") }),
+                /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("option", { value: "active", children: t("sessions.active") }),
+                /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("option", { value: "completed", children: t("sessions.completed") }),
+                /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("option", { value: "dropped", children: t("sessions.dropped") }),
+                /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("option", { value: "converted", children: t("sessions.converted") })
+              ]
+            }
+          )
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("label", { style: { display: "flex", alignItems: "center", gap: 6, fontSize: T.fontSm, color: T.textMuted }, children: [
+          t("sessions.filterConversion"),
+          ":",
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(
+            "select",
+            {
+              value: hasConversion,
+              onChange: (e) => {
+                setHasConversion(e.target.value);
+                setOffset(0);
+              },
+              style: selectStyle,
+              children: [
+                /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("option", { value: "", children: t("sessions.all") }),
+                /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("option", { value: "1", children: [
+                  "\u2713 ",
+                  t("sessions.yes")
+                ] }),
+                /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("option", { value: "0", children: [
+                  "\u2014 ",
+                  t("sessions.no")
+                ] })
+              ]
+            }
+          )
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("span", { style: { marginLeft: "auto", fontSize: T.fontSm, color: T.textMuted }, children: [
+          total,
+          " records"
+        ] })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(ErrorMsg, { msg: error }),
+      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Card, { style: { padding: 0, overflow: "hidden" }, children: loading ? /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("p", { style: { padding: "20px 24px", color: T.textMuted }, children: t("common.loading") }) : sessions.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("p", { style: { padding: "20px 24px", color: T.textMuted }, children: t("sessions.empty") }) : /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { style: { overflowX: "auto" }, children: /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("table", { style: { width: "100%", borderCollapse: "collapse", fontSize: T.fontSm }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("tr", { style: { background: T.tableHeader, borderBottom: `1px solid ${T.border}` }, children: [
+          t("sessions.outcome"),
+          t("sessions.scenarioId"),
+          t("sessions.conversion"),
+          t("sessions.startedAt"),
+          t("sessions.endedAt")
+        ].map((h) => /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("th", { style: {
+          padding: "10px 16px",
+          textAlign: "left",
+          fontWeight: 600,
+          color: T.textMuted,
+          whiteSpace: "nowrap"
+        }, children: h }, h)) }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("tbody", { children: sessions.map((s, i) => /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(
+          "tr",
+          {
+            onClick: () => setSelectedId(s.id),
+            style: {
+              borderBottom: `1px solid ${T.border}`,
+              background: i % 2 === 1 ? T.tableRow : "transparent",
+              cursor: "pointer"
+            },
+            onMouseEnter: (e) => e.currentTarget.style.background = T.surfaceHover,
+            onMouseLeave: (e) => e.currentTarget.style.background = i % 2 === 1 ? T.tableRow : "transparent",
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("td", { style: { padding: "9px 16px" }, children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(OutcomeBadge, { outcome: s.outcome }) }),
+              /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("td", { style: { padding: "9px 16px", color: T.textMuted }, children: [
+                "#",
+                s.scenario_id
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("td", { style: { padding: "9px 16px", color: s.has_conversion ? "oklch(40% 0.14 150)" : T.textMuted }, children: s.has_conversion ? `\u2713 ${t("sessions.yes")}` : `\u2014 ${t("sessions.no")}` }),
+              /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("td", { style: { padding: "9px 16px", color: T.textMuted, whiteSpace: "nowrap" }, children: s.started_at }),
+              /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("td", { style: { padding: "9px 16px", color: T.textMuted, whiteSpace: "nowrap" }, children: s.ended_at ?? "\u2014" })
+            ]
+          },
+          s.id
+        )) })
+      ] }) }) }),
+      totalPages > 1 && /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { style: {
+        display: "flex",
+        justifyContent: "center",
+        gap: 8,
+        marginTop: 16,
+        alignItems: "center"
+      }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
+          "button",
+          {
+            disabled: currentPage <= 1,
+            onClick: () => setOffset(Math.max(0, offset - limit)),
+            style: {
+              padding: "5px 12px",
+              borderRadius: T.radiusMd,
+              border: `1px solid ${T.border}`,
+              background: T.surface,
+              color: T.text,
+              cursor: currentPage <= 1 ? "not-allowed" : "pointer",
+              opacity: currentPage <= 1 ? 0.5 : 1
+            },
+            children: "\u2190 Prev"
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("span", { style: { fontSize: T.fontSm, color: T.textMuted }, children: [
+          currentPage,
+          " / ",
+          totalPages
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
+          "button",
+          {
+            disabled: currentPage >= totalPages,
+            onClick: () => setOffset(offset + limit),
+            style: {
+              padding: "5px 12px",
+              borderRadius: T.radiusMd,
+              border: `1px solid ${T.border}`,
+              background: T.surface,
+              color: T.text,
+              cursor: currentPage >= totalPages ? "not-allowed" : "pointer",
+              opacity: currentPage >= totalPages ? 0.5 : 1
+            },
+            children: "Next \u2192"
+          }
+        )
+      ] }),
+      selectedId !== null && /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
+        SessionDetailPanel,
+        {
+          sessionId: selectedId,
+          onClose: () => setSelectedId(null)
+        }
+      )
+    ] });
+  }
+
+  // src/admin/App.tsx
+  var import_jsx_runtime16 = __toESM(require_jsx_runtime());
   function RequireAuth() {
-    if (!isAuthenticated()) return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Navigate, { to: "/", replace: true });
-    return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Outlet, {});
+    if (!isAuthenticated()) return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Navigate, { to: "/", replace: true });
+    return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Outlet, {});
   }
   function App() {
-    return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(ThemeProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(BrowserRouter, { basename: "/admin", children: /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(Routes, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Route, { index: true, element: isAuthenticated() ? /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Navigate, { to: "/scenarios", replace: true }) : /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(LoginPage, {}) }),
-      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Route, { element: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(RequireAuth, {}), children: /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(Route, { element: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Layout, {}), children: [
-        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Route, { path: "scenarios", element: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(ScenariosPage, {}) }),
-        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Route, { path: "scenarios/new", element: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(ScenarioFormPage, {}) }),
-        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Route, { path: "scenarios/:id", element: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(ScenarioFormPage, {}) }),
-        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Route, { path: "appearance", element: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(AppearancePage, {}) }),
-        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Route, { path: "credentials", element: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(CredentialsPage, {}) }),
-        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Route, { path: "action-logs", element: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(ActionLogsPage, {}) }),
-        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Route, { path: "settings", element: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(SettingsPage, {}) })
+    return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(ThemeProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(BrowserRouter, { basename: "/admin", children: /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(Routes, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Route, { index: true, element: isAuthenticated() ? /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Navigate, { to: "/scenarios", replace: true }) : /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(LoginPage, {}) }),
+      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Route, { element: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(RequireAuth, {}), children: /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(Route, { element: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Layout, {}), children: [
+        /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Route, { path: "scenarios", element: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(ScenariosPage, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Route, { path: "scenarios/new", element: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(ScenarioFormPage, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Route, { path: "scenarios/:id", element: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(ScenarioFormPage, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Route, { path: "appearance", element: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(AppearancePage, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Route, { path: "credentials", element: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(CredentialsPage, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Route, { path: "action-logs", element: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(ActionLogsPage, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Route, { path: "sessions", element: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(SessionsPage, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Route, { path: "settings", element: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(SettingsPage, {}) })
       ] }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Route, { path: "*", element: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Navigate, { to: "/", replace: true }) })
+      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Route, { path: "*", element: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Navigate, { to: "/", replace: true }) })
     ] }) }) });
   }
 
   // src/admin/index.tsx
-  var import_jsx_runtime16 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime17 = __toESM(require_jsx_runtime());
   var storedLocale = (() => {
     try {
       return localStorage.getItem("nca-locale") ?? navigator.language;
@@ -37141,7 +37703,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var container = document.getElementById("root");
   if (!container) throw new Error("Root element #root not found");
   (0, import_client.createRoot)(container).render(
-    /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(import_react14.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(I18nProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(App, {}) }) })
+    /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(import_react15.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(I18nProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(App, {}) }) })
   );
 })();
 /*! Bundled license information:
