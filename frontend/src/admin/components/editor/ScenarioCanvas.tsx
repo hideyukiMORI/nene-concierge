@@ -10,9 +10,8 @@ import {
     type Edge,
     type Connection,
     type NodeTypes,
-    Panel,
 } from '@xyflow/react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import type {
@@ -20,7 +19,7 @@ import type {
     NodeAnalyticsData, ScenarioAnalyticsResponse, AnalyticsPeriod,
 } from '../../api.js';
 import { getScenarioAnalytics } from '../../api.js';
-import { NODE_COLORS, NODE_ICONS, MessageNode, ConditionNode, ActionNode, EndNode } from './NodeTypes.js';
+import { NODE_COLORS, MessageNode, ConditionNode, ActionNode, EndNode } from './NodeTypes.js';
 import NodeConfigPanel from './NodeConfigPanel.js';
 import { T } from '../../theme.js';
 import { useTranslation } from '../../i18n/index.js';
@@ -56,7 +55,6 @@ function apiEdgeToRF(e: ScenarioEdge, i: number): Edge {
 }
 
 function rfNodeToApi(n: Node): ScenarioNode {
-    // _analytics / _isBottleneck を除外して保存
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { label, _analytics, _isBottleneck, ...rest } = n.data as Record<string, unknown>;
     return {
@@ -77,93 +75,104 @@ function rfEdgeToApi(e: Edge): ScenarioEdge {
     };
 }
 
-// ── Analytics 期間ボタン ──────────────────────────────────────────────────────
+// ── Analytics 期間 ────────────────────────────────────────────────────────────
 
 const PERIODS: AnalyticsPeriod[] = ['1d', '7d', '30d', '90d'];
 const PERIOD_LABELS: Record<AnalyticsPeriod, string> = {
     '1d': '1D', '7d': '7D', '30d': '30D', '90d': '90D',
 };
 
-// ── Analytics サマリーパネル ──────────────────────────────────────────────────
+// ── Analytics サマリーパネル（右フローティング）───────────────────────────────
 
 function AnalyticsSummaryPanel({
-    report, loading, noData,
+    report, loading, noData, period, onPeriodChange,
 }: {
-    report: ScenarioAnalyticsResponse | null;
-    loading: boolean;
-    noData: boolean;
+    report:          ScenarioAnalyticsResponse | null;
+    loading:         boolean;
+    noData:          boolean;
+    period:          AnalyticsPeriod;
+    onPeriodChange:  (p: AnalyticsPeriod) => void;
 }) {
     const { t } = useTranslation();
 
-    if (loading) {
-        return (
-            <div style={{
-                width: 220, padding: '20px 16px', background: T.surface,
-                borderLeft: `1px solid ${T.border}`, color: T.textMuted,
-                fontSize: T.fontSm, display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>
-                {t('canvas.analytics.loading')}
-            </div>
-        );
-    }
-
-    if (noData || !report) {
-        return (
-            <div style={{
-                width: 220, padding: '20px 16px', background: T.surface,
-                borderLeft: `1px solid ${T.border}`, color: T.textMuted,
-                fontSize: T.fontSm, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                textAlign: 'center', lineHeight: 1.5,
-            }}>
-                {t('canvas.analytics.noData')}
-            </div>
-        );
-    }
-
-    const cRate = report.total_sessions > 0
-        ? Math.round(report.converted_sessions / report.total_sessions * 100)
-        : 0;
-    const dRate = report.total_sessions > 0
-        ? Math.round(report.completed_sessions / report.total_sessions * 100)
-        : 0;
-
-    function StatRow({ label, value, sub }: { label: string; value: number; sub?: string }) {
-        return (
-            <div style={{
-                display: 'flex', alignItems: 'baseline', justifyContent: 'space-between',
-                padding: '8px 0', borderBottom: `1px solid ${T.border}`,
-            }}>
-                <span style={{ fontSize: T.fontSm, color: T.textMuted }}>{label}</span>
-                <span style={{ fontSize: T.fontMd, fontWeight: 700, color: T.textStrong }}>
-                    {value.toLocaleString()}
-                    {sub && <span style={{ fontSize: T.fontXs, fontWeight: 400, color: T.textMuted, marginLeft: 4 }}>{sub}</span>}
-                </span>
-            </div>
-        );
-    }
-
     return (
-        <div style={{
-            width: 220, background: T.surface, borderLeft: `1px solid ${T.border}`,
-            display: 'flex', flexDirection: 'column', overflowY: 'auto',
-        }}>
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+            {/* 期間セレクタ */}
             <div style={{
-                padding: '12px 14px 8px',
-                borderBottom: `1px solid ${T.border}`,
-                fontSize: T.fontSm, fontWeight: 700, color: T.textStrong,
+                display: 'flex', gap: 2, padding: '8px 10px',
+                borderBottom: `1px solid ${T.border}`, flexShrink: 0,
             }}>
-                📊 {t('canvas.analyticsMode')}
+                <span style={{ fontSize: T.fontXs, color: T.textMuted, alignSelf: 'center', marginRight: 4 }}>
+                    📊
+                </span>
+                {PERIODS.map(p => (
+                    <button
+                        key={p}
+                        onClick={() => onPeriodChange(p)}
+                        style={{
+                            padding: '2px 7px', fontSize: T.fontXs, fontWeight: p === period ? 700 : 400,
+                            border: `1px solid ${p === period ? T.primary : T.border}`,
+                            borderRadius: T.radiusSm, cursor: 'pointer',
+                            background: p === period ? T.primaryLight : 'transparent',
+                            color: p === period ? T.primaryText : T.textMuted,
+                        }}
+                    >
+                        {PERIOD_LABELS[p]}
+                    </button>
+                ))}
             </div>
-            <div style={{ padding: '4px 14px 14px' }}>
-                <StatRow label={t('canvas.analytics.sessions')}   value={report.total_sessions} />
-                <StatRow label={t('canvas.analytics.completed')}  value={report.completed_sessions} sub={`${dRate}%`} />
-                <StatRow label={t('canvas.analytics.converted')}  value={report.converted_sessions} sub={`${cRate}%`} />
-            </div>
-            <div style={{ padding: '4px 14px', fontSize: T.fontXs, color: T.textMuted }}>
-                {report.period_from} – {report.period_to}
-            </div>
+
+            {/* コンテンツ */}
+            {loading ? (
+                <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: T.textMuted, fontSize: T.fontSm }}>
+                    {t('canvas.analytics.loading')}
+                </div>
+            ) : noData || !report ? (
+                <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: T.textMuted, fontSize: T.fontSm, textAlign: 'center', padding: 16, lineHeight: 1.5 }}>
+                    {t('canvas.analytics.noData')}
+                </div>
+            ) : (
+                <div style={{ flex: 1, overflowY: 'auto', padding: '8px 12px' }}>
+                    {(() => {
+                        const cRate = report.total_sessions > 0
+                            ? Math.round(report.converted_sessions / report.total_sessions * 100) : 0;
+                        const dRate = report.total_sessions > 0
+                            ? Math.round(report.completed_sessions / report.total_sessions * 100) : 0;
+
+                        function StatRow({ label, value, sub }: { label: string; value: number; sub?: string }) {
+                            return (
+                                <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', padding: '8px 0', borderBottom: `1px solid ${T.border}` }}>
+                                    <span style={{ fontSize: T.fontSm, color: T.textMuted }}>{label}</span>
+                                    <span style={{ fontSize: T.fontMd, fontWeight: 700, color: T.textStrong }}>
+                                        {value.toLocaleString()}
+                                        {sub && <span style={{ fontSize: T.fontXs, fontWeight: 400, color: T.textMuted, marginLeft: 4 }}>{sub}</span>}
+                                    </span>
+                                </div>
+                            );
+                        }
+
+                        return (
+                            <>
+                                <StatRow label={t('canvas.analytics.sessions')}  value={report.total_sessions} />
+                                <StatRow label={t('canvas.analytics.completed')} value={report.completed_sessions} sub={`${dRate}%`} />
+                                <StatRow label={t('canvas.analytics.converted')} value={report.converted_sessions} sub={`${cRate}%`} />
+                                <div style={{ marginTop: 8, fontSize: T.fontXs, color: T.textMuted }}>
+                                    {report.period_from} – {report.period_to}
+                                </div>
+                            </>
+                        );
+                    })()}
+                </div>
+            )}
         </div>
     );
+}
+
+// ── Public ref handle ─────────────────────────────────────────────────────────
+
+export interface ScenarioCanvasRef {
+    triggerSave: () => void;
+    addNode:     (type: ChatNodeType) => void;
 }
 
 // ── Props ─────────────────────────────────────────────────────────────────────
@@ -173,29 +182,29 @@ interface Props {
     initialNodes:  ScenarioNode[];
     initialEdges:  ScenarioEdge[];
     credentials:   CredentialSummary[];
-    saving:        boolean;
     onSave:        (nodes: ScenarioNode[], edges: ScenarioEdge[]) => void;
+    analyticsMode: boolean;   // 親ヘッダーから制御
 }
 
 // ── コンポーネント ──────────────────────────────────────────────────────────────
 
-export default function ScenarioCanvas({
-    scenarioId, initialNodes, initialEdges, credentials, saving, onSave,
-}: Props) {
+const ScenarioCanvas = forwardRef<ScenarioCanvasRef, Props>(function ScenarioCanvas(
+    { scenarioId, initialNodes, initialEdges, credentials, onSave, analyticsMode },
+    ref,
+) {
     const { t } = useTranslation();
     const [nodes, setNodes, onNodesChange] = useNodesState<Node>(initialNodes.map(apiNodeToRF));
     const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>(initialEdges.map(apiEdgeToRF));
     const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
     const reactFlowWrapper = useRef<HTMLDivElement>(null);
 
-    // ── Analytics 状態 ─────────────────────────────────────────────────────────
-    const [analyticsMode, setAnalyticsMode]   = useState(false);
-    const [period, setPeriod]                 = useState<AnalyticsPeriod>('7d');
+    // ── Analytics 状態（期間は内部管理、モードは親から制御）──────────────────────
+    const [period, setPeriod]                   = useState<AnalyticsPeriod>('7d');
     const [analyticsReport, setAnalyticsReport] = useState<ScenarioAnalyticsResponse | null>(null);
     const [analyticsLoading, setAnalyticsLoading] = useState(false);
     const [analyticsNoData, setAnalyticsNoData]   = useState(false);
 
-    // initialNodes が変わった（ページロード後）ときに同期
+    // initialNodes 変化時に同期
     useEffect(() => {
         setNodes(initialNodes.map(apiNodeToRF));
         setEdges(initialEdges.map(apiEdgeToRF));
@@ -205,7 +214,6 @@ export default function ScenarioCanvas({
     // ── Analytics フェッチ ─────────────────────────────────────────────────────
     useEffect(() => {
         if (!analyticsMode) {
-            // Edit モードに戻したらオーバーレイを除去
             setNodes(nds => nds.map(n => {
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 const { _analytics, _isBottleneck, ...rest } = n.data as Record<string, unknown>;
@@ -230,7 +238,6 @@ export default function ScenarioCanvas({
                 return;
             }
 
-            // ノードにアナリティクスデータを付与
             const analyticsMap = new Map<string, NodeAnalyticsData>(
                 report.nodes.map(n => [n.node_id, n]),
             );
@@ -238,13 +245,8 @@ export default function ScenarioCanvas({
 
             setNodes(nds => nds.map(n => ({
                 ...n,
-                data: {
-                    ...n.data,
-                    _analytics:    analyticsMap.get(n.id),
-                    _isBottleneck: bottleneckSet.has(n.id),
-                },
+                data: { ...n.data, _analytics: analyticsMap.get(n.id), _isBottleneck: bottleneckSet.has(n.id) },
             })));
-
             setAnalyticsLoading(false);
         }).catch(() => {
             if (cancelled) return;
@@ -260,8 +262,8 @@ export default function ScenarioCanvas({
         setEdges(eds => addEdge({ ...connection, id: `e-${uuidv4()}` }, eds));
     }, [setEdges]);
 
-    // ── ノード追加 ─────────────────────────────────────────────────────────────
-    function addNode(type: ChatNodeType) {
+    // ── ノード追加（ref 経由でヘッダーから呼び出し可能）───────────────────────────
+    const addNode = useCallback((type: ChatNodeType) => {
         const id = uuidv4();
         const defaults: Record<ChatNodeType, Record<string, unknown>> = {
             message:   { text: '', choices: [], variable_name: '' },
@@ -273,19 +275,16 @@ export default function ScenarioCanvas({
         const newNode: Node = {
             id,
             type,
-            position: { x: 100 + Math.random() * 200, y: 80 + Math.random() * 200 },
+            position: { x: 120 + Math.random() * 200, y: 80 + Math.random() * 180 },
             data:     { label: defaultLabel, ...defaults[type] },
         };
         setNodes(nds => [...nds, newNode]);
         setSelectedNodeId(id);
-    }
+    }, [setNodes, t]);
 
     // ── ノード設定変更 ─────────────────────────────────────────────────────────
     function handleNodeChange(id: string, label: string, data: Record<string, unknown>) {
-        setNodes(nds => nds.map(n => n.id === id
-            ? { ...n, data: { label, ...data } }
-            : n,
-        ));
+        setNodes(nds => nds.map(n => n.id === id ? { ...n, data: { label, ...data } } : n));
     }
 
     // ── ノード削除 ─────────────────────────────────────────────────────────────
@@ -296,32 +295,18 @@ export default function ScenarioCanvas({
     }
 
     // ── 保存 ──────────────────────────────────────────────────────────────────
-    function handleSave() {
-        onSave(
-            nodes.map(rfNodeToApi),
-            edges.map(rfEdgeToApi),
-        );
-    }
+    const handleSave = useCallback(() => {
+        onSave(nodes.map(rfNodeToApi), edges.map(rfEdgeToApi));
+    }, [nodes, edges, onSave]);
 
-    const selectedNode = !analyticsMode
-        ? (nodes.find(n => n.id === selectedNodeId) ?? null)
-        : null;
+    useImperativeHandle(ref, () => ({ triggerSave: handleSave, addNode }), [handleSave, addNode]);
 
-    // ── セグメントコントロール共通スタイル ──────────────────────────────────────
-    function segBtn(active: boolean): React.CSSProperties {
-        return {
-            padding: '5px 12px', fontSize: T.fontSm, fontWeight: active ? 700 : 400,
-            border: 'none', cursor: 'pointer',
-            background: active ? T.primary : 'transparent',
-            color: active ? '#fff' : T.text,
-            transition: 'background 0.1s, color 0.1s',
-        };
-    }
+    const selectedNode = !analyticsMode ? (nodes.find(n => n.id === selectedNodeId) ?? null) : null;
+    const showRightPanel = analyticsMode || selectedNode !== null;
 
     return (
-        <div style={{ display: 'flex', height: '100%' }}>
-            {/* キャンバス */}
-            <div ref={reactFlowWrapper} style={{ flex: 1, position: 'relative' }}>
+        <div style={{ position: 'relative', height: '100%' }}>
+            <div ref={reactFlowWrapper} style={{ position: 'absolute', inset: 0 }}>
                 <ReactFlow
                     nodes={nodes}
                     edges={edges}
@@ -332,7 +317,7 @@ export default function ScenarioCanvas({
                     onNodeClick={(_, node) => { if (!analyticsMode) setSelectedNodeId(node.id); }}
                     onPaneClick={() => setSelectedNodeId(null)}
                     fitView
-                    fitViewOptions={{ padding: 0.2 }}
+                    fitViewOptions={{ padding: 0.6, maxZoom: 0.85 }}
                     deleteKeyCode={analyticsMode ? null : 'Delete'}
                     nodesDraggable={!analyticsMode}
                     nodesConnectable={!analyticsMode}
@@ -344,135 +329,68 @@ export default function ScenarioCanvas({
                         nodeColor={n => NODE_COLORS[n.type as ChatNodeType]?.header ?? T.sidebarMuted}
                         style={{ background: T.tableHeader, border: `1px solid ${T.border}` }}
                     />
-
-                    {/* ツールバー (React Flow Panel) */}
-                    <Panel position="top-left">
-                        <div style={{
-                            display: 'flex', flexDirection: 'column', gap: 6,
-                        }}>
-                            {/* Edit / Analytics トグル */}
-                            <div style={{
-                                display: 'flex', borderRadius: T.radiusMd,
-                                border: `1px solid ${T.border}`,
-                                overflow: 'hidden',
-                                background: T.surface,
-                                boxShadow: T.shadowCard,
-                            }}>
-                                <button
-                                    style={segBtn(!analyticsMode)}
-                                    onClick={() => setAnalyticsMode(false)}
-                                >
-                                    ✏️ {t('canvas.editMode')}
-                                </button>
-                                <button
-                                    style={{
-                                        ...segBtn(analyticsMode),
-                                        borderLeft: `1px solid ${T.border}`,
-                                    }}
-                                    onClick={() => setAnalyticsMode(true)}
-                                >
-                                    📊 {t('canvas.analyticsMode')}
-                                </button>
-                            </div>
-
-                            {/* ノードパレット (Edit モードのみ) */}
-                            {!analyticsMode && (
-                                <div style={{
-                                    display: 'flex', gap: 6, padding: 10,
-                                    background: T.surface, borderRadius: T.radiusLg,
-                                    border: `1px solid ${T.border}`,
-                                    boxShadow: T.shadowCard,
-                                }}>
-                                    {(['message', 'condition', 'action', 'end'] as ChatNodeType[]).map(type => {
-                                        const c = NODE_COLORS[type];
-                                        const label = t(`node.type.${type}` as Parameters<typeof t>[0]);
-                                        return (
-                                            <button
-                                                key={type}
-                                                onClick={() => addNode(type)}
-                                                title={t('node.addToCanvas', { type: label })}
-                                                style={{
-                                                    display: 'flex', alignItems: 'center', gap: 5,
-                                                    padding: '6px 10px', borderRadius: T.radiusMd,
-                                                    background: c.bg, border: `1.5px solid ${c.border}`,
-                                                    color: c.text, fontWeight: 600, fontSize: T.fontSm,
-                                                    cursor: 'pointer',
-                                                }}
-                                            >
-                                                {NODE_ICONS[type]} {label}
-                                            </button>
-                                        );
-                                    })}
-                                </div>
-                            )}
-
-                            {/* 期間セレクタ (Analytics モードのみ) */}
-                            {analyticsMode && (
-                                <div style={{
-                                    display: 'flex',
-                                    background: T.surface,
-                                    border: `1px solid ${T.border}`,
-                                    borderRadius: T.radiusMd,
-                                    overflow: 'hidden',
-                                    boxShadow: T.shadowCard,
-                                }}>
-                                    {PERIODS.map((p, i) => (
-                                        <button
-                                            key={p}
-                                            onClick={() => setPeriod(p)}
-                                            style={{
-                                                ...segBtn(period === p),
-                                                borderLeft: i > 0 ? `1px solid ${T.border}` : 'none',
-                                                padding: '5px 10px',
-                                            }}
-                                        >
-                                            {PERIOD_LABELS[p]}
-                                        </button>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-                    </Panel>
-
-                    {/* 保存ボタン (Edit モードのみ) */}
-                    {!analyticsMode && (
-                        <Panel position="top-right">
-                            <button
-                                onClick={handleSave}
-                                disabled={saving}
-                                style={{
-                                    padding: '8px 20px', borderRadius: 8,
-                                    background: saving ? T.primaryMuted : T.primary,
-                                    color: '#fff', border: 'none',
-                                    fontWeight: 700, fontSize: T.fontMd,
-                                    cursor: saving ? 'not-allowed' : 'pointer',
-                                    boxShadow: '0 2px 6px rgba(37,99,235,.35)',
-                                }}
-                            >
-                                {saving ? t('canvas.saving') : t('canvas.save')}
-                            </button>
-                        </Panel>
-                    )}
                 </ReactFlow>
             </div>
 
-            {/* 右パネル: Analytics モード → サマリー / Edit モード → ノード設定 */}
-            {analyticsMode ? (
-                <AnalyticsSummaryPanel
-                    report={analyticsReport}
-                    loading={analyticsLoading}
-                    noData={analyticsNoData}
-                />
-            ) : (
-                selectedNode && (
-                    <NodeConfigPanel
-                        node={selectedNode}
-                        credentials={credentials}
-                        onChange={handleNodeChange}
-                        onDelete={handleNodeDelete}
+            {/* 右ドロワー: ノード設定 or Analytics サマリー（にゅっとスライドイン/アウト） */}
+            <div style={{
+                position: 'absolute', top: 0, right: 0, bottom: 0, width: 264,
+                zIndex: 10,
+                background: T.surface,
+                borderLeft: `1px solid ${T.border}`,
+                boxShadow: '-6px 0 20px rgba(0,0,0,.07)',
+                display: 'flex', flexDirection: 'column', overflow: 'hidden',
+                // スライドアニメーション
+                transform: showRightPanel ? 'translateX(0)' : 'translateX(100%)',
+                transition: 'transform 0.20s cubic-bezier(0.4, 0, 0.2, 1)',
+                pointerEvents: showRightPanel ? 'auto' : 'none',
+            }}>
+                {analyticsMode ? (
+                    <AnalyticsSummaryPanel
+                        report={analyticsReport}
+                        loading={analyticsLoading}
+                        noData={analyticsNoData}
+                        period={period}
+                        onPeriodChange={setPeriod}
                     />
-                )
-            )}
+                ) : selectedNode ? (
+                    <>
+                        {/* ドロワーヘッダー */}
+                        <div style={{
+                            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                            padding: '6px 10px', flexShrink: 0,
+                            borderBottom: `1px solid ${T.border}`,
+                            background: T.tableHeader,
+                        }}>
+                            <span style={{ fontSize: T.fontXs, fontWeight: 600, color: T.textMuted }}>
+                                {t('scenarioForm.detailsToggle')}
+                            </span>
+                            <button
+                                onClick={() => setSelectedNodeId(null)}
+                                title={t('common.close')}
+                                style={{
+                                    background: 'none', border: 'none', cursor: 'pointer',
+                                    color: T.textMuted, fontSize: 14, lineHeight: 1,
+                                    padding: '1px 4px', borderRadius: T.radiusSm,
+                                    display: 'flex', alignItems: 'center',
+                                }}
+                                onMouseEnter={e => { e.currentTarget.style.background = T.border; }}
+                                onMouseLeave={e => { e.currentTarget.style.background = 'none'; }}
+                            >×</button>
+                        </div>
+                        <div style={{ flex: 1, overflowY: 'auto' }}>
+                            <NodeConfigPanel
+                                node={selectedNode}
+                                credentials={credentials}
+                                onChange={handleNodeChange}
+                                onDelete={handleNodeDelete}
+                            />
+                        </div>
+                    </>
+                ) : null}
+            </div>
         </div>
     );
-}
+});
+
+export default ScenarioCanvas;

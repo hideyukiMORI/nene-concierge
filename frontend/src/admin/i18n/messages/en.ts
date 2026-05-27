@@ -25,6 +25,7 @@ export const en = {
     'common.delete':        'Delete',
     'common.edit':          'Edit',
     'common.cancel':        'Cancel',
+    'common.close':         'Close',
     'common.backToList':    'Back to list',
     'common.new':           '+ New',
     'common.add':           '+ Add',
@@ -43,12 +44,14 @@ export const en = {
     'common.error.delete':  'Failed to delete.',
 
     // ── Nav ───────────────────────────────────────────────────────────────────
-    'nav.brand':       'NeNe Concierge',
-    'nav.scenarios':   'Scenarios',
-    'nav.appearance':  'Appearance',
-    'nav.credentials': 'Action Credentials',
-    'nav.settings':    'Settings',
-    'nav.logout':      'Log out',
+    'nav.brand':            'NeNe Concierge',
+    'nav.scenarios':        'Scenarios',
+    'nav.appearance':       'Appearance',
+    'nav.credentials':      'Action Credentials',
+    'nav.settings':         'Settings',
+    'nav.logout':           'Log out',
+    'nav.collapseSidebar':  'Collapse sidebar',
+    'nav.expandSidebar':    'Expand sidebar',
 
     // ── Auth ──────────────────────────────────────────────────────────────────
     'auth.appTitle':          'NeNe Concierge',
@@ -83,6 +86,7 @@ export const en = {
     'scenarioForm.descPlaceholder':   'Brief description of this scenario…',
     'scenarioForm.statusLabel':       'Status',
     'scenarioForm.canvasHint':        'Create the scenario to open the canvas editor.',
+    'scenarioForm.detailsToggle':     'Details',
     'scenarioForm.loadError':         'Failed to load scenario.',
     'scenarioForm.saveError':         'Failed to save.',
     'scenarioForm.graphSaveError':    'Failed to save graph.',

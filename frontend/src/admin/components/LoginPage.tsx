@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { login, ApiError } from '../api.js';
-import { setToken } from '../auth.js';
+import { setToken, setStoredEmail } from '../auth.js';
 import { Btn, ErrorMsg, Field } from './Layout.js';
 import { T } from '../theme.js';
 import { useTranslation } from '../i18n/index.js';
@@ -21,7 +21,8 @@ export default function LoginPage() {
         try {
             const res = await login(email, password);
             setToken(res.token);
-            nav('/scenarios');
+            setStoredEmail(res.email);
+            nav('/dashboard');
         } catch (err) {
             setError(err instanceof ApiError ? err.message : t('auth.error'));
         } finally {

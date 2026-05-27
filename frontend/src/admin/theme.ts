@@ -16,6 +16,8 @@ export const T = {
     primaryMuted:   'var(--nca-color-primary-muted)',
     primaryText:    'var(--nca-color-primary-text)',
     primaryBg:      'var(--nca-color-primary-bg)',
+    /** primary ボタン/バッジの前景色 — 明るいテーマでは暗色に上書きされる */
+    primaryFg:      'var(--nca-color-primary-fg)',
 
     // ── Danger ───────────────────────────────────────────────────────────────
     danger:         'var(--nca-color-danger)',
@@ -85,6 +87,16 @@ export const T = {
     // ── Shadow ───────────────────────────────────────────────────────────────
     shadowCard:  'var(--nca-shadow-card)',
     shadowFocus: 'var(--nca-shadow-focus)',
+
+    // ── Control heights ──────────────────────────────────────────────────────
+    // :root の --nca-control-height* を変えるだけでサイト全体に反映される
+    controlHeight:   'var(--nca-control-height)',
+    controlHeightSm: 'var(--nca-control-height-sm)',
+    controlHeightXs: 'var(--nca-control-height-xs)',
+
+    // ── Motion ───────────────────────────────────────────────────────────────
+    transitionFast:   'var(--nca-transition-fast)',
+    transitionNormal: 'var(--nca-transition-normal)',
 } as const;
 
 export type ThemeKey = keyof typeof T;

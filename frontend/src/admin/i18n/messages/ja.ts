@@ -18,6 +18,7 @@ export const ja: Partial<MessageCatalog> = {
     'common.delete':        '削除',
     'common.edit':          '編集',
     'common.cancel':        'キャンセル',
+    'common.close':         '閉じる',
     'common.backToList':    '一覧へ戻る',
     'common.new':           '＋ 新規作成',
     'common.add':           '＋ 追加',
@@ -36,12 +37,14 @@ export const ja: Partial<MessageCatalog> = {
     'common.error.delete':  '削除に失敗しました。',
 
     // ── Nav ───────────────────────────────────────────────────────────────────
-    'nav.brand':       'NeNe Concierge',
-    'nav.scenarios':   'シナリオ',
-    'nav.appearance':  '外観設定',
-    'nav.credentials': 'アクションクレデンシャル',
-    'nav.settings':    '設定',
-    'nav.logout':      'ログアウト',
+    'nav.brand':            'NeNe Concierge',
+    'nav.scenarios':        'シナリオ',
+    'nav.appearance':       '外観設定',
+    'nav.credentials':      'アクションクレデンシャル',
+    'nav.settings':         '設定',
+    'nav.logout':           'ログアウト',
+    'nav.collapseSidebar':  'サイドバーを閉じる',
+    'nav.expandSidebar':    'サイドバーを開く',
 
     // ── Auth ──────────────────────────────────────────────────────────────────
     'auth.appTitle':         'NeNe Concierge',
@@ -76,6 +79,7 @@ export const ja: Partial<MessageCatalog> = {
     'scenarioForm.descPlaceholder': 'このシナリオの概要…',
     'scenarioForm.statusLabel':     'ステータス',
     'scenarioForm.canvasHint':      'シナリオを作成するとキャンバスエディタが開きます',
+    'scenarioForm.detailsToggle':   '詳細',
     'scenarioForm.loadError':       '取得に失敗しました。',
     'scenarioForm.saveError':       '保存に失敗しました。',
     'scenarioForm.graphSaveError':  'グラフの保存に失敗しました。',

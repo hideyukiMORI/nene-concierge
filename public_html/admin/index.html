@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NeNe Concierge — 管理画面</title>
-  <link rel="stylesheet" href="app.css" />
+  <link rel="stylesheet" href="/admin/app.css" />
   <style>
     /* ── NeNe Concierge Admin — Design Tokens ──────────────────────────────
        このブロックを差し替えるだけで全テーマが変わります。
@@ -20,6 +20,8 @@
       --nca-color-primary-muted:  oklch(80% 0.08 192);
       --nca-color-primary-text:   oklch(36% 0.14 192);
       --nca-color-primary-bg:     oklch(94% 0.05 192);
+      /* primary ボタンの前景色 — 明るいテーマで暗い文字に上書きする */
+      --nca-color-primary-fg:     #fff;
 
       /* ── Danger ───────────────────────────────────────────────────────── */
       --nca-color-danger:         oklch(52% 0.20 25);
@@ -69,9 +71,9 @@
       --nca-badge-arch-color:     oklch(36% 0.18 25);
 
       /* ── Border radius ────────────────────────────────────────────────── */
-      --nca-radius-sm:  4px;
-      --nca-radius-md:  6px;
-      --nca-radius-lg:  8px;
+      --nca-radius-sm:  2px;
+      --nca-radius-md:  3px;
+      --nca-radius-lg:  4px;
       --nca-radius-xl:  9999px;
 
       /* ── Font size ────────────────────────────────────────────────────── */
@@ -89,6 +91,15 @@
       /* ── Shadow ───────────────────────────────────────────────────────── */
       --nca-shadow-card:  0 1px 3px oklch(0% 0 0 / 0.07), 0 1px 2px oklch(0% 0 0 / 0.04);
       --nca-shadow-focus: 0 0 0 3px oklch(62% 0.14 192 / 0.30);
+
+      /* ── Control heights — 変えればサイト全体のコントロール高さが変わる ── */
+      --nca-control-height:    28px;  /* 主要フォームコントロール（入力・選択・ボタン） */
+      --nca-control-height-sm: 24px;  /* コンパクトコントロール（フィルター・ページネーション） */
+      --nca-control-height-xs: 20px;  /* サイドバーユーティリティ */
+
+      /* ── Motion ───────────────────────────────────────────────────────── */
+      --nca-transition-fast:   150ms ease;
+      --nca-transition-normal: 200ms ease;
     }
 
     /* ═══════════════════════════════════════════════════════════════════════
@@ -350,6 +361,8 @@
       --nca-color-primary-muted:  oklch(42% 0.12 127);
       --nca-color-primary-text:   oklch(84% 0.18 127);
       --nca-color-primary-bg:     oklch(16% 0.08 127);
+      /* lime green L=84% → 暗い文字でコントラスト確保 */
+      --nca-color-primary-fg:     oklch(14% 0.010 120);
       --nca-color-danger:         oklch(60% 0.25 355);
       --nca-color-danger-bg:      oklch(15% 0.08 355);
       --nca-color-danger-border:  oklch(28% 0.12 355);
@@ -386,6 +399,8 @@
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    /* ブラウザ UA stylesheet が button/input 等のフォントをリセットするのを防ぐ */
+    button, input, select, textarea { font-family: inherit; font-size: inherit; }
     body {
       /* --nca-font-body は JS (applyLocaleFontFamily) でロケール別に上書きされる */
       font-family: var(--nca-font-body, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif);
@@ -402,6 +417,6 @@
 </head>
 <body>
   <div id="root"></div>
-  <script src="app.js"></script>
+  <script src="/admin/app.js"></script>
 </body>
 </html>

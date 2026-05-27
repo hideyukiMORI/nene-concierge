@@ -6,6 +6,7 @@ namespace NeNeConcierge\Scenario;
 
 use Nene2\Http\JsonRequestBodyParser;
 use Nene2\Http\JsonResponseFactory;
+use Nene2\Routing\Router;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -21,7 +22,7 @@ final readonly class UpdateScenarioHandler implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $orgId      = (int) $request->getAttribute('nene2.org.id', 0);
-        $scenarioId = (int) $request->getAttribute('id', 0);
+        $scenarioId = (int) Router::param($request, 'id');
         $body       = JsonRequestBodyParser::parse($request);
 
         $status = null;
