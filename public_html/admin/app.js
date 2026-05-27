@@ -21738,7 +21738,7 @@ var NeNeAdmin = (() => {
               "The result of getSnapshot should be cached to avoid an infinite loop"
             ), didWarnUncachedGetSnapshot = true);
           }
-          cachedValue = useState14({
+          cachedValue = useState15({
             inst: { value, getSnapshot }
           });
           var inst = cachedValue[0].inst, forceUpdate = cachedValue[1];
@@ -21750,7 +21750,7 @@ var NeNeAdmin = (() => {
             },
             [subscribe, value, getSnapshot]
           );
-          useEffect14(
+          useEffect15(
             function() {
               checkIfSnapshotChanged(inst) && forceUpdate({ inst });
               return subscribe(function() {
@@ -21776,7 +21776,7 @@ var NeNeAdmin = (() => {
           return getSnapshot();
         }
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-        var React15 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState14 = React15.useState, useEffect14 = React15.useEffect, useLayoutEffect5 = React15.useLayoutEffect, useDebugValue2 = React15.useDebugValue, didWarnOld18Alpha = false, didWarnUncachedGetSnapshot = false, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
+        var React15 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState15 = React15.useState, useEffect15 = React15.useEffect, useLayoutEffect5 = React15.useLayoutEffect, useDebugValue2 = React15.useDebugValue, didWarnOld18Alpha = false, didWarnUncachedGetSnapshot = false, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
         exports.useSyncExternalStore = void 0 !== React15.useSyncExternalStore ? React15.useSyncExternalStore : shim;
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(Error());
       })();
@@ -21804,7 +21804,7 @@ var NeNeAdmin = (() => {
           return x === y && (0 !== x || 1 / x === 1 / y) || x !== x && y !== y;
         }
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-        var React15 = require_react(), shim = require_shim(), objectIs = "function" === typeof Object.is ? Object.is : is, useSyncExternalStore = shim.useSyncExternalStore, useRef7 = React15.useRef, useEffect14 = React15.useEffect, useMemo6 = React15.useMemo, useDebugValue2 = React15.useDebugValue;
+        var React15 = require_react(), shim = require_shim(), objectIs = "function" === typeof Object.is ? Object.is : is, useSyncExternalStore = shim.useSyncExternalStore, useRef7 = React15.useRef, useEffect15 = React15.useEffect, useMemo6 = React15.useMemo, useDebugValue2 = React15.useDebugValue;
         exports.useSyncExternalStoreWithSelector = function(subscribe, getSnapshot, getServerSnapshot, selector, isEqual) {
           var instRef = useRef7(null);
           if (null === instRef.current) {
@@ -21847,7 +21847,7 @@ var NeNeAdmin = (() => {
             [getSnapshot, getServerSnapshot, selector, isEqual]
           );
           var value = useSyncExternalStore(subscribe, instRef[0], instRef[1]);
-          useEffect14(
+          useEffect15(
             function() {
               inst.hasValue = true;
               inst.value = value;
@@ -21875,7 +21875,7 @@ var NeNeAdmin = (() => {
   });
 
   // src/admin/index.tsx
-  var import_react13 = __toESM(require_react());
+  var import_react14 = __toESM(require_react());
   var import_client = __toESM(require_client());
 
   // node_modules/react-router/dist/development/chunk-4N6VE7H7.mjs
@@ -24784,6 +24784,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     borderLight: "var(--nca-color-border-light)",
     // ── Table ────────────────────────────────────────────────────────────────
     tableHeader: "var(--nca-color-table-header)",
+    tableRow: "var(--nca-color-table-row)",
     // ── Badge ────────────────────────────────────────────────────────────────
     badgeDraftBg: "var(--nca-badge-draft-bg)",
     badgeDraftColor: "var(--nca-badge-draft-color)",
@@ -25015,6 +25016,18 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "canvas.analytics.completed": "Completed",
     "canvas.analytics.converted": "Converted",
     "canvas.analytics.rate": "{{rate}}%",
+    // ── Action Logs ───────────────────────────────────────────────────────────
+    "nav.actionLogs": "Action Logs",
+    "actionLogs.pageTitle": "Action Logs",
+    "actionLogs.empty": "No action logs yet.",
+    "actionLogs.loadError": "Failed to load action logs.",
+    "actionLogs.filterAdapter": "Adapter",
+    "actionLogs.filterStatus": "Status",
+    "actionLogs.all": "All",
+    "actionLogs.sessionId": "Session",
+    "actionLogs.scenarioId": "Scenario",
+    "actionLogs.executedAt": "Executed at",
+    "actionLogs.error": "Error",
     // ── Settings ──────────────────────────────────────────────────────────────
     "settings.pageTitle": "Settings",
     "settings.adminTheme": "Admin Theme",
@@ -25182,6 +25195,18 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "canvas.analytics.completed": "\u5B8C\u4E86",
     "canvas.analytics.converted": "\u30B3\u30F3\u30D0\u30FC\u30B8\u30E7\u30F3",
     "canvas.analytics.rate": "{{rate}}%",
+    // ── Action Logs ───────────────────────────────────────────────────────────
+    "nav.actionLogs": "\u30A2\u30AF\u30B7\u30E7\u30F3\u30ED\u30B0",
+    "actionLogs.pageTitle": "\u30A2\u30AF\u30B7\u30E7\u30F3\u30ED\u30B0",
+    "actionLogs.empty": "\u30A2\u30AF\u30B7\u30E7\u30F3\u30ED\u30B0\u306F\u307E\u3060\u3042\u308A\u307E\u305B\u3093\u3002",
+    "actionLogs.loadError": "\u30A2\u30AF\u30B7\u30E7\u30F3\u30ED\u30B0\u306E\u8AAD\u307F\u8FBC\u307F\u306B\u5931\u6557\u3057\u307E\u3057\u305F\u3002",
+    "actionLogs.filterAdapter": "\u30A2\u30C0\u30D7\u30BF\u30FC",
+    "actionLogs.filterStatus": "\u30B9\u30C6\u30FC\u30BF\u30B9",
+    "actionLogs.all": "\u3059\u3079\u3066",
+    "actionLogs.sessionId": "\u30BB\u30C3\u30B7\u30E7\u30F3",
+    "actionLogs.scenarioId": "\u30B7\u30CA\u30EA\u30AA",
+    "actionLogs.executedAt": "\u5B9F\u884C\u65E5\u6642",
+    "actionLogs.error": "\u30A8\u30E9\u30FC",
     // ── Theme ─────────────────────────────────────────────────────────────────
     "theme.toggleLight": "\u30E9\u30A4\u30C8\u30E2\u30FC\u30C9\u306B\u5207\u308A\u66FF\u3048",
     "theme.toggleDark": "\u30C0\u30FC\u30AF\u30E2\u30FC\u30C9\u306B\u5207\u308A\u66FF\u3048",
@@ -25305,6 +25330,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "canvas.analytics.completed": "Termin\xE9es",
     "canvas.analytics.converted": "Converties",
     "canvas.analytics.rate": "{{rate}}%",
+    // ── Action Logs ───────────────────────────────────────────────────────────
+    "nav.actionLogs": "Action Logs",
     // ── Theme ─────────────────────────────────────────────────────────────────
     "theme.toggleLight": "Passer en mode clair",
     "theme.toggleDark": "Passer en mode sombre",
@@ -25428,6 +25455,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "canvas.analytics.completed": "\u5DF2\u5B8C\u6210",
     "canvas.analytics.converted": "\u5DF2\u8F6C\u5316",
     "canvas.analytics.rate": "{{rate}}%",
+    // ── Action Logs ───────────────────────────────────────────────────────────
+    "nav.actionLogs": "Action Logs",
     // ── Theme ─────────────────────────────────────────────────────────────────
     "theme.toggleLight": "\u5207\u6362\u5230\u6D45\u8272\u6A21\u5F0F",
     "theme.toggleDark": "\u5207\u6362\u5230\u6DF1\u8272\u6A21\u5F0F",
@@ -25551,6 +25580,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "canvas.analytics.completed": "Conclu\xEDdas",
     "canvas.analytics.converted": "Convertidas",
     "canvas.analytics.rate": "{{rate}}%",
+    // ── Action Logs ───────────────────────────────────────────────────────────
+    "nav.actionLogs": "Action Logs",
     // ── Theme ─────────────────────────────────────────────────────────────────
     "theme.toggleLight": "Mudar para modo claro",
     "theme.toggleDark": "Mudar para modo escuro",
@@ -25674,6 +25705,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "canvas.analytics.completed": "Abgeschlossen",
     "canvas.analytics.converted": "Konvertiert",
     "canvas.analytics.rate": "{{rate}}%",
+    // ── Action Logs ───────────────────────────────────────────────────────────
+    "nav.actionLogs": "Action Logs",
     // ── Theme ─────────────────────────────────────────────────────────────────
     "theme.toggleLight": "Zum hellen Modus wechseln",
     "theme.toggleDark": "Zum dunklen Modus wechseln",
@@ -25847,6 +25880,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/scenarios", label: t("nav.scenarios") }),
           /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/appearance", label: t("nav.appearance") }),
           /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/credentials", label: t("nav.credentials") }),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/action-logs", label: t("nav.actionLogs") }),
           /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/settings", label: t("nav.settings") })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { style: {
@@ -26162,6 +26196,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
   function deleteCredential(id2) {
     return request(`/api/v1/action-credentials/${id2}`, { method: "DELETE" });
+  }
+  function listActionLogs(filter2 = {}) {
+    const params = new URLSearchParams();
+    if (filter2.adapter) params.set("adapter", filter2.adapter);
+    if (filter2.status) params.set("status", filter2.status);
+    if (filter2.scenario_id) params.set("scenario_id", String(filter2.scenario_id));
+    if (filter2.limit) params.set("limit", String(filter2.limit));
+    if (filter2.offset) params.set("offset", String(filter2.offset));
+    const qs = params.toString();
+    return request(`/api/v1/action-logs${qs ? `?${qs}` : ""}`);
   }
 
   // src/admin/components/LoginPage.tsx
@@ -36827,29 +36871,261 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     ] });
   }
 
-  // src/admin/App.tsx
+  // src/admin/components/ActionLogsPage.tsx
+  var import_react13 = __toESM(require_react());
   var import_jsx_runtime14 = __toESM(require_jsx_runtime());
+  var ADAPTER_ICONS = {
+    email: "\u{1F4E7}",
+    slack: "\u{1F4AC}",
+    chatwork: "\u{1F5E8}\uFE0F",
+    http: "\u{1F310}"
+  };
+  function StatusBadge({ status }) {
+    const isSuccess = status === "success";
+    return /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("span", { style: {
+      display: "inline-flex",
+      alignItems: "center",
+      gap: 4,
+      padding: "2px 9px",
+      borderRadius: 99,
+      fontSize: T.fontXs,
+      fontWeight: 700,
+      background: isSuccess ? "oklch(96% 0.04 150)" : "oklch(97% 0.04 25)",
+      color: isSuccess ? "oklch(40% 0.14 150)" : "oklch(40% 0.14 25)",
+      border: `1px solid ${isSuccess ? "oklch(85% 0.09 150)" : "oklch(87% 0.08 25)"}`
+    }, children: [
+      isSuccess ? "\u2713" : "\u2717",
+      " ",
+      status
+    ] });
+  }
+  function ActionLogsPage() {
+    const { t } = useTranslation();
+    const [logs, setLogs] = (0, import_react13.useState)([]);
+    const [total, setTotal] = (0, import_react13.useState)(0);
+    const [loading, setLoading] = (0, import_react13.useState)(true);
+    const [error, setError] = (0, import_react13.useState)(null);
+    const [adapter, setAdapter] = (0, import_react13.useState)("");
+    const [status, setStatus] = (0, import_react13.useState)("");
+    const [offset, setOffset] = (0, import_react13.useState)(0);
+    const limit = 50;
+    (0, import_react13.useEffect)(() => {
+      setLoading(true);
+      setError(null);
+      void listActionLogs({
+        ...adapter ? { adapter } : {},
+        ...status ? { status } : {},
+        limit,
+        offset
+      }).then((res) => {
+        setLogs(res.data);
+        setTotal(res.meta.total);
+      }).catch((err) => {
+        setError(err instanceof ApiError ? err.message : t("actionLogs.loadError"));
+      }).finally(() => setLoading(false));
+    }, [adapter, status, offset]);
+    function handleFilterChange() {
+      setOffset(0);
+    }
+    const totalPages = Math.ceil(total / limit);
+    const currentPage = Math.floor(offset / limit) + 1;
+    return /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(PageTitle, { children: t("actionLogs.pageTitle") }),
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: {
+        display: "flex",
+        gap: 10,
+        marginBottom: 16,
+        flexWrap: "wrap",
+        alignItems: "center"
+      }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("label", { style: { display: "flex", alignItems: "center", gap: 6, fontSize: T.fontSm, color: T.textMuted }, children: [
+          t("actionLogs.filterAdapter"),
+          ":",
+          /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(
+            "select",
+            {
+              value: adapter,
+              onChange: (e) => {
+                setAdapter(e.target.value);
+                handleFilterChange();
+              },
+              style: {
+                padding: "5px 8px",
+                borderRadius: T.radiusMd,
+                border: `1px solid ${T.borderInput}`,
+                background: T.surface,
+                color: T.text,
+                fontSize: T.fontSm
+              },
+              children: [
+                /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("option", { value: "", children: t("actionLogs.all") }),
+                /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("option", { value: "http", children: "\u{1F310} HTTP" }),
+                /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("option", { value: "email", children: "\u{1F4E7} Email" }),
+                /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("option", { value: "slack", children: "\u{1F4AC} Slack" }),
+                /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("option", { value: "chatwork", children: "\u{1F5E8}\uFE0F Chatwork" })
+              ]
+            }
+          )
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("label", { style: { display: "flex", alignItems: "center", gap: 6, fontSize: T.fontSm, color: T.textMuted }, children: [
+          t("actionLogs.filterStatus"),
+          ":",
+          /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(
+            "select",
+            {
+              value: status,
+              onChange: (e) => {
+                setStatus(e.target.value);
+                handleFilterChange();
+              },
+              style: {
+                padding: "5px 8px",
+                borderRadius: T.radiusMd,
+                border: `1px solid ${T.borderInput}`,
+                background: T.surface,
+                color: T.text,
+                fontSize: T.fontSm
+              },
+              children: [
+                /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("option", { value: "", children: t("actionLogs.all") }),
+                /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("option", { value: "success", children: "\u2713 success" }),
+                /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("option", { value: "failure", children: "\u2717 failure" })
+              ]
+            }
+          )
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("span", { style: { marginLeft: "auto", fontSize: T.fontSm, color: T.textMuted }, children: [
+          total,
+          " records"
+        ] })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(ErrorMsg, { msg: error }),
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Card, { style: { padding: 0, overflow: "hidden" }, children: loading ? /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("p", { style: { padding: "20px 24px", color: T.textMuted }, children: t("common.loading") }) : logs.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("p", { style: { padding: "20px 24px", color: T.textMuted }, children: t("actionLogs.empty") }) : /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { style: { overflowX: "auto" }, children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("table", { style: { width: "100%", borderCollapse: "collapse", fontSize: T.fontSm }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("tr", { style: { background: T.tableHeader, borderBottom: `1px solid ${T.border}` }, children: [
+          t("common.status"),
+          t("actionLogs.filterAdapter"),
+          t("actionLogs.sessionId"),
+          t("actionLogs.scenarioId"),
+          t("actionLogs.executedAt"),
+          t("actionLogs.error")
+        ].map((h) => /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("th", { style: {
+          padding: "10px 16px",
+          textAlign: "left",
+          fontWeight: 600,
+          color: T.textMuted,
+          whiteSpace: "nowrap"
+        }, children: h }, h)) }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("tbody", { children: logs.map((log, i) => /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(
+          "tr",
+          {
+            style: {
+              borderBottom: `1px solid ${T.border}`,
+              background: i % 2 === 1 ? T.tableRow : "transparent"
+            },
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("td", { style: { padding: "9px 16px", whiteSpace: "nowrap" }, children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(StatusBadge, { status: log.status }) }),
+              /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("td", { style: { padding: "9px 16px", whiteSpace: "nowrap", color: T.text }, children: [
+                ADAPTER_ICONS[log.adapter] ?? "\u{1F527}",
+                " ",
+                log.adapter
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("td", { style: { padding: "9px 16px", fontFamily: "monospace", fontSize: T.fontXs, color: T.textMuted }, children: [
+                log.session_id.slice(0, 8),
+                "\u2026"
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("td", { style: { padding: "9px 16px", color: T.textMuted }, children: [
+                "#",
+                log.scenario_id
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("td", { style: { padding: "9px 16px", whiteSpace: "nowrap", color: T.textMuted }, children: log.executed_at }),
+              /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("td", { style: {
+                padding: "9px 16px",
+                color: T.dangerText,
+                fontSize: T.fontXs,
+                maxWidth: 280,
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap"
+              }, children: log.error_message ?? "\u2014" })
+            ]
+          },
+          log.id ?? i
+        )) })
+      ] }) }) }),
+      totalPages > 1 && /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: {
+        display: "flex",
+        justifyContent: "center",
+        gap: 8,
+        marginTop: 16,
+        alignItems: "center"
+      }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+          "button",
+          {
+            disabled: currentPage <= 1,
+            onClick: () => setOffset(Math.max(0, offset - limit)),
+            style: {
+              padding: "5px 12px",
+              borderRadius: T.radiusMd,
+              border: `1px solid ${T.border}`,
+              background: T.surface,
+              color: T.text,
+              cursor: currentPage <= 1 ? "not-allowed" : "pointer",
+              opacity: currentPage <= 1 ? 0.5 : 1
+            },
+            children: "\u2190 Prev"
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("span", { style: { fontSize: T.fontSm, color: T.textMuted }, children: [
+          currentPage,
+          " / ",
+          totalPages
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+          "button",
+          {
+            disabled: currentPage >= totalPages,
+            onClick: () => setOffset(offset + limit),
+            style: {
+              padding: "5px 12px",
+              borderRadius: T.radiusMd,
+              border: `1px solid ${T.border}`,
+              background: T.surface,
+              color: T.text,
+              cursor: currentPage >= totalPages ? "not-allowed" : "pointer",
+              opacity: currentPage >= totalPages ? 0.5 : 1
+            },
+            children: "Next \u2192"
+          }
+        )
+      ] })
+    ] });
+  }
+
+  // src/admin/App.tsx
+  var import_jsx_runtime15 = __toESM(require_jsx_runtime());
   function RequireAuth() {
-    if (!isAuthenticated()) return /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Navigate, { to: "/", replace: true });
-    return /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Outlet, {});
+    if (!isAuthenticated()) return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Navigate, { to: "/", replace: true });
+    return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Outlet, {});
   }
   function App() {
-    return /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(ThemeProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(BrowserRouter, { basename: "/admin", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(Routes, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Route, { index: true, element: isAuthenticated() ? /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Navigate, { to: "/scenarios", replace: true }) : /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(LoginPage, {}) }),
-      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Route, { element: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(RequireAuth, {}), children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(Route, { element: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Layout, {}), children: [
-        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Route, { path: "scenarios", element: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(ScenariosPage, {}) }),
-        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Route, { path: "scenarios/new", element: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(ScenarioFormPage, {}) }),
-        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Route, { path: "scenarios/:id", element: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(ScenarioFormPage, {}) }),
-        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Route, { path: "appearance", element: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(AppearancePage, {}) }),
-        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Route, { path: "credentials", element: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(CredentialsPage, {}) }),
-        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Route, { path: "settings", element: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(SettingsPage, {}) })
+    return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(ThemeProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(BrowserRouter, { basename: "/admin", children: /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(Routes, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Route, { index: true, element: isAuthenticated() ? /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Navigate, { to: "/scenarios", replace: true }) : /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(LoginPage, {}) }),
+      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Route, { element: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(RequireAuth, {}), children: /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(Route, { element: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Layout, {}), children: [
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Route, { path: "scenarios", element: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(ScenariosPage, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Route, { path: "scenarios/new", element: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(ScenarioFormPage, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Route, { path: "scenarios/:id", element: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(ScenarioFormPage, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Route, { path: "appearance", element: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(AppearancePage, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Route, { path: "credentials", element: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(CredentialsPage, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Route, { path: "action-logs", element: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(ActionLogsPage, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Route, { path: "settings", element: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(SettingsPage, {}) })
       ] }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Route, { path: "*", element: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Navigate, { to: "/", replace: true }) })
+      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Route, { path: "*", element: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Navigate, { to: "/", replace: true }) })
     ] }) }) });
   }
 
   // src/admin/index.tsx
-  var import_jsx_runtime15 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime16 = __toESM(require_jsx_runtime());
   var storedLocale = (() => {
     try {
       return localStorage.getItem("nca-locale") ?? navigator.language;
@@ -36865,7 +37141,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var container = document.getElementById("root");
   if (!container) throw new Error("Root element #root not found");
   (0, import_client.createRoot)(container).render(
-    /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(import_react13.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(I18nProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(App, {}) }) })
+    /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(import_react14.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(I18nProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(App, {}) }) })
   );
 })();
 /*! Bundled license information:

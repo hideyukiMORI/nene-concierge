@@ -303,6 +303,24 @@ final readonly class ActionServiceProvider implements ServiceProviderInterface
                     return new ScenarioAnalyticsHandler($useCase, $json);
                 },
             )
+            // ── Action log list handler ────────────────────────────────────────
+            ->set(
+                ListActionLogsHandler::class,
+                static function (ContainerInterface $c): ListActionLogsHandler {
+                    $repo = $c->get(ActionLogRepositoryInterface::class);
+                    $json = $c->get(JsonResponseFactory::class);
+
+                    if (!$repo instanceof ActionLogRepositoryInterface) {
+                        throw new LogicException('ActionLog repository service is invalid.');
+                    }
+
+                    if (!$json instanceof JsonResponseFactory) {
+                        throw new LogicException('JSON response factory service is invalid.');
+                    }
+
+                    return new ListActionLogsHandler($repo, $json);
+                },
+            )
             // ── Route registrar ────────────────────────────────────────────────
             ->set(
                 ActionRouteRegistrar::class,
@@ -312,6 +330,7 @@ final readonly class ActionServiceProvider implements ServiceProviderInterface
                     $update    = $c->get(UpdateCredentialHandler::class);
                     $delete    = $c->get(DeleteCredentialHandler::class);
                     $analytics = $c->get(ScenarioAnalyticsHandler::class);
+                    $logs      = $c->get(ListActionLogsHandler::class);
 
                     if (!$list instanceof ListCredentialsHandler) {
                         throw new LogicException('ListCredentials handler service is invalid.');
@@ -333,7 +352,11 @@ final readonly class ActionServiceProvider implements ServiceProviderInterface
                         throw new LogicException('ScenarioAnalytics handler service is invalid.');
                     }
 
-                    return new ActionRouteRegistrar($list, $create, $update, $delete, $analytics);
+                    if (!$logs instanceof ListActionLogsHandler) {
+                        throw new LogicException('ListActionLogs handler service is invalid.');
+                    }
+
+                    return new ActionRouteRegistrar($list, $create, $update, $delete, $analytics, $logs);
                 },
             );
     }

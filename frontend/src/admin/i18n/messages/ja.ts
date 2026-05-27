@@ -181,6 +181,19 @@ export const ja: Partial<MessageCatalog> = {
     'canvas.analytics.rate':       '{{rate}}%',
 
 
+    // ── Action Logs ───────────────────────────────────────────────────────────
+    'nav.actionLogs':           'アクションログ',
+    'actionLogs.pageTitle':     'アクションログ',
+    'actionLogs.empty':         'アクションログはまだありません。',
+    'actionLogs.loadError':     'アクションログの読み込みに失敗しました。',
+    'actionLogs.filterAdapter': 'アダプター',
+    'actionLogs.filterStatus':  'ステータス',
+    'actionLogs.all':           'すべて',
+    'actionLogs.sessionId':     'セッション',
+    'actionLogs.scenarioId':    'シナリオ',
+    'actionLogs.executedAt':    '実行日時',
+    'actionLogs.error':         'エラー',
+
     // ── Theme ─────────────────────────────────────────────────────────────────
     'theme.toggleLight': 'ライトモードに切り替え',
     'theme.toggleDark':  'ダークモードに切り替え',

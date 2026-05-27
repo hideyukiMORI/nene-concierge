@@ -130,6 +130,8 @@ export const zhHans: Partial<MessageCatalog> = {
     'canvas.analytics.converted':  '已转化',
     'canvas.analytics.rate':       '{{rate}}%',
 
+    // ── Action Logs ───────────────────────────────────────────────────────────
+    'nav.actionLogs':          'Action Logs',
     // ── Theme ─────────────────────────────────────────────────────────────────
     'theme.toggleLight': '切换到浅色模式',
     'theme.toggleDark':  '切换到深色模式',

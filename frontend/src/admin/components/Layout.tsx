@@ -88,10 +88,11 @@ export default function Layout() {
 
                 {/* Nav links */}
                 <nav style={{ flex: 1, padding: '12px 8px' }} aria-label="Main">
-                    <NavItem to="/scenarios"   label={t('nav.scenarios')} />
-                    <NavItem to="/appearance"  label={t('nav.appearance')} />
-                    <NavItem to="/credentials" label={t('nav.credentials')} />
-                    <NavItem to="/settings"    label={t('nav.settings')} />
+                    <NavItem to="/scenarios"    label={t('nav.scenarios')} />
+                    <NavItem to="/appearance"   label={t('nav.appearance')} />
+                    <NavItem to="/credentials"  label={t('nav.credentials')} />
+                    <NavItem to="/action-logs"  label={t('nav.actionLogs')} />
+                    <NavItem to="/settings"     label={t('nav.settings')} />
                 </nav>
 
                 {/* Footer: locale + light/dark toggle + logout */}

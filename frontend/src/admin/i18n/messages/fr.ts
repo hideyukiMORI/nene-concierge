@@ -130,6 +130,8 @@ export const fr: Partial<MessageCatalog> = {
     'canvas.analytics.converted':  'Converties',
     'canvas.analytics.rate':       '{{rate}}%',
 
+    // ── Action Logs ───────────────────────────────────────────────────────────
+    'nav.actionLogs':          'Action Logs',
     // ── Theme ─────────────────────────────────────────────────────────────────
     'theme.toggleLight': 'Passer en mode clair',
     'theme.toggleDark':  'Passer en mode sombre',

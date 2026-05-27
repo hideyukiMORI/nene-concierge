@@ -123,6 +123,30 @@
       "responseSchemaRef": "#/components/schemas/ScenarioAnalyticsResponse"
     },
     {
+      "name": "listActionLogs",
+      "title": "List Action Logs",
+      "description": "Returns a paginated list of action execution logs. Filter by adapter (http/email/slack/chatwork), status (success/failure), or scenario_id. Use this to audit action history and diagnose failures.",
+      "safety": "read",
+      "source": {
+        "type": "openapi",
+        "operationId": "listActionLogs",
+        "method": "GET",
+        "path": "/api/v1/action-logs"
+      },
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "adapter":     { "type": "string", "enum": ["http", "email", "slack", "chatwork"], "description": "Filter by adapter type." },
+          "status":      { "type": "string", "enum": ["success", "failure"], "description": "Filter by execution status." },
+          "scenario_id": { "type": "integer", "description": "Filter by scenario ID." },
+          "limit":       { "type": "integer", "minimum": 1, "maximum": 200, "description": "Max records (default 50)." },
+          "offset":      { "type": "integer", "minimum": 0, "description": "Records to skip (default 0)." }
+        }
+      },
+      "responseSchemaRef": "#/components/schemas/ActionLogListResponse"
+    },
+    {
       "name": "listActionCredentials",
       "title": "List Action Credentials",
       "description": "Returns all action credentials for the organization. The config (secrets) field is omitted from list responses.",
