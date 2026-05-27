@@ -187,6 +187,19 @@ export const en = {
     'canvas.analytics.converted':  'Converted',
     'canvas.analytics.rate':       '{{rate}}%',
 
+    // ── Action Logs ───────────────────────────────────────────────────────────
+    'nav.actionLogs':          'Action Logs',
+    'actionLogs.pageTitle':    'Action Logs',
+    'actionLogs.empty':        'No action logs yet.',
+    'actionLogs.loadError':    'Failed to load action logs.',
+    'actionLogs.filterAdapter': 'Adapter',
+    'actionLogs.filterStatus':  'Status',
+    'actionLogs.all':           'All',
+    'actionLogs.sessionId':    'Session',
+    'actionLogs.scenarioId':   'Scenario',
+    'actionLogs.executedAt':   'Executed at',
+    'actionLogs.error':        'Error',
+
     // ── Settings ──────────────────────────────────────────────────────────────
     'settings.pageTitle':  'Settings',
     'settings.adminTheme': 'Admin Theme',

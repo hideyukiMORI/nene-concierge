@@ -53,6 +53,7 @@ export const T = {
 
     // ── Table ────────────────────────────────────────────────────────────────
     tableHeader:    'var(--nca-color-table-header)',
+    tableRow:       'var(--nca-color-table-row)',
 
     // ── Badge ────────────────────────────────────────────────────────────────
     badgeDraftBg:    'var(--nca-badge-draft-bg)',

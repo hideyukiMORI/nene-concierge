@@ -16,6 +16,7 @@ final readonly class ActionRouteRegistrar
         private UpdateCredentialHandler     $updateHandler,
         private DeleteCredentialHandler     $deleteHandler,
         private ScenarioAnalyticsHandler    $analyticsHandler,
+        private ListActionLogsHandler       $listLogsHandler,
     ) {
     }
 
@@ -26,11 +27,13 @@ final readonly class ActionRouteRegistrar
         $update    = $this->updateHandler;
         $delete    = $this->deleteHandler;
         $analytics = $this->analyticsHandler;
+        $logs      = $this->listLogsHandler;
 
         $router->get('/api/v1/action-credentials', static fn (ServerRequestInterface $r) => $list->handle($r));
         $router->post('/api/v1/action-credentials', static fn (ServerRequestInterface $r) => $create->handle($r));
         $router->patch('/api/v1/action-credentials/{id}', static fn (ServerRequestInterface $r) => $update->handle($r));
         $router->delete('/api/v1/action-credentials/{id}', static fn (ServerRequestInterface $r) => $delete->handle($r));
         $router->get('/api/v1/scenarios/{id}/analytics', static fn (ServerRequestInterface $r) => $analytics->handle($r));
+        $router->get('/api/v1/action-logs', static fn (ServerRequestInterface $r) => $logs->handle($r));
     }
 }

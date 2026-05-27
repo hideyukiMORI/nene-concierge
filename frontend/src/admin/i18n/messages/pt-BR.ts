@@ -130,6 +130,8 @@ export const ptBR: Partial<MessageCatalog> = {
     'canvas.analytics.converted':  'Convertidas',
     'canvas.analytics.rate':       '{{rate}}%',
 
+    // ── Action Logs ───────────────────────────────────────────────────────────
+    'nav.actionLogs':          'Action Logs',
     // ── Theme ─────────────────────────────────────────────────────────────────
     'theme.toggleLight': 'Mudar para modo claro',
     'theme.toggleDark':  'Mudar para modo escuro',

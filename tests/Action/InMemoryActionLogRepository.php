@@ -25,4 +25,62 @@ final class InMemoryActionLogRepository implements ActionLogRepositoryInterface
             static fn (ActionLog $l) => $l->sessionId === $sessionId && $l->organizationId === $organizationId,
         ));
     }
+
+    /** @return list<ActionLog> */
+    public function listByOrganization(
+        int     $organizationId,
+        ?string $adapter    = null,
+        ?string $status     = null,
+        ?int    $scenarioId = null,
+        int     $limit      = 50,
+        int     $offset     = 0,
+    ): array {
+        $filtered = $this->filterLogs($organizationId, $adapter, $status, $scenarioId);
+
+        /** @var list<ActionLog> */
+        return array_slice($filtered, $offset, $limit);
+    }
+
+    public function countByOrganization(
+        int     $organizationId,
+        ?string $adapter    = null,
+        ?string $status     = null,
+        ?int    $scenarioId = null,
+    ): int {
+        return count($this->filterLogs($organizationId, $adapter, $status, $scenarioId));
+    }
+
+    /**
+     * @return list<ActionLog>
+     */
+    private function filterLogs(
+        int     $organizationId,
+        ?string $adapter,
+        ?string $status,
+        ?int    $scenarioId,
+    ): array {
+        $result = [];
+
+        foreach ($this->logs as $l) {
+            if ($l->organizationId !== $organizationId) {
+                continue;
+            }
+
+            if ($adapter !== null && $l->adapter !== $adapter) {
+                continue;
+            }
+
+            if ($status !== null && $l->status !== $status) {
+                continue;
+            }
+
+            if ($scenarioId !== null && $l->scenarioId !== $scenarioId) {
+                continue;
+            }
+
+            $result[] = $l;
+        }
+
+        return $result;
+    }
 }

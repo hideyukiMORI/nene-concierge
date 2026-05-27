@@ -163,3 +163,40 @@ export function createCredential(body: { name: string; adapter: string; config?:
 export function deleteCredential(id: number): Promise<void> {
     return request(`/api/v1/action-credentials/${id}`, { method: 'DELETE' });
 }
+
+// ── Action Logs ───────────────────────────────────────────────────────────────
+
+export interface ActionLogEntry {
+    id:            number | null;
+    session_id:    string;
+    scenario_id:   number;
+    node_id:       string;
+    adapter:       string;
+    status:        'success' | 'failure';
+    error_message: string | null;
+    executed_at:   string;
+}
+
+export interface ActionLogListResponse {
+    data: ActionLogEntry[];
+    meta: { total: number; limit: number; offset: number };
+}
+
+export interface ActionLogFilter {
+    adapter?:     string;
+    status?:      string;
+    scenario_id?: number;
+    limit?:       number;
+    offset?:      number;
+}
+
+export function listActionLogs(filter: ActionLogFilter = {}): Promise<ActionLogListResponse> {
+    const params = new URLSearchParams();
+    if (filter.adapter)     params.set('adapter',     filter.adapter);
+    if (filter.status)      params.set('status',      filter.status);
+    if (filter.scenario_id) params.set('scenario_id', String(filter.scenario_id));
+    if (filter.limit)       params.set('limit',        String(filter.limit));
+    if (filter.offset)      params.set('offset',       String(filter.offset));
+    const qs = params.toString();
+    return request(`/api/v1/action-logs${qs ? `?${qs}` : ''}`);
+}
