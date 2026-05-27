@@ -1,0 +1,15 @@
+{
+  "name": "nene-concierge-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "NeNe Concierge embed widget and frontend assets",
+  "scripts": {
+    "build": "node esbuild.mjs",
+    "type-check": "tsc --noEmit",
+    "check": "npm run type-check && npm run build"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.0",
+    "typescript": "^5.6.0"
+  }
+}

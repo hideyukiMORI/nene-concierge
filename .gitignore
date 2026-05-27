@@ -9,6 +9,7 @@ composer.lock
 
 # Build outputs
 public_html/assets/
+public_html/widget.js.map
 node_modules/
 frontend/dist/
 
