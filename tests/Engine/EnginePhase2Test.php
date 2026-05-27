@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace NeNeConcierge\Tests\Engine;
 
+use NeNeConcierge\Action\ActionDispatcher;
+use NeNeConcierge\Action\ActionLogRepositoryInterface;
 use NeNeConcierge\Engine\ConditionEvaluator;
 use NeNeConcierge\Engine\EngineException;
 use NeNeConcierge\Engine\ScenarioEngine;
@@ -44,6 +46,7 @@ final class EnginePhase2Test extends TestCase
             $this->eventRepo,
             new ConditionEvaluator(),
             new VariableInterpolator(),
+            new ActionDispatcher([], $this->createStub(ActionLogRepositoryInterface::class)),
         );
     }
 
