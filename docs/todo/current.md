@@ -190,6 +190,31 @@ Last updated: 2026-05-27
 
 ---
 
+**管理画面デザインリフレッシュ — 完了 ✅**
+
+| 項目 | 状態 | Issue |
+| --- | --- | --- |
+| カラーシステム hex → OKLCH 全面移行 | ✅ | #32 |
+| アクセントカラー blue → teal oklch(62% 0.14 192) | ✅ | #32 |
+| nene-records AppShell スタイルサイドバー | ✅ | #32 |
+| NavLink ホバーステート | ✅ | #32 |
+| Admin バッジ pill（サイドバー + ログイン画面） | ✅ | #32 |
+
+---
+
+**管理画面ロケール別 Web フォント — 完了 ✅**
+
+| 項目 | 状態 | Issue |
+| --- | --- | --- |
+| @fontsource/inter / noto-sans-jp / noto-sans-sc インストール | ✅ | #34 |
+| esbuild woff2/woff ローダー追加（outdir 方式） | ✅ | #34 |
+| frontend/src/admin/fonts.ts 新設 | ✅ | #34 |
+| frontend/src/admin/i18n/locale-fonts.ts 新設 | ✅ | #34 |
+| applyLocaleFontFamily() → --nca-font-body CSS 変数方式 | ✅ | #34 |
+| FOUC 防止早期適用（index.tsx） | ✅ | #34 |
+
+---
+
 ## Operating Notes
 
 - このファイルはマイルストーン完了時またはセッション終了時に更新する。
