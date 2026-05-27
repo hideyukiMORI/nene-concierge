@@ -1,29 +1,48 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import {
-    getScenario, createScenario, updateScenario, ApiError,
+    getScenario, createScenario, updateScenario, deleteScenario, saveScenarioGraph,
+    listCredentials,
+    ApiError,
+    type ScenarioNode, type ScenarioEdge, type CredentialSummary,
 } from '../api.js';
-import { PageTitle, Card, Btn, ErrorMsg, Field, Select } from './Layout.js';
+import { PageTitle, Btn, Badge, ErrorMsg } from './Layout.js';
+import ScenarioCanvas from './editor/ScenarioCanvas.js';
+
+// React Flow の CSS を読み込む（esbuild がバンドル時に app.css へ出力する）
+import '@xyflow/react/dist/style.css';
 
 const STATUS_OPTIONS = [
     { value: 'draft',     label: 'ドラフト' },
     { value: 'published', label: '公開中' },
     { value: 'archived',  label: 'アーカイブ' },
-];
+] as const;
 
 export default function ScenarioFormPage() {
-    const { id } = useParams<{ id?: string }>();
+    const { id }  = useParams<{ id?: string }>();
     const isNew   = id === undefined;
     const nav     = useNavigate();
 
+    // ── メタ情報 ────────────────────────────────────────────────────────────
     const [name, setName]               = useState('');
     const [description, setDescription] = useState('');
-    const [status, setStatus]           = useState('draft');
+    const [status, setStatus]           = useState<'draft' | 'published' | 'archived'>('draft');
+
+    // ── グラフデータ ────────────────────────────────────────────────────────
+    const [nodes, setNodes]             = useState<ScenarioNode[]>([]);
+    const [edges, setEdges]             = useState<ScenarioEdge[]>([]);
+    const [credentials, setCredentials] = useState<CredentialSummary[]>([]);
+
+    // ── UI 状態 ─────────────────────────────────────────────────────────────
     const [loading, setLoading]         = useState(!isNew);
     const [saving, setSaving]           = useState(false);
     const [error, setError]             = useState<string | null>(null);
+    const [savedMsg, setSavedMsg]       = useState('');
 
+    // ── ロード ──────────────────────────────────────────────────────────────
     useEffect(() => {
+        void listCredentials().then(r => setCredentials(r.data)).catch(() => {});
+
         if (isNew) return;
         void (async () => {
             try {
@@ -31,6 +50,8 @@ export default function ScenarioFormPage() {
                 setName(s.name);
                 setDescription(s.description ?? '');
                 setStatus(s.status);
+                setNodes(s.nodes);
+                setEdges(s.edges);
             } catch (err) {
                 setError(err instanceof ApiError ? err.message : '取得に失敗しました。');
             } finally {
@@ -39,25 +60,19 @@ export default function ScenarioFormPage() {
         })();
     }, [id, isNew]);
 
-    async function handleSubmit(e: React.FormEvent) {
+    // ── メタ情報保存 ─────────────────────────────────────────────────────────
+    async function handleMetaSave(e: React.FormEvent) {
         e.preventDefault();
         setSaving(true);
         setError(null);
         try {
             if (isNew) {
-                const res = await createScenario({
-                    name,
-                    ...(description ? { description } : {}),
-                });
+                const res = await createScenario({ name, ...(description ? { description } : {}) });
                 nav(`/scenarios/${res.id}`);
-            } else {
-                await updateScenario(Number(id), {
-                    name,
-                    description: description || null,
-                    status,
-                });
-                nav('/scenarios');
+                return;
             }
+            await updateScenario(Number(id), { name, description: description || null, status });
+            flash('メタ情報を保存しました');
         } catch (err) {
             setError(err instanceof ApiError ? err.message : '保存に失敗しました。');
         } finally {
@@ -65,50 +80,144 @@ export default function ScenarioFormPage() {
         }
     }
 
-    if (loading) return <p style={{ color:'#6b7280', marginTop:40 }}>読み込み中…</p>;
+    // ── グラフ保存 ───────────────────────────────────────────────────────────
+    async function handleGraphSave(newNodes: ScenarioNode[], newEdges: ScenarioEdge[]) {
+        setSaving(true);
+        setError(null);
+        try {
+            await saveScenarioGraph(Number(id), newNodes, newEdges);
+            setNodes(newNodes);
+            setEdges(newEdges);
+            flash('グラフを保存しました');
+        } catch (err) {
+            setError(err instanceof ApiError ? err.message : 'グラフの保存に失敗しました。');
+        } finally {
+            setSaving(false);
+        }
+    }
+
+    // ── 削除 ────────────────────────────────────────────────────────────────
+    async function handleDelete() {
+        if (!confirm(`「${name}」を削除しますか？この操作は取り消せません。`)) return;
+        try {
+            await deleteScenario(Number(id));
+            nav('/scenarios');
+        } catch (err) {
+            setError(err instanceof ApiError ? err.message : '削除に失敗しました。');
+        }
+    }
+
+    function flash(msg: string) {
+        setSavedMsg(msg);
+        setTimeout(() => setSavedMsg(''), 2500);
+    }
+
+    if (loading) return <p style={{ color: '#6b7280', marginTop: 40 }}>読み込み中…</p>;
 
     return (
-        <div style={{ maxWidth: 600 }}>
-            <PageTitle>{isNew ? '新規シナリオ' : 'シナリオを編集'}</PageTitle>
-            <Card>
-                <ErrorMsg msg={error} />
-                <form onSubmit={e => { void handleSubmit(e); }}>
-                    <Field
-                        label="シナリオ名" value={name} onChange={setName}
-                        required placeholder="例: 問い合わせ対応フロー"
-                    />
-                    <label style={{ display:'block', marginBottom:16 }}>
-                        <span style={{ display:'block', fontWeight:600, marginBottom:4, fontSize:13 }}>
-                            説明（任意）
-                        </span>
-                        <textarea
-                            value={description}
-                            onChange={e => setDescription(e.target.value)}
-                            placeholder="このシナリオの概要…"
-                            rows={3}
-                            style={{
-                                width:'100%', padding:'8px 12px', borderRadius:7,
-                                border:'1.5px solid #d1d5db', fontSize:14,
-                                resize:'vertical', outline:'none',
-                            }}
-                        />
+        <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 64px)', gap: 0 }}>
+
+            {/* ── ヘッダーバー ── */}
+            <div style={{
+                display: 'flex', alignItems: 'center', gap: 12,
+                padding: '10px 16px', borderBottom: '1px solid #e5e7eb',
+                background: '#fff', flexShrink: 0,
+            }}>
+                <PageTitle style={{ margin: 0, fontSize: 18 }}>
+                    {isNew ? '新規シナリオ' : name}
+                </PageTitle>
+                {!isNew && <Badge status={status} />}
+                <div style={{ flex: 1 }} />
+                {savedMsg && (
+                    <span style={{ fontSize: 13, color: '#16a34a', fontWeight: 600 }}>
+                        ✓ {savedMsg}
+                    </span>
+                )}
+                {!isNew && (
+                    <Btn variant="danger" onClick={() => void handleDelete()}>削除</Btn>
+                )}
+                <Btn variant="ghost" onClick={() => nav('/scenarios')}>一覧へ戻る</Btn>
+            </div>
+
+            {/* ── エラー表示 ── */}
+            {error && (
+                <div style={{ padding: '8px 16px', background: '#fef2f2', flexShrink: 0 }}>
+                    <ErrorMsg msg={error} />
+                </div>
+            )}
+
+            {/* ── メタ情報フォーム ── */}
+            <form
+                onSubmit={e => { void handleMetaSave(e); }}
+                style={{
+                    display: 'flex', gap: 10, alignItems: 'flex-end',
+                    padding: '10px 16px', background: '#f9fafb',
+                    borderBottom: '1px solid #e5e7eb', flexShrink: 0,
+                    flexWrap: 'wrap',
+                }}
+            >
+                <div style={{ flex: '1 1 200px' }}>
+                    <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: '#6b7280', marginBottom: 3 }}>
+                        シナリオ名 *
                     </label>
-                    {!isNew && (
-                        <Select
-                            label="ステータス" value={status}
-                            onChange={setStatus} options={STATUS_OPTIONS}
-                        />
-                    )}
-                    <div style={{ display:'flex', gap:12, marginTop:8 }}>
-                        <Btn type="submit" disabled={saving}>
-                            {saving ? '保存中…' : (isNew ? '作成' : '保存')}
-                        </Btn>
-                        <Btn variant="ghost" onClick={() => nav('/scenarios')}>
-                            キャンセル
-                        </Btn>
+                    <input
+                        value={name} onChange={e => setName(e.target.value)}
+                        required placeholder="例: 問い合わせ対応フロー"
+                        style={{ width: '100%', padding: '7px 10px', borderRadius: 6, border: '1.5px solid #d1d5db', fontSize: 13, boxSizing: 'border-box' }}
+                    />
+                </div>
+                <div style={{ flex: '2 1 300px' }}>
+                    <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: '#6b7280', marginBottom: 3 }}>
+                        説明（任意）
+                    </label>
+                    <input
+                        value={description} onChange={e => setDescription(e.target.value)}
+                        placeholder="このシナリオの概要…"
+                        style={{ width: '100%', padding: '7px 10px', borderRadius: 6, border: '1.5px solid #d1d5db', fontSize: 13, boxSizing: 'border-box' }}
+                    />
+                </div>
+                {!isNew && (
+                    <div style={{ flex: '0 0 120px' }}>
+                        <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: '#6b7280', marginBottom: 3 }}>
+                            ステータス
+                        </label>
+                        <select
+                            value={status}
+                            onChange={e => setStatus(e.target.value as typeof status)}
+                            style={{ width: '100%', padding: '7px 10px', borderRadius: 6, border: '1.5px solid #d1d5db', fontSize: 13, background: '#fff', boxSizing: 'border-box' }}
+                        >
+                            {STATUS_OPTIONS.map(o => (
+                                <option key={o.value} value={o.value}>{o.label}</option>
+                            ))}
+                        </select>
                     </div>
-                </form>
-            </Card>
+                )}
+                <Btn type="submit" disabled={saving}>
+                    {isNew ? '作成' : '保存'}
+                </Btn>
+            </form>
+
+            {/* ── ビジュアルエディタ (新規作成前は非表示) ── */}
+            {!isNew && (
+                <div style={{ flex: 1, overflow: 'hidden' }}>
+                    <ScenarioCanvas
+                        initialNodes={nodes}
+                        initialEdges={edges}
+                        credentials={credentials}
+                        saving={saving}
+                        onSave={handleGraphSave}
+                    />
+                </div>
+            )}
+
+            {isNew && (
+                <div style={{
+                    flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    color: '#9ca3af', fontSize: 14,
+                }}>
+                    シナリオを作成するとキャンバスエディタが開きます
+                </div>
+            )}
         </div>
     );
 }
