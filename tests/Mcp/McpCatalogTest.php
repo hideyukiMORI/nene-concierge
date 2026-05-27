@@ -44,6 +44,7 @@ final class McpCatalogTest extends TestCase
             'getScenarioById',
             'getScenarioAnalytics',
             'listActionCredentials',
+            'exportScenario',
         ];
 
         foreach ($expected as $name) {
@@ -62,6 +63,7 @@ final class McpCatalogTest extends TestCase
             'updateScenario',
             'startPreviewSession',
             'stepPreviewSession',
+            'importScenario',
         ];
 
         foreach ($expected as $name) {
