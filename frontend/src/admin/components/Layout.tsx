@@ -88,6 +88,7 @@ export default function Layout() {
 
                 {/* Nav links */}
                 <nav style={{ flex: 1, padding: '12px 8px' }} aria-label="Main">
+                    <NavItem to="/dashboard"    label={t('nav.dashboard')} />
                     <NavItem to="/scenarios"    label={t('nav.scenarios')} />
                     <NavItem to="/appearance"   label={t('nav.appearance')} />
                     <NavItem to="/credentials"  label={t('nav.credentials')} />

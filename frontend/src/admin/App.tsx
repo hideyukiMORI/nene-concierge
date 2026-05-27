@@ -9,6 +9,7 @@ import AppearancePage    from './components/AppearancePage.js';
 import CredentialsPage   from './components/CredentialsPage.js';
 import SettingsPage      from './components/SettingsPage.js';
 import ActionLogsPage   from './components/ActionLogsPage.js';
+import DashboardPage    from './components/DashboardPage.js';
 import SessionsPage     from './components/SessionsPage.js';
 
 function RequireAuth() {
@@ -24,13 +25,14 @@ export default function App() {
                 {/* Public */}
                 <Route index element={
                     isAuthenticated()
-                        ? <Navigate to="/scenarios" replace />
+                        ? <Navigate to="/dashboard" replace />
                         : <LoginPage />
                 } />
 
                 {/* Protected */}
                 <Route element={<RequireAuth />}>
                     <Route element={<Layout />}>
+                        <Route path="dashboard"      element={<DashboardPage />} />
                         <Route path="scenarios"      element={<ScenariosPage />} />
                         <Route path="scenarios/new"  element={<ScenarioFormPage />} />
                         <Route path="scenarios/:id"  element={<ScenarioFormPage />} />

@@ -135,6 +135,19 @@ export const de: Partial<MessageCatalog> = {
     // ── Theme ─────────────────────────────────────────────────────────────────
     'theme.toggleLight': 'Zum hellen Modus wechseln',
     'theme.toggleDark':  'Zum dunklen Modus wechseln',
+    // ── Dashboard ────────────────────────────────────────────────────────────
+    'nav.dashboard':                  'Dashboard',
+    'dashboard.pageTitle':            'Dashboard',
+    'dashboard.loadError':            'Dashboard konnte nicht geladen werden.',
+    'dashboard.sessions7d':           'Sitzungen (7T)',
+    'dashboard.converted7d':          'Konversionen (7T)',
+    'dashboard.conversionRate':       'Konversionsrate',
+    'dashboard.activeSessions':       'Aktive Sitzungen',
+    'dashboard.publishedScenarios':   'Veröffentlichte Szenarien',
+    'dashboard.actionFailures24h':    'Aktionsfehler (24h)',
+    'dashboard.dailySessions':        'Tägliche Sitzungen (7T)',
+    'dashboard.noData':               'Noch keine Daten vorhanden.',
+    'dashboard.failuresAlert':        '{{count}} Aktionsfehler in den letzten 24 Stunden.',
     // ── Sessions ─────────────────────────────────────────────────────────────
     'nav.sessions':              'Sitzungen',
     'sessions.pageTitle':        'Sitzungen',

@@ -1,5 +1,26 @@
 import { getToken, clearToken } from './auth.js';
 
+// ── Dashboard ─────────────────────────────────────────────────────────────────
+
+export interface DailySessionCount {
+    date:  string;
+    count: number;
+}
+
+export interface DashboardStats {
+    sessions_7d:          number;
+    converted_7d:         number;
+    conversion_rate_7d:   number;
+    active_sessions:      number;
+    published_scenarios:  number;
+    action_failures_24h:  number;
+    daily_sessions:       DailySessionCount[];
+}
+
+export interface DashboardResponse {
+    data: DashboardStats;
+}
+
 const BASE = window.location.origin;
 
 export class ApiError extends Error {
@@ -257,4 +278,8 @@ export function listSessions(filter: SessionFilter = {}): Promise<SessionListRes
 
 export function getSessionDetail(sessionId: string): Promise<SessionDetailResponse> {
     return request(`/api/v1/sessions/${encodeURIComponent(sessionId)}`);
+}
+
+export function getDashboard(): Promise<DashboardResponse> {
+    return request('/api/v1/dashboard');
 }

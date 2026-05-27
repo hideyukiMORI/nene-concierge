@@ -20,7 +20,7 @@ info:
     - `POST /api/v1/auth/login`
     - `POST /api/v1/public/sessions`
     - `POST /api/v1/public/sessions/{session_id}/step`
-  version: 0.6.0
+  version: 0.7.0
   contact:
     name: NeNe Concierge
     url: https://github.com/hideyukiMORI/nene-concierge
@@ -672,6 +672,26 @@ paths:
               schema:
                 $ref: "#/components/schemas/AppearanceResponse"
 
+  /api/v1/dashboard:
+    get:
+      operationId: getDashboard
+      summary: Get dashboard statistics
+      description: |
+        Returns aggregated KPI statistics for the authenticated operator's organization.
+        Includes 7-day session and conversion counts, active sessions, published scenarios,
+        24-hour action failure count, and a daily session sparkline for the last 7 days.
+      tags:
+        - Dashboard
+      responses:
+        "200":
+          description: Dashboard statistics.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
   /api/v1/sessions:
     get:
       operationId: listSessions
@@ -941,6 +961,64 @@ components:
             $ref: "#/components/schemas/ProblemDetails"
 
   schemas:
+    DailySessionCount:
+      type: object
+      required:
+        - date
+        - count
+      properties:
+        date:
+          type: string
+          format: date
+          description: Calendar date (YYYY-MM-DD).
+        count:
+          type: integer
+          description: Number of sessions started on this date.
+
+    DashboardStats:
+      type: object
+      required:
+        - sessions_7d
+        - converted_7d
+        - conversion_rate_7d
+        - active_sessions
+        - published_scenarios
+        - action_failures_24h
+        - daily_sessions
+      properties:
+        sessions_7d:
+          type: integer
+          description: Total non-preview sessions in the last 7 days.
+        converted_7d:
+          type: integer
+          description: Sessions with outcome=converted in the last 7 days.
+        conversion_rate_7d:
+          type: number
+          format: float
+          description: Conversion rate (%) for the last 7 days.
+        active_sessions:
+          type: integer
+          description: Currently active (in-progress) sessions.
+        published_scenarios:
+          type: integer
+          description: Number of published scenarios.
+        action_failures_24h:
+          type: integer
+          description: Action execution failures in the last 24 hours.
+        daily_sessions:
+          type: array
+          items:
+            $ref: "#/components/schemas/DailySessionCount"
+          description: Daily session counts for the last 7 days (sparkline data).
+
+    DashboardResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          $ref: "#/components/schemas/DashboardStats"
+
     SessionSummary:
       type: object
       required:
