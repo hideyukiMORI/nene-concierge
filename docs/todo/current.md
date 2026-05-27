@@ -23,7 +23,7 @@ Last updated: 2026-05-27
 
 ---
 
-**Phase 1 — Scenario Engine MVP: 進行中 🔄**
+**Phase 1 — Scenario Engine MVP: 完了 ✅**
 
 | 項目 | 状態 | Issue |
 | --- | --- | --- |
@@ -31,27 +31,42 @@ Last updated: 2026-05-27
 | `Organization` モジュール（src/Organization/） | ✅ | #7 |
 | `OrgResolverMiddleware` + 解決戦略 4 種 | ✅ | #7 |
 | JWT Bearer 認証（AdminAuth モジュール） | ✅ | #7 |
-| `scenarios`, `nodes`, `edges` スキーマ + マイグレーション | 🔲 | #8 |
-| `sessions`, `messages` スキーマ + `outcome` + `has_conversion` | 🔲 | #8 |
-| **`session_node_events`** スキーマ + マイグレーション | 🔲 | #8 |
-| シナリオ CRUD API + OpenAPI | 🔲 | #8 |
-| セッション作成 / ステップ / 終了 API（訪問者向け） | 🔲 | #8 |
-| **Engine がノード遷移時に `session_node_event` を記録** | 🔲 | #8 |
-| `message` / `end` ノードタイプ | 🔲 | #8 |
-| PHPUnit テスト（SQLite） | 🔲 | #8 |
+| `scenarios`, `nodes`, `edges` スキーマ + マイグレーション | ✅ | #8 |
+| `sessions`, `messages`, `session_node_events` スキーマ + マイグレーション | ✅ | #8 |
+| シナリオ CRUD API（src/Scenario/） | ✅ | #8 |
+| セッション作成 / ステップ API（src/Engine/ 訪問者向け public エンドポイント） | ✅ | #8 |
+| Engine がノード遷移時に `session_node_event` を記録 | ✅ | #8 |
+| `message` / `end` ノードタイプ | ✅ | #8 |
+| PHPUnit テスト 46本 / PHPStan level 8 クリーン | ✅ | #8 |
 
 ---
 
-## 次の作業（Issue #8）
+**Phase 2 — Scenario Editor UI: バックログ 🔲**
 
-```
-feat(scenario+engine): Phase 1 シナリオエンジン MVP
-```
+| 項目 | 状態 | Issue |
+| --- | --- | --- |
+| React ビジュアルエディタ（ノード・エッジ編集） | 🔲 | TBD |
+| エディタ ↔ シナリオ CRUD API 統合 | 🔲 | TBD |
+| フロントエンド CI（型チェック + lint + test） | 🔲 | TBD |
 
-- シナリオ CRUD + バージョン管理（scenarios / nodes / edges テーブル）
-- セッション管理（sessions + session_node_events テーブル、ADR 0005）
-- Engine: メッセージノード → 終端ノードの最小ステートマシン
-- OpenAPI 拡張
+---
+
+**Phase 3 — Embed Widget + Action Engine: バックログ 🔲**
+
+| 項目 | 状態 | Issue |
+| --- | --- | --- |
+| Embed widget（訪問者向け JS） | 🔲 | TBD |
+| Action アダプター（Email / Slack / Chatwork / HTTP） | 🔲 | TBD |
+| `condition` / `action` ノードタイプ | 🔲 | TBD |
+
+---
+
+**Phase 4 — MCP ツール・AI シナリオ生成: バックログ 🔲**
+
+| 項目 | 状態 | Issue |
+| --- | --- | --- |
+| MCP ツール定義 | 🔲 | TBD |
+| AI シナリオ生成エンドポイント | 🔲 | TBD |
 
 ---
 
