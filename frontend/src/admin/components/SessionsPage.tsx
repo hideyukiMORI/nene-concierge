@@ -268,9 +268,11 @@ export default function SessionsPage() {
     const currentPage = Math.floor(offset / limit) + 1;
 
     const selectStyle = {
-        padding: '5px 8px', borderRadius: T.radiusMd,
-        border: `1px solid ${T.borderInput}`, background: T.surface,
+        height: '32px', padding: '0 8px', boxSizing: 'border-box',
+        borderRadius: T.radiusMd,
+        border: `1.5px solid ${T.borderInput}`, background: T.surface,
         color: T.text, fontSize: T.fontSm,
+        outline: 'none', cursor: 'pointer',
     } as const;
 
     return (
@@ -388,11 +390,16 @@ export default function SessionsPage() {
                         disabled={currentPage <= 1}
                         onClick={() => setOffset(Math.max(0, offset - limit))}
                         style={{
-                            padding: '5px 12px', borderRadius: T.radiusMd,
-                            border: `1px solid ${T.border}`, background: T.surface,
-                            color: T.text, cursor: currentPage <= 1 ? 'not-allowed' : 'pointer',
-                            opacity: currentPage <= 1 ? 0.5 : 1,
+                            height: '32px', padding: '0 14px', boxSizing: 'border-box',
+                            borderRadius: T.radiusMd,
+                            border: `1.5px solid ${T.border}`, background: T.surface,
+                            color: T.text, fontSize: T.fontSm, fontWeight: 500,
+                            cursor: currentPage <= 1 ? 'not-allowed' : 'pointer',
+                            opacity: currentPage <= 1 ? 0.45 : 1,
+                            transition: 'filter 150ms ease',
                         }}
+                        onMouseEnter={e => { if (currentPage > 1) e.currentTarget.style.filter = 'brightness(0.92)'; }}
+                        onMouseLeave={e => { e.currentTarget.style.filter = ''; }}
                     >
                         ← Prev
                     </button>
@@ -403,11 +410,16 @@ export default function SessionsPage() {
                         disabled={currentPage >= totalPages}
                         onClick={() => setOffset(offset + limit)}
                         style={{
-                            padding: '5px 12px', borderRadius: T.radiusMd,
-                            border: `1px solid ${T.border}`, background: T.surface,
-                            color: T.text, cursor: currentPage >= totalPages ? 'not-allowed' : 'pointer',
-                            opacity: currentPage >= totalPages ? 0.5 : 1,
+                            height: '32px', padding: '0 14px', boxSizing: 'border-box',
+                            borderRadius: T.radiusMd,
+                            border: `1.5px solid ${T.border}`, background: T.surface,
+                            color: T.text, fontSize: T.fontSm, fontWeight: 500,
+                            cursor: currentPage >= totalPages ? 'not-allowed' : 'pointer',
+                            opacity: currentPage >= totalPages ? 0.45 : 1,
+                            transition: 'filter 150ms ease',
                         }}
+                        onMouseEnter={e => { if (currentPage < totalPages) e.currentTarget.style.filter = 'brightness(0.92)'; }}
+                        onMouseLeave={e => { e.currentTarget.style.filter = ''; }}
                     >
                         Next →
                     </button>

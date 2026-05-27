@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { listScenarios, deleteScenario, ScenarioSummary, ApiError } from '../api.js';
-import { PageTitle, Card, Btn, Badge, ErrorMsg } from './Layout.js';
+import { PageTitle, Card, Btn, Badge, ErrorMsg, trHover } from './Layout.js';
 import { T } from '../theme.js';
 import { useTranslation } from '../i18n/index.js';
 
@@ -75,7 +75,7 @@ export default function ScenariosPage() {
                         </thead>
                         <tbody>
                             {scenarios.map(s => (
-                                <tr key={s.id} style={{ borderBottom: `1px solid ${T.borderLight}` }}>
+                                <tr key={s.id} style={{ borderBottom: `1px solid ${T.borderLight}`, transition: 'background 100ms ease' }} {...trHover}>
                                     <td style={{ padding:'12px 16px', color: T.textMuted, fontSize: T.fontBase }}>{s.id}</td>
                                     <td style={{ padding:'12px 16px', fontWeight:500 }}>
                                         <Link to={`/scenarios/${s.id}`} style={{ color: T.primary, textDecoration:'none' }}>

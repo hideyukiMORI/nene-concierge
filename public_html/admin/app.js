@@ -26051,6 +26051,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // src/admin/components/Layout.tsx
   var import_jsx_runtime3 = __toESM(require_jsx_runtime());
+  function applyFocus(el) {
+    el.style.borderColor = T.primary;
+    el.style.boxShadow = T.shadowFocus;
+  }
+  function removeFocus(el) {
+    el.style.borderColor = T.borderInput;
+    el.style.boxShadow = "none";
+  }
   function NavItem({ to, label }) {
     const loc = useLocation();
     const active = loc.pathname.startsWith(to);
@@ -26061,8 +26069,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         style: {
           display: "flex",
           alignItems: "center",
-          gap: 8,
-          padding: "8px 12px",
+          // 9px left-pad + 3px left-border = 12px visual indent (avoids layout-shift on activation)
+          padding: "8px 12px 8px 9px",
           margin: "1px 0",
           color: active ? T.sidebarTitle : T.sidebarText,
           textDecoration: "none",
@@ -26070,7 +26078,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           background: active ? T.sidebarActive : "transparent",
           fontWeight: active ? 600 : 400,
           fontSize: T.fontBase,
-          transition: "background 0.12s, color 0.12s"
+          transition: "background 120ms ease, color 120ms ease",
+          borderLeft: active ? `3px solid ${T.primary}` : "3px solid transparent"
         },
         onMouseEnter: (e) => {
           if (!active) {
@@ -26096,6 +26105,22 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       clearToken();
       nav("/");
     }
+    const sidebarBtnStyle = {
+      flexShrink: 0,
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
+      height: "28px",
+      padding: "0 9px",
+      background: T.sidebarActive,
+      border: `1px solid ${T.sidebarBorder}`,
+      color: T.sidebarText,
+      borderRadius: T.radiusMd,
+      cursor: "pointer",
+      fontSize: T.fontSm,
+      lineHeight: 1,
+      transition: "background 120ms ease, color 120ms ease, border-color 120ms ease"
+    };
     return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { style: { display: "flex", minHeight: "100vh" }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("aside", { style: {
         width: T.sidebarWidth,
@@ -26122,9 +26147,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: {
             flex: 1,
             fontWeight: 700,
-            fontSize: T.fontBase,
+            fontSize: T.fontMd,
             color: T.sidebarTitle,
-            letterSpacing: "0.01em",
+            letterSpacing: "-0.01em",
             overflow: "hidden",
             textOverflow: "ellipsis",
             whiteSpace: "nowrap"
@@ -26141,7 +26166,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             flexShrink: 0
           }, children: "Admin" })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("nav", { style: { flex: 1, padding: "12px 8px" }, "aria-label": "Main", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("nav", { style: { flex: 1, padding: "10px 8px" }, "aria-label": "Main", children: [
           /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/dashboard", label: t("nav.dashboard") }),
           /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/scenarios", label: t("nav.scenarios") }),
           /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/appearance", label: t("nav.appearance") }),
@@ -26152,7 +26177,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { style: {
           flexShrink: 0,
-          padding: "10px 10px 12px",
+          padding: "8px 10px 12px",
           borderTop: `1px solid ${T.sidebarBorder}`,
           display: "flex",
           alignItems: "center",
@@ -26167,14 +26192,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               style: {
                 flex: 1,
                 minWidth: 0,
-                padding: "6px 8px",
+                height: "28px",
+                padding: "0 8px",
                 borderRadius: T.radiusMd,
                 border: `1px solid ${T.sidebarBorder}`,
                 background: T.sidebarActive,
                 color: T.sidebarText,
                 fontSize: T.fontSm,
                 cursor: "pointer",
-                outline: "none"
+                outline: "none",
+                boxSizing: "border-box"
               },
               children: SUPPORTED_LOCALE_IDS.map((id2) => /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("option", { value: id2, children: LOCALES[id2].label }, id2))
             }
@@ -26185,17 +26212,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               onClick: toggleVariant,
               "aria-label": themeVariant2 === "dark" ? t("theme.toggleLight") : t("theme.toggleDark"),
               title: themeVariant2 === "dark" ? t("theme.toggleLight") : t("theme.toggleDark"),
-              style: {
-                flexShrink: 0,
-                background: T.sidebarActive,
-                border: `1px solid ${T.sidebarBorder}`,
-                color: T.sidebarText,
-                padding: "6px 8px",
-                borderRadius: T.radiusMd,
-                cursor: "pointer",
-                fontSize: 14,
-                lineHeight: 1,
-                transition: "background 0.12s"
+              style: sidebarBtnStyle,
+              onMouseEnter: (e) => {
+                e.currentTarget.style.background = T.sidebarHover;
+              },
+              onMouseLeave: (e) => {
+                e.currentTarget.style.background = T.sidebarActive;
               },
               children: themeVariant2 === "dark" ? "\u2600" : "\u{1F319}"
             }
@@ -26206,17 +26228,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               onClick: logout,
               title: t("nav.logout"),
               "aria-label": t("nav.logout"),
-              style: {
-                flexShrink: 0,
-                background: T.sidebarActive,
-                border: `1px solid ${T.sidebarBorder}`,
-                color: T.sidebarText,
-                padding: "6px 10px",
-                borderRadius: T.radiusMd,
-                cursor: "pointer",
-                fontSize: T.fontSm,
-                transition: "background 0.12s, color 0.12s"
-              },
+              style: sidebarBtnStyle,
               onMouseEnter: (e) => {
                 e.currentTarget.style.background = "oklch(15% 0.05 25 / 0.8)";
                 e.currentTarget.style.color = "oklch(75% 0.08 25)";
@@ -26241,15 +26253,29 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       }, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { style: { maxWidth: 960, margin: "0 auto" }, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(Outlet, {}) }) })
     ] });
   }
-  function PageTitle({ children: children2, style: style2 }) {
-    return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("h1", { style: { fontSize: T.font2xl, fontWeight: 700, marginBottom: 24, color: T.textStrong, ...style2 }, children: children2 });
+  function PageTitle({
+    children: children2,
+    style: style2
+  }) {
+    return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("h1", { style: {
+      fontSize: T.font2xl,
+      fontWeight: 700,
+      marginBottom: 24,
+      color: T.textStrong,
+      letterSpacing: "-0.02em",
+      lineHeight: 1.2,
+      ...style2
+    }, children: children2 });
   }
-  function Card({ children: children2, style: style2 }) {
+  function Card({
+    children: children2,
+    style: style2
+  }) {
     return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { style: {
       background: T.surface,
       border: `1px solid ${T.border}`,
       borderRadius: T.radiusLg,
-      padding: "20px 24px",
+      padding: "24px",
       boxShadow: T.shadowCard,
       ...style2
     }, children: children2 });
@@ -26263,19 +26289,28 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     style: style2
   }) {
     const base = {
-      padding: "7px 16px",
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
+      height: "36px",
+      padding: "0 16px",
+      gap: 6,
       borderRadius: T.radiusMd,
       fontWeight: 600,
       fontSize: T.fontBase,
       cursor: disabled ? "not-allowed" : "pointer",
-      border: "none",
+      border: "1.5px solid transparent",
+      boxSizing: "border-box",
+      lineHeight: 1,
+      whiteSpace: "nowrap",
       opacity: disabled ? 0.55 : 1,
-      transition: "opacity 0.12s, filter 0.12s"
+      transition: "filter 150ms ease, opacity 150ms ease",
+      textDecoration: "none"
     };
     const variants = {
-      primary: { background: T.primary, color: "#fff" },
-      danger: { background: T.danger, color: "#fff" },
-      ghost: { background: "transparent", color: T.primary, border: `1.5px solid ${T.primary}` }
+      primary: { background: T.primary, color: "#fff", borderColor: T.primary },
+      danger: { background: T.danger, color: "#fff", borderColor: T.danger },
+      ghost: { background: "transparent", color: T.primary, borderColor: T.primary }
     };
     return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
       "button",
@@ -26284,6 +26319,18 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         onClick,
         disabled,
         style: { ...base, ...variants[variant], ...style2 },
+        onMouseEnter: (e) => {
+          if (!disabled) e.currentTarget.style.filter = "brightness(0.90)";
+        },
+        onMouseLeave: (e) => {
+          e.currentTarget.style.filter = "";
+        },
+        onMouseDown: (e) => {
+          if (!disabled) e.currentTarget.style.filter = "brightness(0.83)";
+        },
+        onMouseUp: (e) => {
+          if (!disabled) e.currentTarget.style.filter = "brightness(0.90)";
+        },
         children: children2
       }
     );
@@ -26304,10 +26351,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: {
       background: bg,
       color: color2,
-      padding: "2px 10px",
+      padding: "3px 10px",
       borderRadius: T.radiusXl,
       fontSize: T.fontSm,
-      fontWeight: 600
+      fontWeight: 600,
+      display: "inline-block"
     }, children: labels[status] });
   }
   function ErrorMsg({ msg }) {
@@ -26319,9 +26367,44 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       borderRadius: T.radiusMd,
       padding: "10px 14px",
       marginBottom: 16,
-      fontSize: T.fontBase
+      fontSize: T.fontBase,
+      lineHeight: "1.5"
     }, children: msg });
   }
+  function SuccessMsg({ msg }) {
+    if (!msg) return null;
+    return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { style: {
+      background: T.successBg,
+      border: `1px solid ${T.successBorder}`,
+      color: T.successText,
+      borderRadius: T.radiusMd,
+      padding: "10px 14px",
+      marginBottom: 16,
+      fontSize: T.fontBase,
+      lineHeight: "1.5"
+    }, children: msg });
+  }
+  var FIELD_INPUT_STYLE = {
+    width: "100%",
+    height: "36px",
+    padding: "0 12px",
+    boxSizing: "border-box",
+    borderRadius: T.radiusMd,
+    border: `1.5px solid ${T.borderInput}`,
+    fontSize: T.fontMd,
+    outline: "none",
+    background: T.surface,
+    color: T.text,
+    transition: "border-color 150ms ease, box-shadow 150ms ease"
+  };
+  var FIELD_LABEL_STYLE = {
+    display: "block",
+    fontWeight: 600,
+    marginBottom: 5,
+    fontSize: T.fontSm,
+    color: T.textStrong,
+    lineHeight: "1.4"
+  };
   function Field({
     label,
     value,
@@ -26331,7 +26414,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     required
   }) {
     return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("label", { style: { display: "block", marginBottom: 16 }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("span", { style: { display: "block", fontWeight: 600, marginBottom: 4, fontSize: T.fontBase, color: T.textStrong }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("span", { style: FIELD_LABEL_STYLE, children: [
         label,
         required && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: { color: T.danger }, children: " *" })
       ] }),
@@ -26343,17 +26426,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           onChange: (e) => onChange(e.target.value),
           placeholder,
           required,
-          style: {
-            width: "100%",
-            padding: "8px 12px",
-            borderRadius: T.radiusMd,
-            border: `1.5px solid ${T.borderInput}`,
-            fontSize: T.fontMd,
-            outline: "none",
-            background: T.surface,
-            color: T.text,
-            transition: "border-color 0.12s"
-          }
+          style: FIELD_INPUT_STYLE,
+          onFocus: (e) => applyFocus(e.currentTarget),
+          onBlur: (e) => removeFocus(e.currentTarget)
         }
       )
     ] });
@@ -26365,26 +26440,33 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     options
   }) {
     return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("label", { style: { display: "block", marginBottom: 16 }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: { display: "block", fontWeight: 600, marginBottom: 4, fontSize: T.fontBase, color: T.textStrong }, children: label }),
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: FIELD_LABEL_STYLE, children: label }),
       /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
         "select",
         {
           value,
           onChange: (e) => onChange(e.target.value),
           style: {
-            width: "100%",
-            padding: "8px 12px",
-            borderRadius: T.radiusMd,
-            border: `1.5px solid ${T.borderInput}`,
-            fontSize: T.fontMd,
-            background: T.surface,
-            color: T.text
+            ...FIELD_INPUT_STYLE,
+            cursor: "pointer",
+            // padding adjustment: select needs extra-right room for arrow
+            padding: "0 12px"
           },
+          onFocus: (e) => applyFocus(e.currentTarget),
+          onBlur: (e) => removeFocus(e.currentTarget),
           children: options.map((o) => /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("option", { value: o.value, children: o.label }, o.value))
         }
       )
     ] });
   }
+  var trHover = {
+    onMouseEnter: (e) => {
+      e.currentTarget.style.background = T.surfaceHover;
+    },
+    onMouseLeave: (e) => {
+      e.currentTarget.style.background = "";
+    }
+  };
 
   // src/admin/components/LoginPage.tsx
   var import_react3 = __toESM(require_react());
@@ -26629,7 +26711,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           fontWeight: 600,
           color: T.textMuted
         }, children: h }, h)) }) }),
-        /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("tbody", { children: scenarios.map((s) => /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("tr", { style: { borderBottom: `1px solid ${T.borderLight}` }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("tbody", { children: scenarios.map((s) => /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("tr", { style: { borderBottom: `1px solid ${T.borderLight}`, transition: "background 100ms ease" }, ...trHover, children: [
           /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("td", { style: { padding: "12px 16px", color: T.textMuted, fontSize: T.fontBase }, children: s.id }),
           /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("td", { style: { padding: "12px 16px", fontWeight: 500 }, children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(Link, { to: `/scenarios/${s.id}`, style: { color: T.primary, textDecoration: "none" }, children: s.name }) }),
           /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("td", { style: { padding: "12px 16px", color: T.textMuted, fontSize: T.fontBase, maxWidth: 200 }, children: s.description ?? "\u2014" }),
@@ -35788,42 +35870,62 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       background: T.surface,
       borderLeft: `1px solid ${T.border}`,
       overflowY: "auto",
-      padding: "16px 16px",
+      padding: "16px",
       display: "flex",
       flexDirection: "column",
-      gap: 12
+      gap: 14
     },
-    label: { display: "block", fontWeight: 600, fontSize: T.fontSm, marginBottom: 3, color: T.textStrong },
+    label: {
+      display: "block",
+      fontWeight: 600,
+      fontSize: T.fontSm,
+      marginBottom: 4,
+      color: T.textStrong,
+      lineHeight: "1.4"
+    },
     input: {
       width: "100%",
-      padding: "7px 10px",
-      borderRadius: T.radiusSm,
+      height: "36px",
+      padding: "0 10px",
+      boxSizing: "border-box",
+      borderRadius: T.radiusMd,
       border: `1.5px solid ${T.borderInput}`,
       fontSize: T.fontBase,
       outline: "none",
-      boxSizing: "border-box"
+      background: T.surface,
+      color: T.text,
+      transition: "border-color 150ms ease, box-shadow 150ms ease"
     },
     select: {
       width: "100%",
-      padding: "7px 10px",
-      borderRadius: T.radiusSm,
+      height: "36px",
+      padding: "0 10px",
+      boxSizing: "border-box",
+      borderRadius: T.radiusMd,
       border: `1.5px solid ${T.borderInput}`,
       fontSize: T.fontBase,
       background: T.surface,
-      boxSizing: "border-box"
+      color: T.text,
+      outline: "none",
+      cursor: "pointer",
+      transition: "border-color 150ms ease, box-shadow 150ms ease"
     },
     textarea: {
       width: "100%",
-      padding: "7px 10px",
-      borderRadius: T.radiusSm,
+      padding: "8px 10px",
+      boxSizing: "border-box",
+      borderRadius: T.radiusMd,
       border: `1.5px solid ${T.borderInput}`,
       fontSize: T.fontBase,
-      resize: "vertical",
       outline: "none",
-      boxSizing: "border-box",
-      minHeight: 80
+      resize: "vertical",
+      lineHeight: "1.5",
+      minHeight: 80,
+      background: T.surface,
+      color: T.text,
+      transition: "border-color 150ms ease, box-shadow 150ms ease"
     },
-    section: { borderTop: `1px solid ${T.borderLight}`, paddingTop: 10 },
+    section: { borderTop: `1px solid ${T.borderLight}`, paddingTop: 12 },
     tag: {
       display: "inline-flex",
       alignItems: "center",
@@ -35834,12 +35936,29 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       padding: "3px 10px",
       fontSize: T.fontSm
     },
-    tagList: { display: "flex", flexWrap: "wrap", gap: 6 }
+    tagList: { display: "flex", flexWrap: "wrap", gap: 6 },
+    hint: {
+      margin: "4px 0 0",
+      fontSize: T.fontXs,
+      color: T.textMuted,
+      lineHeight: "1.4"
+    }
   };
+  var onF = (e) => applyFocus(e.currentTarget);
+  var onB = (e) => removeFocus(e.currentTarget);
   function LabelInput({ label, value, onChange }) {
     return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { children: [
       /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { style: S.label, children: label }),
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("input", { style: S.input, value, onChange: (e) => onChange(e.target.value) })
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+        "input",
+        {
+          style: S.input,
+          value,
+          onChange: (e) => onChange(e.target.value),
+          onFocus: onF,
+          onBlur: onB
+        }
+      )
     ] });
   }
   function NodeConfigPanel({ node, credentials, onChange, onDelete }) {
@@ -35874,7 +35993,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               style: S.textarea,
               value: String(d.text ?? ""),
               onChange: (e) => setData({ text: e.target.value }),
-              placeholder: t("node.messagePlaceholder")
+              placeholder: t("node.messagePlaceholder"),
+              onFocus: onF,
+              onBlur: onB
             }
           )
         ] }),
@@ -35909,10 +36030,17 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 color: T.primary,
                 background: "none",
                 border: `1px dashed ${T.primaryMuted}`,
-                borderRadius: T.radiusSm,
-                padding: "4px 10px",
+                borderRadius: T.radiusMd,
+                padding: "5px 10px",
                 cursor: "pointer",
-                width: "100%"
+                width: "100%",
+                transition: "background 120ms ease"
+              },
+              onMouseEnter: (e) => {
+                e.currentTarget.style.background = T.primaryBg;
+              },
+              onMouseLeave: (e) => {
+                e.currentTarget.style.background = "none";
               },
               children: t("node.addChoice")
             }
@@ -35926,7 +36054,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               style: S.input,
               value: String(d.variable_name ?? ""),
               onChange: (e) => setData({ variable_name: e.target.value || void 0 }),
-              placeholder: t("node.variablePlaceholder")
+              placeholder: t("node.variablePlaceholder"),
+              onFocus: onF,
+              onBlur: onB
             }
           )
         ] })
@@ -35944,7 +36074,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               style: S.input,
               value: d.variable ?? "",
               onChange: (e) => setData({ variable: e.target.value }),
-              placeholder: t("node.conditionVarPlaceholder")
+              placeholder: t("node.conditionVarPlaceholder"),
+              onFocus: onF,
+              onBlur: onB
             }
           )
         ] }),
@@ -35956,6 +36088,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               style: S.select,
               value: d.operator ?? "eq",
               onChange: (e) => setData({ operator: e.target.value }),
+              onFocus: onF,
+              onBlur: onB,
               children: [
                 /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "eq", children: t("node.operator.eq") }),
                 /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "neq", children: t("node.operator.neq") }),
@@ -35974,11 +36108,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               style: S.input,
               value: d.value ?? "",
               onChange: (e) => setData({ value: e.target.value }),
-              placeholder: t("node.compareValuePlaceholder")
+              placeholder: t("node.compareValuePlaceholder"),
+              onFocus: onF,
+              onBlur: onB
             }
           )
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { style: { fontSize: T.fontXs, color: T.textMuted, margin: 0 }, children: t("node.conditionHint") })
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { style: S.hint, children: t("node.conditionHint") })
       ] });
     }
     function ActionConfig() {
@@ -35994,6 +36130,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               style: S.select,
               value: d.action_type ?? "http",
               onChange: (e) => setData({ action_type: e.target.value }),
+              onFocus: onF,
+              onBlur: onB,
               children: [
                 /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "http", children: "HTTP" }),
                 /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "email", children: "Email" }),
@@ -36016,10 +36154,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 style: S.textarea,
                 value: d.qr_content ?? "",
                 onChange: (e) => setData({ qr_content: e.target.value }),
-                placeholder: t("node.qrContentPlaceholder")
+                placeholder: t("node.qrContentPlaceholder"),
+                onFocus: onF,
+                onBlur: onB
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { style: { margin: "4px 0 0", fontSize: T.fontXs, color: T.textMuted }, children: t("node.qrContentHint") })
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { style: S.hint, children: t("node.qrContentHint") })
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { children: [
             /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { style: S.label, children: t("node.qrVariable") }),
@@ -36029,7 +36169,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 style: S.input,
                 value: d.qr_variable ?? "",
                 onChange: (e) => setData({ qr_variable: e.target.value || void 0 }),
-                placeholder: t("node.qrVariablePlaceholder")
+                placeholder: t("node.qrVariablePlaceholder"),
+                onFocus: onF,
+                onBlur: onB
               }
             )
           ] }),
@@ -36044,7 +36186,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 step: 8,
                 style: S.input,
                 value: d.qr_size ?? 200,
-                onChange: (e) => setData({ qr_size: Number(e.target.value) || void 0 })
+                onChange: (e) => setData({ qr_size: Number(e.target.value) || void 0 }),
+                onFocus: onF,
+                onBlur: onB
               }
             )
           ] })
@@ -36057,6 +36201,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               style: S.select,
               value: String(d.credential_id ?? ""),
               onChange: (e) => setData({ credential_id: e.target.value ? Number(e.target.value) : void 0 }),
+              onFocus: onF,
+              onBlur: onB,
               children: [
                 /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "", children: t("node.credentialNone") }),
                 credentials.filter((c) => !d.action_type || c.adapter === d.action_type).map((c) => /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: c.id, children: c.name }, c.id))
@@ -36078,6 +36224,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               style: S.select,
               value: d.outcome ?? "completed",
               onChange: (e) => setData({ outcome: e.target.value }),
+              onFocus: onF,
+              onBlur: onB,
               children: [
                 /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "completed", children: t("node.outcome.completed") }),
                 /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "abandoned", children: t("node.outcome.abandoned") })
@@ -36091,8 +36239,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: S.panel, children: [
       /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: {
         padding: "8px 12px",
-        borderRadius: 8,
-        marginBottom: 4,
+        borderRadius: T.radiusMd,
+        marginBottom: 2,
         background: colors.header,
         color: "#fff",
         fontWeight: 700,
@@ -36108,20 +36256,31 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       type === "condition" && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(ConditionConfig, {}),
       type === "action" && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(ActionConfig, {}),
       type === "end" && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(EndConfig, {}),
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { borderTop: `1px solid ${T.borderLight}`, paddingTop: 12, marginTop: 4 }, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { borderTop: `1px solid ${T.borderLight}`, paddingTop: 12, marginTop: 2 }, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
         "button",
         {
           onClick: () => onDelete(node.id),
           style: {
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             width: "100%",
-            padding: "7px 0",
+            height: "36px",
+            boxSizing: "border-box",
             background: T.dangerBg,
-            border: `1px solid ${T.dangerBorder}`,
+            border: `1.5px solid ${T.dangerBorder}`,
             color: T.dangerText,
-            borderRadius: T.radiusSm,
+            borderRadius: T.radiusMd,
             cursor: "pointer",
             fontSize: T.fontBase,
-            fontWeight: 600
+            fontWeight: 600,
+            transition: "filter 150ms ease"
+          },
+          onMouseEnter: (e) => {
+            e.currentTarget.style.filter = "brightness(0.94)";
+          },
+          onMouseLeave: (e) => {
+            e.currentTarget.style.filter = "";
           },
           children: t("node.delete")
         }
@@ -36828,15 +36987,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(PageTitle, { children: t("appearance.pageTitle") }),
       /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(Card, { children: [
         /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(ErrorMsg, { msg: error }),
-        saved && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: {
-          background: T.successBg,
-          border: `1px solid ${T.successBorder}`,
-          color: T.successText,
-          borderRadius: T.radiusMd,
-          padding: "10px 14px",
-          marginBottom: 16,
-          fontSize: T.fontBase
-        }, children: t("appearance.saved") }),
+        /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(SuccessMsg, { msg: saved ? t("appearance.saved") : null }),
         /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("form", { onSubmit: (e) => {
           void handleSubmit(e);
         }, children: [
@@ -36863,11 +37014,19 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                   placeholder: "#2563eb",
                   style: {
                     width: 100,
-                    padding: "6px 10px",
-                    borderRadius: T.radiusSm,
+                    height: "36px",
+                    padding: "0 10px",
+                    boxSizing: "border-box",
+                    borderRadius: T.radiusMd,
                     border: `1.5px solid ${T.borderInput}`,
-                    fontSize: T.fontBase
-                  }
+                    fontSize: T.fontBase,
+                    outline: "none",
+                    background: T.surface,
+                    color: T.text,
+                    transition: "border-color 150ms ease, box-shadow 150ms ease"
+                  },
+                  onFocus: (e) => applyFocus(e.currentTarget),
+                  onBlur: (e) => removeFocus(e.currentTarget)
                 }
               )
             ] })
@@ -36895,11 +37054,19 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                   placeholder: "#ffffff",
                   style: {
                     width: 100,
-                    padding: "6px 10px",
-                    borderRadius: T.radiusSm,
+                    height: "36px",
+                    padding: "0 10px",
+                    boxSizing: "border-box",
+                    borderRadius: T.radiusMd,
                     border: `1.5px solid ${T.borderInput}`,
-                    fontSize: T.fontBase
-                  }
+                    fontSize: T.fontBase,
+                    outline: "none",
+                    background: T.surface,
+                    color: T.text,
+                    transition: "border-color 150ms ease, box-shadow 150ms ease"
+                  },
+                  onFocus: (e) => applyFocus(e.currentTarget),
+                  onBlur: (e) => removeFocus(e.currentTarget)
                 }
               )
             ] })
@@ -37069,7 +37236,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           fontWeight: 600,
           color: T.textMuted
         }, children: h }, h)) }) }),
-        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("tbody", { children: creds.map((c) => /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("tr", { style: { borderBottom: `1px solid ${T.borderLight}` }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("tbody", { children: creds.map((c) => /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("tr", { style: { borderBottom: `1px solid ${T.borderLight}`, transition: "background 100ms ease" }, ...trHover, children: [
           /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("td", { style: { padding: "12px 16px", color: T.textMuted, fontSize: T.fontBase }, children: c.id }),
           /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("td", { style: { padding: "12px 16px", fontWeight: 500 }, children: c.name }),
           /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("td", { style: { padding: "12px 16px" }, children: /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(AdapterBadge, { adapter: c.adapter }) }),
@@ -37287,12 +37454,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 handleFilterChange();
               },
               style: {
-                padding: "5px 8px",
+                height: "32px",
+                padding: "0 8px",
+                boxSizing: "border-box",
                 borderRadius: T.radiusMd,
-                border: `1px solid ${T.borderInput}`,
+                border: `1.5px solid ${T.borderInput}`,
                 background: T.surface,
                 color: T.text,
-                fontSize: T.fontSm
+                fontSize: T.fontSm,
+                outline: "none",
+                cursor: "pointer"
               },
               children: [
                 /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("option", { value: "", children: t("actionLogs.all") }),
@@ -37316,12 +37487,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 handleFilterChange();
               },
               style: {
-                padding: "5px 8px",
+                height: "32px",
+                padding: "0 8px",
+                boxSizing: "border-box",
                 borderRadius: T.radiusMd,
-                border: `1px solid ${T.borderInput}`,
+                border: `1.5px solid ${T.borderInput}`,
                 background: T.surface,
                 color: T.text,
-                fontSize: T.fontSm
+                fontSize: T.fontSm,
+                outline: "none",
+                cursor: "pointer"
               },
               children: [
                 /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("option", { value: "", children: t("actionLogs.all") }),
@@ -37402,13 +37577,24 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             disabled: currentPage <= 1,
             onClick: () => setOffset(Math.max(0, offset - limit)),
             style: {
-              padding: "5px 12px",
+              height: "32px",
+              padding: "0 14px",
+              boxSizing: "border-box",
               borderRadius: T.radiusMd,
-              border: `1px solid ${T.border}`,
+              border: `1.5px solid ${T.border}`,
               background: T.surface,
               color: T.text,
+              fontSize: T.fontSm,
+              fontWeight: 500,
               cursor: currentPage <= 1 ? "not-allowed" : "pointer",
-              opacity: currentPage <= 1 ? 0.5 : 1
+              opacity: currentPage <= 1 ? 0.45 : 1,
+              transition: "filter 150ms ease"
+            },
+            onMouseEnter: (e) => {
+              if (currentPage > 1) e.currentTarget.style.filter = "brightness(0.92)";
+            },
+            onMouseLeave: (e) => {
+              e.currentTarget.style.filter = "";
             },
             children: "\u2190 Prev"
           }
@@ -37424,13 +37610,24 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             disabled: currentPage >= totalPages,
             onClick: () => setOffset(offset + limit),
             style: {
-              padding: "5px 12px",
+              height: "32px",
+              padding: "0 14px",
+              boxSizing: "border-box",
               borderRadius: T.radiusMd,
-              border: `1px solid ${T.border}`,
+              border: `1.5px solid ${T.border}`,
               background: T.surface,
               color: T.text,
+              fontSize: T.fontSm,
+              fontWeight: 500,
               cursor: currentPage >= totalPages ? "not-allowed" : "pointer",
-              opacity: currentPage >= totalPages ? 0.5 : 1
+              opacity: currentPage >= totalPages ? 0.45 : 1,
+              transition: "filter 150ms ease"
+            },
+            onMouseEnter: (e) => {
+              if (currentPage < totalPages) e.currentTarget.style.filter = "brightness(0.92)";
+            },
+            onMouseLeave: (e) => {
+              e.currentTarget.style.filter = "";
             },
             children: "Next \u2192"
           }
@@ -37876,12 +38073,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const totalPages = Math.ceil(total / limit);
     const currentPage = Math.floor(offset / limit) + 1;
     const selectStyle = {
-      padding: "5px 8px",
+      height: "32px",
+      padding: "0 8px",
+      boxSizing: "border-box",
       borderRadius: T.radiusMd,
-      border: `1px solid ${T.borderInput}`,
+      border: `1.5px solid ${T.borderInput}`,
       background: T.surface,
       color: T.text,
-      fontSize: T.fontSm
+      fontSize: T.fontSm,
+      outline: "none",
+      cursor: "pointer"
     };
     return /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { children: [
       /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(PageTitle, { children: t("sessions.pageTitle") }),
@@ -37992,13 +38193,24 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             disabled: currentPage <= 1,
             onClick: () => setOffset(Math.max(0, offset - limit)),
             style: {
-              padding: "5px 12px",
+              height: "32px",
+              padding: "0 14px",
+              boxSizing: "border-box",
               borderRadius: T.radiusMd,
-              border: `1px solid ${T.border}`,
+              border: `1.5px solid ${T.border}`,
               background: T.surface,
               color: T.text,
+              fontSize: T.fontSm,
+              fontWeight: 500,
               cursor: currentPage <= 1 ? "not-allowed" : "pointer",
-              opacity: currentPage <= 1 ? 0.5 : 1
+              opacity: currentPage <= 1 ? 0.45 : 1,
+              transition: "filter 150ms ease"
+            },
+            onMouseEnter: (e) => {
+              if (currentPage > 1) e.currentTarget.style.filter = "brightness(0.92)";
+            },
+            onMouseLeave: (e) => {
+              e.currentTarget.style.filter = "";
             },
             children: "\u2190 Prev"
           }
@@ -38014,13 +38226,24 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             disabled: currentPage >= totalPages,
             onClick: () => setOffset(offset + limit),
             style: {
-              padding: "5px 12px",
+              height: "32px",
+              padding: "0 14px",
+              boxSizing: "border-box",
               borderRadius: T.radiusMd,
-              border: `1px solid ${T.border}`,
+              border: `1.5px solid ${T.border}`,
               background: T.surface,
               color: T.text,
+              fontSize: T.fontSm,
+              fontWeight: 500,
               cursor: currentPage >= totalPages ? "not-allowed" : "pointer",
-              opacity: currentPage >= totalPages ? 0.5 : 1
+              opacity: currentPage >= totalPages ? 0.45 : 1,
+              transition: "filter 150ms ease"
+            },
+            onMouseEnter: (e) => {
+              if (currentPage < totalPages) e.currentTarget.style.filter = "brightness(0.92)";
+            },
+            onMouseLeave: (e) => {
+              e.currentTarget.style.filter = "";
             },
             children: "Next \u2192"
           }

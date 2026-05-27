@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getAppearance, upsertAppearance, AppearanceData, ApiError } from '../api.js';
-import { PageTitle, Card, Btn, ErrorMsg, Field, Select } from './Layout.js';
+import { PageTitle, Card, Btn, ErrorMsg, SuccessMsg, Field, Select, applyFocus, removeFocus } from './Layout.js';
 import { T } from '../theme.js';
 import { useTranslation } from '../i18n/index.js';
 
@@ -78,15 +78,7 @@ export default function AppearancePage() {
             <PageTitle>{t('appearance.pageTitle')}</PageTitle>
             <Card>
                 <ErrorMsg msg={error} />
-                {saved && (
-                    <div style={{
-                        background: T.successBg, border: `1px solid ${T.successBorder}`,
-                        color: T.successText, borderRadius: T.radiusMd,
-                        padding: '10px 14px', marginBottom: 16, fontSize: T.fontBase,
-                    }}>
-                        {t('appearance.saved')}
-                    </div>
-                )}
+                <SuccessMsg msg={saved ? t('appearance.saved') : null} />
                 <form onSubmit={e => { void handleSubmit(e); }}>
                     <label style={{ display:'block', marginBottom:16 }}>
                         <span style={{ display:'block', fontWeight:600, marginBottom:4, fontSize: T.fontBase }}>
@@ -104,9 +96,15 @@ export default function AppearancePage() {
                                 onChange={e => set('color_primary', e.target.value)}
                                 maxLength={7} placeholder="#2563eb"
                                 style={{
-                                    width:100, padding:'6px 10px', borderRadius: T.radiusSm,
+                                    width: 100, height: '36px', padding: '0 10px',
+                                    boxSizing: 'border-box',
+                                    borderRadius: T.radiusMd,
                                     border: `1.5px solid ${T.borderInput}`, fontSize: T.fontBase,
+                                    outline: 'none', background: T.surface, color: T.text,
+                                    transition: 'border-color 150ms ease, box-shadow 150ms ease',
                                 }}
+                            onFocus={e => applyFocus(e.currentTarget)}
+                            onBlur={e  => removeFocus(e.currentTarget)}
                             />
                         </div>
                     </label>
@@ -126,9 +124,15 @@ export default function AppearancePage() {
                                 onChange={e => set('color_secondary', e.target.value)}
                                 maxLength={7} placeholder="#ffffff"
                                 style={{
-                                    width:100, padding:'6px 10px', borderRadius: T.radiusSm,
+                                    width: 100, height: '36px', padding: '0 10px',
+                                    boxSizing: 'border-box',
+                                    borderRadius: T.radiusMd,
                                     border: `1.5px solid ${T.borderInput}`, fontSize: T.fontBase,
+                                    outline: 'none', background: T.surface, color: T.text,
+                                    transition: 'border-color 150ms ease, box-shadow 150ms ease',
                                 }}
+                            onFocus={e => applyFocus(e.currentTarget)}
+                            onBlur={e  => removeFocus(e.currentTarget)}
                             />
                         </div>
                     </label>

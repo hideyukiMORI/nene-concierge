@@ -3,7 +3,7 @@ import {
     listCredentials, createCredential, deleteCredential,
     CredentialSummary, ApiError,
 } from '../api.js';
-import { PageTitle, Card, Btn, ErrorMsg, Field, Select } from './Layout.js';
+import { PageTitle, Card, Btn, ErrorMsg, Field, Select, trHover } from './Layout.js';
 import { T } from '../theme.js';
 import { useTranslation } from '../i18n/index.js';
 
@@ -145,7 +145,7 @@ export default function CredentialsPage() {
                         </thead>
                         <tbody>
                             {creds.map(c => (
-                                <tr key={c.id} style={{ borderBottom: `1px solid ${T.borderLight}` }}>
+                                <tr key={c.id} style={{ borderBottom: `1px solid ${T.borderLight}`, transition: 'background 100ms ease' }} {...trHover}>
                                     <td style={{ padding:'12px 16px', color: T.textMuted, fontSize: T.fontBase }}>{c.id}</td>
                                     <td style={{ padding:'12px 16px', fontWeight:500 }}>{c.name}</td>
                                     <td style={{ padding:'12px 16px' }}><AdapterBadge adapter={c.adapter} /></td>
