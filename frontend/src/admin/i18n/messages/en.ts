@@ -174,6 +174,19 @@ export const en = {
     'canvas.save':   '💾 Save',
     'canvas.saving': 'Saving…',
 
+    'canvas.editMode':      'Edit',
+    'canvas.analyticsMode': 'Analytics',
+
+    'canvas.analytics.loading':    'Loading analytics…',
+    'canvas.analytics.noData':     'No session data for this period.',
+    'canvas.analytics.visits':     '{{count}} visits',
+    'canvas.analytics.dropOff':    '{{rate}}% drop-off',
+    'canvas.analytics.bottleneck': '⚠ Bottleneck',
+    'canvas.analytics.sessions':   'Sessions',
+    'canvas.analytics.completed':  'Completed',
+    'canvas.analytics.converted':  'Converted',
+    'canvas.analytics.rate':       '{{rate}}%',
+
     // ── Settings ──────────────────────────────────────────────────────────────
     'settings.pageTitle':  'Settings',
     'settings.adminTheme': 'Admin Theme',

@@ -25004,6 +25004,17 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     // ── Canvas ────────────────────────────────────────────────────────────────
     "canvas.save": "\u{1F4BE} Save",
     "canvas.saving": "Saving\u2026",
+    "canvas.editMode": "Edit",
+    "canvas.analyticsMode": "Analytics",
+    "canvas.analytics.loading": "Loading analytics\u2026",
+    "canvas.analytics.noData": "No session data for this period.",
+    "canvas.analytics.visits": "{{count}} visits",
+    "canvas.analytics.dropOff": "{{rate}}% drop-off",
+    "canvas.analytics.bottleneck": "\u26A0 Bottleneck",
+    "canvas.analytics.sessions": "Sessions",
+    "canvas.analytics.completed": "Completed",
+    "canvas.analytics.converted": "Converted",
+    "canvas.analytics.rate": "{{rate}}%",
     // ── Settings ──────────────────────────────────────────────────────────────
     "settings.pageTitle": "Settings",
     "settings.adminTheme": "Admin Theme",
@@ -25160,6 +25171,17 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     // ── Canvas ────────────────────────────────────────────────────────────────
     "canvas.save": "\u{1F4BE} \u4FDD\u5B58",
     "canvas.saving": "\u4FDD\u5B58\u4E2D\u2026",
+    "canvas.editMode": "\u7DE8\u96C6",
+    "canvas.analyticsMode": "\u30A2\u30CA\u30EA\u30C6\u30A3\u30AF\u30B9",
+    "canvas.analytics.loading": "\u30A2\u30CA\u30EA\u30C6\u30A3\u30AF\u30B9\u3092\u8AAD\u307F\u8FBC\u3093\u3067\u3044\u307E\u3059\u2026",
+    "canvas.analytics.noData": "\u3053\u306E\u671F\u9593\u306E\u30BB\u30C3\u30B7\u30E7\u30F3\u30C7\u30FC\u30BF\u304C\u3042\u308A\u307E\u305B\u3093\u3002",
+    "canvas.analytics.visits": "{{count}} \u8A2A\u554F",
+    "canvas.analytics.dropOff": "{{rate}}% \u96E2\u8131",
+    "canvas.analytics.bottleneck": "\u26A0 \u30DC\u30C8\u30EB\u30CD\u30C3\u30AF",
+    "canvas.analytics.sessions": "\u30BB\u30C3\u30B7\u30E7\u30F3",
+    "canvas.analytics.completed": "\u5B8C\u4E86",
+    "canvas.analytics.converted": "\u30B3\u30F3\u30D0\u30FC\u30B8\u30E7\u30F3",
+    "canvas.analytics.rate": "{{rate}}%",
     // ── Theme ─────────────────────────────────────────────────────────────────
     "theme.toggleLight": "\u30E9\u30A4\u30C8\u30E2\u30FC\u30C9\u306B\u5207\u308A\u66FF\u3048",
     "theme.toggleDark": "\u30C0\u30FC\u30AF\u30E2\u30FC\u30C9\u306B\u5207\u308A\u66FF\u3048",
@@ -25272,6 +25294,17 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "node.delete": "\u{1F5D1} Supprimer ce n\u0153ud",
     "canvas.save": "\u{1F4BE} Enregistrer",
     "canvas.saving": "Enregistrement\u2026",
+    "canvas.editMode": "\xC9dition",
+    "canvas.analyticsMode": "Analytique",
+    "canvas.analytics.loading": "Chargement des analytics\u2026",
+    "canvas.analytics.noData": "Aucune donn\xE9e de session pour cette p\xE9riode.",
+    "canvas.analytics.visits": "{{count}} visites",
+    "canvas.analytics.dropOff": "{{rate}}% abandon",
+    "canvas.analytics.bottleneck": "\u26A0 Goulot",
+    "canvas.analytics.sessions": "Sessions",
+    "canvas.analytics.completed": "Termin\xE9es",
+    "canvas.analytics.converted": "Converties",
+    "canvas.analytics.rate": "{{rate}}%",
     // ── Theme ─────────────────────────────────────────────────────────────────
     "theme.toggleLight": "Passer en mode clair",
     "theme.toggleDark": "Passer en mode sombre",
@@ -25384,6 +25417,17 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "node.delete": "\u{1F5D1} \u5220\u9664\u6B64\u8282\u70B9",
     "canvas.save": "\u{1F4BE} \u4FDD\u5B58",
     "canvas.saving": "\u4FDD\u5B58\u4E2D\u2026",
+    "canvas.editMode": "\u7F16\u8F91",
+    "canvas.analyticsMode": "\u5206\u6790",
+    "canvas.analytics.loading": "\u6B63\u5728\u52A0\u8F7D\u5206\u6790\u6570\u636E\u2026",
+    "canvas.analytics.noData": "\u6B64\u671F\u95F4\u5185\u65E0\u4F1A\u8BDD\u6570\u636E\u3002",
+    "canvas.analytics.visits": "{{count}} \u6B21\u8BBF\u95EE",
+    "canvas.analytics.dropOff": "{{rate}}% \u6D41\u5931",
+    "canvas.analytics.bottleneck": "\u26A0 \u74F6\u9888",
+    "canvas.analytics.sessions": "\u4F1A\u8BDD",
+    "canvas.analytics.completed": "\u5DF2\u5B8C\u6210",
+    "canvas.analytics.converted": "\u5DF2\u8F6C\u5316",
+    "canvas.analytics.rate": "{{rate}}%",
     // ── Theme ─────────────────────────────────────────────────────────────────
     "theme.toggleLight": "\u5207\u6362\u5230\u6D45\u8272\u6A21\u5F0F",
     "theme.toggleDark": "\u5207\u6362\u5230\u6DF1\u8272\u6A21\u5F0F",
@@ -25496,6 +25540,17 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "node.delete": "\u{1F5D1} Excluir este n\xF3",
     "canvas.save": "\u{1F4BE} Salvar",
     "canvas.saving": "Salvando\u2026",
+    "canvas.editMode": "Editar",
+    "canvas.analyticsMode": "An\xE1lises",
+    "canvas.analytics.loading": "Carregando an\xE1lises\u2026",
+    "canvas.analytics.noData": "Sem dados de sess\xE3o para este per\xEDodo.",
+    "canvas.analytics.visits": "{{count}} visitas",
+    "canvas.analytics.dropOff": "{{rate}}% sa\xEDda",
+    "canvas.analytics.bottleneck": "\u26A0 Gargalo",
+    "canvas.analytics.sessions": "Sess\xF5es",
+    "canvas.analytics.completed": "Conclu\xEDdas",
+    "canvas.analytics.converted": "Convertidas",
+    "canvas.analytics.rate": "{{rate}}%",
     // ── Theme ─────────────────────────────────────────────────────────────────
     "theme.toggleLight": "Mudar para modo claro",
     "theme.toggleDark": "Mudar para modo escuro",
@@ -25608,6 +25663,17 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "node.delete": "\u{1F5D1} Diesen Knoten l\xF6schen",
     "canvas.save": "\u{1F4BE} Speichern",
     "canvas.saving": "Wird gespeichert\u2026",
+    "canvas.editMode": "Bearbeiten",
+    "canvas.analyticsMode": "Analysen",
+    "canvas.analytics.loading": "Analysen werden geladen\u2026",
+    "canvas.analytics.noData": "Keine Sitzungsdaten f\xFCr diesen Zeitraum.",
+    "canvas.analytics.visits": "{{count}} Besuche",
+    "canvas.analytics.dropOff": "{{rate}}% Abbruch",
+    "canvas.analytics.bottleneck": "\u26A0 Engpass",
+    "canvas.analytics.sessions": "Sitzungen",
+    "canvas.analytics.completed": "Abgeschlossen",
+    "canvas.analytics.converted": "Konvertiert",
+    "canvas.analytics.rate": "{{rate}}%",
     // ── Theme ─────────────────────────────────────────────────────────────────
     "theme.toggleLight": "Zum hellen Modus wechseln",
     "theme.toggleDark": "Zum dunklen Modus wechseln",
@@ -26078,6 +26144,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       method: "PUT",
       body: JSON.stringify({ nodes, edges })
     });
+  }
+  function getScenarioAnalytics(id2, period = "7d") {
+    return request(`/api/v1/scenarios/${id2}/analytics?period=${period}`);
   }
   function getAppearance() {
     return request("/api/v1/appearance");
@@ -35150,22 +35219,32 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     action: "\u30A2\u30AF\u30B7\u30E7\u30F3",
     end: "\u7D42\u7AEF"
   };
+  function dropOffColor(rate) {
+    if (rate >= 0.5) return "#ef4444";
+    if (rate >= 0.2) return "#f59e0b";
+    return "#22c55e";
+  }
   function NodeShell({
     type,
     label,
     children: children2,
-    selected: selected2
+    selected: selected2,
+    analytics,
+    isBottleneck
   }) {
     const c = NODE_COLORS[type];
+    const borderColor = isBottleneck ? "#ef4444" : analytics ? dropOffColor(analytics.drop_off_rate) : selected2 ? "#6366f1" : c.border;
+    const boxShadow = isBottleneck ? "0 0 0 3px rgba(239,68,68,.35)" : selected2 ? "0 0 0 3px #c7d2fe" : "0 2px 6px rgba(0,0,0,.10)";
     return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: {
       background: c.bg,
-      border: `2px solid ${selected2 ? "#6366f1" : c.border}`,
+      border: `2px solid ${borderColor}`,
       borderRadius: 10,
       minWidth: 200,
       maxWidth: 240,
-      boxShadow: selected2 ? "0 0 0 3px #c7d2fe" : "0 2px 6px rgba(0,0,0,.10)",
+      boxShadow,
       fontSize: 13,
-      fontFamily: "system-ui, sans-serif"
+      fontFamily: "system-ui, sans-serif",
+      position: "relative"
     }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: {
         background: c.header,
@@ -35179,44 +35258,126 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         gap: 6
       }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { children: NODE_ICONS[type] }),
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }, children: label || NODE_LABELS[type] })
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }, children: label || NODE_LABELS[type] }),
+        isBottleneck && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: {
+          background: "#ef4444",
+          color: "#fff",
+          fontSize: 9,
+          fontWeight: 700,
+          padding: "1px 5px",
+          borderRadius: 99,
+          flexShrink: 0
+        }, children: "\u26A0" })
       ] }),
-      children2 && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { padding: "8px 10px", color: c.text, lineHeight: 1.4 }, children: children2 })
+      children2 && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { padding: "8px 10px", color: c.text, lineHeight: 1.4 }, children: children2 }),
+      analytics && /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: {
+        padding: "5px 10px 6px",
+        borderTop: `1px solid ${c.border}`,
+        display: "flex",
+        gap: 8,
+        alignItems: "center",
+        background: "rgba(0,0,0,.03)",
+        borderRadius: "0 0 8px 8px"
+      }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("span", { style: {
+          display: "flex",
+          alignItems: "center",
+          gap: 3,
+          fontSize: 11,
+          fontWeight: 700,
+          color: "#374151"
+        }, children: [
+          "\u{1F441} ",
+          analytics.visit_count.toLocaleString()
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("span", { style: {
+          fontSize: 11,
+          fontWeight: 700,
+          color: dropOffColor(analytics.drop_off_rate),
+          marginLeft: "auto"
+        }, children: [
+          Math.round(analytics.drop_off_rate * 100),
+          "% \u2193"
+        ] })
+      ] })
     ] });
   }
   function truncate(s, n = 80) {
     return s.length > n ? s.slice(0, n) + "\u2026" : s;
   }
+  function getAnalytics(data2) {
+    return data2["_analytics"];
+  }
+  function getIsBottleneck(data2) {
+    return data2["_isBottleneck"] === true;
+  }
   function MessageNode({ data: data2, selected: selected2 }) {
     const d = data2;
+    const a = getAnalytics(data2);
     return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_jsx_runtime7.Fragment, { children: [
       /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Handle, { type: "target", position: Position.Top }),
-      /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(NodeShell, { type: "message", label: String(data2["label"] ?? ""), selected: selected2, children: [
-        d.text && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("p", { style: { margin: 0, fontSize: 12 }, children: truncate(d.text) }),
-        d.choices && d.choices.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { marginTop: 4, display: "flex", flexWrap: "wrap", gap: 4 }, children: d.choices.map((c, i) => /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: {
-          background: "#dbeafe",
-          color: "#1e40af",
-          borderRadius: 99,
-          padding: "2px 8px",
-          fontSize: 11
-        }, children: c }, i)) }),
-        d.variable_name && /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("p", { style: { margin: "4px 0 0", fontSize: 11, color: "#6b7280" }, children: [
-          "\u2192 ",
-          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("code", { children: d.variable_name })
-        ] })
-      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
+        NodeShell,
+        {
+          type: "message",
+          label: String(data2["label"] ?? ""),
+          selected: selected2,
+          ...a !== void 0 ? { analytics: a } : {},
+          isBottleneck: getIsBottleneck(data2),
+          children: [
+            d.text && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("p", { style: { margin: 0, fontSize: 12 }, children: truncate(d.text) }),
+            d.choices && d.choices.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { marginTop: 4, display: "flex", flexWrap: "wrap", gap: 4 }, children: d.choices.map((c, i) => /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: {
+              background: "#dbeafe",
+              color: "#1e40af",
+              borderRadius: 99,
+              padding: "2px 8px",
+              fontSize: 11
+            }, children: c }, i)) }),
+            d.variable_name && /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("p", { style: { margin: "4px 0 0", fontSize: 11, color: "#6b7280" }, children: [
+              "\u2192 ",
+              /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("code", { children: d.variable_name })
+            ] })
+          ]
+        }
+      ),
       /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Handle, { type: "source", position: Position.Bottom })
     ] });
   }
   function ConditionNode({ data: data2, selected: selected2 }) {
     const d = data2;
+    const a = getAnalytics(data2);
     return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_jsx_runtime7.Fragment, { children: [
       /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Handle, { type: "target", position: Position.Top }),
-      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(NodeShell, { type: "condition", label: String(data2["label"] ?? ""), selected: selected2, children: d.variable && /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("p", { style: { margin: 0, fontSize: 12 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("code", { children: d.variable }),
-        d.operator ? ` ${d.operator}` : "",
-        d.value ? ` "${d.value}"` : ""
-      ] }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
+        NodeShell,
+        {
+          type: "condition",
+          label: String(data2["label"] ?? ""),
+          selected: selected2,
+          ...a !== void 0 ? { analytics: a } : {},
+          isBottleneck: getIsBottleneck(data2),
+          children: [
+            d.variable && /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("p", { style: { margin: 0, fontSize: 12 }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("code", { children: d.variable }),
+              d.operator ? ` ${d.operator}` : "",
+              d.value ? ` "${d.value}"` : ""
+            ] }),
+            a && Object.keys(a.branch_percentages).length > 0 && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { display: "flex", gap: 8, marginTop: 4 }, children: Object.entries(a.branch_percentages).map(([label, pct]) => /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("span", { style: {
+              fontSize: 10,
+              fontWeight: 700,
+              color: label === "true" ? "#16a34a" : "#dc2626",
+              background: label === "true" ? "#dcfce7" : "#fee2e2",
+              borderRadius: 99,
+              padding: "1px 6px"
+            }, children: [
+              label,
+              ": ",
+              Math.round(pct * 100),
+              "%"
+            ] }, label)) })
+          ]
+        }
+      ),
       /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
         Handle,
         {
@@ -35245,21 +35406,43 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   };
   function ActionNode({ data: data2, selected: selected2 }) {
     const d = data2;
+    const a = getAnalytics(data2);
     return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_jsx_runtime7.Fragment, { children: [
       /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Handle, { type: "target", position: Position.Top }),
-      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(NodeShell, { type: "action", label: String(data2["label"] ?? ""), selected: selected2, children: d.action_type && /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("p", { style: { margin: 0, fontSize: 12 }, children: [
-        ACTION_ICONS[d.action_type] ?? "\u{1F527}",
-        " ",
-        d.action_type
-      ] }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+        NodeShell,
+        {
+          type: "action",
+          label: String(data2["label"] ?? ""),
+          selected: selected2,
+          ...a !== void 0 ? { analytics: a } : {},
+          isBottleneck: getIsBottleneck(data2),
+          children: d.action_type && /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("p", { style: { margin: 0, fontSize: 12 }, children: [
+            ACTION_ICONS[d.action_type] ?? "\u{1F527}",
+            " ",
+            d.action_type
+          ] })
+        }
+      ),
       /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Handle, { type: "source", position: Position.Bottom })
     ] });
   }
   function EndNode({ data: data2, selected: selected2 }) {
     const d = data2;
+    const a = getAnalytics(data2);
     return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_jsx_runtime7.Fragment, { children: [
       /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Handle, { type: "target", position: Position.Top }),
-      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(NodeShell, { type: "end", label: String(data2["label"] ?? ""), selected: selected2, children: d.outcome && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("p", { style: { margin: 0, fontSize: 12 }, children: d.outcome }) })
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+        NodeShell,
+        {
+          type: "end",
+          label: String(data2["label"] ?? ""),
+          selected: selected2,
+          ...a !== void 0 ? { analytics: a } : {},
+          isBottleneck: getIsBottleneck(data2),
+          children: d.outcome && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("p", { style: { margin: 0, fontSize: 12 }, children: d.outcome })
+        }
+      )
     ] });
   }
 
@@ -35591,7 +35774,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     };
   }
   function rfNodeToApi(n) {
-    const { label, ...rest } = n.data;
+    const { label, _analytics, _isBottleneck, ...rest } = n.data;
     return {
       node_id: n.id,
       type: n.type,
@@ -35608,16 +35791,159 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       label: typeof e.label === "string" ? e.label : null
     };
   }
-  function ScenarioCanvas({ initialNodes, initialEdges, credentials, saving, onSave }) {
+  var PERIODS = ["1d", "7d", "30d", "90d"];
+  var PERIOD_LABELS = {
+    "1d": "1D",
+    "7d": "7D",
+    "30d": "30D",
+    "90d": "90D"
+  };
+  function AnalyticsSummaryPanel({
+    report,
+    loading,
+    noData
+  }) {
+    const { t } = useTranslation();
+    if (loading) {
+      return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: {
+        width: 220,
+        padding: "20px 16px",
+        background: T.surface,
+        borderLeft: `1px solid ${T.border}`,
+        color: T.textMuted,
+        fontSize: T.fontSm,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center"
+      }, children: t("canvas.analytics.loading") });
+    }
+    if (noData || !report) {
+      return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: {
+        width: 220,
+        padding: "20px 16px",
+        background: T.surface,
+        borderLeft: `1px solid ${T.border}`,
+        color: T.textMuted,
+        fontSize: T.fontSm,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        textAlign: "center",
+        lineHeight: 1.5
+      }, children: t("canvas.analytics.noData") });
+    }
+    const cRate = report.total_sessions > 0 ? Math.round(report.converted_sessions / report.total_sessions * 100) : 0;
+    const dRate = report.total_sessions > 0 ? Math.round(report.completed_sessions / report.total_sessions * 100) : 0;
+    function StatRow({ label, value, sub }) {
+      return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: {
+        display: "flex",
+        alignItems: "baseline",
+        justifyContent: "space-between",
+        padding: "8px 0",
+        borderBottom: `1px solid ${T.border}`
+      }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { fontSize: T.fontSm, color: T.textMuted }, children: label }),
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("span", { style: { fontSize: T.fontMd, fontWeight: 700, color: T.textStrong }, children: [
+          value.toLocaleString(),
+          sub && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { fontSize: T.fontXs, fontWeight: 400, color: T.textMuted, marginLeft: 4 }, children: sub })
+        ] })
+      ] });
+    }
+    return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: {
+      width: 220,
+      background: T.surface,
+      borderLeft: `1px solid ${T.border}`,
+      display: "flex",
+      flexDirection: "column",
+      overflowY: "auto"
+    }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: {
+        padding: "12px 14px 8px",
+        borderBottom: `1px solid ${T.border}`,
+        fontSize: T.fontSm,
+        fontWeight: 700,
+        color: T.textStrong
+      }, children: [
+        "\u{1F4CA} ",
+        t("canvas.analyticsMode")
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { padding: "4px 14px 14px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(StatRow, { label: t("canvas.analytics.sessions"), value: report.total_sessions }),
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(StatRow, { label: t("canvas.analytics.completed"), value: report.completed_sessions, sub: `${dRate}%` }),
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(StatRow, { label: t("canvas.analytics.converted"), value: report.converted_sessions, sub: `${cRate}%` })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { padding: "4px 14px", fontSize: T.fontXs, color: T.textMuted }, children: [
+        report.period_from,
+        " \u2013 ",
+        report.period_to
+      ] })
+    ] });
+  }
+  function ScenarioCanvas({
+    scenarioId,
+    initialNodes,
+    initialEdges,
+    credentials,
+    saving,
+    onSave
+  }) {
     const { t } = useTranslation();
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes.map(apiNodeToRF));
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges.map(apiEdgeToRF));
     const [selectedNodeId, setSelectedNodeId] = (0, import_react9.useState)(null);
     const reactFlowWrapper = (0, import_react9.useRef)(null);
+    const [analyticsMode, setAnalyticsMode] = (0, import_react9.useState)(false);
+    const [period, setPeriod] = (0, import_react9.useState)("7d");
+    const [analyticsReport, setAnalyticsReport] = (0, import_react9.useState)(null);
+    const [analyticsLoading, setAnalyticsLoading] = (0, import_react9.useState)(false);
+    const [analyticsNoData, setAnalyticsNoData] = (0, import_react9.useState)(false);
     (0, import_react9.useEffect)(() => {
       setNodes(initialNodes.map(apiNodeToRF));
       setEdges(initialEdges.map(apiEdgeToRF));
     }, [initialNodes.length, initialEdges.length]);
+    (0, import_react9.useEffect)(() => {
+      if (!analyticsMode) {
+        setNodes((nds) => nds.map((n) => {
+          const { _analytics, _isBottleneck, ...rest } = n.data;
+          return { ...n, data: rest };
+        }));
+        setAnalyticsReport(null);
+        setAnalyticsNoData(false);
+        return;
+      }
+      let cancelled = false;
+      setAnalyticsLoading(true);
+      setAnalyticsNoData(false);
+      void getScenarioAnalytics(scenarioId, period).then((report) => {
+        if (cancelled) return;
+        setAnalyticsReport(report);
+        if (report.total_sessions === 0) {
+          setAnalyticsNoData(true);
+          setAnalyticsLoading(false);
+          return;
+        }
+        const analyticsMap = new Map(
+          report.nodes.map((n) => [n.node_id, n])
+        );
+        const bottleneckSet = new Set(report.bottlenecks);
+        setNodes((nds) => nds.map((n) => ({
+          ...n,
+          data: {
+            ...n.data,
+            _analytics: analyticsMap.get(n.id),
+            _isBottleneck: bottleneckSet.has(n.id)
+          }
+        })));
+        setAnalyticsLoading(false);
+      }).catch(() => {
+        if (cancelled) return;
+        setAnalyticsNoData(true);
+        setAnalyticsLoading(false);
+      });
+      return () => {
+        cancelled = true;
+      };
+    }, [analyticsMode, period, scenarioId]);
     const onConnect = (0, import_react9.useCallback)((connection) => {
       setEdges((eds) => addEdge({ ...connection, id: `e-${v4_default()}` }, eds));
     }, [setEdges]);
@@ -35655,7 +35981,19 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         edges.map(rfEdgeToApi)
       );
     }
-    const selectedNode = nodes.find((n) => n.id === selectedNodeId) ?? null;
+    const selectedNode = !analyticsMode ? nodes.find((n) => n.id === selectedNodeId) ?? null : null;
+    function segBtn(active) {
+      return {
+        padding: "5px 12px",
+        fontSize: T.fontSm,
+        fontWeight: active ? 700 : 400,
+        border: "none",
+        cursor: "pointer",
+        background: active ? T.primary : "transparent",
+        color: active ? "#fff" : T.text,
+        transition: "background 0.1s, color 0.1s"
+      };
+    }
     return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", height: "100%" }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { ref: reactFlowWrapper, style: { flex: 1, position: "relative" }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
         index,
@@ -35666,11 +36004,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           onNodesChange,
           onEdgesChange,
           onConnect,
-          onNodeClick: (_, node) => setSelectedNodeId(node.id),
+          onNodeClick: (_, node) => {
+            if (!analyticsMode) setSelectedNodeId(node.id);
+          },
           onPaneClick: () => setSelectedNodeId(null),
           fitView: true,
           fitViewOptions: { padding: 0.2 },
-          deleteKeyCode: "Delete",
+          deleteKeyCode: analyticsMode ? null : "Delete",
+          nodesDraggable: !analyticsMode,
+          nodesConnectable: !analyticsMode,
+          elementsSelectable: !analyticsMode,
           children: [
             /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Background, { gap: 20, color: T.border }),
             /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Controls, {}),
@@ -35681,45 +36024,105 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 style: { background: T.tableHeader, border: `1px solid ${T.border}` }
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Panel, { position: "top-left", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: {
+            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Panel, { position: "top-left", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: {
               display: "flex",
-              gap: 6,
-              padding: 10,
-              background: T.surface,
-              borderRadius: T.radiusLg,
-              border: `1px solid ${T.border}`,
-              boxShadow: T.shadowCard
-            }, children: ["message", "condition", "action", "end"].map((type) => {
-              const c = NODE_COLORS[type];
-              const label = t(`node.type.${type}`);
-              return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
+              flexDirection: "column",
+              gap: 6
+            }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: {
+                display: "flex",
+                borderRadius: T.radiusMd,
+                border: `1px solid ${T.border}`,
+                overflow: "hidden",
+                background: T.surface,
+                boxShadow: T.shadowCard
+              }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
+                  "button",
+                  {
+                    style: segBtn(!analyticsMode),
+                    onClick: () => setAnalyticsMode(false),
+                    children: [
+                      "\u270F\uFE0F ",
+                      t("canvas.editMode")
+                    ]
+                  }
+                ),
+                /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
+                  "button",
+                  {
+                    style: {
+                      ...segBtn(analyticsMode),
+                      borderLeft: `1px solid ${T.border}`
+                    },
+                    onClick: () => setAnalyticsMode(true),
+                    children: [
+                      "\u{1F4CA} ",
+                      t("canvas.analyticsMode")
+                    ]
+                  }
+                )
+              ] }),
+              !analyticsMode && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: {
+                display: "flex",
+                gap: 6,
+                padding: 10,
+                background: T.surface,
+                borderRadius: T.radiusLg,
+                border: `1px solid ${T.border}`,
+                boxShadow: T.shadowCard
+              }, children: ["message", "condition", "action", "end"].map((type) => {
+                const c = NODE_COLORS[type];
+                const label = t(`node.type.${type}`);
+                return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
+                  "button",
+                  {
+                    onClick: () => addNode(type),
+                    title: t("node.addToCanvas", { type: label }),
+                    style: {
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 5,
+                      padding: "6px 10px",
+                      borderRadius: T.radiusMd,
+                      background: c.bg,
+                      border: `1.5px solid ${c.border}`,
+                      color: c.text,
+                      fontWeight: 600,
+                      fontSize: T.fontSm,
+                      cursor: "pointer"
+                    },
+                    children: [
+                      NODE_ICONS[type],
+                      " ",
+                      label
+                    ]
+                  },
+                  type
+                );
+              }) }),
+              analyticsMode && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: {
+                display: "flex",
+                background: T.surface,
+                border: `1px solid ${T.border}`,
+                borderRadius: T.radiusMd,
+                overflow: "hidden",
+                boxShadow: T.shadowCard
+              }, children: PERIODS.map((p, i) => /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
                 "button",
                 {
-                  onClick: () => addNode(type),
-                  title: t("node.addToCanvas", { type: label }),
+                  onClick: () => setPeriod(p),
                   style: {
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 5,
-                    padding: "6px 10px",
-                    borderRadius: T.radiusMd,
-                    background: c.bg,
-                    border: `1.5px solid ${c.border}`,
-                    color: c.text,
-                    fontWeight: 600,
-                    fontSize: T.fontSm,
-                    cursor: "pointer"
+                    ...segBtn(period === p),
+                    borderLeft: i > 0 ? `1px solid ${T.border}` : "none",
+                    padding: "5px 10px"
                   },
-                  children: [
-                    NODE_ICONS[type],
-                    " ",
-                    label
-                  ]
+                  children: PERIOD_LABELS[p]
                 },
-                type
-              );
-            }) }) }),
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Panel, { position: "top-right", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+                p
+              )) })
+            ] }) }),
+            !analyticsMode && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Panel, { position: "top-right", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
               "button",
               {
                 onClick: handleSave,
@@ -35741,7 +36144,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           ]
         }
       ) }),
-      selectedNode && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+      analyticsMode ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+        AnalyticsSummaryPanel,
+        {
+          report: analyticsReport,
+          loading: analyticsLoading,
+          noData: analyticsNoData
+        }
+      ) : selectedNode && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
         NodeConfigPanel,
         {
           node: selectedNode,
@@ -35947,6 +36357,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       !isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { flex: 1, overflow: "hidden" }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
         ScenarioCanvas,
         {
+          scenarioId: Number(id2),
           initialNodes: nodes,
           initialEdges: edges,
           credentials,

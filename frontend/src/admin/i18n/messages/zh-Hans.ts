@@ -117,6 +117,18 @@ export const zhHans: Partial<MessageCatalog> = {
     'canvas.save':   '💾 保存',
     'canvas.saving': '保存中…',
 
+    'canvas.editMode':      '编辑',
+    'canvas.analyticsMode': '分析',
+
+    'canvas.analytics.loading':    '正在加载分析数据…',
+    'canvas.analytics.noData':     '此期间内无会话数据。',
+    'canvas.analytics.visits':     '{{count}} 次访问',
+    'canvas.analytics.dropOff':    '{{rate}}% 流失',
+    'canvas.analytics.bottleneck': '⚠ 瓶颈',
+    'canvas.analytics.sessions':   '会话',
+    'canvas.analytics.completed':  '已完成',
+    'canvas.analytics.converted':  '已转化',
+    'canvas.analytics.rate':       '{{rate}}%',
 
     // ── Theme ─────────────────────────────────────────────────────────────────
     'theme.toggleLight': '切换到浅色模式',

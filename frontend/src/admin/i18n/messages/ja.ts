@@ -167,6 +167,19 @@ export const ja: Partial<MessageCatalog> = {
     'canvas.save':   '💾 保存',
     'canvas.saving': '保存中…',
 
+    'canvas.editMode':      '編集',
+    'canvas.analyticsMode': 'アナリティクス',
+
+    'canvas.analytics.loading':    'アナリティクスを読み込んでいます…',
+    'canvas.analytics.noData':     'この期間のセッションデータがありません。',
+    'canvas.analytics.visits':     '{{count}} 訪問',
+    'canvas.analytics.dropOff':    '{{rate}}% 離脱',
+    'canvas.analytics.bottleneck': '⚠ ボトルネック',
+    'canvas.analytics.sessions':   'セッション',
+    'canvas.analytics.completed':  '完了',
+    'canvas.analytics.converted':  'コンバージョン',
+    'canvas.analytics.rate':       '{{rate}}%',
+
 
     // ── Theme ─────────────────────────────────────────────────────────────────
     'theme.toggleLight': 'ライトモードに切り替え',
