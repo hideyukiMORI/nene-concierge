@@ -54,13 +54,16 @@ Last updated: 2026-05-27
 
 ---
 
-**Phase 3 — Embed Widget + Action Engine: バックログ 🔲**
+**Phase 3 — Embed Widget + Action Engine: 一部完了 🔶**
 
 | 項目 | 状態 | Issue |
 | --- | --- | --- |
+| Action アダプター（Email / Slack / Chatwork / HTTP） | ✅ | #13 |
+| `action` ノードタイプ（Engine 統合・has_conversion・プレビュースキップ） | ✅ | #13 |
+| ActionCredential CRUD API | ✅ | #13 |
+| アナリティクス API（visit_count / dwell_ms / drop_off_rate / branch_percentages） | ✅ | #13 |
+| PSR-18/17 実装（CurlHttpClient 等） | ✅ | #13 |
 | Embed widget（訪問者向け JS） | 🔲 | TBD |
-| Action アダプター（Email / Slack / Chatwork / HTTP） | 🔲 | TBD |
-| `condition` / `action` ノードタイプ | 🔲 | TBD |
 
 ---
 
