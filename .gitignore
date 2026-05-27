@@ -13,8 +13,15 @@ node_modules/
 frontend/dist/
 
 # Logs and cache
-var/
+/var/
+!var/.gitkeep
 *.log
+
+# PHP tooling cache
+/.phpunit.cache/
+/.phpunit.result.cache
+/.phpstan.cache/
+/.php-cs-fixer.cache
 
 # OS
 .DS_Store
