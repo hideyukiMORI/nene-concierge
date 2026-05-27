@@ -67,11 +67,14 @@ Last updated: 2026-05-27
 
 ---
 
-**Phase 4 — MCP ツール・AI シナリオ生成: バックログ 🔲**
+**Phase 4 — MCP ツール・AI シナリオ生成: 一部完了 🔶**
 
 | 項目 | 状態 | Issue |
 | --- | --- | --- |
-| MCP ツール定義 | 🔲 | TBD |
+| OpenAPI spec 全エンドポイント定義（v0.2.0） | ✅ | #15 |
+| MCP ツールカタログ（docs/mcp/tools.json）18 ツール | ✅ | #15 |
+| mcp-server.sh Docker Compose ラッパー | ✅ | #15 |
+| composer check に MCP 検証 (@mcp) 追加 | ✅ | #15 |
 | AI シナリオ生成エンドポイント | 🔲 | TBD |
 
 ---
