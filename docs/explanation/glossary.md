@@ -84,6 +84,25 @@ Canonical English terms for NeNe Concierge documentation, OpenAPI, code comments
 
 ---
 
+## Analytics and AI optimization
+
+| Canonical term | Definition | Japanese note | Do not use |
+| --- | --- | --- | --- |
+| **session node event** | A single recorded moment when a visitor enters a scenario node. Stores `entered_at`, `exited_at`, and `branch_taken`. Table: `session_node_events`. ADR 0005. | セッションノードイベント | "visit event", "step event" |
+| **dwell time** | The time a visitor spent on a single node (`exited_at − entered_at`). Stored in milliseconds. | 滞在時間 | "view time", "engagement time" |
+| **drop-off** | A node where `exited_at` is `NULL` at session end — the visitor left without advancing. | 離脱 | "bounce" (use only in casual copy) |
+| **drop-off rate** | Proportion of visits to a node that result in a drop-off. Computed from `session_node_events`. | 離脱率 | "bounce rate" (acceptable in casual copy) |
+| **session outcome** | The final result of a session: `active`, `completed`, `dropped`, or `converted`. Column: `sessions.outcome`. | セッション結果 | "session status" (use `outcome` in code and API) |
+| **conversion** | A session in which at least one `action` node fired successfully (email, QR, Slack, etc.). `sessions.has_conversion = true`. | コンバージョン | "success", "goal" (use `conversion` in code) |
+| **conversion rate** | Proportion of sessions where `has_conversion = true`. | コンバージョン率 | "success rate" |
+| **analytics period** | The time window for aggregating analytics data. Values: `1d`, `7d`, `30d`, `90d`, `custom`. ADR 0005. | 計測期間 | "date range" (acceptable in casual copy) |
+| **analytics overlay** | The analytics display mode of the scenario canvas — node cards show metrics; edges are weighted by flow volume. Phase 4. | 分析オーバーレイ | "heatmap mode" (acceptable in casual copy) |
+| **bottleneck** | A node identified by the analytics engine as having a high drop-off rate. Included in the analytics API response. | ボトルネック | "problem node", "weak point" |
+| **analytics report** | The structured JSON payload returned by `GET /api/v1/scenarios/{id}/analytics`. Consumed by both the admin UI and LLM agents via MCP. | アナリティクスレポート | "stats", "report" (use canonical term in code) |
+| **AI optimization workflow** | The loop: LLM reads analytics report → identifies bottlenecks → proposes node edits as a draft scenario version → human reviews → publishes. ADR 0005. | AI 最適化ワークフロー | "auto-improve", "self-optimize" |
+
+---
+
 ## Operator and auth
 
 | Canonical term | Definition | Japanese note | Do not use |
