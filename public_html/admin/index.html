@@ -8,70 +8,71 @@
   <style>
     /* ── NeNe Concierge Admin — Design Tokens ──────────────────────────────
        このブロックを差し替えるだけで全テーマが変わります。
-       変数名は nene-corpus の --nc-* 命名規約に準拠し、管理画面固有は --nca-* です。
+       nene-records default.css の OKLCH カラーシステムに準拠。
+       アクセントカラー: teal  oklch(62% 0.14 192)
     ──────────────────────────────────────────────────────────────────────── */
     :root {
-      /* Primary (ブランドカラー) */
-      --nca-color-primary:        #2563eb;
-      --nca-color-primary-hover:  #1d4ed8;
-      --nca-color-primary-light:  #eff6ff;
-      --nca-color-primary-border: #3b82f6;
-      --nca-color-primary-muted:  #93c5fd;
-      --nca-color-primary-text:   #1e3a8a;
-      --nca-color-primary-bg:     #dbeafe;
+      /* ── Accent / Primary (teal) ──────────────────────────────────────── */
+      --nca-color-primary:        oklch(62% 0.14 192);
+      --nca-color-primary-hover:  oklch(56% 0.14 192);
+      --nca-color-primary-light:  oklch(97% 0.03 192);
+      --nca-color-primary-border: oklch(74% 0.10 192);
+      --nca-color-primary-muted:  oklch(80% 0.08 192);
+      --nca-color-primary-text:   oklch(36% 0.14 192);
+      --nca-color-primary-bg:     oklch(94% 0.05 192);
 
-      /* Danger */
-      --nca-color-danger:         #ef4444;
-      --nca-color-danger-bg:      #fef2f2;
-      --nca-color-danger-border:  #fca5a5;
-      --nca-color-danger-text:    #b91c1c;
+      /* ── Danger ───────────────────────────────────────────────────────── */
+      --nca-color-danger:         oklch(52% 0.20 25);
+      --nca-color-danger-bg:      oklch(97% 0.02 25);
+      --nca-color-danger-border:  oklch(78% 0.09 25);
+      --nca-color-danger-text:    oklch(37% 0.18 25);
 
-      /* Success */
-      --nca-color-success-bg:     #f0fdf4;
-      --nca-color-success-border: #86efac;
-      --nca-color-success-text:   #166534;
+      /* ── Success ──────────────────────────────────────────────────────── */
+      --nca-color-success-bg:     oklch(97% 0.03 145);
+      --nca-color-success-border: oklch(78% 0.10 145);
+      --nca-color-success-text:   oklch(38% 0.15 145);
 
-      /* Surface & Background */
-      --nca-color-bg:             #f9fafb;
-      --nca-color-surface:        #ffffff;
+      /* ── Surface & Background ─────────────────────────────────────────── */
+      --nca-color-bg:             oklch(97% 0.006 75);
+      --nca-color-surface:        oklch(100% 0 0);
 
-      /* Sidebar */
-      --nca-color-sidebar:        #1e293b;
-      --nca-color-sidebar-active: #334155;
-      --nca-color-sidebar-border: #334155;
-      --nca-color-sidebar-text:   #e2e8f0;
-      --nca-color-sidebar-muted:  #94a3b8;
-      --nca-color-sidebar-title:  #f8fafc;
+      /* ── Sidebar (dark — nene-records WordPress style) ────────────────── */
+      --nca-color-sidebar:        oklch(19% 0.015 265);
+      --nca-color-sidebar-hover:  oklch(24% 0.015 265);
+      --nca-color-sidebar-active: oklch(28% 0.020 265);
+      --nca-color-sidebar-border: oklch(27% 0.015 265);
+      --nca-color-sidebar-text:   oklch(80% 0.010 265);
+      --nca-color-sidebar-muted:  oklch(55% 0.010 265);
+      --nca-color-sidebar-title:  oklch(94% 0.005 75);
 
-      /* Text */
-      --nca-color-text:           #111827;
-      --nca-color-text-strong:    #374151;
-      --nca-color-text-muted:     #6b7280;
+      /* ── Text ─────────────────────────────────────────────────────────── */
+      --nca-color-text:           oklch(18% 0.02 75);
+      --nca-color-text-strong:    oklch(24% 0.02 75);
+      --nca-color-text-muted:     oklch(50% 0.02 75);
 
-      /* Border */
-      --nca-color-border:         #e5e7eb;
-      --nca-color-border-input:   #d1d5db;
-      --nca-color-border-light:   #f3f4f6;
+      /* ── Border ───────────────────────────────────────────────────────── */
+      --nca-color-border:         oklch(88% 0.010 75);
+      --nca-color-border-input:   oklch(82% 0.010 75);
+      --nca-color-border-light:   oklch(93% 0.006 75);
 
-      /* Table */
-      --nca-color-table-header:   #f9fafb;
-      --nca-color-table-row-hover:#f8fafc;
+      /* ── Table ────────────────────────────────────────────────────────── */
+      --nca-color-table-header:   oklch(97% 0.006 75);
 
-      /* Badge */
-      --nca-badge-draft-bg:       #f3f4f6;
-      --nca-badge-draft-color:    #374151;
-      --nca-badge-pub-bg:         #dcfce7;
-      --nca-badge-pub-color:      #166534;
-      --nca-badge-arch-bg:        #fee2e2;
-      --nca-badge-arch-color:     #991b1b;
+      /* ── Badge ────────────────────────────────────────────────────────── */
+      --nca-badge-draft-bg:       oklch(93% 0.010 265);
+      --nca-badge-draft-color:    oklch(34% 0.020 265);
+      --nca-badge-pub-bg:         oklch(94% 0.05 145);
+      --nca-badge-pub-color:      oklch(36% 0.15 145);
+      --nca-badge-arch-bg:        oklch(94% 0.04 25);
+      --nca-badge-arch-color:     oklch(36% 0.18 25);
 
-      /* Border radius */
-      --nca-radius-sm:  6px;
-      --nca-radius-md:  7px;
-      --nca-radius-lg:  10px;
-      --nca-radius-xl:  99px;
+      /* ── Border radius ────────────────────────────────────────────────── */
+      --nca-radius-sm:  4px;
+      --nca-radius-md:  6px;
+      --nca-radius-lg:  8px;
+      --nca-radius-xl:  9999px;
 
-      /* Font size */
+      /* ── Font size ────────────────────────────────────────────────────── */
       --nca-font-xs:    11px;
       --nca-font-sm:    12px;
       --nca-font-base:  13px;
@@ -80,11 +81,12 @@
       --nca-font-xl:    18px;
       --nca-font-2xl:   22px;
 
-      /* Sidebar */
-      --nca-sidebar-width: 220px;
+      /* ── Sidebar width ────────────────────────────────────────────────── */
+      --nca-sidebar-width: 240px;
 
-      /* Shadow */
-      --nca-shadow-card: 0 1px 3px rgba(0, 0, 0, .08);
+      /* ── Shadow ───────────────────────────────────────────────────────── */
+      --nca-shadow-card:  0 1px 3px oklch(0% 0 0 / 0.07), 0 1px 2px oklch(0% 0 0 / 0.04);
+      --nca-shadow-focus: 0 0 0 3px oklch(62% 0.14 192 / 0.30);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -96,6 +98,9 @@
       background: var(--nca-color-bg);
     }
     #root { min-height: 100vh; }
+
+    /* ── Focus ring (アクセシビリティ) ──────────────────────────────────── */
+    :focus-visible { outline: none; box-shadow: var(--nca-shadow-focus); }
   </style>
 </head>
 <body>

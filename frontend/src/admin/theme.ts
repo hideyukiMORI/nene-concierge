@@ -34,6 +34,7 @@ export const T = {
 
     // ── Sidebar ──────────────────────────────────────────────────────────────
     sidebar:        'var(--nca-color-sidebar)',
+    sidebarHover:   'var(--nca-color-sidebar-hover)',
     sidebarActive:  'var(--nca-color-sidebar-active)',
     sidebarBorder:  'var(--nca-color-sidebar-border)',
     sidebarText:    'var(--nca-color-sidebar-text)',
@@ -80,7 +81,8 @@ export const T = {
     sidebarWidth: 'var(--nca-sidebar-width)',
 
     // ── Shadow ───────────────────────────────────────────────────────────────
-    shadowCard: 'var(--nca-shadow-card)',
+    shadowCard:  'var(--nca-shadow-card)',
+    shadowFocus: 'var(--nca-shadow-focus)',
 } as const;
 
 export type ThemeKey = keyof typeof T;
