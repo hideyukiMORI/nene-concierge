@@ -11,7 +11,7 @@ $database = (new ConfigLoader(__DIR__))->load()->database;
 return [
     'paths' => [
         'migrations' => 'database/migrations',
-        'seeds' => 'database/seeds',
+        'seeds'      => 'database/seeds',
     ],
     'environments' => [
         'default_environment' => $database->environment,
@@ -19,11 +19,11 @@ return [
             ? ['url' => $database->url]
             : [
                 'adapter' => $database->adapter,
-                'host' => $database->host,
-                'name' => $database->name,
-                'user' => $database->user,
-                'pass' => $database->password,
-                'port' => $database->port,
+                'host'    => $database->host,
+                'name'    => $database->name,
+                'user'    => $database->user,
+                'pass'    => $database->password,
+                'port'    => $database->port,
                 'charset' => $database->charset,
             ],
     ],

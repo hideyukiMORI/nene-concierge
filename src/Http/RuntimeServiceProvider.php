@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace NeNeConcierge\Http;
 
 use LogicException;
+use Nene2\Auth\LocalBearerTokenVerifier;
+use Nene2\Auth\TokenIssuerInterface;
+use Nene2\Auth\TokenVerifierInterface;
 use Nene2\Config\AppConfig;
 use Nene2\Config\ConfigLoader;
 use Nene2\Database\DatabaseConnectionFactoryInterface;
@@ -15,13 +18,22 @@ use Nene2\Database\PdoDatabaseQueryExecutor;
 use Nene2\Database\PdoDatabaseTransactionManager;
 use Nene2\DependencyInjection\ContainerBuilder;
 use Nene2\DependencyInjection\ServiceProviderInterface;
+use Nene2\Error\DomainExceptionHandlerInterface;
 use Nene2\Error\ProblemDetailsResponseFactory;
 use Nene2\Http\JsonResponseFactory;
+use Nene2\Http\RequestScopedHolder;
 use Nene2\Http\ResponseEmitter;
 use Nene2\Http\RuntimeApplicationFactory;
 use Nene2\Log\MonologLoggerFactory;
 use Nene2\Log\RequestIdHolder;
 use NeNeConcierge\ApplicationServiceProvider;
+use NeNeConcierge\Auth\AdminApiAuthMiddleware;
+use NeNeConcierge\Auth\CapabilityMiddleware;
+use NeNeConcierge\Organization\OrganizationRepositoryInterface;
+use NeNeConcierge\Organization\Resolution\EnvResolutionStrategy;
+use NeNeConcierge\Organization\Resolution\OrgResolverMiddleware;
+use NeNeConcierge\Organization\Resolution\PathPrefixResolutionStrategy;
+use NeNeConcierge\Organization\Resolution\SubdomainResolutionStrategy;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -127,7 +139,7 @@ final readonly class RuntimeServiceProvider implements ServiceProviderInterface
                 JsonResponseFactory::class,
                 static function (ContainerInterface $container): JsonResponseFactory {
                     $responseFactory = $container->get(ResponseFactoryInterface::class);
-                    $streamFactory = $container->get(StreamFactoryInterface::class);
+                    $streamFactory   = $container->get(StreamFactoryInterface::class);
 
                     if (!$responseFactory instanceof ResponseFactoryInterface) {
                         throw new LogicException('Response factory service is invalid.');
@@ -144,8 +156,8 @@ final readonly class RuntimeServiceProvider implements ServiceProviderInterface
                 ProblemDetailsResponseFactory::class,
                 static function (ContainerInterface $container): ProblemDetailsResponseFactory {
                     $responseFactory = $container->get(ResponseFactoryInterface::class);
-                    $streamFactory = $container->get(StreamFactoryInterface::class);
-                    $config = $container->get(AppConfig::class);
+                    $streamFactory   = $container->get(StreamFactoryInterface::class);
+                    $config          = $container->get(AppConfig::class);
 
                     if (!$responseFactory instanceof ResponseFactoryInterface) {
                         throw new LogicException('Response factory service is invalid.');
@@ -168,10 +180,52 @@ final readonly class RuntimeServiceProvider implements ServiceProviderInterface
             )
             ->set(RequestIdHolder::class, static fn (ContainerInterface $container): RequestIdHolder => new RequestIdHolder())
             ->set(
+                LocalBearerTokenVerifier::class,
+                static function (ContainerInterface $container): LocalBearerTokenVerifier {
+                    $config = $container->get(AppConfig::class);
+
+                    if (!$config instanceof AppConfig) {
+                        throw new LogicException('Application config service is invalid.');
+                    }
+
+                    return new LocalBearerTokenVerifier($config->localJwtSecret ?? 'nene-concierge-dev-secret');
+                },
+            )
+            ->set(
+                TokenVerifierInterface::class,
+                static function (ContainerInterface $container): TokenVerifierInterface {
+                    $verifier = $container->get(LocalBearerTokenVerifier::class);
+
+                    if (!$verifier instanceof TokenVerifierInterface) {
+                        throw new LogicException('LocalBearerTokenVerifier service is invalid.');
+                    }
+
+                    return $verifier;
+                },
+            )
+            ->set(
+                TokenIssuerInterface::class,
+                static function (ContainerInterface $container): TokenIssuerInterface {
+                    $issuer = $container->get(LocalBearerTokenVerifier::class);
+
+                    if (!$issuer instanceof TokenIssuerInterface) {
+                        throw new LogicException('LocalBearerTokenVerifier service is invalid.');
+                    }
+
+                    return $issuer;
+                },
+            )
+            ->set(
+                'nene-concierge.token_issuer',
+                static function (ContainerInterface $container): TokenIssuerInterface {
+                    return $container->get(TokenIssuerInterface::class);
+                },
+            )
+            ->set(
                 LoggerInterface::class,
                 static function (ContainerInterface $container): LoggerInterface {
                     $config = $container->get(AppConfig::class);
-                    $debug = $config instanceof AppConfig && $config->debug;
+                    $debug  = $config instanceof AppConfig && $config->debug;
                     $holder = $container->get(RequestIdHolder::class);
 
                     return (new MonologLoggerFactory())->create(
@@ -184,13 +238,13 @@ final readonly class RuntimeServiceProvider implements ServiceProviderInterface
             ->set(
                 RuntimeApplicationFactory::class,
                 static function (ContainerInterface $container): RuntimeApplicationFactory {
-                    $responseFactory = $container->get(ResponseFactoryInterface::class);
-                    $streamFactory = $container->get(StreamFactoryInterface::class);
-                    $logger = $container->get(LoggerInterface::class);
-                    $config = $container->get(AppConfig::class);
+                    $responseFactory   = $container->get(ResponseFactoryInterface::class);
+                    $streamFactory     = $container->get(StreamFactoryInterface::class);
+                    $logger            = $container->get(LoggerInterface::class);
+                    $config            = $container->get(AppConfig::class);
                     $exceptionHandlers = $container->get(ApplicationServiceProvider::EXCEPTION_HANDLERS);
-                    $routeRegistrars = $container->get(ApplicationServiceProvider::ROUTE_REGISTRARS);
-                    $requestIdHolder = $container->get(RequestIdHolder::class);
+                    $routeRegistrars   = $container->get(ApplicationServiceProvider::ROUTE_REGISTRARS);
+                    $requestIdHolder   = $container->get(RequestIdHolder::class);
 
                     if (!$responseFactory instanceof ResponseFactoryInterface) {
                         throw new LogicException('Response factory service is invalid.');
@@ -216,12 +270,51 @@ final readonly class RuntimeServiceProvider implements ServiceProviderInterface
                         throw new LogicException('Route registrars service is invalid.');
                     }
 
-                    /** @var list<\Nene2\Error\DomainExceptionHandlerInterface> $exceptionHandlers */
+                    /** @var list<DomainExceptionHandlerInterface> $exceptionHandlers */
                     /** @var list<callable(\Nene2\Routing\Router): void> $routeRegistrars */
 
                     if (!$requestIdHolder instanceof RequestIdHolder) {
                         throw new LogicException('RequestIdHolder service is invalid.');
                     }
+
+                    // Resolve tenant resolution mode from env
+                    $resolvedMode   = (string) (getenv('TENANT_RESOLUTION') ?: 'single');
+                    $resolvedSlug   = (string) (getenv('ORG_SLUG') ?: '');
+                    $resolvedDomain = (string) (getenv('BASE_DOMAIN') ?: 'localhost');
+
+                    $orgRepo = $container->get(OrganizationRepositoryInterface::class);
+                    if (!$orgRepo instanceof OrganizationRepositoryInterface) {
+                        throw new LogicException('OrganizationRepositoryInterface service is invalid.');
+                    }
+
+                    $orgIdHolder = $container->get(ApplicationServiceProvider::ORG_ID_HOLDER);
+                    if (!$orgIdHolder instanceof RequestScopedHolder) {
+                        throw new LogicException('Org ID holder service is invalid.');
+                    }
+                    /** @var RequestScopedHolder<int> $orgIdHolder */
+
+                    $problemDetails = $container->get(ProblemDetailsResponseFactory::class);
+                    $tokenVerifier  = $container->get(TokenVerifierInterface::class);
+
+                    if (!$problemDetails instanceof ProblemDetailsResponseFactory) {
+                        throw new LogicException('ProblemDetailsResponseFactory service is invalid.');
+                    }
+
+                    if (!$tokenVerifier instanceof TokenVerifierInterface) {
+                        throw new LogicException('TokenVerifierInterface service is invalid.');
+                    }
+
+                    $strategy = match ($resolvedMode) {
+                        'subdomain' => new SubdomainResolutionStrategy($resolvedDomain),
+                        'path'      => new PathPrefixResolutionStrategy(),
+                        default     => new EnvResolutionStrategy($resolvedSlug),
+                    };
+
+                    $authMiddleware = [
+                        new OrgResolverMiddleware($orgIdHolder, $orgRepo, $problemDetails, $strategy),
+                        new AdminApiAuthMiddleware($problemDetails, $tokenVerifier),
+                        new CapabilityMiddleware($problemDetails),
+                    ];
 
                     return new RuntimeApplicationFactory(
                         responseFactory: $responseFactory,
@@ -231,6 +324,7 @@ final readonly class RuntimeServiceProvider implements ServiceProviderInterface
                         domainExceptionHandlers: $exceptionHandlers,
                         requestIdHolder: $requestIdHolder,
                         routeRegistrars: $routeRegistrars,
+                        authMiddleware: $authMiddleware,
                         debug: $config->debug,
                     );
                 },
