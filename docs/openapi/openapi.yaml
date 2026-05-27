@@ -20,7 +20,7 @@ info:
     - `POST /api/v1/auth/login`
     - `POST /api/v1/public/sessions`
     - `POST /api/v1/public/sessions/{session_id}/step`
-  version: 0.2.0
+  version: 0.3.0
   contact:
     name: NeNe Concierge
     url: https://github.com/hideyukiMORI/nene-concierge
@@ -577,6 +577,72 @@ paths:
                 $ref: "#/components/schemas/ProblemDetails"
         "422":
           $ref: "#/components/responses/ValidationError"
+
+  /api/v1/appearance:
+    get:
+      operationId: getAppearance
+      summary: Get widget appearance
+      description: |
+        Returns the organization's widget appearance settings.
+        If no settings have been saved yet, the default values are returned.
+        Defaults: color_primary=#2563eb, color_secondary=#ffffff, position=bottom-right, trigger_type=page_load.
+      tags:
+        - Appearance
+      responses:
+        "200":
+          description: Appearance settings.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppearanceResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+    put:
+      operationId: upsertAppearance
+      summary: Update widget appearance
+      description: |
+        Creates or fully replaces the widget appearance settings for the organization.
+        Any field omitted from the request body retains its current stored value
+        (or the default value when no settings have been saved yet).
+      tags:
+        - Appearance
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpsertAppearanceRequest"
+      responses:
+        "200":
+          description: Updated appearance settings.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppearanceResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+  /api/v1/public/appearance:
+    get:
+      operationId: getPublicAppearance
+      summary: Get widget appearance (public)
+      description: |
+        Returns the widget appearance settings for the resolved organization.
+        No authentication required — intended for use by the embed widget (widget.js)
+        to load styling and behaviour configuration on page load.
+        Organization is resolved from request context (subdomain, custom domain, or X-Org-Slug header).
+      security: []
+      tags:
+        - Appearance
+      responses:
+        "200":
+          description: Appearance settings.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppearanceResponse"
 
   /api/v1/action-credentials:
     get:
@@ -1303,6 +1369,67 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/ScenarioExportEdgeEntry"
+
+    AppearanceResponse:
+      type: object
+      required:
+        - color_primary
+        - color_secondary
+        - position
+        - trigger_type
+      properties:
+        color_primary:
+          type: string
+          pattern: "^#[0-9a-fA-F]{6}$"
+          description: "Primary widget colour (hex, e.g. #2563eb)."
+          example: "#2563eb"
+        color_secondary:
+          type: string
+          pattern: "^#[0-9a-fA-F]{6}$"
+          description: "Secondary widget colour (hex, e.g. #ffffff)."
+          example: "#ffffff"
+        position:
+          type: string
+          enum: [bottom-right, bottom-left, top-right, top-left]
+          description: Screen position of the widget launcher button.
+        trigger_type:
+          type: string
+          enum: [page_load, scroll, exit_intent, manual]
+          description: When the widget should open automatically.
+        icon_url:
+          type: string
+          nullable: true
+          description: URL of the widget launcher icon. Null uses the default icon.
+        welcome_text:
+          type: string
+          nullable: true
+          description: Text shown in the launcher tooltip or pre-chat bubble.
+
+    UpsertAppearanceRequest:
+      type: object
+      properties:
+        color_primary:
+          type: string
+          pattern: "^#[0-9a-fA-F]{6}$"
+          description: "Primary widget colour (hex)."
+        color_secondary:
+          type: string
+          pattern: "^#[0-9a-fA-F]{6}$"
+          description: "Secondary widget colour (hex)."
+        position:
+          type: string
+          enum: [bottom-right, bottom-left, top-right, top-left]
+        trigger_type:
+          type: string
+          enum: [page_load, scroll, exit_intent, manual]
+        icon_url:
+          type: string
+          nullable: true
+          description: URL of the widget launcher icon, or null to clear.
+        welcome_text:
+          type: string
+          nullable: true
+          description: Pre-chat bubble text, or null to clear.
 
     ScenarioExportDocument:
       type: object

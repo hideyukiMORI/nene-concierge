@@ -11,6 +11,8 @@ use Nene2\Http\RequestScopedHolder;
 use NeNeConcierge\Action\ActionCredentialNotFoundExceptionHandler;
 use NeNeConcierge\Action\ActionRouteRegistrar;
 use NeNeConcierge\Action\ActionServiceProvider;
+use NeNeConcierge\Appearance\AppearanceRouteRegistrar;
+use NeNeConcierge\Appearance\AppearanceServiceProvider;
 use NeNeConcierge\Auth\AuthRouteRegistrar;
 use NeNeConcierge\Auth\AuthServiceProvider;
 use NeNeConcierge\Auth\InvalidCredentialsExceptionHandler;
@@ -40,6 +42,7 @@ final readonly class ApplicationServiceProvider implements ServiceProviderInterf
     public function register(ContainerBuilder $builder): void
     {
         $builder->addProvider(new ActionServiceProvider());
+        $builder->addProvider(new AppearanceServiceProvider());
         $builder->addProvider(new AuthServiceProvider());
         $builder->addProvider(new EngineServiceProvider());
         $builder->addProvider(new OrganizationServiceProvider());
@@ -97,14 +100,19 @@ final readonly class ApplicationServiceProvider implements ServiceProviderInterf
             ->set(
                 self::ROUTE_REGISTRARS,
                 static function (ContainerInterface $c): array {
-                    $action   = $c->get(ActionRouteRegistrar::class);
-                    $auth     = $c->get('nene-concierge.route_registrar.auth');
-                    $engine   = $c->get(EngineRouteRegistrar::class);
-                    $org      = $c->get(OrganizationRouteRegistrar::class);
-                    $scenario = $c->get(ScenarioRouteRegistrar::class);
+                    $action     = $c->get(ActionRouteRegistrar::class);
+                    $appearance = $c->get(AppearanceRouteRegistrar::class);
+                    $auth       = $c->get('nene-concierge.route_registrar.auth');
+                    $engine     = $c->get(EngineRouteRegistrar::class);
+                    $org        = $c->get(OrganizationRouteRegistrar::class);
+                    $scenario   = $c->get(ScenarioRouteRegistrar::class);
 
                     if (!$action instanceof ActionRouteRegistrar) {
                         throw new LogicException('ActionRouteRegistrar service is invalid.');
+                    }
+
+                    if (!$appearance instanceof AppearanceRouteRegistrar) {
+                        throw new LogicException('AppearanceRouteRegistrar service is invalid.');
                     }
 
                     if (!$auth instanceof AuthRouteRegistrar) {
@@ -123,7 +131,7 @@ final readonly class ApplicationServiceProvider implements ServiceProviderInterf
                         throw new LogicException('ScenarioRouteRegistrar service is invalid.');
                     }
 
-                    return [$action, $auth, $engine, $org, $scenario];
+                    return [$action, $appearance, $auth, $engine, $org, $scenario];
                 },
             );
     }
