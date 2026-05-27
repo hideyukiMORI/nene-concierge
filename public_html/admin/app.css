@@ -559,4 +559,112 @@ svg.react-flow__connectionline {
 .react-flow__edge-text {
   fill: var(--xy-edge-label-color, var(--xy-edge-label-color-default));
 }
-/*# sourceMappingURL=app.css.map */
+
+/* node_modules/@fontsource/inter/latin-400.css */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("/admin/assets/inter-latin-400-normal-55WT6UWF.woff2") format("woff2"), url("/admin/assets/inter-latin-400-normal-FR5HOXA4.woff") format("woff");
+}
+
+/* node_modules/@fontsource/inter/latin-500.css */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url("/admin/assets/inter-latin-500-normal-W62DVTXI.woff2") format("woff2"), url("/admin/assets/inter-latin-500-normal-ZNGIZ2YB.woff") format("woff");
+}
+
+/* node_modules/@fontsource/inter/latin-600.css */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url("/admin/assets/inter-latin-600-normal-R6Y2SZCR.woff2") format("woff2"), url("/admin/assets/inter-latin-600-normal-ZYHV6QZT.woff") format("woff");
+}
+
+/* node_modules/@fontsource/inter/latin-ext-400.css */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("/admin/assets/inter-latin-ext-400-normal-GKRFIQRI.woff2") format("woff2"), url("/admin/assets/inter-latin-ext-400-normal-J3OKVTXA.woff") format("woff");
+}
+
+/* node_modules/@fontsource/inter/latin-ext-500.css */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url("/admin/assets/inter-latin-ext-500-normal-3G2JDXWM.woff2") format("woff2"), url("/admin/assets/inter-latin-ext-500-normal-UGNIJJWL.woff") format("woff");
+}
+
+/* node_modules/@fontsource/inter/latin-ext-600.css */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url("/admin/assets/inter-latin-ext-600-normal-HCYHLWH6.woff2") format("woff2"), url("/admin/assets/inter-latin-ext-600-normal-JH5KI6RD.woff") format("woff");
+}
+
+/* node_modules/@fontsource/noto-sans-jp/japanese-400.css */
+@font-face {
+  font-family: "Noto Sans JP";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("/admin/assets/noto-sans-jp-japanese-400-normal-XXYCTPU7.woff2") format("woff2"), url("/admin/assets/noto-sans-jp-japanese-400-normal-3KLZIVYQ.woff") format("woff");
+}
+
+/* node_modules/@fontsource/noto-sans-jp/japanese-500.css */
+@font-face {
+  font-family: "Noto Sans JP";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url("/admin/assets/noto-sans-jp-japanese-500-normal-F737Y34T.woff2") format("woff2"), url("/admin/assets/noto-sans-jp-japanese-500-normal-5GGRIRMS.woff") format("woff");
+}
+
+/* node_modules/@fontsource/noto-sans-jp/japanese-600.css */
+@font-face {
+  font-family: "Noto Sans JP";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url("/admin/assets/noto-sans-jp-japanese-600-normal-VO2MJWYM.woff2") format("woff2"), url("/admin/assets/noto-sans-jp-japanese-600-normal-ZUAXNSLG.woff") format("woff");
+}
+
+/* node_modules/@fontsource/noto-sans-sc/chinese-simplified-400.css */
+@font-face {
+  font-family: "Noto Sans SC";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("/admin/assets/noto-sans-sc-chinese-simplified-400-normal-4JKGPSA3.woff2") format("woff2"), url("/admin/assets/noto-sans-sc-chinese-simplified-400-normal-FXKMQURL.woff") format("woff");
+}
+
+/* node_modules/@fontsource/noto-sans-sc/chinese-simplified-500.css */
+@font-face {
+  font-family: "Noto Sans SC";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url("/admin/assets/noto-sans-sc-chinese-simplified-500-normal-2NKTW33X.woff2") format("woff2"), url("/admin/assets/noto-sans-sc-chinese-simplified-500-normal-64M2N6HM.woff") format("woff");
+}
+
+/* node_modules/@fontsource/noto-sans-sc/chinese-simplified-600.css */
+@font-face {
+  font-family: "Noto Sans SC";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url("/admin/assets/noto-sans-sc-chinese-simplified-600-normal-6I6AQXEB.woff2") format("woff2"), url("/admin/assets/noto-sans-sc-chinese-simplified-600-normal-YKGE24GT.woff") format("woff");
+}
+/*# sourceMappingURL=/admin/app.css.map */

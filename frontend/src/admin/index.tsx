@@ -1,10 +1,12 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.js';
-import { I18nProvider, resolveLocale } from './i18n/index.js';
+import { I18nProvider, applyLocaleFontFamily, resolveLocale } from './i18n/index.js';
+import './fonts.js';
 
 // FOUC 防止: React レンダリング前にロケール検出してフォントを即適用する。
 // (I18nProvider 内でも同じ処理をするが、こちらが先に動く)
+// nene-records main.tsx と同パターン。
 const storedLocale = (() => {
     try {
         return localStorage.getItem('nca-locale') ?? navigator.language;
@@ -12,7 +14,9 @@ const storedLocale = (() => {
         return navigator.language;
     }
 })();
-document.documentElement.lang = resolveLocale(storedLocale);
+const initialLocale = resolveLocale(storedLocale);
+document.documentElement.lang = initialLocale;
+applyLocaleFontFamily(initialLocale);
 
 const container = document.getElementById('root');
 if (!container) throw new Error('Root element #root not found');

@@ -5,10 +5,10 @@ import { dirname, resolve } from 'path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const isProd = process.env.NODE_ENV === 'production';
-const common = {
+
+const baseConfig = {
     bundle:    true,
     format:    /** @type {'iife'} */ ('iife'),
-    target:    ['es2020', 'chrome90', 'firefox90', 'safari14'],
     minify:    isProd,
     sourcemap: !isProd,
     logLevel:  /** @type {'info'} */ ('info'),
@@ -16,18 +16,28 @@ const common = {
 
 // ── embed widget ──────────────────────────────────────────────────────────────
 await build({
-    ...common,
+    ...baseConfig,
+    target:      ['es2020', 'chrome90', 'firefox90', 'safari14'],
     entryPoints: [resolve(__dirname, 'src/widget/index.ts')],
     outfile:     resolve(__dirname, '../public_html/widget.js'),
     globalName:  'NeNeWidget',
 });
 
-// ── admin SPA (modern browsers only — CSS bundled separately) ─────────────────
+// ── admin SPA (modern browsers only) ─────────────────────────────────────────
+// outdir 方式で @fontsource フォントファイル (woff2/woff) を assets/ に出力する。
 await build({
-    ...common,
-    target:      ['esnext'],   // admin served from own server, always modern browser
+    ...baseConfig,
+    target:      ['esnext'],   // admin は常にモダンブラウザ
     entryPoints: [resolve(__dirname, 'src/admin/index.tsx')],
-    outfile:     resolve(__dirname, '../public_html/admin/app.js'),
+    outdir:      resolve(__dirname, '../public_html/admin/'),
+    entryNames:  'app',        // → app.js / app.css (従来と同じ出力ファイル名)
     globalName:  'NeNeAdmin',
-    external:    [],  // bundle everything including React
+    external:    [],           // bundle everything including React
+    // @fontsource woff2/woff ファイルをコピーし CSS の url() を /admin/assets/... に書き換える
+    loader: /** @type {Record<string, import('esbuild').Loader>} */ ({
+        '.woff':  'file',
+        '.woff2': 'file',
+    }),
+    assetNames:  'assets/[name]-[hash]',
+    publicPath:  '/admin/',
 });
