@@ -302,6 +302,49 @@
       "responseSchemaRef": "#/components/schemas/SessionStepResponse"
     },
     {
+      "name": "getAppearance",
+      "title": "Get Widget Appearance",
+      "description": "Returns the organization's widget appearance settings (colors, position, trigger type, icon, welcome text). If no settings have been saved, the defaults are returned: color_primary=#2563eb, color_secondary=#ffffff, position=bottom-right, trigger_type=page_load.",
+      "safety": "read",
+      "source": {
+        "type": "openapi",
+        "operationId": "getAppearance",
+        "method": "GET",
+        "path": "/api/v1/appearance"
+      },
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "responseSchemaRef": "#/components/schemas/AppearanceResponse"
+    },
+    {
+      "name": "upsertAppearance",
+      "title": "Update Widget Appearance",
+      "description": "Creates or fully replaces the widget appearance settings. Any field omitted retains its current value. Use this to customize the chat widget's color scheme, screen position, open trigger, icon, and welcome text.",
+      "safety": "write",
+      "source": {
+        "type": "openapi",
+        "operationId": "upsertAppearance",
+        "method": "PUT",
+        "path": "/api/v1/appearance"
+      },
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "color_primary":   { "type": "string", "description": "Primary widget colour (6-digit hex, e.g. #2563eb)." },
+          "color_secondary": { "type": "string", "description": "Secondary widget colour (6-digit hex, e.g. #ffffff)." },
+          "position":        { "type": "string", "description": "Widget position: bottom-right, bottom-left, top-right, top-left." },
+          "trigger_type":    { "type": "string", "description": "Auto-open trigger: page_load, scroll, exit_intent, manual." },
+          "icon_url":        { "type": "string", "description": "URL of the widget launcher icon, or null to clear." },
+          "welcome_text":    { "type": "string", "description": "Pre-chat bubble text, or null to clear." }
+        }
+      },
+      "responseSchemaRef": "#/components/schemas/AppearanceResponse"
+    },
+    {
       "name": "exportScenario",
       "title": "Export Scenario",
       "description": "Returns a portable JSON export document of a scenario. The document includes all nodes and edges with their positions, types, labels, and data, but strips internal IDs (organization_id, scenario_id). Use the returned document with importScenario to reproduce the scenario in any organization.",
