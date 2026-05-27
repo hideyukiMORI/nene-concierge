@@ -12,7 +12,7 @@ Make contribution, AI operation, and NENE2 inheritance unambiguous before writin
 - [ ] README describes the product clearly
 - [ ] Product vision is documented (`docs/explanation/product-vision.md`)
 - [ ] Glossary covers core domain terms (`docs/explanation/glossary.md`)
-- [ ] ADR 0001 (governance), ADR 0002 (separation), ADR 0003 (deployment) are accepted
+- [ ] ADR 0001 (governance), ADR 0002 (separation), ADR 0003 (deployment), ADR 0004 (multi-tenancy) are accepted
 - [ ] `AGENTS.md` and `CLAUDE.md` enable AI agents to start work without context loss
 - [ ] `docs/workflow.md` and `docs/CONTRIBUTING.md` define the contribution process
 - [ ] `docs/inheritance-from-nene2.md` maps NENE2 governance inheritance
