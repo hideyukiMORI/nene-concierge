@@ -57,3 +57,19 @@ docs(adr): ADR 0003 デュアルデプロイポリシーを追加する (#2)
 refactor(session): セッションステートを readonly DTO に変更する (#44)
 test(engine): シナリオ実行エンジンのユニットテストを追加する (#50)
 ```
+
+## AI Agent Commits (Co-Authored-By)
+
+AI agents (Claude Code, etc.) must append a `Co-Authored-By` trailer. Use two `-m` flags — a single `-m` with `\n` does not produce a proper git trailer:
+
+```bash
+# ✅ Correct: two -m flags
+git commit \
+  -m "feat(editor): ノードパレットを右寄せに変更する (#55)" \
+  -m "Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>"
+
+# ❌ Wrong: \n in a single -m does not create a trailer
+git commit -m "feat(editor): ... (#55)\nCo-Authored-By: ..."
+```
+
+The model name in the trailer should match the model actually used (e.g., `claude-haiku-4-5-20251001` for Haiku, `claude-opus-4-7` for Opus).

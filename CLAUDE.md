@@ -21,15 +21,21 @@ Embed widget             ─┘                    │
 
 ## 現在の開発状況
 
-> **最終更新: 2026-05-27**（`docs/todo/current.md` が正本）
+> **最終更新: 2026-05-28**（`docs/todo/current.md` が正本）
 
-| フェーズ | 状態 |
+| フェーズ / 領域 | 状態 |
 | --- | --- |
-| Phase 0 ガバナンス・基盤 | 🔲 進行中 |
-| Phase 1 シナリオエンジン MVP | 🔲 バックログ |
-| Phase 2 シナリオエディタ UI | 🔲 バックログ |
-| Phase 3 Embed Widget + アクションエンジン | 🔲 バックログ |
-| Phase 4 MCP ツール・AI シナリオ生成 | 🔲 バックログ |
+| Phase 0 ガバナンス・基盤 | ✅ 完了 |
+| Phase 1 シナリオエンジン MVP | ✅ 完了 |
+| Phase 2 条件ノード・変数・プレビュー | ✅ 完了 |
+| Phase 3 Embed Widget + アクションエンジン | 🔶 一部完了（widget JS のみ残） |
+| Phase 4 MCP ツール・AI シナリオ生成 | 🔶 一部完了（AI 生成 EP のみ残） |
+| 管理画面 SPA（React + React Router） | ✅ 完了 |
+| ビジュアルシナリオエディタ（React Flow） | ✅ 完了 |
+| アナリティクスオーバーレイ | ✅ 完了 |
+| セッションログ管理 | ✅ 完了 |
+| 6 言語ローカライズ | ✅ 完了 |
+| フロントエンド CI + React テスト | 🔲 バックログ（#57 #58） |
 
 ---
 
@@ -50,10 +56,30 @@ Embed widget             ─┘                    │
 - `type`/`scope` は英語。`description`/`body` は日本語可。
 - 例: `feat(scenario): シナリオ CRUD API を追加する (#5)`
 
+**AI エージェントは必ず Co-Authored-By を付ける（`-m` 二段階で書く）:**
+```bash
+git commit \
+  -m "feat(editor): ノードパレットを右寄せに変更する (#55)" \
+  -m "Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>"
+```
+
 **絶対禁止:**
-- `main` への直接 commit/push
-- Issue なしのコード・ドキュメント変更
+- `main` への直接 commit/push（例外: `docs/todo/current.md` の状態更新のみ）
+- Issue なしのコード・ドキュメント変更（例外: 複数の UI 微調整は 1 Issue にまとめてよい）
 - `.env` / トークン / パスワードのコミット
+
+**GitHub ラベル（`gh issue create --label` で使用可能なもの）:**
+
+| ラベル | 用途 |
+| --- | --- |
+| `feat` | 新機能 |
+| `fix` | バグ修正 |
+| `docs` | ドキュメントのみ |
+| `build` | ビルド・CI・依存関係 |
+| `bug` | 不具合 |
+| `enhancement` | 改善・拡張 |
+| `phase-0` 〜 `phase-3` | フェーズ紐づけ |
+| `good first issue` / `help wanted` | コントリビューター向け |
 
 ---
 

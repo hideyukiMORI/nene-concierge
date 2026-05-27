@@ -20,6 +20,12 @@ See also: `docs/inheritance-from-nene2.md`.
 
 **Do not commit directly to `main`.** Every merge to `main` goes through a PR tied to an Issue.
 
+**Exceptions (direct `main` commit is allowed):**
+- `docs/todo/current.md` status-only updates (task state changes, no new decisions)
+- Typo fixes in documentation with zero behavior change
+
+**Issue granularity:** Multiple related UI micro-adjustments (spacing, color, radius tweaks) may share a single Issue and be batched into one PR. Use judgment — if two changes can be reviewed together without confusion, they belong in the same Issue.
+
 ## Branch Names
 
 ```
@@ -42,6 +48,14 @@ Examples:
 - description and body: Japanese allowed
 - Public API changes: add `!` or `BREAKING CHANGE:` footer
 
+**AI agents must append Co-Authored-By. Use two `-m` flags (a single `-m` with a literal `\n` does not create a trailer):**
+
+```bash
+git commit \
+  -m "feat(editor): ノードパレットを右寄せに変更する (#55)" \
+  -m "Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>"
+```
+
 | type | 用途 |
 | --- | --- |
 | `feat` | 新機能 |
@@ -52,6 +66,24 @@ Examples:
 | `build` | 依存関係・ビルド設定 |
 | `ci` | CI 設定 |
 | `chore` | メンテナンス |
+
+## GitHub Labels
+
+Use these labels with `gh issue create --label`:
+
+| Label | 用途 |
+| --- | --- |
+| `feat` | 新機能 |
+| `fix` | バグ修正 |
+| `docs` | ドキュメントのみ |
+| `build` | ビルド・CI・依存関係 |
+| `bug` | 不具合レポート |
+| `enhancement` | 改善・拡張リクエスト |
+| `phase-0` 〜 `phase-3` | フェーズ紐づけ |
+| `good first issue` | 初回コントリビューター向け |
+| `help wanted` | レビュー・協力募集 |
+
+Example: `gh issue create --label "feat,enhancement"`
 
 ## PR Requirements
 

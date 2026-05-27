@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# .githooks/pre-commit
+# フロントエンド TypeScript ファイルが staged にある場合、commit 前に型チェックを実行する。
+# インストール: scripts/dev-setup.sh を実行するか
+#   git config core.hooksPath .githooks
+
+set -euo pipefail
+
+FRONTEND_TS=$(git diff --cached --name-only | grep -E '^frontend/.*\.tsx?$' || true)
+
+if [[ -n "$FRONTEND_TS" ]]; then
+  echo "🔍 Frontend TypeScript type-check (staged files include .ts/.tsx)..."
+  if ! npm run type-check --prefix frontend; then
+    echo ""
+    echo "❌ Type check failed. Fix the errors above before committing."
+    echo "   Run: npm run type-check --prefix frontend"
+    exit 1
+  fi
+  echo "✅ Type check passed."
+fi
