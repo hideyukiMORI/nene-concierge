@@ -35758,10 +35758,27 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   // src/admin/components/editor/NodeTypes.tsx
   var import_jsx_runtime7 = __toESM(require_jsx_runtime());
   var NODE_COLORS = {
-    message: { bg: "oklch(91% 0.06 248)", header: "oklch(52% 0.18 248)", text: "oklch(26% 0.16 248)" },
-    condition: { bg: "oklch(91% 0.09 65)", header: "oklch(62% 0.16 65)", text: "oklch(28% 0.14 65)" },
-    action: { bg: "oklch(91% 0.06 192)", header: "oklch(52% 0.17 192)", text: "oklch(26% 0.14 192)" },
-    end: { bg: "oklch(91% 0.035 265)", header: "oklch(44% 0.10 265)", text: "oklch(24% 0.10 265)" }
+    message: {
+      bg: "color-mix(in oklch, oklch(52% 0.18 248) 14%, var(--nca-color-surface))",
+      header: "oklch(52% 0.18 248)",
+      text: "oklch(26% 0.16 248)"
+      // MiniMap などで参照（NodeShell 内は T.text を使用）
+    },
+    condition: {
+      bg: "color-mix(in oklch, oklch(62% 0.16 65) 14%, var(--nca-color-surface))",
+      header: "oklch(62% 0.16 65)",
+      text: "oklch(28% 0.14 65)"
+    },
+    action: {
+      bg: "color-mix(in oklch, oklch(52% 0.17 192) 14%, var(--nca-color-surface))",
+      header: "oklch(52% 0.17 192)",
+      text: "oklch(26% 0.14 192)"
+    },
+    end: {
+      bg: "color-mix(in oklch, oklch(44% 0.10 265) 14%, var(--nca-color-surface))",
+      header: "oklch(44% 0.10 265)",
+      text: "oklch(24% 0.10 265)"
+    }
   };
   var NODE_ICONS = {
     message: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
@@ -35833,14 +35850,15 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const boxShadow = isBottleneck ? "0 0 0 3px oklch(52% 0.20 25 / 0.55), 0 2px 8px rgba(0,0,0,.14)" : analytics ? `0 0 0 2px ${dropOffColor(analytics.drop_off_rate)} , 0 2px 8px rgba(0,0,0,.12)` : selected2 ? "0 0 0 3px oklch(62% 0.18 265 / 0.55), 0 2px 8px rgba(0,0,0,.14)" : "0 2px 8px rgba(0,0,0,.12)";
     return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: {
       background: c.bg,
-      borderRadius: 10,
+      borderRadius: 3,
+      // シャープな角丸
       minWidth: 200,
       maxWidth: 240,
       boxShadow,
       fontSize: 13,
       position: "relative",
       overflow: "hidden"
-      // ヘッダーの角丸クリップ
+      // ヘッダーを角丸でクリップ
     }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: {
         background: c.header,
@@ -35864,14 +35882,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           flexShrink: 0
         }, children: "\u26A0" })
       ] }),
-      children2 && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { padding: "8px 10px", color: c.text, lineHeight: 1.4 }, children: children2 }),
+      children2 && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { padding: "8px 10px", color: T.text, lineHeight: 1.4 }, children: children2 }),
       analytics && /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: {
         padding: "5px 10px 6px",
-        borderTop: "1px solid rgba(0,0,0,.10)",
+        borderTop: `1px solid ${T.border}`,
         display: "flex",
         gap: 8,
         alignItems: "center",
-        background: "rgba(0,0,0,.04)"
+        background: T.tableHeader
       }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("span", { style: {
           display: "flex",
@@ -35879,7 +35897,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           gap: 3,
           fontSize: 11,
           fontWeight: 700,
-          color: c.text
+          color: T.textMuted
         }, children: [
           "\u{1F441} ",
           analytics.visit_count.toLocaleString()
@@ -35921,8 +35939,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           children: [
             d.text && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("p", { style: { margin: 0, fontSize: 12 }, children: truncate(d.text) }),
             d.choices && d.choices.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { marginTop: 4, display: "flex", flexWrap: "wrap", gap: 4 }, children: d.choices.map((choice, i) => /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: {
-              background: "oklch(78% 0.11 248)",
-              color: "oklch(22% 0.18 248)",
+              background: "color-mix(in oklch, oklch(52% 0.18 248) 28%, var(--nca-color-surface))",
+              color: T.text,
               borderRadius: 99,
               padding: "2px 8px",
               fontSize: 11,
@@ -35960,8 +35978,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             a && Object.keys(a.branch_percentages).length > 0 && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { display: "flex", gap: 8, marginTop: 4 }, children: Object.entries(a.branch_percentages).map(([label, pct]) => /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("span", { style: {
               fontSize: 10,
               fontWeight: 700,
-              color: label === "true" ? "oklch(38% 0.15 145)" : "oklch(40% 0.18 25)",
-              background: label === "true" ? "oklch(94% 0.05 145)" : "oklch(95% 0.04 25)",
+              color: label === "true" ? "oklch(56% 0.17 145)" : "oklch(60% 0.20 25)",
+              background: label === "true" ? "color-mix(in oklch, oklch(52% 0.17 145) 25%, var(--nca-color-surface))" : "color-mix(in oklch, oklch(52% 0.20 25) 25%, var(--nca-color-surface))",
               borderRadius: 99,
               padding: "1px 6px"
             }, children: [

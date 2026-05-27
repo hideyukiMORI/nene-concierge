@@ -2,15 +2,35 @@ import type { ReactElement } from 'react';
 import { Handle, Position } from '@xyflow/react';
 import type { NodeProps } from '@xyflow/react';
 import type { ChatNodeType, NodeAnalyticsData } from '../../api.js';
+import { T } from '../../theme.js';
 
 // ── カラーパレット (OKLCH) ────────────────────────────────────────────────────
 // Hue 248 = blue, 65 = amber, 192 = teal (primary), 265 = slate
+//
+// bg: color-mix で各テーマの surface 色にヘッダー色を 14% 混ぜる
+//   → ライトテーマでは薄いパステル、ダークテーマでは暗いトーンに自然になじむ
 
 export const NODE_COLORS: Record<ChatNodeType, { bg: string; header: string; text: string }> = {
-    message:   { bg: 'oklch(91% 0.06 248)',  header: 'oklch(52% 0.18 248)',  text: 'oklch(26% 0.16 248)'  },
-    condition: { bg: 'oklch(91% 0.09 65)',   header: 'oklch(62% 0.16 65)',   text: 'oklch(28% 0.14 65)'   },
-    action:    { bg: 'oklch(91% 0.06 192)',  header: 'oklch(52% 0.17 192)',  text: 'oklch(26% 0.14 192)'  },
-    end:       { bg: 'oklch(91% 0.035 265)', header: 'oklch(44% 0.10 265)',  text: 'oklch(24% 0.10 265)'  },
+    message:   {
+        bg:     'color-mix(in oklch, oklch(52% 0.18 248) 14%, var(--nca-color-surface))',
+        header: 'oklch(52% 0.18 248)',
+        text:   'oklch(26% 0.16 248)',   // MiniMap などで参照（NodeShell 内は T.text を使用）
+    },
+    condition: {
+        bg:     'color-mix(in oklch, oklch(62% 0.16 65) 14%, var(--nca-color-surface))',
+        header: 'oklch(62% 0.16 65)',
+        text:   'oklch(28% 0.14 65)',
+    },
+    action:    {
+        bg:     'color-mix(in oklch, oklch(52% 0.17 192) 14%, var(--nca-color-surface))',
+        header: 'oklch(52% 0.17 192)',
+        text:   'oklch(26% 0.14 192)',
+    },
+    end:       {
+        bg:     'color-mix(in oklch, oklch(44% 0.10 265) 14%, var(--nca-color-surface))',
+        header: 'oklch(44% 0.10 265)',
+        text:   'oklch(24% 0.10 265)',
+    },
 };
 
 // ── ノードアイコン (inline SVG) ───────────────────────────────────────────────
@@ -97,20 +117,20 @@ function NodeShell({
     return (
         <div style={{
             background:   c.bg,
-            borderRadius: 10,
+            borderRadius: 3,            // シャープな角丸
             minWidth:     200,
             maxWidth:     240,
             boxShadow,
             fontSize:     13,
             position:     'relative',
-            overflow:     'hidden',  // ヘッダーの角丸クリップ
+            overflow:     'hidden',     // ヘッダーを角丸でクリップ
         }}>
             {/* ヘッダー (べた塗り) */}
             <div style={{
-                background:   c.header, color: '#fff',
-                padding:      '6px 10px',
-                fontWeight:   700, fontSize: 12,
-                display:      'flex', alignItems: 'center', gap: 6,
+                background: c.header, color: '#fff',
+                padding:    '6px 10px',
+                fontWeight: 700, fontSize: 12,
+                display:    'flex', alignItems: 'center', gap: 6,
             }}>
                 <span>{NODE_ICONS[type]}</span>
                 <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
@@ -128,24 +148,24 @@ function NodeShell({
                     </span>
                 )}
             </div>
-            {/* ボディ */}
+            {/* ボディ — テーマ対応テキスト色 */}
             {children && (
-                <div style={{ padding: '8px 10px', color: c.text, lineHeight: 1.4 }}>
+                <div style={{ padding: '8px 10px', color: T.text, lineHeight: 1.4 }}>
                     {children}
                 </div>
             )}
-            {/* Analytics オーバーレイ */}
+            {/* Analytics オーバーレイ — テーマ対応 */}
             {analytics && (
                 <div style={{
                     padding: '5px 10px 6px',
-                    borderTop: '1px solid rgba(0,0,0,.10)',
+                    borderTop: `1px solid ${T.border}`,
                     display: 'flex', gap: 8, alignItems: 'center',
-                    background: 'rgba(0,0,0,.04)',
+                    background: T.tableHeader,
                 }}>
                     {/* 訪問数 */}
                     <span style={{
                         display: 'flex', alignItems: 'center', gap: 3,
-                        fontSize: 11, fontWeight: 700, color: c.text,
+                        fontSize: 11, fontWeight: 700, color: T.textMuted,
                     }}>
                         👁 {analytics.visit_count.toLocaleString()}
                     </span>
@@ -194,7 +214,8 @@ export function MessageNode({ data, selected }: NodeProps) {
                     <div style={{ marginTop: 4, display: 'flex', flexWrap: 'wrap', gap: 4 }}>
                         {d.choices.map((choice, i) => (
                             <span key={i} style={{
-                                background: 'oklch(78% 0.11 248)', color: 'oklch(22% 0.18 248)',
+                                background: 'color-mix(in oklch, oklch(52% 0.18 248) 28%, var(--nca-color-surface))',
+                                color: T.text,
                                 borderRadius: 99, padding: '2px 8px', fontSize: 11, fontWeight: 600,
                             }}>
                                 {choice}
@@ -239,8 +260,10 @@ export function ConditionNode({ data, selected }: NodeProps) {
                         {Object.entries(a.branch_percentages).map(([label, pct]) => (
                             <span key={label} style={{
                                 fontSize: 10, fontWeight: 700,
-                                color: label === 'true' ? 'oklch(38% 0.15 145)' : 'oklch(40% 0.18 25)',
-                                background: label === 'true' ? 'oklch(94% 0.05 145)' : 'oklch(95% 0.04 25)',
+                                color: label === 'true' ? 'oklch(56% 0.17 145)' : 'oklch(60% 0.20 25)',
+                                background: label === 'true'
+                                    ? 'color-mix(in oklch, oklch(52% 0.17 145) 25%, var(--nca-color-surface))'
+                                    : 'color-mix(in oklch, oklch(52% 0.20 25) 25%, var(--nca-color-surface))',
                                 borderRadius: 99, padding: '1px 6px',
                             }}>
                                 {label}: {Math.round(pct * 100)}%
