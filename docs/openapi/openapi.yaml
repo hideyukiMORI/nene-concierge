@@ -10,7 +10,17 @@ info:
     - Production: `https://<your-domain>`
 
     **Authentication:** JWT Bearer (operator endpoints). Visitor-facing endpoints are open.
-  version: 0.1.0
+
+    **Operator endpoints** (require `Authorization: Bearer <token>`):
+    - All `/api/v1/organizations`, `/api/v1/scenarios`, `/api/v1/action-credentials`, analytics
+    - Preview endpoints
+
+    **Public endpoints** (no authentication required):
+    - `GET /health`
+    - `POST /api/v1/auth/login`
+    - `POST /api/v1/public/sessions`
+    - `POST /api/v1/public/sessions/{session_id}/step`
+  version: 0.2.0
   contact:
     name: NeNe Concierge
     url: https://github.com/hideyukiMORI/nene-concierge
@@ -22,12 +32,16 @@ servers:
   - url: http://localhost:8090
     description: Local development (Docker Compose)
 
+security:
+  - bearerAuth: []
+
 paths:
   /health:
     get:
       operationId: getHealth
       summary: Health check
       description: Returns the operational status of the API. Always open; no authentication required.
+      security: []
       tags:
         - System
       responses:
@@ -47,7 +61,579 @@ paths:
               schema:
                 $ref: "#/components/schemas/HealthResponse"
 
+  /api/v1/auth/login:
+    post:
+      operationId: login
+      summary: Operator login
+      description: |
+        Authenticates an operator with email and password, and returns a JWT Bearer token.
+        The token must be included as `Authorization: Bearer <token>` on all operator endpoints.
+      security: []
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+            example:
+              email: admin@example.com
+              password: secret
+      responses:
+        "200":
+          description: Login successful.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        "422":
+          description: Validation error (missing email or password).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        "401":
+          description: Invalid credentials.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+
+  /api/v1/organizations:
+    get:
+      operationId: listOrganizations
+      summary: List organizations
+      description: Returns all organizations accessible to the authenticated operator.
+      tags:
+        - Organizations
+      responses:
+        "200":
+          description: Organization list.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrganizationListResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+    post:
+      operationId: createOrganization
+      summary: Create organization
+      description: Creates a new organization. The authenticated operator becomes the owner.
+      tags:
+        - Organizations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateOrganizationRequest"
+      responses:
+        "201":
+          description: Organization created.
+          headers:
+            Location:
+              schema:
+                type: string
+              description: URL of the created organization.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrganizationResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+        "409":
+          description: Slug already taken.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+
+  /api/v1/organizations/{id}:
+    get:
+      operationId: getOrganizationById
+      summary: Get organization
+      description: Returns a single organization by ID.
+      tags:
+        - Organizations
+      parameters:
+        - $ref: "#/components/parameters/IntId"
+      responses:
+        "200":
+          description: Organization data.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrganizationResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    patch:
+      operationId: updateOrganization
+      summary: Update organization
+      description: Partially updates an organization. Only provided fields are changed.
+      tags:
+        - Organizations
+      parameters:
+        - $ref: "#/components/parameters/IntId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateOrganizationRequest"
+      responses:
+        "204":
+          description: Organization updated successfully.
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+    delete:
+      operationId: deleteOrganization
+      summary: Delete organization
+      description: Permanently deletes an organization and all associated data.
+      tags:
+        - Organizations
+      parameters:
+        - $ref: "#/components/parameters/IntId"
+      responses:
+        "204":
+          description: Organization deleted successfully.
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /api/v1/scenarios:
+    get:
+      operationId: listScenarios
+      summary: List scenarios
+      description: Returns all scenarios belonging to the authenticated operator's organization.
+      tags:
+        - Scenarios
+      responses:
+        "200":
+          description: Scenario list.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScenarioListResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+    post:
+      operationId: createScenario
+      summary: Create scenario
+      description: |
+        Creates a new scenario with an optional initial set of nodes and edges.
+        The scenario is created in `draft` status.
+      tags:
+        - Scenarios
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateScenarioRequest"
+      responses:
+        "201":
+          description: Scenario created.
+          headers:
+            Location:
+              schema:
+                type: string
+              description: URL of the created scenario.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+  /api/v1/scenarios/{id}:
+    get:
+      operationId: getScenarioById
+      summary: Get scenario
+      description: Returns a single scenario with its nodes and edges.
+      tags:
+        - Scenarios
+      parameters:
+        - $ref: "#/components/parameters/IntId"
+      responses:
+        "200":
+          description: Scenario data including nodes and edges.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScenarioDetailResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    patch:
+      operationId: updateScenario
+      summary: Update scenario
+      description: |
+        Partially updates a scenario's name, description, status, nodes, and/or edges.
+        Passing `nodes` or `edges` replaces the entire set (full replace, not merge).
+        Changing `status` to `published` makes the scenario live.
+      tags:
+        - Scenarios
+      parameters:
+        - $ref: "#/components/parameters/IntId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateScenarioRequest"
+      responses:
+        "204":
+          description: Scenario updated successfully.
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+    delete:
+      operationId: deleteScenario
+      summary: Delete scenario
+      description: Permanently deletes a scenario, its nodes, and edges.
+      tags:
+        - Scenarios
+      parameters:
+        - $ref: "#/components/parameters/IntId"
+      responses:
+        "204":
+          description: Scenario deleted successfully.
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /api/v1/scenarios/{id}/preview/start:
+    post:
+      operationId: startPreviewSession
+      summary: Start preview session
+      description: |
+        Starts a preview session for any scenario (draft or published).
+        Preview sessions are excluded from analytics and do not trigger actions.
+      tags:
+        - Preview
+      parameters:
+        - $ref: "#/components/parameters/IntId"
+      responses:
+        "201":
+          description: Preview session started.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionStartResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /api/v1/scenarios/{id}/preview/step/{session_id}:
+    post:
+      operationId: stepPreviewSession
+      summary: Step preview session
+      description: |
+        Advances a preview session to the next node.
+        For condition nodes, `target_node_id` may be omitted (auto-routed).
+      tags:
+        - Preview
+      parameters:
+        - $ref: "#/components/parameters/IntId"
+        - name: session_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Preview session UUID.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SessionStepRequest"
+      responses:
+        "200":
+          description: Next node after the step.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionStepResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /api/v1/scenarios/{id}/analytics:
+    get:
+      operationId: getScenarioAnalytics
+      summary: Get scenario analytics
+      description: |
+        Returns aggregated analytics for a scenario over a given period.
+
+        Preview sessions are excluded from all counts.
+
+        Node-level metrics: visit count, average dwell time (ms), drop-off rate, branch percentages.
+
+        Bottleneck nodes: nodes with drop-off rate ≥ 0.5.
+      tags:
+        - Analytics
+      parameters:
+        - $ref: "#/components/parameters/IntId"
+        - name: period
+          in: query
+          schema:
+            type: string
+            enum: [1d, 7d, 30d, 90d, custom]
+            default: 7d
+          description: Analysis period. Use `custom` together with `from` and `to`.
+        - name: from
+          in: query
+          schema:
+            type: string
+            format: date
+          description: Start date (inclusive). Required when `period=custom`.
+        - name: to
+          in: query
+          schema:
+            type: string
+            format: date
+          description: End date (inclusive). Required when `period=custom`.
+      responses:
+        "200":
+          description: Analytics report.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScenarioAnalyticsResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /api/v1/public/sessions:
+    post:
+      operationId: startSession
+      summary: Start visitor session
+      description: |
+        Starts a new visitor chat session for a published scenario.
+        No authentication required. Organization is resolved from request context
+        (subdomain, custom domain, or `X-Org-Slug` header — depends on deployment).
+      security: []
+      tags:
+        - Sessions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - scenario_id
+              properties:
+                scenario_id:
+                  type: integer
+                  description: ID of the published scenario to run.
+      responses:
+        "201":
+          description: Session started; first node returned.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionStartResponse"
+        "404":
+          description: Scenario not found or not published.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+
+  /api/v1/public/sessions/{session_id}/step:
+    post:
+      operationId: stepSession
+      summary: Step visitor session
+      description: |
+        Advances a visitor's session to the next node.
+
+        For **message nodes**: provide `target_node_id` (the `node_id` of the choice to follow).
+        For **condition nodes**: `target_node_id` is optional (the engine auto-evaluates conditions).
+
+        Optionally provide `answer` to collect a variable from this step.
+      security: []
+      tags:
+        - Sessions
+      parameters:
+        - name: session_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Session UUID returned from startSession.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SessionStepRequest"
+      responses:
+        "200":
+          description: Next node after the step.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionStepResponse"
+        "404":
+          description: Session not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+  /api/v1/action-credentials:
+    get:
+      operationId: listActionCredentials
+      summary: List action credentials
+      description: |
+        Returns all action credentials for the authenticated operator's organization.
+        The `config` field (containing secrets) is intentionally omitted from list responses.
+      tags:
+        - ActionCredentials
+      responses:
+        "200":
+          description: Action credential list.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionCredentialListResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+    post:
+      operationId: createActionCredential
+      summary: Create action credential
+      description: |
+        Creates a new action credential (e.g., a Slack webhook URL, email API key).
+        The `config` object contains adapter-specific secrets stored encrypted at rest.
+      tags:
+        - ActionCredentials
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateActionCredentialRequest"
+      responses:
+        "201":
+          description: Credential created.
+          headers:
+            Location:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+  /api/v1/action-credentials/{id}:
+    patch:
+      operationId: updateActionCredential
+      summary: Update action credential
+      description: Partially updates an action credential. Only provided fields are changed.
+      tags:
+        - ActionCredentials
+      parameters:
+        - $ref: "#/components/parameters/IntId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateActionCredentialRequest"
+      responses:
+        "204":
+          description: Credential updated successfully.
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    delete:
+      operationId: deleteActionCredential
+      summary: Delete action credential
+      description: Permanently deletes an action credential.
+      tags:
+        - ActionCredentials
+      parameters:
+        - $ref: "#/components/parameters/IntId"
+      responses:
+        "204":
+          description: Credential deleted successfully.
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    IntId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: Resource integer ID.
+
+  responses:
+    Unauthorized:
+      description: Missing or invalid JWT Bearer token.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ProblemDetails"
+    NotFound:
+      description: Resource not found.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ProblemDetails"
+    ValidationError:
+      description: Request validation failed.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ProblemDetails"
+
   schemas:
     HealthResponse:
       type: object
@@ -96,3 +682,495 @@ components:
           type: string
           format: uri
           description: URI reference identifying this specific occurrence.
+
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+
+    LoginResponse:
+      type: object
+      required:
+        - token
+        - expires_at
+        - email
+        - role
+      properties:
+        token:
+          type: string
+          description: JWT Bearer token.
+        expires_at:
+          type: string
+          format: date-time
+          description: Token expiry (ISO 8601).
+        email:
+          type: string
+          format: email
+        role:
+          type: string
+          description: Operator role (e.g. admin, operator).
+
+    OrganizationResponse:
+      type: object
+      required:
+        - id
+        - name
+        - slug
+        - plan
+        - is_active
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        slug:
+          type: string
+        custom_domain:
+          type: string
+          nullable: true
+        plan:
+          type: string
+          enum: [free, starter, pro, enterprise]
+        is_active:
+          type: boolean
+
+    OrganizationListResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrganizationResponse"
+
+    CreateOrganizationRequest:
+      type: object
+      required:
+        - name
+        - slug
+      properties:
+        name:
+          type: string
+          description: Display name of the organization.
+        slug:
+          type: string
+          pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          description: URL-safe identifier (lowercase alphanumeric with hyphens).
+        plan:
+          type: string
+          enum: [free, starter, pro, enterprise]
+          default: free
+        custom_domain:
+          type: string
+          nullable: true
+          description: Custom domain for org resolution (optional).
+
+    UpdateOrganizationRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        slug:
+          type: string
+          pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        plan:
+          type: string
+          enum: [free, starter, pro, enterprise]
+        custom_domain:
+          type: string
+          nullable: true
+        is_active:
+          type: boolean
+
+    ScenarioNodeInput:
+      type: object
+      required:
+        - node_id
+        - type
+        - label
+      properties:
+        node_id:
+          type: string
+          description: Client-assigned unique node identifier (UUID recommended).
+        type:
+          type: string
+          enum: [message, condition, action, end]
+        label:
+          type: string
+          description: Node display text. Supports `{{variable_name}}` interpolation.
+        data:
+          type: object
+          description: |
+            Node-type-specific data.
+            - **message**: `{ collect_variable?: string }`
+            - **condition**: `{ conditions: [...], match: "all"|"any" }`
+            - **action**: `{ adapter: "http"|"email"|"slack"|"chatwork", params: {...} }`
+            - **end**: (empty)
+          additionalProperties: true
+        position_x:
+          type: number
+          default: 0
+        position_y:
+          type: number
+          default: 0
+
+    ScenarioEdgeInput:
+      type: object
+      required:
+        - source_node_id
+        - target_node_id
+      properties:
+        source_node_id:
+          type: string
+        target_node_id:
+          type: string
+        label:
+          type: string
+          nullable: true
+          description: Edge label / branch name (e.g. "yes", "no", "Continue").
+
+    ScenarioNodeDetail:
+      allOf:
+        - $ref: "#/components/schemas/ScenarioNodeInput"
+      type: object
+      properties:
+        node_id:
+          type: string
+        type:
+          type: string
+          enum: [message, condition, action, end]
+        label:
+          type: string
+        data:
+          type: object
+          additionalProperties: true
+        position_x:
+          type: number
+        position_y:
+          type: number
+
+    ScenarioEdgeDetail:
+      type: object
+      required:
+        - source_node_id
+        - target_node_id
+      properties:
+        source_node_id:
+          type: string
+        target_node_id:
+          type: string
+        label:
+          type: string
+          nullable: true
+
+    ScenarioSummary:
+      type: object
+      required:
+        - id
+        - name
+        - status
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        status:
+          type: string
+          enum: [draft, published, archived]
+        created_at:
+          type: string
+          format: date-time
+          nullable: true
+        updated_at:
+          type: string
+          format: date-time
+          nullable: true
+
+    ScenarioListResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/ScenarioSummary"
+
+    ScenarioDetailResponse:
+      allOf:
+        - $ref: "#/components/schemas/ScenarioSummary"
+      type: object
+      properties:
+        nodes:
+          type: array
+          items:
+            $ref: "#/components/schemas/ScenarioNodeDetail"
+        edges:
+          type: array
+          items:
+            $ref: "#/components/schemas/ScenarioEdgeDetail"
+
+    CreateScenarioRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        nodes:
+          type: array
+          items:
+            $ref: "#/components/schemas/ScenarioNodeInput"
+          default: []
+        edges:
+          type: array
+          items:
+            $ref: "#/components/schemas/ScenarioEdgeInput"
+          default: []
+
+    UpdateScenarioRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        status:
+          type: string
+          enum: [draft, published, archived]
+        nodes:
+          type: array
+          description: Full replacement of all nodes (replaces entire set).
+          items:
+            $ref: "#/components/schemas/ScenarioNodeInput"
+        edges:
+          type: array
+          description: Full replacement of all edges (replaces entire set).
+          items:
+            $ref: "#/components/schemas/ScenarioEdgeInput"
+
+    ChoiceView:
+      type: object
+      required:
+        - target_node_id
+      properties:
+        target_node_id:
+          type: string
+        label:
+          type: string
+          nullable: true
+
+    NodeView:
+      type: object
+      required:
+        - node_id
+        - type
+        - label
+        - choices
+        - is_terminal
+      properties:
+        node_id:
+          type: string
+        type:
+          type: string
+          enum: [message, condition, action, end]
+        label:
+          type: string
+          description: Label with `{{variable_name}}` placeholders already resolved.
+        data:
+          type: object
+          additionalProperties: true
+        choices:
+          type: array
+          items:
+            $ref: "#/components/schemas/ChoiceView"
+        is_terminal:
+          type: boolean
+          description: True for `end` nodes; the session ends when this is true.
+
+    SessionStartResponse:
+      type: object
+      required:
+        - session_id
+        - node
+      properties:
+        session_id:
+          type: string
+          format: uuid
+        node:
+          $ref: "#/components/schemas/NodeView"
+
+    SessionStepRequest:
+      type: object
+      properties:
+        target_node_id:
+          type: string
+          description: |
+            The `node_id` of the next node to navigate to (required for message nodes).
+            May be omitted for condition nodes — the engine resolves the branch automatically.
+        answer:
+          type: string
+          nullable: true
+          description: |
+            Visitor's text answer. Stored as a session variable when the current node
+            has `data.collect_variable` set.
+
+    SessionStepResponse:
+      type: object
+      required:
+        - outcome
+        - node
+      properties:
+        outcome:
+          type: string
+          enum: [active, completed, dropped, converted, preview]
+          description: Session outcome after this step.
+        node:
+          $ref: "#/components/schemas/NodeView"
+
+    ActionCredentialSummary:
+      type: object
+      required:
+        - id
+        - name
+        - adapter
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        adapter:
+          type: string
+          enum: [http, email, slack, chatwork]
+        created_at:
+          type: string
+          format: date-time
+          nullable: true
+        updated_at:
+          type: string
+          format: date-time
+          nullable: true
+
+    ActionCredentialListResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/ActionCredentialSummary"
+
+    CreateActionCredentialRequest:
+      type: object
+      required:
+        - name
+        - adapter
+      properties:
+        name:
+          type: string
+          description: Human-readable label (e.g. "Production Slack webhook").
+        adapter:
+          type: string
+          enum: [http, email, slack, chatwork]
+        config:
+          type: object
+          description: |
+            Adapter-specific configuration (secrets stored encrypted).
+            - **http**: `{ url?, headers?: {...} }`
+            - **email**: `{ mode: "mail"|"api", api_url?, api_key?, from? }`
+            - **slack**: `{ webhook_url? }`
+            - **chatwork**: `{ api_token?, room_id? }`
+          additionalProperties: true
+          default: {}
+
+    UpdateActionCredentialRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        adapter:
+          type: string
+          enum: [http, email, slack, chatwork]
+        config:
+          type: object
+          additionalProperties: true
+
+    NodeAnalytics:
+      type: object
+      required:
+        - node_id
+        - visit_count
+        - avg_dwell_ms
+        - drop_off_rate
+        - branch_percentages
+      properties:
+        node_id:
+          type: string
+        visit_count:
+          type: integer
+          description: Total number of times this node was entered.
+        avg_dwell_ms:
+          type: integer
+          description: Average time spent on this node before advancing (milliseconds).
+        drop_off_rate:
+          type: number
+          format: float
+          description: Fraction of visitors who left at this node (0.0 – 1.0).
+        branch_percentages:
+          type: object
+          description: "For condition nodes: percentage of visits per branch label."
+          additionalProperties:
+            type: number
+
+    ScenarioAnalyticsResponse:
+      type: object
+      required:
+        - scenario_id
+        - period_from
+        - period_to
+        - total_sessions
+        - completed_sessions
+        - converted_sessions
+        - nodes
+        - bottlenecks
+      properties:
+        scenario_id:
+          type: integer
+        period_from:
+          type: string
+          format: date-time
+        period_to:
+          type: string
+          format: date-time
+        total_sessions:
+          type: integer
+        completed_sessions:
+          type: integer
+        converted_sessions:
+          type: integer
+        nodes:
+          type: array
+          items:
+            $ref: "#/components/schemas/NodeAnalytics"
+        bottlenecks:
+          type: array
+          description: node_ids of nodes with drop_off_rate ≥ 0.5.
+          items:
+            type: string
