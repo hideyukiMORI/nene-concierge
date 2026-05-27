@@ -172,6 +172,11 @@ export const en = {
     // ── Canvas ────────────────────────────────────────────────────────────────
     'canvas.save':   '💾 Save',
     'canvas.saving': 'Saving…',
+
+    // ── Theme ─────────────────────────────────────────────────────────────────
+    'theme.toggleLight': 'Switch to light mode',
+    'theme.toggleDark':  'Switch to dark mode',
+    'theme.label':       'Theme',
 } as const
 
 /** Complete message catalog type — keys from the English source of truth, values are strings. */

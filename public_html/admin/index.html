@@ -89,6 +89,286 @@
       --nca-shadow-focus: 0 0 0 3px oklch(62% 0.14 192 / 0.30);
     }
 
+    /* ═══════════════════════════════════════════════════════════════════════
+       テーマオーバーライド — data-nca-theme 属性で切り替え
+       セレクター: [data-nca-theme='{id}-{variant}']
+       Default Light は :root の値をそのまま使用（上書き不要）
+    ═══════════════════════════════════════════════════════════════════════ */
+
+    /* ── Default Dark ─────────────────────────────────────────────────── */
+    [data-nca-theme='default-dark'] {
+      --nca-color-primary:        oklch(70% 0.14 192);
+      --nca-color-primary-hover:  oklch(76% 0.14 192);
+      --nca-color-primary-light:  oklch(20% 0.08 192);
+      --nca-color-primary-border: oklch(35% 0.10 192);
+      --nca-color-primary-muted:  oklch(40% 0.10 192);
+      --nca-color-primary-text:   oklch(75% 0.12 192);
+      --nca-color-primary-bg:     oklch(18% 0.08 192);
+      --nca-color-danger:         oklch(62% 0.20 25);
+      --nca-color-danger-bg:      oklch(15% 0.06 25);
+      --nca-color-danger-border:  oklch(28% 0.10 25);
+      --nca-color-danger-text:    oklch(68% 0.16 25);
+      --nca-color-success-bg:     oklch(15% 0.06 145);
+      --nca-color-success-border: oklch(28% 0.10 145);
+      --nca-color-success-text:   oklch(68% 0.14 145);
+      --nca-color-bg:             oklch(13% 0.010 265);
+      --nca-color-surface:        oklch(17% 0.012 265);
+      --nca-color-sidebar:        oklch(10% 0.010 265);
+      --nca-color-sidebar-hover:  oklch(17% 0.015 265);
+      --nca-color-sidebar-active: oklch(22% 0.020 265);
+      --nca-color-sidebar-border: oklch(22% 0.010 265);
+      --nca-color-sidebar-text:   oklch(78% 0.010 265);
+      --nca-color-sidebar-muted:  oklch(50% 0.010 265);
+      --nca-color-sidebar-title:  oklch(96% 0.005 75);
+      --nca-color-text:           oklch(93% 0.008 75);
+      --nca-color-text-strong:    oklch(97% 0.005 75);
+      --nca-color-text-muted:     oklch(60% 0.010 265);
+      --nca-color-border:         oklch(28% 0.010 265);
+      --nca-color-border-input:   oklch(32% 0.010 265);
+      --nca-color-border-light:   oklch(22% 0.010 265);
+      --nca-color-table-header:   oklch(13% 0.010 265);
+      --nca-badge-draft-bg:       oklch(22% 0.010 265);
+      --nca-badge-draft-color:    oklch(70% 0.010 265);
+      --nca-badge-pub-bg:         oklch(16% 0.08 145);
+      --nca-badge-pub-color:      oklch(66% 0.14 145);
+      --nca-badge-arch-bg:        oklch(16% 0.08 25);
+      --nca-badge-arch-color:     oklch(66% 0.15 25);
+      --nca-shadow-card:          0 1px 3px oklch(0% 0 0 / 0.30);
+      --nca-shadow-focus:         0 0 0 3px oklch(70% 0.14 192 / 0.35);
+    }
+
+    /* ── GitHub Light ─────────────────────────────────────────────────── */
+    [data-nca-theme='github-light'] {
+      --nca-color-primary:        oklch(46% 0.21 248);
+      --nca-color-primary-hover:  oklch(40% 0.21 248);
+      --nca-color-primary-light:  oklch(97% 0.04 248);
+      --nca-color-primary-border: oklch(72% 0.14 248);
+      --nca-color-primary-muted:  oklch(80% 0.10 248);
+      --nca-color-primary-text:   oklch(34% 0.18 248);
+      --nca-color-primary-bg:     oklch(94% 0.05 248);
+      --nca-color-bg:             oklch(97% 0.005 240);
+      --nca-color-surface:        oklch(100% 0 0);
+      --nca-color-sidebar:        oklch(20% 0.015 250);
+      --nca-color-sidebar-hover:  oklch(26% 0.015 250);
+      --nca-color-sidebar-active: oklch(30% 0.015 250);
+      --nca-color-sidebar-border: oklch(26% 0.015 250);
+      --nca-color-sidebar-text:   oklch(90% 0.010 240);
+      --nca-color-sidebar-muted:  oklch(60% 0.015 240);
+      --nca-color-sidebar-title:  oklch(97% 0.007 240);
+      --nca-color-text:           oklch(18% 0.010 265);
+      --nca-color-text-strong:    oklch(12% 0.010 265);
+      --nca-color-text-muted:     oklch(46% 0.015 250);
+      --nca-color-border:         oklch(86% 0.010 230);
+      --nca-color-border-input:   oklch(80% 0.010 230);
+      --nca-color-border-light:   oklch(92% 0.006 230);
+      --nca-color-table-header:   oklch(97% 0.005 240);
+      --nca-badge-draft-bg:       oklch(93% 0.010 250);
+      --nca-badge-draft-color:    oklch(30% 0.015 250);
+      --nca-shadow-focus:         0 0 0 3px oklch(46% 0.21 248 / 0.30);
+    }
+
+    /* ── GitHub Dark ──────────────────────────────────────────────────── */
+    [data-nca-theme='github-dark'] {
+      --nca-color-primary:        oklch(66% 0.17 250);
+      --nca-color-primary-hover:  oklch(72% 0.17 250);
+      --nca-color-primary-light:  oklch(18% 0.08 250);
+      --nca-color-primary-border: oklch(30% 0.12 250);
+      --nca-color-primary-muted:  oklch(35% 0.10 250);
+      --nca-color-primary-text:   oklch(70% 0.15 250);
+      --nca-color-primary-bg:     oklch(15% 0.08 250);
+      --nca-color-danger:         oklch(58% 0.22 25);
+      --nca-color-danger-bg:      oklch(14% 0.06 25);
+      --nca-color-danger-border:  oklch(26% 0.10 25);
+      --nca-color-danger-text:    oklch(64% 0.16 25);
+      --nca-color-success-bg:     oklch(14% 0.06 145);
+      --nca-color-success-border: oklch(26% 0.10 145);
+      --nca-color-success-text:   oklch(64% 0.14 145);
+      --nca-color-bg:             oklch(9%  0.010 265);
+      --nca-color-surface:        oklch(13% 0.015 265);
+      --nca-color-sidebar:        oklch(5%  0.010 265);
+      --nca-color-sidebar-hover:  oklch(13% 0.015 265);
+      --nca-color-sidebar-active: oklch(18% 0.015 265);
+      --nca-color-sidebar-border: oklch(18% 0.015 265);
+      --nca-color-sidebar-text:   oklch(62% 0.015 240);
+      --nca-color-sidebar-muted:  oklch(42% 0.015 250);
+      --nca-color-sidebar-title:  oklch(96% 0.007 240);
+      --nca-color-text:           oklch(92% 0.010 240);
+      --nca-color-text-strong:    oklch(97% 0.007 240);
+      --nca-color-text-muted:     oklch(62% 0.015 240);
+      --nca-color-border:         oklch(26% 0.015 250);
+      --nca-color-border-input:   oklch(30% 0.015 250);
+      --nca-color-border-light:   oklch(18% 0.015 250);
+      --nca-color-table-header:   oklch(9%  0.010 265);
+      --nca-badge-draft-bg:       oklch(18% 0.010 265);
+      --nca-badge-draft-color:    oklch(66% 0.010 265);
+      --nca-badge-pub-bg:         oklch(14% 0.08 145);
+      --nca-badge-pub-color:      oklch(62% 0.14 145);
+      --nca-badge-arch-bg:        oklch(14% 0.08 25);
+      --nca-badge-arch-color:     oklch(62% 0.15 25);
+      --nca-shadow-card:          0 1px 3px oklch(0% 0 0 / 0.40);
+      --nca-shadow-focus:         0 0 0 3px oklch(66% 0.17 250 / 0.35);
+    }
+
+    /* ── Solarized Light ──────────────────────────────────────────────── */
+    [data-nca-theme='solarized-light'] {
+      --nca-color-primary:        oklch(62% 0.11 185);
+      --nca-color-primary-hover:  oklch(56% 0.11 185);
+      --nca-color-primary-light:  oklch(96% 0.04 185);
+      --nca-color-primary-border: oklch(74% 0.08 185);
+      --nca-color-primary-muted:  oklch(78% 0.07 185);
+      --nca-color-primary-text:   oklch(38% 0.11 185);
+      --nca-color-primary-bg:     oklch(93% 0.04 185);
+      --nca-color-bg:             oklch(97% 0.030 88);
+      --nca-color-surface:        oklch(93% 0.025 88);
+      --nca-color-sidebar:        oklch(22% 0.050 215);
+      --nca-color-sidebar-hover:  oklch(28% 0.050 215);
+      --nca-color-sidebar-active: oklch(32% 0.050 215);
+      --nca-color-sidebar-border: oklch(30% 0.050 215);
+      --nca-color-sidebar-text:   oklch(60% 0.030 200);
+      --nca-color-sidebar-muted:  oklch(46% 0.040 210);
+      --nca-color-sidebar-title:  oklch(66% 0.025 200);
+      --nca-color-text:           oklch(46% 0.040 210);
+      --nca-color-text-strong:    oklch(36% 0.040 210);
+      --nca-color-text-muted:     oklch(62% 0.025 200);
+      --nca-color-border:         oklch(83% 0.040 88);
+      --nca-color-border-input:   oklch(78% 0.035 88);
+      --nca-color-border-light:   oklch(90% 0.025 88);
+      --nca-color-table-header:   oklch(93% 0.025 88);
+      --nca-badge-draft-bg:       oklch(89% 0.025 88);
+      --nca-badge-draft-color:    oklch(46% 0.040 210);
+      --nca-badge-pub-bg:         oklch(93% 0.04 145);
+      --nca-badge-pub-color:      oklch(38% 0.12 145);
+      --nca-badge-arch-bg:        oklch(93% 0.04 25);
+      --nca-badge-arch-color:     oklch(38% 0.16 25);
+      --nca-shadow-focus:         0 0 0 3px oklch(62% 0.11 185 / 0.30);
+    }
+
+    /* ── Solarized Dark ───────────────────────────────────────────────── */
+    [data-nca-theme='solarized-dark'] {
+      --nca-color-primary:        oklch(62% 0.11 185);
+      --nca-color-primary-hover:  oklch(68% 0.11 185);
+      --nca-color-primary-light:  oklch(18% 0.08 185);
+      --nca-color-primary-border: oklch(30% 0.09 185);
+      --nca-color-primary-muted:  oklch(34% 0.08 185);
+      --nca-color-primary-text:   oklch(68% 0.10 185);
+      --nca-color-primary-bg:     oklch(16% 0.07 185);
+      --nca-color-danger:         oklch(58% 0.20 25);
+      --nca-color-danger-bg:      oklch(16% 0.06 25);
+      --nca-color-danger-border:  oklch(28% 0.10 25);
+      --nca-color-danger-text:    oklch(64% 0.16 25);
+      --nca-color-success-bg:     oklch(16% 0.06 145);
+      --nca-color-success-border: oklch(28% 0.10 145);
+      --nca-color-success-text:   oklch(64% 0.13 145);
+      --nca-color-bg:             oklch(15% 0.050 215);
+      --nca-color-surface:        oklch(22% 0.050 215);
+      --nca-color-sidebar:        oklch(12% 0.050 215);
+      --nca-color-sidebar-hover:  oklch(18% 0.050 215);
+      --nca-color-sidebar-active: oklch(22% 0.050 215);
+      --nca-color-sidebar-border: oklch(22% 0.050 215);
+      --nca-color-sidebar-text:   oklch(60% 0.030 200);
+      --nca-color-sidebar-muted:  oklch(46% 0.040 210);
+      --nca-color-sidebar-title:  oklch(66% 0.025 200);
+      --nca-color-text:           oklch(60% 0.030 200);
+      --nca-color-text-strong:    oklch(68% 0.025 200);
+      --nca-color-text-muted:     oklch(46% 0.040 210);
+      --nca-color-border:         oklch(26% 0.050 215);
+      --nca-color-border-input:   oklch(30% 0.050 215);
+      --nca-color-border-light:   oklch(22% 0.050 215);
+      --nca-color-table-header:   oklch(15% 0.050 215);
+      --nca-badge-draft-bg:       oklch(22% 0.050 215);
+      --nca-badge-draft-color:    oklch(60% 0.030 200);
+      --nca-badge-pub-bg:         oklch(16% 0.07 145);
+      --nca-badge-pub-color:      oklch(60% 0.11 145);
+      --nca-badge-arch-bg:        oklch(16% 0.07 25);
+      --nca-badge-arch-color:     oklch(60% 0.14 25);
+      --nca-shadow-card:          0 1px 3px oklch(0% 0 0 / 0.30);
+      --nca-shadow-focus:         0 0 0 3px oklch(62% 0.11 185 / 0.35);
+    }
+
+    /* ── Dracula Dark ─────────────────────────────────────────────────── */
+    [data-nca-theme='dracula-dark'] {
+      --nca-color-primary:        oklch(72% 0.18 295);
+      --nca-color-primary-hover:  oklch(78% 0.18 295);
+      --nca-color-primary-light:  oklch(18% 0.08 295);
+      --nca-color-primary-border: oklch(32% 0.12 295);
+      --nca-color-primary-muted:  oklch(38% 0.12 295);
+      --nca-color-primary-text:   oklch(76% 0.16 295);
+      --nca-color-primary-bg:     oklch(16% 0.08 295);
+      --nca-color-danger:         oklch(65% 0.22 25);
+      --nca-color-danger-bg:      oklch(16% 0.06 25);
+      --nca-color-danger-border:  oklch(28% 0.10 25);
+      --nca-color-danger-text:    oklch(72% 0.18 25);
+      --nca-color-success-bg:     oklch(16% 0.08 145);
+      --nca-color-success-border: oklch(28% 0.12 145);
+      --nca-color-success-text:   oklch(72% 0.18 145);
+      --nca-color-bg:             oklch(20% 0.030 280);
+      --nca-color-surface:        oklch(24% 0.030 278);
+      --nca-color-sidebar:        oklch(16% 0.025 275);
+      --nca-color-sidebar-hover:  oklch(27% 0.035 278);
+      --nca-color-sidebar-active: oklch(32% 0.040 275);
+      --nca-color-sidebar-border: oklch(32% 0.040 275);
+      --nca-color-sidebar-text:   oklch(97% 0.005 60);
+      --nca-color-sidebar-muted:  oklch(55% 0.060 280);
+      --nca-color-sidebar-title:  oklch(97% 0.005 60);
+      --nca-color-text:           oklch(97% 0.005 60);
+      --nca-color-text-strong:    oklch(99% 0.002 60);
+      --nca-color-text-muted:     oklch(55% 0.060 280);
+      --nca-color-border:         oklch(32% 0.040 275);
+      --nca-color-border-input:   oklch(36% 0.040 275);
+      --nca-color-border-light:   oklch(24% 0.030 278);
+      --nca-color-table-header:   oklch(20% 0.030 280);
+      --nca-badge-draft-bg:       oklch(28% 0.030 278);
+      --nca-badge-draft-color:    oklch(80% 0.015 280);
+      --nca-badge-pub-bg:         oklch(16% 0.10 145);
+      --nca-badge-pub-color:      oklch(78% 0.20 145);
+      --nca-badge-arch-bg:        oklch(16% 0.08 25);
+      --nca-badge-arch-color:     oklch(70% 0.18 25);
+      --nca-shadow-card:          0 1px 3px oklch(0% 0 0 / 0.40);
+      --nca-shadow-focus:         0 0 0 3px oklch(72% 0.18 295 / 0.40);
+    }
+
+    /* ── Monokai Dark ─────────────────────────────────────────────────── */
+    [data-nca-theme='monokai-dark'] {
+      --nca-color-primary:        oklch(84% 0.20 127);
+      --nca-color-primary-hover:  oklch(78% 0.20 127);
+      --nca-color-primary-light:  oklch(18% 0.08 127);
+      --nca-color-primary-border: oklch(36% 0.14 127);
+      --nca-color-primary-muted:  oklch(42% 0.12 127);
+      --nca-color-primary-text:   oklch(84% 0.18 127);
+      --nca-color-primary-bg:     oklch(16% 0.08 127);
+      --nca-color-danger:         oklch(60% 0.25 355);
+      --nca-color-danger-bg:      oklch(15% 0.08 355);
+      --nca-color-danger-border:  oklch(28% 0.12 355);
+      --nca-color-danger-text:    oklch(66% 0.22 355);
+      --nca-color-success-bg:     oklch(16% 0.10 127);
+      --nca-color-success-border: oklch(30% 0.14 127);
+      --nca-color-success-text:   oklch(76% 0.18 127);
+      --nca-color-bg:             oklch(19% 0.015 120);
+      --nca-color-surface:        oklch(28% 0.015 95);
+      --nca-color-sidebar:        oklch(14% 0.010 95);
+      --nca-color-sidebar-hover:  oklch(28% 0.015 95);
+      --nca-color-sidebar-active: oklch(32% 0.015 95);
+      --nca-color-sidebar-border: oklch(32% 0.015 95);
+      --nca-color-sidebar-text:   oklch(97% 0.005 60);
+      --nca-color-sidebar-muted:  oklch(50% 0.030 85);
+      --nca-color-sidebar-title:  oklch(84% 0.20 127);
+      --nca-color-text:           oklch(97% 0.005 60);
+      --nca-color-text-strong:    oklch(99% 0.002 60);
+      --nca-color-text-muted:     oklch(50% 0.030 85);
+      --nca-color-border:         oklch(32% 0.015 95);
+      --nca-color-border-input:   oklch(36% 0.015 95);
+      --nca-color-border-light:   oklch(24% 0.012 95);
+      --nca-color-table-header:   oklch(19% 0.015 120);
+      --nca-badge-draft-bg:       oklch(28% 0.015 95);
+      --nca-badge-draft-color:    oklch(75% 0.015 85);
+      --nca-badge-pub-bg:         oklch(16% 0.10 127);
+      --nca-badge-pub-color:      oklch(76% 0.18 127);
+      --nca-badge-arch-bg:        oklch(15% 0.08 355);
+      --nca-badge-arch-color:     oklch(66% 0.22 355);
+      --nca-shadow-card:          0 1px 3px oklch(0% 0 0 / 0.40);
+      --nca-shadow-focus:         0 0 0 3px oklch(84% 0.20 127 / 0.35);
+    }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       /* --nca-font-body は JS (applyLocaleFontFamily) でロケール別に上書きされる */

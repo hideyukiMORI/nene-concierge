@@ -115,4 +115,10 @@ export const de: Partial<MessageCatalog> = {
 
     'canvas.save':   '💾 Speichern',
     'canvas.saving': 'Wird gespeichert…',
+
+
+    // ── Theme ─────────────────────────────────────────────────────────────────
+    'theme.toggleLight': 'Zum hellen Modus wechseln',
+    'theme.toggleDark':  'Zum dunklen Modus wechseln',
+    'theme.label':       'Design',
 }
