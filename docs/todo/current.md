@@ -79,6 +79,23 @@ Last updated: 2026-05-27
 
 ---
 
+**Appearance モジュール — 完了 ✅**
+
+| 項目 | 状態 | Issue |
+| --- | --- | --- |
+| Appearance VO + AppearancePosition / AppearanceTrigger Enum | ✅ | #19 |
+| PdoAppearanceRepository（ON DUPLICATE KEY UPDATE） | ✅ | #19 |
+| GetAppearanceUseCase（行未存在 → デフォルト返却、永続化しない） | ✅ | #19 |
+| UpsertAppearanceUseCase（完全置換 PUT） | ✅ | #19 |
+| GET /api/v1/appearance・PUT /api/v1/appearance（Hex + Enum 検証） | ✅ | #19 |
+| GET /api/v1/public/appearance（認証不要・embed widget 向け） | ✅ | #19 |
+| DB マイグレーション 0014（appearances テーブル、organization_id UNIQUE FK） | ✅ | #19 |
+| OpenAPI v0.3.0: 3 エンドポイント + AppearanceResponse / UpsertAppearanceRequest | ✅ | #19 |
+| MCP catalog: getAppearance (read) / upsertAppearance (write) → 計 22 ツール | ✅ | #19 |
+| テスト 8 本 | ✅ | #19 |
+
+---
+
 **Phase 5 — Import / Export: 完了 ✅**
 
 | 項目 | 状態 | Issue |
