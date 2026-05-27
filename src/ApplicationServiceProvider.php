@@ -8,6 +8,9 @@ use LogicException;
 use Nene2\DependencyInjection\ContainerBuilder;
 use Nene2\DependencyInjection\ServiceProviderInterface;
 use Nene2\Http\RequestScopedHolder;
+use NeNeConcierge\Action\ActionCredentialNotFoundExceptionHandler;
+use NeNeConcierge\Action\ActionRouteRegistrar;
+use NeNeConcierge\Action\ActionServiceProvider;
 use NeNeConcierge\Auth\AuthRouteRegistrar;
 use NeNeConcierge\Auth\AuthServiceProvider;
 use NeNeConcierge\Auth\InvalidCredentialsExceptionHandler;
@@ -36,6 +39,7 @@ final readonly class ApplicationServiceProvider implements ServiceProviderInterf
 
     public function register(ContainerBuilder $builder): void
     {
+        $builder->addProvider(new ActionServiceProvider());
         $builder->addProvider(new AuthServiceProvider());
         $builder->addProvider(new EngineServiceProvider());
         $builder->addProvider(new OrganizationServiceProvider());
@@ -49,11 +53,16 @@ final readonly class ApplicationServiceProvider implements ServiceProviderInterf
             ->set(
                 self::EXCEPTION_HANDLERS,
                 static function (ContainerInterface $c): array {
+                    $actionCredNotFound = $c->get(ActionCredentialNotFoundExceptionHandler::class);
                     $engineError        = $c->get(EngineExceptionHandler::class);
                     $invalidCredentials = $c->get(InvalidCredentialsExceptionHandler::class);
                     $orgNotFound        = $c->get(OrganizationNotFoundExceptionHandler::class);
                     $orgSlugConflict    = $c->get(OrganizationSlugConflictExceptionHandler::class);
                     $scenarioNotFound   = $c->get(ScenarioNotFoundExceptionHandler::class);
+
+                    if (!$actionCredNotFound instanceof ActionCredentialNotFoundExceptionHandler) {
+                        throw new LogicException('ActionCredentialNotFoundExceptionHandler service is invalid.');
+                    }
 
                     if (!$engineError instanceof EngineExceptionHandler) {
                         throw new LogicException('EngineExceptionHandler service is invalid.');
@@ -76,6 +85,7 @@ final readonly class ApplicationServiceProvider implements ServiceProviderInterf
                     }
 
                     return [
+                        $actionCredNotFound,
                         $engineError,
                         $invalidCredentials,
                         $orgNotFound,
@@ -87,10 +97,15 @@ final readonly class ApplicationServiceProvider implements ServiceProviderInterf
             ->set(
                 self::ROUTE_REGISTRARS,
                 static function (ContainerInterface $c): array {
-                    $auth    = $c->get('nene-concierge.route_registrar.auth');
-                    $engine  = $c->get(EngineRouteRegistrar::class);
-                    $org     = $c->get(OrganizationRouteRegistrar::class);
+                    $action   = $c->get(ActionRouteRegistrar::class);
+                    $auth     = $c->get('nene-concierge.route_registrar.auth');
+                    $engine   = $c->get(EngineRouteRegistrar::class);
+                    $org      = $c->get(OrganizationRouteRegistrar::class);
                     $scenario = $c->get(ScenarioRouteRegistrar::class);
+
+                    if (!$action instanceof ActionRouteRegistrar) {
+                        throw new LogicException('ActionRouteRegistrar service is invalid.');
+                    }
 
                     if (!$auth instanceof AuthRouteRegistrar) {
                         throw new LogicException('AuthRouteRegistrar service is invalid.');
@@ -108,7 +123,7 @@ final readonly class ApplicationServiceProvider implements ServiceProviderInterf
                         throw new LogicException('ScenarioRouteRegistrar service is invalid.');
                     }
 
-                    return [$auth, $engine, $org, $scenario];
+                    return [$action, $auth, $engine, $org, $scenario];
                 },
             );
     }

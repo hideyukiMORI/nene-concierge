@@ -10,6 +10,7 @@ use Nene2\DependencyInjection\ContainerBuilder;
 use Nene2\DependencyInjection\ServiceProviderInterface;
 use Nene2\Error\ProblemDetailsResponseFactory;
 use Nene2\Http\JsonResponseFactory;
+use NeNeConcierge\Action\ActionDispatcher;
 use NeNeConcierge\Scenario\ScenarioEdgeRepositoryInterface;
 use NeNeConcierge\Scenario\ScenarioNodeRepositoryInterface;
 use NeNeConcierge\Scenario\ScenarioRepositoryInterface;
@@ -76,13 +77,14 @@ final readonly class EngineServiceProvider implements ServiceProviderInterface
             ->set(
                 ScenarioEngine::class,
                 static function (ContainerInterface $c): ScenarioEngine {
-                    $scenarios   = $c->get(ScenarioRepositoryInterface::class);
-                    $nodes       = $c->get(ScenarioNodeRepositoryInterface::class);
-                    $edges       = $c->get(ScenarioEdgeRepositoryInterface::class);
-                    $sessions    = $c->get(ChatSessionRepositoryInterface::class);
-                    $events      = $c->get(SessionNodeEventRepositoryInterface::class);
-                    $conditions  = $c->get(ConditionEvaluator::class);
-                    $interpolator = $c->get(VariableInterpolator::class);
+                    $scenarios        = $c->get(ScenarioRepositoryInterface::class);
+                    $nodes            = $c->get(ScenarioNodeRepositoryInterface::class);
+                    $edges            = $c->get(ScenarioEdgeRepositoryInterface::class);
+                    $sessions         = $c->get(ChatSessionRepositoryInterface::class);
+                    $events           = $c->get(SessionNodeEventRepositoryInterface::class);
+                    $conditions       = $c->get(ConditionEvaluator::class);
+                    $interpolator     = $c->get(VariableInterpolator::class);
+                    $actionDispatcher = $c->get(ActionDispatcher::class);
 
                     if (!$scenarios instanceof ScenarioRepositoryInterface) {
                         throw new LogicException('Scenario repository service is invalid.');
@@ -112,7 +114,11 @@ final readonly class EngineServiceProvider implements ServiceProviderInterface
                         throw new LogicException('VariableInterpolator service is invalid.');
                     }
 
-                    return new ScenarioEngine($scenarios, $nodes, $edges, $sessions, $events, $conditions, $interpolator);
+                    if (!$actionDispatcher instanceof ActionDispatcher) {
+                        throw new LogicException('ActionDispatcher service is invalid.');
+                    }
+
+                    return new ScenarioEngine($scenarios, $nodes, $edges, $sessions, $events, $conditions, $interpolator, $actionDispatcher);
                 },
             )
             // ── Handlers ───────────────────────────────────────────────────────

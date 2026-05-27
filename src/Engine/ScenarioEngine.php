@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace NeNeConcierge\Engine;
 
+use NeNeConcierge\Action\ActionDispatcher;
+use NeNeConcierge\Action\ActionException;
 use NeNeConcierge\Scenario\ScenarioEdge;
 use NeNeConcierge\Scenario\ScenarioEdgeRepositoryInterface;
 use NeNeConcierge\Scenario\ScenarioNode;
@@ -21,7 +23,7 @@ use NeNeConcierge\Session\SessionOutcome;
  * Scenario execution state machine.
  *
  * Start node detection: the node with no incoming edges (no explicit start_node_id column).
- * Supported node types: message, condition, end.
+ * Supported node types: message, condition, action, end.
  *
  * Condition nodes:
  *   - data_json contains {conditions: [...], match: "all"|"any"}
@@ -46,6 +48,7 @@ final readonly class ScenarioEngine
         private SessionNodeEventRepositoryInterface $events,
         private ConditionEvaluator                  $conditionEvaluator,
         private VariableInterpolator                $interpolator,
+        private ActionDispatcher                    $actionDispatcher,
     ) {
     }
 
@@ -171,6 +174,24 @@ final readonly class ScenarioEngine
         $nodeView = $this->buildNodeView($nextNode, $allEdges, $variables, $branchTaken);
 
         $isPreview    = $session->outcome === SessionOutcome::Preview;
+        $hasConversion = $session->hasConversion;
+
+        // Execute action node synchronously; set has_conversion on success
+        if ($nextNode->type === ScenarioNodeType::Action && !$isPreview) {
+            try {
+                $this->actionDispatcher->dispatch(
+                    $nextNode->data,
+                    $organizationId,
+                    $sessionId,
+                    $session->scenarioId,
+                    $nextNode->nodeId,
+                );
+                $hasConversion = true;
+            } catch (ActionException) {
+                // Action failed — logged by dispatcher; session continues
+            }
+        }
+
         $finalOutcome = match (true) {
             $isPreview            => SessionOutcome::Preview,
             $nodeView->isTerminal => SessionOutcome::Completed,
@@ -183,7 +204,7 @@ final readonly class ScenarioEngine
             scenarioId:     $session->scenarioId,
             currentNodeId:  $nextNode->nodeId,
             outcome:        $finalOutcome,
-            hasConversion:  $session->hasConversion,
+            hasConversion:  $hasConversion,
             startedAt:      $session->startedAt,
             variables:      $variables,
             endedAt:        ($nodeView->isTerminal && !$isPreview) ? date('Y-m-d H:i:s') : null,
@@ -219,6 +240,13 @@ final readonly class ScenarioEngine
     ): array {
         if ($currentNode->type === ScenarioNodeType::Condition) {
             return $this->resolveConditionBranch($currentNode, $outgoing, $variables);
+        }
+
+        // action nodes auto-follow their single outgoing edge
+        if ($currentNode->type === ScenarioNodeType::Action && $outgoing !== []) {
+            $edge = $outgoing[0];
+
+            return [$edge->targetNodeId, null];
         }
 
         // message / end: validate chosen target
