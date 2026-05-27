@@ -101,6 +101,36 @@ export function saveScenarioGraph(
     });
 }
 
+// ── Analytics ────────────────────────────────────────────────────────────────
+
+export type AnalyticsPeriod = '1d' | '7d' | '30d' | '90d';
+
+export interface NodeAnalyticsData {
+    node_id:             string;
+    visit_count:         number;
+    avg_dwell_ms:        number;
+    drop_off_rate:       number;
+    branch_percentages:  Record<string, number>;
+}
+
+export interface ScenarioAnalyticsResponse {
+    scenario_id:         number;
+    period_from:         string;
+    period_to:           string;
+    total_sessions:      number;
+    completed_sessions:  number;
+    converted_sessions:  number;
+    nodes:               NodeAnalyticsData[];
+    bottlenecks:         string[];
+}
+
+export function getScenarioAnalytics(
+    id: number,
+    period: AnalyticsPeriod = '7d',
+): Promise<ScenarioAnalyticsResponse> {
+    return request(`/api/v1/scenarios/${id}/analytics?period=${period}`);
+}
+
 // ── Appearance ────────────────────────────────────────────────────────────────
 
 export interface AppearanceData {

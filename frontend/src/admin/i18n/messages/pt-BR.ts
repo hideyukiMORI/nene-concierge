@@ -117,6 +117,18 @@ export const ptBR: Partial<MessageCatalog> = {
     'canvas.save':   '💾 Salvar',
     'canvas.saving': 'Salvando…',
 
+    'canvas.editMode':      'Editar',
+    'canvas.analyticsMode': 'Análises',
+
+    'canvas.analytics.loading':    'Carregando análises…',
+    'canvas.analytics.noData':     'Sem dados de sessão para este período.',
+    'canvas.analytics.visits':     '{{count}} visitas',
+    'canvas.analytics.dropOff':    '{{rate}}% saída',
+    'canvas.analytics.bottleneck': '⚠ Gargalo',
+    'canvas.analytics.sessions':   'Sessões',
+    'canvas.analytics.completed':  'Concluídas',
+    'canvas.analytics.converted':  'Convertidas',
+    'canvas.analytics.rate':       '{{rate}}%',
 
     // ── Theme ─────────────────────────────────────────────────────────────────
     'theme.toggleLight': 'Mudar para modo claro',

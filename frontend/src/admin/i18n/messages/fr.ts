@@ -117,6 +117,18 @@ export const fr: Partial<MessageCatalog> = {
     'canvas.save':   '💾 Enregistrer',
     'canvas.saving': 'Enregistrement…',
 
+    'canvas.editMode':      'Édition',
+    'canvas.analyticsMode': 'Analytique',
+
+    'canvas.analytics.loading':    'Chargement des analytics…',
+    'canvas.analytics.noData':     'Aucune donnée de session pour cette période.',
+    'canvas.analytics.visits':     '{{count}} visites',
+    'canvas.analytics.dropOff':    '{{rate}}% abandon',
+    'canvas.analytics.bottleneck': '⚠ Goulot',
+    'canvas.analytics.sessions':   'Sessions',
+    'canvas.analytics.completed':  'Terminées',
+    'canvas.analytics.converted':  'Converties',
+    'canvas.analytics.rate':       '{{rate}}%',
 
     // ── Theme ─────────────────────────────────────────────────────────────────
     'theme.toggleLight': 'Passer en mode clair',

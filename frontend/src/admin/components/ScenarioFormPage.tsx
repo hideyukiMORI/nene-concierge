@@ -216,6 +216,7 @@ export default function ScenarioFormPage() {
             {!isNew && (
                 <div style={{ flex: 1, overflow: 'hidden' }}>
                     <ScenarioCanvas
+                        scenarioId={Number(id)}
                         initialNodes={nodes}
                         initialEdges={edges}
                         credentials={credentials}

@@ -117,6 +117,18 @@ export const de: Partial<MessageCatalog> = {
     'canvas.save':   '💾 Speichern',
     'canvas.saving': 'Wird gespeichert…',
 
+    'canvas.editMode':      'Bearbeiten',
+    'canvas.analyticsMode': 'Analysen',
+
+    'canvas.analytics.loading':    'Analysen werden geladen…',
+    'canvas.analytics.noData':     'Keine Sitzungsdaten für diesen Zeitraum.',
+    'canvas.analytics.visits':     '{{count}} Besuche',
+    'canvas.analytics.dropOff':    '{{rate}}% Abbruch',
+    'canvas.analytics.bottleneck': '⚠ Engpass',
+    'canvas.analytics.sessions':   'Sitzungen',
+    'canvas.analytics.completed':  'Abgeschlossen',
+    'canvas.analytics.converted':  'Konvertiert',
+    'canvas.analytics.rate':       '{{rate}}%',
 
     // ── Theme ─────────────────────────────────────────────────────────────────
     'theme.toggleLight': 'Zum hellen Modus wechseln',
