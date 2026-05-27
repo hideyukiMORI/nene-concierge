@@ -157,6 +157,14 @@ export const en = {
     'node.credential':    'Credential',
     'node.credentialNone': '— Select —',
 
+    'node.qrCode':               'QR code',
+    'node.qrContent':            'Content (URL or text)',
+    'node.qrContentPlaceholder': 'https://example.com/{{user_id}}',
+    'node.qrContentHint':        '{{variable}} interpolation is supported.',
+    'node.qrVariable':           'Output variable name',
+    'node.qrVariablePlaceholder': 'qr_url',
+    'node.qrSize':               'Image size (px, 64–800)',
+
     'node.outcome': 'Outcome',
     'node.outcome.completed': 'completed — Done',
     'node.outcome.abandoned': 'abandoned — Abandoned',

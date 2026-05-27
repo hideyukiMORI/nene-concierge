@@ -111,6 +111,15 @@ export const ptBR: Partial<MessageCatalog> = {
     'node.compareValue': 'Valor de comparação',
     'node.actionType':   'Tipo de ação',
     'node.credential':   'Credencial',
+
+    'node.qrCode':               'Código QR',
+    'node.qrContent':            'Conteúdo (URL ou texto)',
+    'node.qrContentPlaceholder': 'https://example.com/{{user_id}}',
+    'node.qrContentHint':        'A interpolação {{variável}} é suportada.',
+    'node.qrVariable':           'Nome da variável de saída',
+    'node.qrVariablePlaceholder': 'qr_url',
+    'node.qrSize':               'Tamanho da imagem (px, 64–800)',
+
     'node.outcome':      'Resultado',
     'node.delete':       '🗑 Excluir este nó',
 

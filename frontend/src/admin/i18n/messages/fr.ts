@@ -111,6 +111,15 @@ export const fr: Partial<MessageCatalog> = {
     'node.compareValue': 'Valeur de comparaison',
     'node.actionType':   "Type d'action",
     'node.credential':   'Identifiant',
+
+    'node.qrCode':               'Code QR',
+    'node.qrContent':            'Contenu (URL ou texte)',
+    'node.qrContentPlaceholder': 'https://example.com/{{user_id}}',
+    'node.qrContentHint':        "L'interpolation {{variable}} est prise en charge.",
+    'node.qrVariable':           'Nom de la variable de sortie',
+    'node.qrVariablePlaceholder': 'qr_url',
+    'node.qrSize':               'Taille de l\'image (px, 64–800)',
+
     'node.outcome':      'Résultat',
     'node.delete':       '🗑 Supprimer ce nœud',
 

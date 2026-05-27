@@ -24993,6 +24993,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "node.actionType": "Action type",
     "node.credential": "Credential",
     "node.credentialNone": "\u2014 Select \u2014",
+    "node.qrCode": "QR code",
+    "node.qrContent": "Content (URL or text)",
+    "node.qrContentPlaceholder": "https://example.com/{{user_id}}",
+    "node.qrContentHint": "{{variable}} interpolation is supported.",
+    "node.qrVariable": "Output variable name",
+    "node.qrVariablePlaceholder": "qr_url",
+    "node.qrSize": "Image size (px, 64\u2013800)",
     "node.outcome": "Outcome",
     "node.outcome.completed": "completed \u2014 Done",
     "node.outcome.abandoned": "abandoned \u2014 Abandoned",
@@ -25209,6 +25216,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "node.actionType": "\u30A2\u30AF\u30B7\u30E7\u30F3\u30BF\u30A4\u30D7",
     "node.credential": "\u30AF\u30EC\u30C7\u30F3\u30B7\u30E3\u30EB",
     "node.credentialNone": "\u2014 \u9078\u629E \u2014",
+    "node.qrCode": "QR \u30B3\u30FC\u30C9",
+    "node.qrContent": "\u30B3\u30F3\u30C6\u30F3\u30C4\uFF08URL \u307E\u305F\u306F\u30C6\u30AD\u30B9\u30C8\uFF09",
+    "node.qrContentPlaceholder": "https://example.com/{{user_id}}",
+    "node.qrContentHint": "{{\u5909\u6570\u540D}} \u306B\u3088\u308B\u88DC\u9593\u304C\u4F7F\u3048\u307E\u3059\u3002",
+    "node.qrVariable": "\u51FA\u529B\u5909\u6570\u540D",
+    "node.qrVariablePlaceholder": "qr_url",
+    "node.qrSize": "\u753B\u50CF\u30B5\u30A4\u30BA\uFF08px\u300164\u301C800\uFF09",
     "node.outcome": "\u30A2\u30A6\u30C8\u30AB\u30E0",
     "node.outcome.completed": "completed \u2014 \u5B8C\u4E86",
     "node.outcome.abandoned": "abandoned \u2014 \u96E2\u8131",
@@ -25390,6 +25404,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "node.compareValue": "Valeur de comparaison",
     "node.actionType": "Type d'action",
     "node.credential": "Identifiant",
+    "node.qrCode": "Code QR",
+    "node.qrContent": "Contenu (URL ou texte)",
+    "node.qrContentPlaceholder": "https://example.com/{{user_id}}",
+    "node.qrContentHint": "L'interpolation {{variable}} est prise en charge.",
+    "node.qrVariable": "Nom de la variable de sortie",
+    "node.qrVariablePlaceholder": "qr_url",
+    "node.qrSize": "Taille de l'image (px, 64\u2013800)",
     "node.outcome": "R\xE9sultat",
     "node.delete": "\u{1F5D1} Supprimer ce n\u0153ud",
     "canvas.save": "\u{1F4BE} Enregistrer",
@@ -25552,6 +25573,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "node.compareValue": "\u6BD4\u8F83\u503C",
     "node.actionType": "\u52A8\u4F5C\u7C7B\u578B",
     "node.credential": "\u51ED\u8BC1",
+    "node.qrCode": "QR \u7801",
+    "node.qrContent": "\u5185\u5BB9\uFF08URL \u6216\u6587\u672C\uFF09",
+    "node.qrContentPlaceholder": "https://example.com/{{user_id}}",
+    "node.qrContentHint": "\u652F\u6301 {{\u53D8\u91CF}} \u63D2\u503C\u3002",
+    "node.qrVariable": "\u8F93\u51FA\u53D8\u91CF\u540D",
+    "node.qrVariablePlaceholder": "qr_url",
+    "node.qrSize": "\u56FE\u50CF\u5C3A\u5BF8\uFF08px\uFF0C64\u2013800\uFF09",
     "node.outcome": "\u7ED3\u679C",
     "node.delete": "\u{1F5D1} \u5220\u9664\u6B64\u8282\u70B9",
     "canvas.save": "\u{1F4BE} \u4FDD\u5B58",
@@ -25714,6 +25742,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "node.compareValue": "Valor de compara\xE7\xE3o",
     "node.actionType": "Tipo de a\xE7\xE3o",
     "node.credential": "Credencial",
+    "node.qrCode": "C\xF3digo QR",
+    "node.qrContent": "Conte\xFAdo (URL ou texto)",
+    "node.qrContentPlaceholder": "https://example.com/{{user_id}}",
+    "node.qrContentHint": "A interpola\xE7\xE3o {{vari\xE1vel}} \xE9 suportada.",
+    "node.qrVariable": "Nome da vari\xE1vel de sa\xEDda",
+    "node.qrVariablePlaceholder": "qr_url",
+    "node.qrSize": "Tamanho da imagem (px, 64\u2013800)",
     "node.outcome": "Resultado",
     "node.delete": "\u{1F5D1} Excluir este n\xF3",
     "canvas.save": "\u{1F4BE} Salvar",
@@ -25876,6 +25911,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "node.compareValue": "Vergleichswert",
     "node.actionType": "Aktionstyp",
     "node.credential": "Zugangsdaten",
+    "node.qrCode": "QR-Code",
+    "node.qrContent": "Inhalt (URL oder Text)",
+    "node.qrContentPlaceholder": "https://example.com/{{user_id}}",
+    "node.qrContentHint": "{{Variable}} Interpolation wird unterst\xFCtzt.",
+    "node.qrVariable": "Ausgabevariablenname",
+    "node.qrVariablePlaceholder": "qr_url",
+    "node.qrSize": "Bildgr\xF6\xDFe (px, 64\u2013800)",
     "node.outcome": "Ergebnis",
     "node.delete": "\u{1F5D1} Diesen Knoten l\xF6schen",
     "canvas.save": "\u{1F4BE} Speichern",
@@ -35687,14 +35729,15 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     email: "\u{1F4E7}",
     slack: "\u{1F4AC}",
     chatwork: "\u{1F5E8}\uFE0F",
-    http: "\u{1F310}"
+    http: "\u{1F310}",
+    qr: "\u25FB"
   };
   function ActionNode({ data: data2, selected: selected2 }) {
     const d = data2;
     const a = getAnalytics(data2);
     return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_jsx_runtime7.Fragment, { children: [
       /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Handle, { type: "target", position: Position.Top }),
-      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
         NodeShell,
         {
           type: "action",
@@ -35702,11 +35745,17 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           selected: selected2,
           ...a !== void 0 ? { analytics: a } : {},
           isBottleneck: getIsBottleneck(data2),
-          children: d.action_type && /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("p", { style: { margin: 0, fontSize: 12 }, children: [
-            ACTION_ICONS[d.action_type] ?? "\u{1F527}",
-            " ",
-            d.action_type
-          ] })
+          children: [
+            d.action_type && /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("p", { style: { margin: 0, fontSize: 12 }, children: [
+              ACTION_ICONS[d.action_type] ?? "\u{1F527}",
+              " ",
+              d.action_type
+            ] }),
+            d.action_type === "qr" && d.qr_content && /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("p", { style: { margin: "3px 0 0", fontSize: 11, color: "#166534", wordBreak: "break-all" }, children: [
+              truncate(d.qr_content, 40),
+              d.qr_variable && d.qr_variable !== "qr_url" ? ` \u2192 ${d.qr_variable}` : ""
+            ] })
+          ]
         }
       ),
       /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Handle, { type: "source", position: Position.Bottom })
@@ -35934,6 +35983,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     }
     function ActionConfig() {
       const d = data2;
+      const isQr = (d.action_type ?? "http") === "qr";
       return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
         /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(LabelInput, { label: t("node.label"), value: label, onChange: setLabel }),
         /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: S.section, children: [
@@ -35948,12 +35998,58 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "http", children: "HTTP" }),
                 /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "email", children: "Email" }),
                 /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "slack", children: "Slack" }),
-                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "chatwork", children: "Chatwork" })
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "chatwork", children: "Chatwork" }),
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("option", { value: "qr", children: [
+                  "\u25FB ",
+                  t("node.qrCode")
+                ] })
               ]
             }
           )
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { children: [
+        isQr && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: S.section, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { style: S.label, children: t("node.qrContent") }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+              "textarea",
+              {
+                style: S.textarea,
+                value: d.qr_content ?? "",
+                onChange: (e) => setData({ qr_content: e.target.value }),
+                placeholder: t("node.qrContentPlaceholder")
+              }
+            ),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { style: { margin: "4px 0 0", fontSize: T.fontXs, color: T.textMuted }, children: t("node.qrContentHint") })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { style: S.label, children: t("node.qrVariable") }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+              "input",
+              {
+                style: S.input,
+                value: d.qr_variable ?? "",
+                onChange: (e) => setData({ qr_variable: e.target.value || void 0 }),
+                placeholder: t("node.qrVariablePlaceholder")
+              }
+            )
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { style: S.label, children: t("node.qrSize") }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+              "input",
+              {
+                type: "number",
+                min: 64,
+                max: 800,
+                step: 8,
+                style: S.input,
+                value: d.qr_size ?? 200,
+                onChange: (e) => setData({ qr_size: Number(e.target.value) || void 0 })
+              }
+            )
+          ] })
+        ] }),
+        !isQr && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { children: [
           /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { style: S.label, children: t("node.credential") }),
           /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
             "select",
