@@ -21738,7 +21738,7 @@ var NeNeAdmin = (() => {
               "The result of getSnapshot should be cached to avoid an infinite loop"
             ), didWarnUncachedGetSnapshot = true);
           }
-          cachedValue = useState17({
+          cachedValue = useState18({
             inst: { value, getSnapshot }
           });
           var inst = cachedValue[0].inst, forceUpdate = cachedValue[1];
@@ -21776,7 +21776,7 @@ var NeNeAdmin = (() => {
           return getSnapshot();
         }
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-        var React15 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState17 = React15.useState, useEffect17 = React15.useEffect, useLayoutEffect5 = React15.useLayoutEffect, useDebugValue2 = React15.useDebugValue, didWarnOld18Alpha = false, didWarnUncachedGetSnapshot = false, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
+        var React15 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState18 = React15.useState, useEffect17 = React15.useEffect, useLayoutEffect5 = React15.useLayoutEffect, useDebugValue2 = React15.useDebugValue, didWarnOld18Alpha = false, didWarnUncachedGetSnapshot = false, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
         exports.useSyncExternalStore = void 0 !== React15.useSyncExternalStore ? React15.useSyncExternalStore : shim;
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(Error());
       })();
@@ -21875,7 +21875,7 @@ var NeNeAdmin = (() => {
   });
 
   // src/admin/index.tsx
-  var import_react16 = __toESM(require_react());
+  var import_react17 = __toESM(require_react());
   var import_client = __toESM(require_client());
 
   // node_modules/react-router/dist/development/chunk-4N6VE7H7.mjs
@@ -24752,6 +24752,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return ctx;
   }
 
+  // src/admin/components/Layout.tsx
+  var import_react3 = __toESM(require_react());
+
   // src/admin/theme.ts
   var T = {
     // ── Primary ──────────────────────────────────────────────────────────────
@@ -24915,6 +24918,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "nav.credentials": "Action Credentials",
     "nav.settings": "Settings",
     "nav.logout": "Log out",
+    "nav.collapseSidebar": "Collapse sidebar",
+    "nav.expandSidebar": "Expand sidebar",
     // ── Auth ──────────────────────────────────────────────────────────────────
     "auth.appTitle": "NeNe Concierge",
     "auth.subtitle": "Sign in to Admin",
@@ -25138,6 +25143,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "nav.credentials": "\u30A2\u30AF\u30B7\u30E7\u30F3\u30AF\u30EC\u30C7\u30F3\u30B7\u30E3\u30EB",
     "nav.settings": "\u8A2D\u5B9A",
     "nav.logout": "\u30ED\u30B0\u30A2\u30A6\u30C8",
+    "nav.collapseSidebar": "\u30B5\u30A4\u30C9\u30D0\u30FC\u3092\u9589\u3058\u308B",
+    "nav.expandSidebar": "\u30B5\u30A4\u30C9\u30D0\u30FC\u3092\u958B\u304F",
     // ── Auth ──────────────────────────────────────────────────────────────────
     "auth.appTitle": "NeNe Concierge",
     "auth.subtitle": "\u7BA1\u7406\u753B\u9762\u306B\u30ED\u30B0\u30A4\u30F3",
@@ -25353,6 +25360,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "nav.credentials": "Identifiants d'action",
     "nav.settings": "Param\xE8tres",
     "nav.logout": "D\xE9connexion",
+    "nav.collapseSidebar": "R\xE9duire la barre lat\xE9rale",
+    "nav.expandSidebar": "D\xE9velopper la barre lat\xE9rale",
     "auth.appTitle": "NeNe Concierge",
     "auth.subtitle": "Connexion \xE0 l'administration",
     "auth.emailLabel": "Adresse e-mail",
@@ -25522,6 +25531,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "nav.credentials": "\u64CD\u4F5C\u51ED\u8BC1",
     "nav.settings": "\u8BBE\u7F6E",
     "nav.logout": "\u9000\u51FA\u767B\u5F55",
+    "nav.collapseSidebar": "\u6536\u8D77\u4FA7\u8FB9\u680F",
+    "nav.expandSidebar": "\u5C55\u5F00\u4FA7\u8FB9\u680F",
     "auth.appTitle": "NeNe Concierge",
     "auth.subtitle": "\u767B\u5F55\u7BA1\u7406\u540E\u53F0",
     "auth.emailLabel": "\u90AE\u7BB1\u5730\u5740",
@@ -25691,6 +25702,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "nav.credentials": "Credenciais de a\xE7\xE3o",
     "nav.settings": "Configura\xE7\xF5es",
     "nav.logout": "Sair",
+    "nav.collapseSidebar": "Recolher barra lateral",
+    "nav.expandSidebar": "Expandir barra lateral",
     "auth.appTitle": "NeNe Concierge",
     "auth.subtitle": "Entrar na administra\xE7\xE3o",
     "auth.emailLabel": "Endere\xE7o de e-mail",
@@ -25860,6 +25873,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "nav.credentials": "Aktions-Zugangsdaten",
     "nav.settings": "Einstellungen",
     "nav.logout": "Abmelden",
+    "nav.collapseSidebar": "Seitenleiste schlie\xDFen",
+    "nav.expandSidebar": "Seitenleiste \xF6ffnen",
     "auth.appTitle": "NeNe Concierge",
     "auth.subtitle": "Anmeldung f\xFCr die Verwaltung",
     "auth.emailLabel": "E-Mail-Adresse",
@@ -26067,6 +26082,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // src/admin/components/Layout.tsx
   var import_jsx_runtime3 = __toESM(require_jsx_runtime());
+  var SIDEBAR_OPEN_KEY = "nene_admin_sidebar_open";
   function applyFocus(el) {
     el.style.borderColor = T.primary;
     el.style.boxShadow = T.shadowFocus;
@@ -26084,7 +26100,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "/sessions": "\u25CB",
     "/settings": "\u2699"
   };
-  function NavItem({ to, label }) {
+  function NavItem({ to, label, open }) {
     const loc = useLocation();
     const active = loc.pathname.startsWith(to);
     const icon = NAV_ICONS[to] ?? "\xB7";
@@ -26092,11 +26108,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       Link,
       {
         to,
+        title: open ? void 0 : label,
         style: {
           display: "flex",
           alignItems: "center",
-          gap: 10,
-          padding: "7px 12px",
+          justifyContent: open ? "flex-start" : "center",
+          gap: open ? 10 : 0,
+          padding: open ? "7px 12px" : "7px 0",
           margin: "1px 0",
           color: active ? T.sidebarTitle : T.sidebarText,
           textDecoration: "none",
@@ -26104,6 +26122,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           background: active ? T.sidebarActive : "transparent",
           fontWeight: active ? 600 : 400,
           fontSize: T.fontBase,
+          overflow: "hidden",
+          whiteSpace: "nowrap",
           transition: `background ${T.transitionFast}, color ${T.transitionFast}`
         },
         onMouseEnter: (e) => {
@@ -26120,7 +26140,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         },
         children: [
           /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: { opacity: 0.75, fontSize: 13, lineHeight: 1, flexShrink: 0 }, children: icon }),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: label })
+          open && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: label })
         ]
       }
     );
@@ -26137,6 +26157,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const { t, locale, setLocale } = useTranslation();
     const { themeVariant: themeVariant2, toggleVariant, canToggleVariant: canToggleVariant2 } = useTheme();
     const email = getStoredEmail();
+    const [open, setOpen] = (0, import_react3.useState)(
+      () => localStorage.getItem(SIDEBAR_OPEN_KEY) !== "false"
+    );
+    function toggleSidebar() {
+      const next = !open;
+      setOpen(next);
+      localStorage.setItem(SIDEBAR_OPEN_KEY, String(next));
+    }
     function logout() {
       clearToken();
       nav("/");
@@ -26159,7 +26187,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     };
     return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { style: { display: "flex", minHeight: "100vh" }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("aside", { style: {
-        width: T.sidebarWidth,
+        width: open ? T.sidebarWidth : "52px",
         flexShrink: 0,
         background: T.sidebar,
         color: T.sidebarText,
@@ -26169,127 +26197,185 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         position: "sticky",
         top: 0,
         height: "100vh",
-        overflowY: "auto"
+        overflow: "hidden",
+        transition: "width 200ms ease"
       }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { style: {
           display: "flex",
           alignItems: "center",
-          gap: 8,
           height: 56,
-          padding: "0 16px",
           flexShrink: 0,
-          borderBottom: `1px solid ${T.sidebarBorder}`
+          padding: open ? "0 8px 0 16px" : "0",
+          justifyContent: open ? "flex-start" : "center",
+          borderBottom: `1px solid ${T.sidebarBorder}`,
+          gap: 8
         }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: {
-            flex: 1,
-            fontWeight: 600,
-            fontSize: T.fontBase,
-            color: T.sidebarTitle,
-            letterSpacing: "0.01em",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap"
-          }, children: t("nav.brand") }),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: {
-            background: T.primary,
-            color: "#fff",
-            padding: "2px 7px",
-            borderRadius: T.radiusSm,
-            fontSize: T.fontXs,
-            fontWeight: 700,
-            letterSpacing: "0.06em",
-            textTransform: "uppercase",
-            flexShrink: 0
-          }, children: "Admin" })
+          open && /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(import_jsx_runtime3.Fragment, { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: {
+              flex: 1,
+              fontWeight: 600,
+              fontSize: T.fontBase,
+              color: T.sidebarTitle,
+              letterSpacing: "0.01em",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap"
+            }, children: t("nav.brand") }),
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: {
+              background: T.primary,
+              color: "#fff",
+              padding: "2px 7px",
+              borderRadius: T.radiusSm,
+              fontSize: T.fontXs,
+              fontWeight: 700,
+              letterSpacing: "0.06em",
+              textTransform: "uppercase",
+              flexShrink: 0
+            }, children: "Admin" })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+            "button",
+            {
+              onClick: toggleSidebar,
+              title: open ? t("nav.collapseSidebar") : t("nav.expandSidebar"),
+              "aria-label": open ? t("nav.collapseSidebar") : t("nav.expandSidebar"),
+              style: {
+                ...sidebarIconBtn,
+                background: "transparent",
+                border: "none",
+                fontSize: 16
+              },
+              onMouseEnter: (e) => {
+                e.currentTarget.style.background = T.sidebarHover;
+                e.currentTarget.style.color = T.sidebarTitle;
+              },
+              onMouseLeave: (e) => {
+                e.currentTarget.style.background = "transparent";
+                e.currentTarget.style.color = T.sidebarText;
+              },
+              children: open ? "\u2039" : "\u203A"
+            }
+          )
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("nav", { style: { flex: 1, padding: "12px 8px", overflowY: "auto" }, "aria-label": "Main", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/dashboard", label: t("nav.dashboard") }),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/scenarios", label: t("nav.scenarios") }),
+        /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("nav", { style: {
+          flex: 1,
+          padding: open ? "12px 8px" : "12px 4px",
+          overflowY: "auto",
+          overflowX: "hidden"
+        }, "aria-label": "Main", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/dashboard", label: t("nav.dashboard"), open }),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/scenarios", label: t("nav.scenarios"), open }),
           /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavDivider, {}),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/appearance", label: t("nav.appearance") }),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/credentials", label: t("nav.credentials") }),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/action-logs", label: t("nav.actionLogs") }),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/sessions", label: t("nav.sessions") }),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/appearance", label: t("nav.appearance"), open }),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/credentials", label: t("nav.credentials"), open }),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/action-logs", label: t("nav.actionLogs"), open }),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/sessions", label: t("nav.sessions"), open }),
           /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavDivider, {}),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/settings", label: t("nav.settings") })
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/settings", label: t("nav.settings"), open })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { style: {
           flexShrink: 0,
-          padding: "10px 12px 12px",
-          borderTop: `1px solid ${T.sidebarBorder}`
+          padding: open ? "10px 12px 12px" : "8px 4px",
+          borderTop: `1px solid ${T.sidebarBorder}`,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: open ? "stretch" : "center",
+          gap: open ? 0 : 6
         }, children: [
-          email && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { style: {
-            fontSize: T.fontXs,
-            color: T.sidebarMuted,
-            padding: "0 2px",
-            marginBottom: 8,
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap"
-          }, title: email, children: email }),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 6 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-              "select",
-              {
-                value: locale,
-                onChange: (e) => setLocale(e.target.value),
-                "aria-label": "Language",
-                style: {
-                  flex: 1,
-                  minWidth: 0,
-                  height: T.controlHeightXs,
-                  padding: "0 8px",
-                  boxSizing: "border-box",
-                  borderRadius: T.radiusMd,
-                  border: `1px solid ${T.sidebarBorder}`,
-                  background: T.sidebarActive,
-                  color: T.sidebarText,
-                  fontSize: T.fontXs,
-                  cursor: "pointer",
-                  outline: "none"
-                },
-                children: SUPPORTED_LOCALE_IDS.map((id2) => /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("option", { value: id2, children: LOCALES[id2].label }, id2))
-              }
-            ),
-            canToggleVariant2 && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-              "button",
-              {
-                onClick: toggleVariant,
-                "aria-label": themeVariant2 === "dark" ? t("theme.toggleLight") : t("theme.toggleDark"),
-                title: themeVariant2 === "dark" ? t("theme.toggleLight") : t("theme.toggleDark"),
-                style: sidebarIconBtn,
-                onMouseEnter: (e) => {
-                  e.currentTarget.style.background = T.sidebarHover;
-                  e.currentTarget.style.color = T.sidebarTitle;
-                },
-                onMouseLeave: (e) => {
-                  e.currentTarget.style.background = T.sidebarActive;
-                  e.currentTarget.style.color = T.sidebarText;
-                },
-                children: themeVariant2 === "dark" ? "\u2600" : "\u{1F319}"
-              }
-            ),
-            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-              "button",
-              {
-                onClick: logout,
-                title: t("nav.logout"),
-                "aria-label": t("nav.logout"),
-                style: sidebarIconBtn,
-                onMouseEnter: (e) => {
-                  e.currentTarget.style.background = "oklch(15% 0.05 25 / 0.8)";
-                  e.currentTarget.style.color = "oklch(75% 0.08 25)";
-                  e.currentTarget.style.borderColor = "oklch(30% 0.08 25)";
-                },
-                onMouseLeave: (e) => {
-                  e.currentTarget.style.background = T.sidebarActive;
-                  e.currentTarget.style.color = T.sidebarText;
-                  e.currentTarget.style.borderColor = T.sidebarBorder;
-                },
-                children: "\u21AA"
-              }
-            )
-          ] })
+          open && /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(import_jsx_runtime3.Fragment, { children: [
+            email && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { style: {
+              fontSize: T.fontXs,
+              color: T.sidebarMuted,
+              padding: "0 2px",
+              marginBottom: 8,
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap"
+            }, title: email, children: email }),
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 6 }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+                "select",
+                {
+                  value: locale,
+                  onChange: (e) => setLocale(e.target.value),
+                  "aria-label": "Language",
+                  style: {
+                    flex: 1,
+                    minWidth: 0,
+                    height: T.controlHeightXs,
+                    padding: "0 8px",
+                    boxSizing: "border-box",
+                    borderRadius: T.radiusMd,
+                    border: `1px solid ${T.sidebarBorder}`,
+                    background: T.sidebarActive,
+                    color: T.sidebarText,
+                    fontSize: T.fontXs,
+                    cursor: "pointer",
+                    outline: "none"
+                  },
+                  children: SUPPORTED_LOCALE_IDS.map((id2) => /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("option", { value: id2, children: LOCALES[id2].label }, id2))
+                }
+              ),
+              canToggleVariant2 && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+                "button",
+                {
+                  onClick: toggleVariant,
+                  "aria-label": themeVariant2 === "dark" ? t("theme.toggleLight") : t("theme.toggleDark"),
+                  title: themeVariant2 === "dark" ? t("theme.toggleLight") : t("theme.toggleDark"),
+                  style: sidebarIconBtn,
+                  onMouseEnter: (e) => {
+                    e.currentTarget.style.background = T.sidebarHover;
+                    e.currentTarget.style.color = T.sidebarTitle;
+                  },
+                  onMouseLeave: (e) => {
+                    e.currentTarget.style.background = T.sidebarActive;
+                    e.currentTarget.style.color = T.sidebarText;
+                  },
+                  children: themeVariant2 === "dark" ? "\u2600" : "\u{1F319}"
+                }
+              ),
+              /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+                "button",
+                {
+                  onClick: logout,
+                  title: t("nav.logout"),
+                  "aria-label": t("nav.logout"),
+                  style: sidebarIconBtn,
+                  onMouseEnter: (e) => {
+                    e.currentTarget.style.background = "oklch(15% 0.05 25 / 0.8)";
+                    e.currentTarget.style.color = "oklch(75% 0.08 25)";
+                    e.currentTarget.style.borderColor = "oklch(30% 0.08 25)";
+                  },
+                  onMouseLeave: (e) => {
+                    e.currentTarget.style.background = T.sidebarActive;
+                    e.currentTarget.style.color = T.sidebarText;
+                    e.currentTarget.style.borderColor = T.sidebarBorder;
+                  },
+                  children: "\u21AA"
+                }
+              )
+            ] })
+          ] }),
+          !open && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+            "button",
+            {
+              onClick: logout,
+              title: t("nav.logout"),
+              "aria-label": t("nav.logout"),
+              style: sidebarIconBtn,
+              onMouseEnter: (e) => {
+                e.currentTarget.style.background = "oklch(15% 0.05 25 / 0.8)";
+                e.currentTarget.style.color = "oklch(75% 0.08 25)";
+                e.currentTarget.style.borderColor = "oklch(30% 0.08 25)";
+              },
+              onMouseLeave: (e) => {
+                e.currentTarget.style.background = T.sidebarActive;
+                e.currentTarget.style.color = T.sidebarText;
+                e.currentTarget.style.borderColor = T.sidebarBorder;
+              },
+              children: "\u21AA"
+            }
+          )
         ] })
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("main", { style: {
@@ -26514,7 +26600,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   };
 
   // src/admin/components/LoginPage.tsx
-  var import_react3 = __toESM(require_react());
+  var import_react4 = __toESM(require_react());
 
   // src/admin/api.ts
   var BASE = window.location.origin;
@@ -26623,10 +26709,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   function LoginPage() {
     const nav = useNavigate();
     const { t } = useTranslation();
-    const [email, setEmail] = (0, import_react3.useState)("");
-    const [password, setPassword] = (0, import_react3.useState)("");
-    const [loading, setLoading] = (0, import_react3.useState)(false);
-    const [error, setError] = (0, import_react3.useState)(null);
+    const [email, setEmail] = (0, import_react4.useState)("");
+    const [password, setPassword] = (0, import_react4.useState)("");
+    const [loading, setLoading] = (0, import_react4.useState)(false);
+    const [error, setError] = (0, import_react4.useState)(null);
     async function handleSubmit(e) {
       e.preventDefault();
       setLoading(true);
@@ -26702,13 +26788,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/ScenariosPage.tsx
-  var import_react4 = __toESM(require_react());
+  var import_react5 = __toESM(require_react());
   var import_jsx_runtime5 = __toESM(require_jsx_runtime());
   function ScenariosPage() {
     const { t } = useTranslation();
-    const [scenarios, setScenarios] = (0, import_react4.useState)([]);
-    const [loading, setLoading] = (0, import_react4.useState)(true);
-    const [error, setError] = (0, import_react4.useState)(null);
+    const [scenarios, setScenarios] = (0, import_react5.useState)([]);
+    const [loading, setLoading] = (0, import_react5.useState)(true);
+    const [error, setError] = (0, import_react5.useState)(null);
     async function load() {
       setLoading(true);
       setError(null);
@@ -26721,7 +26807,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         setLoading(false);
       }
     }
-    (0, import_react4.useEffect)(() => {
+    (0, import_react5.useEffect)(() => {
       void load();
     }, []);
     async function handleDelete(id2, name) {
@@ -26772,11 +26858,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/ScenarioFormPage.tsx
-  var import_react10 = __toESM(require_react());
+  var import_react11 = __toESM(require_react());
 
   // node_modules/@xyflow/react/dist/esm/index.js
   var import_jsx_runtime6 = __toESM(require_jsx_runtime());
-  var import_react6 = __toESM(require_react());
+  var import_react7 = __toESM(require_react());
 
   // node_modules/classcat/index.js
   function cc(names) {
@@ -32375,7 +32461,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // node_modules/zustand/esm/traditional.mjs
-  var import_react5 = __toESM(require_react(), 1);
+  var import_react6 = __toESM(require_react(), 1);
   var import_with_selector = __toESM(require_with_selector(), 1);
 
   // node_modules/zustand/esm/vanilla.mjs
@@ -32412,7 +32498,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var createStore = (createState) => createState ? createStoreImpl(createState) : createStoreImpl;
 
   // node_modules/zustand/esm/traditional.mjs
-  var { useDebugValue } = import_react5.default;
+  var { useDebugValue } = import_react6.default;
   var { useSyncExternalStoreWithSelector } = import_with_selector.default;
   var identity3 = (arg) => arg;
   function useStoreWithEqualityFn(api, selector = identity3, equalityFn) {
@@ -32474,22 +32560,22 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // node_modules/@xyflow/react/dist/esm/index.js
   var import_react_dom = __toESM(require_react_dom());
-  var StoreContext = (0, import_react6.createContext)(null);
+  var StoreContext = (0, import_react7.createContext)(null);
   var Provider$1 = StoreContext.Provider;
   var zustandErrorMessage = errorMessages["error001"]();
   function useStore(selector, equalityFn) {
-    const store = (0, import_react6.useContext)(StoreContext);
+    const store = (0, import_react7.useContext)(StoreContext);
     if (store === null) {
       throw new Error(zustandErrorMessage);
     }
     return useStoreWithEqualityFn(store, selector, equalityFn);
   }
   function useStoreApi() {
-    const store = (0, import_react6.useContext)(StoreContext);
+    const store = (0, import_react7.useContext)(StoreContext);
     if (store === null) {
       throw new Error(zustandErrorMessage);
     }
-    return (0, import_react6.useMemo)(() => ({
+    return (0, import_react7.useMemo)(() => ({
       getState: store.getState,
       setState: store.setState,
       subscribe: store.subscribe
@@ -32520,7 +32606,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const ariaLabelConfig = useStore(ariaLabelConfigSelector);
     return (0, import_jsx_runtime6.jsxs)(import_jsx_runtime6.Fragment, { children: [(0, import_jsx_runtime6.jsx)("div", { id: `${ARIA_NODE_DESC_KEY}-${rfId}`, style, children: disableKeyboardA11y ? ariaLabelConfig["node.a11yDescription.default"] : ariaLabelConfig["node.a11yDescription.keyboardDisabled"] }), (0, import_jsx_runtime6.jsx)("div", { id: `${ARIA_EDGE_DESC_KEY}-${rfId}`, style, children: ariaLabelConfig["edge.a11yDescription.default"] }), !disableKeyboardA11y && (0, import_jsx_runtime6.jsx)(AriaLiveMessage, { rfId })] });
   }
-  var Panel = (0, import_react6.forwardRef)(({ position = "top-left", children: children2, className, style: style2, ...rest }, ref) => {
+  var Panel = (0, import_react7.forwardRef)(({ position = "top-left", children: children2, className, style: style2, ...rest }, ref) => {
     const positionClasses = `${position}`.split("-");
     return (0, import_jsx_runtime6.jsx)("div", { className: cc(["react-flow__panel", className, ...positionClasses]), style: style2, ref, ...rest, children: children2 });
   });
@@ -32553,7 +32639,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   function SelectionListenerInner({ onSelectionChange }) {
     const store = useStoreApi();
     const { selectedNodes, selectedEdges } = useStore(selector$m, areEqual);
-    (0, import_react6.useEffect)(() => {
+    (0, import_react7.useEffect)(() => {
       const params = { nodes: selectedNodes, edges: selectedEdges };
       onSelectionChange?.(params);
       store.getState().onSelectionChangeHandlers.forEach((fn) => fn(params));
@@ -32568,7 +32654,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     }
     return null;
   }
-  var useIsomorphicLayoutEffect2 = typeof window !== "undefined" ? import_react6.useLayoutEffect : import_react6.useEffect;
+  var useIsomorphicLayoutEffect2 = typeof window !== "undefined" ? import_react7.useLayoutEffect : import_react7.useEffect;
   var defaultNodeOrigin = [0, 0];
   var defaultViewport = { x: 0, y: 0, zoom: 1 };
   var reactFlowFieldsToTrack = [
@@ -32666,7 +32752,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         reset();
       };
     }, []);
-    const previousFields = (0, import_react6.useRef)(initPrevValues2);
+    const previousFields = (0, import_react7.useRef)(initPrevValues2);
     useIsomorphicLayoutEffect2(
       () => {
         for (const fieldName of fieldsToTrack) {
@@ -32711,8 +32797,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return window.matchMedia("(prefers-color-scheme: dark)");
   }
   function useColorModeClass(colorMode) {
-    const [colorModeClass, setColorModeClass] = (0, import_react6.useState)(colorMode === "system" ? null : colorMode);
-    (0, import_react6.useEffect)(() => {
+    const [colorModeClass, setColorModeClass] = (0, import_react7.useState)(colorMode === "system" ? null : colorMode);
+    (0, import_react7.useEffect)(() => {
       if (colorMode !== "system") {
         setColorModeClass(colorMode);
         return;
@@ -32729,10 +32815,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
   var defaultDoc = typeof document !== "undefined" ? document : null;
   function useKeyPress(keyCode = null, options = { target: defaultDoc, actInsideInputWithModifier: true }) {
-    const [keyPressed, setKeyPressed] = (0, import_react6.useState)(false);
-    const modifierPressed = (0, import_react6.useRef)(false);
-    const pressedKeys = (0, import_react6.useRef)(/* @__PURE__ */ new Set([]));
-    const [keyCodes, keysToWatch] = (0, import_react6.useMemo)(() => {
+    const [keyPressed, setKeyPressed] = (0, import_react7.useState)(false);
+    const modifierPressed = (0, import_react7.useRef)(false);
+    const pressedKeys = (0, import_react7.useRef)(/* @__PURE__ */ new Set([]));
+    const [keyCodes, keysToWatch] = (0, import_react7.useMemo)(() => {
       if (keyCode !== null) {
         const keyCodeArr = Array.isArray(keyCode) ? keyCode : [keyCode];
         const keys = keyCodeArr.filter((kc) => typeof kc === "string").map((kc) => kc.replace("+", "\n").replace("\n\n", "\n+").split("\n"));
@@ -32741,7 +32827,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       }
       return [[], []];
     }, [keyCode]);
-    (0, import_react6.useEffect)(() => {
+    (0, import_react7.useEffect)(() => {
       const target = options?.target ?? defaultDoc;
       const actInsideInputWithModifier = options?.actInsideInputWithModifier ?? true;
       if (keyCode !== null) {
@@ -32801,7 +32887,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
   var useViewportHelper = () => {
     const store = useStoreApi();
-    return (0, import_react6.useMemo)(() => {
+    return (0, import_react7.useMemo)(() => {
       return {
         zoomIn: (options) => {
           const { panZoom } = store.getState();
@@ -33018,11 +33104,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var isNode = (element) => isNodeBase(element);
   var isEdge = (element) => isEdgeBase(element);
   function fixedForwardRef(render) {
-    return (0, import_react6.forwardRef)(render);
+    return (0, import_react7.forwardRef)(render);
   }
   function useQueue(runQueue) {
-    const [serial, setSerial] = (0, import_react6.useState)(BigInt(0));
-    const [queue] = (0, import_react6.useState)(() => createQueue(() => setSerial((n) => n + BigInt(1))));
+    const [serial, setSerial] = (0, import_react7.useState)(BigInt(0));
+    const [queue] = (0, import_react7.useState)(() => createQueue(() => setSerial((n) => n + BigInt(1))));
     useIsomorphicLayoutEffect2(() => {
       const queueItems = queue.get();
       if (queueItems.length) {
@@ -33045,10 +33131,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       }
     };
   }
-  var BatchContext = (0, import_react6.createContext)(null);
+  var BatchContext = (0, import_react7.createContext)(null);
   function BatchProvider({ children: children2 }) {
     const store = useStoreApi();
-    const nodeQueueHandler = (0, import_react6.useCallback)((queueItems) => {
+    const nodeQueueHandler = (0, import_react7.useCallback)((queueItems) => {
       const { nodes = [], setNodes, hasDefaultNodes, onNodesChange, nodeLookup, fitViewQueued, onNodesChangeMiddlewareMap } = store.getState();
       let next = nodes;
       for (const payload of queueItems) {
@@ -33076,7 +33162,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       }
     }, []);
     const nodeQueue = useQueue(nodeQueueHandler);
-    const edgeQueueHandler = (0, import_react6.useCallback)((queueItems) => {
+    const edgeQueueHandler = (0, import_react7.useCallback)((queueItems) => {
       const { edges = [], setEdges, hasDefaultEdges, onEdgesChange, edgeLookup } = store.getState();
       let next = edges;
       for (const payload of queueItems) {
@@ -33092,11 +33178,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       }
     }, []);
     const edgeQueue = useQueue(edgeQueueHandler);
-    const value = (0, import_react6.useMemo)(() => ({ nodeQueue, edgeQueue }), []);
+    const value = (0, import_react7.useMemo)(() => ({ nodeQueue, edgeQueue }), []);
     return (0, import_jsx_runtime6.jsx)(BatchContext.Provider, { value, children: children2 });
   }
   function useBatchContext() {
-    const batchContext = (0, import_react6.useContext)(BatchContext);
+    const batchContext = (0, import_react7.useContext)(BatchContext);
     if (!batchContext) {
       throw new Error("useBatchContext must be used within a BatchProvider");
     }
@@ -33108,7 +33194,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const store = useStoreApi();
     const batchContext = useBatchContext();
     const viewportInitialized = useStore(selector$k);
-    const generalHelper = (0, import_react6.useMemo)(() => {
+    const generalHelper = (0, import_react7.useMemo)(() => {
       const getInternalNode = (id2) => store.getState().nodeLookup.get(id2);
       const setNodes = (payload) => {
         batchContext.nodeQueue.push(payload);
@@ -33265,7 +33351,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }
       };
     }, []);
-    return (0, import_react6.useMemo)(() => {
+    return (0, import_react7.useMemo)(() => {
       return {
         ...generalHelper,
         ...viewportHelper,
@@ -33280,20 +33366,20 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const { deleteElements } = useReactFlow();
     const deleteKeyPressed = useKeyPress(deleteKeyCode, { actInsideInputWithModifier: false });
     const multiSelectionKeyPressed = useKeyPress(multiSelectionKeyCode, { target: win$1 });
-    (0, import_react6.useEffect)(() => {
+    (0, import_react7.useEffect)(() => {
       if (deleteKeyPressed) {
         const { edges, nodes } = store.getState();
         deleteElements({ nodes: nodes.filter(selected), edges: edges.filter(selected) });
         store.setState({ nodesSelectionActive: false });
       }
     }, [deleteKeyPressed]);
-    (0, import_react6.useEffect)(() => {
+    (0, import_react7.useEffect)(() => {
       store.setState({ multiSelectionActive: multiSelectionKeyPressed });
     }, [multiSelectionKeyPressed]);
   }
   function useResizeHandler(domNode) {
     const store = useStoreApi();
-    (0, import_react6.useEffect)(() => {
+    (0, import_react7.useEffect)(() => {
       const updateDimensions = () => {
         if (!domNode.current || !(domNode.current.checkVisibility?.() ?? true)) {
           return false;
@@ -33332,18 +33418,18 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   });
   function ZoomPane({ onPaneContextMenu, zoomOnScroll = true, zoomOnPinch = true, panOnScroll = false, panOnScrollSpeed = 0.5, panOnScrollMode = PanOnScrollMode.Free, zoomOnDoubleClick = true, panOnDrag = true, defaultViewport: defaultViewport2, translateExtent, minZoom, maxZoom, zoomActivationKeyCode, preventScrolling = true, children: children2, noWheelClassName, noPanClassName, onViewportChange, isControlledViewport, paneClickDistance, selectionOnDrag }) {
     const store = useStoreApi();
-    const zoomPane = (0, import_react6.useRef)(null);
+    const zoomPane = (0, import_react7.useRef)(null);
     const { userSelectionActive, lib, connectionInProgress } = useStore(selector$j, shallow$1);
     const zoomActivationKeyPressed = useKeyPress(zoomActivationKeyCode);
-    const panZoom = (0, import_react6.useRef)();
+    const panZoom = (0, import_react7.useRef)();
     useResizeHandler(zoomPane);
-    const onTransformChange = (0, import_react6.useCallback)((transform2) => {
+    const onTransformChange = (0, import_react7.useCallback)((transform2) => {
       onViewportChange?.({ x: transform2[0], y: transform2[1], zoom: transform2[2] });
       if (!isControlledViewport) {
         store.setState({ transform: transform2 });
       }
     }, [onViewportChange, isControlledViewport]);
-    (0, import_react6.useEffect)(() => {
+    (0, import_react7.useEffect)(() => {
       if (zoomPane.current) {
         panZoom.current = XYPanZoom({
           domNode: zoomPane.current,
@@ -33379,7 +33465,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         };
       }
     }, []);
-    (0, import_react6.useEffect)(() => {
+    (0, import_react7.useEffect)(() => {
       panZoom.current?.update({
         onPaneContextMenu,
         zoomOnScroll,
@@ -33456,11 +33542,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const store = useStoreApi();
     const { userSelectionActive, elementsSelectable, dragging, connectionInProgress } = useStore(selector$h, shallow$1);
     const isSelectionEnabled = elementsSelectable && (isSelecting || userSelectionActive);
-    const container2 = (0, import_react6.useRef)(null);
-    const containerBounds = (0, import_react6.useRef)();
-    const selectedNodeIds = (0, import_react6.useRef)(/* @__PURE__ */ new Set());
-    const selectedEdgeIds = (0, import_react6.useRef)(/* @__PURE__ */ new Set());
-    const selectionInProgress = (0, import_react6.useRef)(false);
+    const container2 = (0, import_react7.useRef)(null);
+    const containerBounds = (0, import_react7.useRef)();
+    const selectedNodeIds = (0, import_react7.useRef)(/* @__PURE__ */ new Set());
+    const selectedEdgeIds = (0, import_react7.useRef)(/* @__PURE__ */ new Set());
+    const selectionInProgress = (0, import_react7.useRef)(false);
     const onClick = (event) => {
       if (selectionInProgress.current || connectionInProgress) {
         selectionInProgress.current = false;
@@ -33607,9 +33693,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
   function useDrag({ nodeRef, disabled = false, noDragClassName, handleSelector, nodeId, isSelectable, nodeClickDistance }) {
     const store = useStoreApi();
-    const [dragging, setDragging] = (0, import_react6.useState)(false);
-    const xyDrag = (0, import_react6.useRef)();
-    (0, import_react6.useEffect)(() => {
+    const [dragging, setDragging] = (0, import_react7.useState)(false);
+    const xyDrag = (0, import_react7.useRef)();
+    (0, import_react7.useEffect)(() => {
       xyDrag.current = XYDrag({
         getStoreItems: () => store.getState(),
         onNodeMouseDown: (id2) => {
@@ -33627,7 +33713,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }
       });
     }, []);
-    (0, import_react6.useEffect)(() => {
+    (0, import_react7.useEffect)(() => {
       if (disabled || !nodeRef.current || !xyDrag.current) {
         return;
       }
@@ -33648,7 +33734,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var selectedAndDraggable = (nodesDraggable) => (n) => n.selected && (n.draggable || nodesDraggable && typeof n.draggable === "undefined");
   function useMoveSelectedNodes() {
     const store = useStoreApi();
-    const moveSelectedNodes = (0, import_react6.useCallback)((params) => {
+    const moveSelectedNodes = (0, import_react7.useCallback)((params) => {
       const { nodeExtent, snapToGrid, snapGrid, nodesDraggable, onError, updateNodePositions, nodeLookup, nodeOrigin } = store.getState();
       const nodeUpdates = /* @__PURE__ */ new Map();
       const isSelected = selectedAndDraggable(nodesDraggable);
@@ -33683,11 +33769,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     }, []);
     return moveSelectedNodes;
   }
-  var NodeIdContext = (0, import_react6.createContext)(null);
+  var NodeIdContext = (0, import_react7.createContext)(null);
   var Provider = NodeIdContext.Provider;
   NodeIdContext.Consumer;
   var useNodeId = () => {
-    const nodeId = (0, import_react6.useContext)(NodeIdContext);
+    const nodeId = (0, import_react7.useContext)(NodeIdContext);
     return nodeId;
   };
   var selector$g = (s) => ({
@@ -33831,7 +33917,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       }
     ]), onMouseDown: onPointerDown2, onTouchStart: onPointerDown2, onClick: connectOnClick ? onClick : void 0, ref, ...rest, children: children2 });
   }
-  var Handle = (0, import_react6.memo)(fixedForwardRef(HandleComponent));
+  var Handle = (0, import_react7.memo)(fixedForwardRef(HandleComponent));
   function InputNode({ data: data2, isConnectable, sourcePosition = Position.Bottom }) {
     return (0, import_jsx_runtime6.jsxs)(import_jsx_runtime6.Fragment, { children: [data2?.label, (0, import_jsx_runtime6.jsx)(Handle, { type: "source", position: sourcePosition, isConnectable })] });
   }
@@ -33883,8 +33969,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const store = useStoreApi();
     const { width, height, transformString, userSelectionActive } = useStore(selector$f, shallow$1);
     const moveSelectedNodes = useMoveSelectedNodes();
-    const nodeRef = (0, import_react6.useRef)(null);
-    (0, import_react6.useEffect)(() => {
+    const nodeRef = (0, import_react7.useRef)(null);
+    (0, import_react7.useEffect)(() => {
       if (!disableKeyboardA11y) {
         nodeRef.current?.focus({
           preventScroll: true
@@ -33935,18 +34021,18 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return (0, import_jsx_runtime6.jsx)(ZoomPane, { onPaneContextMenu, elementsSelectable, zoomOnScroll, zoomOnPinch, panOnScroll, panOnScrollSpeed, panOnScrollMode, zoomOnDoubleClick, panOnDrag: !selectionKeyPressed && panOnDrag, defaultViewport: defaultViewport2, translateExtent, minZoom, maxZoom, zoomActivationKeyCode, preventScrolling, noWheelClassName, noPanClassName, onViewportChange, isControlledViewport, paneClickDistance, selectionOnDrag: _selectionOnDrag, children: (0, import_jsx_runtime6.jsxs)(Pane, { onSelectionStart, onSelectionEnd, onPaneClick, onPaneMouseEnter, onPaneMouseMove, onPaneMouseLeave, onPaneContextMenu, onPaneScroll, panOnDrag, isSelecting: !!isSelecting, selectionMode, selectionKeyPressed, paneClickDistance, selectionOnDrag: _selectionOnDrag, children: [children2, nodesSelectionActive && (0, import_jsx_runtime6.jsx)(NodesSelection, { onSelectionContextMenu, noPanClassName, disableKeyboardA11y })] }) });
   }
   FlowRendererComponent.displayName = "FlowRenderer";
-  var FlowRenderer = (0, import_react6.memo)(FlowRendererComponent);
+  var FlowRenderer = (0, import_react7.memo)(FlowRendererComponent);
   var selector$d = (onlyRenderVisible) => (s) => {
     return onlyRenderVisible ? getNodesInside(s.nodeLookup, { x: 0, y: 0, width: s.width, height: s.height }, s.transform, true).map((node) => node.id) : Array.from(s.nodeLookup.keys());
   };
   function useVisibleNodeIds(onlyRenderVisible) {
-    const nodeIds = useStore((0, import_react6.useCallback)(selector$d(onlyRenderVisible), [onlyRenderVisible]), shallow$1);
+    const nodeIds = useStore((0, import_react7.useCallback)(selector$d(onlyRenderVisible), [onlyRenderVisible]), shallow$1);
     return nodeIds;
   }
   var selector$c = (s) => s.updateNodeInternals;
   function useResizeObserver() {
     const updateNodeInternals2 = useStore(selector$c);
-    const [resizeObserver] = (0, import_react6.useState)(() => {
+    const [resizeObserver] = (0, import_react7.useState)(() => {
       if (typeof ResizeObserver === "undefined") {
         return null;
       }
@@ -33963,7 +34049,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         updateNodeInternals2(updates);
       });
     });
-    (0, import_react6.useEffect)(() => {
+    (0, import_react7.useEffect)(() => {
       return () => {
         resizeObserver?.disconnect();
       };
@@ -33972,13 +34058,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
   function useNodeObserver({ node, nodeType, hasDimensions, resizeObserver }) {
     const store = useStoreApi();
-    const nodeRef = (0, import_react6.useRef)(null);
-    const observedNode = (0, import_react6.useRef)(null);
-    const prevSourcePosition = (0, import_react6.useRef)(node.sourcePosition);
-    const prevTargetPosition = (0, import_react6.useRef)(node.targetPosition);
-    const prevType = (0, import_react6.useRef)(nodeType);
+    const nodeRef = (0, import_react7.useRef)(null);
+    const observedNode = (0, import_react7.useRef)(null);
+    const prevSourcePosition = (0, import_react7.useRef)(node.sourcePosition);
+    const prevTargetPosition = (0, import_react7.useRef)(node.targetPosition);
+    const prevType = (0, import_react7.useRef)(nodeType);
     const isInitialized = hasDimensions && !!node.internals.handleBounds;
-    (0, import_react6.useEffect)(() => {
+    (0, import_react7.useEffect)(() => {
       if (nodeRef.current && !node.hidden && (!isInitialized || observedNode.current !== nodeRef.current)) {
         if (observedNode.current) {
           resizeObserver?.unobserve(observedNode.current);
@@ -33987,7 +34073,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         observedNode.current = nodeRef.current;
       }
     }, [isInitialized, node.hidden]);
-    (0, import_react6.useEffect)(() => {
+    (0, import_react7.useEffect)(() => {
       return () => {
         if (observedNode.current) {
           resizeObserver?.unobserve(observedNode.current);
@@ -33995,7 +34081,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }
       };
     }, []);
-    (0, import_react6.useEffect)(() => {
+    (0, import_react7.useEffect)(() => {
       if (nodeRef.current) {
         const typeChanged = prevType.current !== nodeType;
         const sourcePosChanged = prevSourcePosition.current !== node.sourcePosition;
@@ -34135,7 +34221,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ...inlineDimensions
     }, "data-id": id2, "data-testid": `rf__node-${id2}`, onMouseEnter: onMouseEnterHandler, onMouseMove: onMouseMoveHandler, onMouseLeave: onMouseLeaveHandler, onContextMenu: onContextMenuHandler, onClick: onSelectNodeHandler, onDoubleClick: onDoubleClickHandler, onKeyDown: isFocusable ? onKeyDown : void 0, tabIndex: isFocusable ? 0 : void 0, onFocus: isFocusable ? onFocus : void 0, role: node.ariaRole ?? (isFocusable ? "group" : void 0), "aria-roledescription": "node", "aria-describedby": disableKeyboardA11y ? void 0 : `${ARIA_NODE_DESC_KEY}-${rfId}`, "aria-label": node.ariaLabel, ...node.domAttributes, children: (0, import_jsx_runtime6.jsx)(Provider, { value: id2, children: (0, import_jsx_runtime6.jsx)(NodeComponent, { id: id2, data: node.data, type: nodeType, positionAbsoluteX: internals.positionAbsolute.x, positionAbsoluteY: internals.positionAbsolute.y, selected: node.selected ?? false, selectable: isSelectable, draggable: isDraggable, deletable: node.deletable ?? true, isConnectable, sourcePosition: node.sourcePosition, targetPosition: node.targetPosition, dragging, dragHandle: node.dragHandle, zIndex: internals.z, parentId: node.parentId, ...nodeDimensions }) }) });
   }
-  var NodeWrapper$1 = (0, import_react6.memo)(NodeWrapper);
+  var NodeWrapper$1 = (0, import_react7.memo)(NodeWrapper);
   var selector$b = (s) => ({
     nodesDraggable: s.nodesDraggable,
     nodesConnectable: s.nodesConnectable,
@@ -34179,9 +34265,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     }) });
   }
   NodeRendererComponent.displayName = "NodeRenderer";
-  var NodeRenderer = (0, import_react6.memo)(NodeRendererComponent);
+  var NodeRenderer = (0, import_react7.memo)(NodeRendererComponent);
   function useVisibleEdgeIds(onlyRenderVisible) {
-    const edgeIds = useStore((0, import_react6.useCallback)((s) => {
+    const edgeIds = useStore((0, import_react7.useCallback)((s) => {
       if (!onlyRenderVisible) {
         return s.edges.map((edge) => edge.id);
       }
@@ -34225,7 +34311,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   };
   function useMarkerSymbol(type) {
     const store = useStoreApi();
-    const symbol = (0, import_react6.useMemo)(() => {
+    const symbol = (0, import_react7.useMemo)(() => {
       const symbolExists = Object.prototype.hasOwnProperty.call(MarkerSymbols, type);
       if (!symbolExists) {
         store.getState().onError?.("009", errorMessages["error009"](type));
@@ -34245,7 +34331,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var MarkerDefinitions = ({ defaultColor, rfId }) => {
     const edges = useStore((s) => s.edges);
     const defaultEdgeOptions = useStore((s) => s.defaultEdgeOptions);
-    const markers = (0, import_react6.useMemo)(() => {
+    const markers = (0, import_react7.useMemo)(() => {
       const markers2 = createMarkerIds(edges, {
         id: rfId,
         defaultColor,
@@ -34260,12 +34346,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return (0, import_jsx_runtime6.jsx)("svg", { className: "react-flow__marker", "aria-hidden": "true", children: (0, import_jsx_runtime6.jsx)("defs", { children: markers.map((marker) => (0, import_jsx_runtime6.jsx)(Marker, { id: marker.id, type: marker.type, color: marker.color, width: marker.width, height: marker.height, markerUnits: marker.markerUnits, strokeWidth: marker.strokeWidth, orient: marker.orient }, marker.id)) }) });
   };
   MarkerDefinitions.displayName = "MarkerDefinitions";
-  var MarkerDefinitions$1 = (0, import_react6.memo)(MarkerDefinitions);
+  var MarkerDefinitions$1 = (0, import_react7.memo)(MarkerDefinitions);
   function EdgeTextComponent({ x, y, label, labelStyle, labelShowBg = true, labelBgStyle, labelBgPadding = [2, 4], labelBgBorderRadius = 2, children: children2, className, ...rest }) {
-    const [edgeTextBbox, setEdgeTextBbox] = (0, import_react6.useState)({ x: 1, y: 0, width: 0, height: 0 });
+    const [edgeTextBbox, setEdgeTextBbox] = (0, import_react7.useState)({ x: 1, y: 0, width: 0, height: 0 });
     const edgeTextClasses = cc(["react-flow__edge-textwrapper", className]);
-    const edgeTextRef = (0, import_react6.useRef)(null);
-    (0, import_react6.useEffect)(() => {
+    const edgeTextRef = (0, import_react7.useRef)(null);
+    (0, import_react7.useEffect)(() => {
       if (edgeTextRef.current) {
         const textBbox = edgeTextRef.current.getBBox();
         setEdgeTextBbox({
@@ -34282,7 +34368,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return (0, import_jsx_runtime6.jsxs)("g", { transform: `translate(${x - edgeTextBbox.width / 2} ${y - edgeTextBbox.height / 2})`, className: edgeTextClasses, visibility: edgeTextBbox.width ? "visible" : "hidden", ...rest, children: [labelShowBg && (0, import_jsx_runtime6.jsx)("rect", { width: edgeTextBbox.width + 2 * labelBgPadding[0], x: -labelBgPadding[0], y: -labelBgPadding[1], height: edgeTextBbox.height + 2 * labelBgPadding[1], className: "react-flow__edge-textbg", style: labelBgStyle, rx: labelBgBorderRadius, ry: labelBgBorderRadius }), (0, import_jsx_runtime6.jsx)("text", { className: "react-flow__edge-text", y: edgeTextBbox.height / 2, dy: "0.3em", ref: edgeTextRef, style: labelStyle, children: label }), children2] });
   }
   EdgeTextComponent.displayName = "EdgeText";
-  var EdgeText = (0, import_react6.memo)(EdgeTextComponent);
+  var EdgeText = (0, import_react7.memo)(EdgeTextComponent);
   function BaseEdge({ path, labelX, labelY, label, labelStyle, labelShowBg, labelBgStyle, labelBgPadding, labelBgBorderRadius, interactionWidth = 20, ...props }) {
     return (0, import_jsx_runtime6.jsxs)(import_jsx_runtime6.Fragment, { children: [(0, import_jsx_runtime6.jsx)("path", { ...props, d: path, fill: "none", className: cc(["react-flow__edge-path", props.className]) }), interactionWidth ? (0, import_jsx_runtime6.jsx)("path", { d: path, fill: "none", strokeOpacity: 0, strokeWidth: interactionWidth, className: "react-flow__edge-interaction" }) : null, label && isNumeric(labelX) && isNumeric(labelY) ? (0, import_jsx_runtime6.jsx)(EdgeText, { x: labelX, y: labelY, label, labelStyle, labelShowBg, labelBgStyle, labelBgPadding, labelBgBorderRadius }) : null] });
   }
@@ -34326,7 +34412,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     ];
   }
   function createSimpleBezierEdge(params) {
-    return (0, import_react6.memo)(({ id: id2, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition, label, labelStyle, labelShowBg, labelBgStyle, labelBgPadding, labelBgBorderRadius, style: style2, markerEnd, markerStart, interactionWidth }) => {
+    return (0, import_react7.memo)(({ id: id2, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition, label, labelStyle, labelShowBg, labelBgStyle, labelBgPadding, labelBgBorderRadius, style: style2, markerEnd, markerStart, interactionWidth }) => {
       const [path, labelX, labelY] = getSimpleBezierPath({
         sourceX,
         sourceY,
@@ -34344,7 +34430,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   SimpleBezierEdge.displayName = "SimpleBezierEdge";
   SimpleBezierEdgeInternal.displayName = "SimpleBezierEdgeInternal";
   function createSmoothStepEdge(params) {
-    return (0, import_react6.memo)(({ id: id2, sourceX, sourceY, targetX, targetY, label, labelStyle, labelShowBg, labelBgStyle, labelBgPadding, labelBgBorderRadius, style: style2, sourcePosition = Position.Bottom, targetPosition = Position.Top, markerEnd, markerStart, pathOptions, interactionWidth }) => {
+    return (0, import_react7.memo)(({ id: id2, sourceX, sourceY, targetX, targetY, label, labelStyle, labelShowBg, labelBgStyle, labelBgPadding, labelBgBorderRadius, style: style2, sourcePosition = Position.Bottom, targetPosition = Position.Top, markerEnd, markerStart, pathOptions, interactionWidth }) => {
       const [path, labelX, labelY] = getSmoothStepPath({
         sourceX,
         sourceY,
@@ -34365,9 +34451,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   SmoothStepEdge.displayName = "SmoothStepEdge";
   SmoothStepEdgeInternal.displayName = "SmoothStepEdgeInternal";
   function createStepEdge(params) {
-    return (0, import_react6.memo)(({ id: id2, ...props }) => {
+    return (0, import_react7.memo)(({ id: id2, ...props }) => {
       const _id = params.isInternal ? void 0 : id2;
-      return (0, import_jsx_runtime6.jsx)(SmoothStepEdge, { ...props, id: _id, pathOptions: (0, import_react6.useMemo)(() => ({ borderRadius: 0, offset: props.pathOptions?.offset }), [props.pathOptions?.offset]) });
+      return (0, import_jsx_runtime6.jsx)(SmoothStepEdge, { ...props, id: _id, pathOptions: (0, import_react7.useMemo)(() => ({ borderRadius: 0, offset: props.pathOptions?.offset }), [props.pathOptions?.offset]) });
     });
   }
   var StepEdge = createStepEdge({ isInternal: false });
@@ -34375,7 +34461,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   StepEdge.displayName = "StepEdge";
   StepEdgeInternal.displayName = "StepEdgeInternal";
   function createStraightEdge(params) {
-    return (0, import_react6.memo)(({ id: id2, sourceX, sourceY, targetX, targetY, label, labelStyle, labelShowBg, labelBgStyle, labelBgPadding, labelBgBorderRadius, style: style2, markerEnd, markerStart, interactionWidth }) => {
+    return (0, import_react7.memo)(({ id: id2, sourceX, sourceY, targetX, targetY, label, labelStyle, labelShowBg, labelBgStyle, labelBgPadding, labelBgBorderRadius, style: style2, markerEnd, markerStart, interactionWidth }) => {
       const [path, labelX, labelY] = getStraightPath({ sourceX, sourceY, targetX, targetY });
       const _id = params.isInternal ? void 0 : id2;
       return (0, import_jsx_runtime6.jsx)(BaseEdge, { id: _id, path, labelX, labelY, label, labelStyle, labelShowBg, labelBgStyle, labelBgPadding, labelBgBorderRadius, style: style2, markerEnd, markerStart, interactionWidth });
@@ -34386,7 +34472,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   StraightEdge.displayName = "StraightEdge";
   StraightEdgeInternal.displayName = "StraightEdgeInternal";
   function createBezierEdge(params) {
-    return (0, import_react6.memo)(({ id: id2, sourceX, sourceY, targetX, targetY, sourcePosition = Position.Bottom, targetPosition = Position.Top, label, labelStyle, labelShowBg, labelBgStyle, labelBgPadding, labelBgBorderRadius, style: style2, markerEnd, markerStart, pathOptions, interactionWidth }) => {
+    return (0, import_react7.memo)(({ id: id2, sourceX, sourceY, targetX, targetY, sourcePosition = Position.Bottom, targetPosition = Position.Top, label, labelStyle, labelShowBg, labelBgStyle, labelBgPadding, labelBgBorderRadius, style: style2, markerEnd, markerStart, pathOptions, interactionWidth }) => {
       const [path, labelX, labelY] = getBezierPath({
         sourceX,
         sourceY,
@@ -34501,11 +34587,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const isFocusable = !!(edge.focusable || edgesFocusable && typeof edge.focusable === "undefined");
     const isReconnectable = typeof onReconnect !== "undefined" && (edge.reconnectable || edgesReconnectable && typeof edge.reconnectable === "undefined");
     const isSelectable = !!(edge.selectable || elementsSelectable && typeof edge.selectable === "undefined");
-    const edgeRef = (0, import_react6.useRef)(null);
-    const [updateHover, setUpdateHover] = (0, import_react6.useState)(false);
-    const [reconnecting, setReconnecting] = (0, import_react6.useState)(false);
+    const edgeRef = (0, import_react7.useRef)(null);
+    const [updateHover, setUpdateHover] = (0, import_react7.useState)(false);
+    const [reconnecting, setReconnecting] = (0, import_react7.useState)(false);
     const store = useStoreApi();
-    const { zIndex, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition } = useStore((0, import_react6.useCallback)((store2) => {
+    const { zIndex, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition } = useStore((0, import_react7.useCallback)((store2) => {
       const sourceNode = store2.nodeLookup.get(edge.source);
       const targetNode = store2.nodeLookup.get(edge.target);
       if (!sourceNode || !targetNode) {
@@ -34536,8 +34622,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         ...edgePosition || nullPosition
       };
     }, [edge.source, edge.target, edge.sourceHandle, edge.targetHandle, edge.selected, edge.zIndex]), shallow$1);
-    const markerStartUrl = (0, import_react6.useMemo)(() => edge.markerStart ? `url('#${getMarkerId(edge.markerStart, rfId)}')` : void 0, [edge.markerStart, rfId]);
-    const markerEndUrl = (0, import_react6.useMemo)(() => edge.markerEnd ? `url('#${getMarkerId(edge.markerEnd, rfId)}')` : void 0, [edge.markerEnd, rfId]);
+    const markerStartUrl = (0, import_react7.useMemo)(() => edge.markerStart ? `url('#${getMarkerId(edge.markerStart, rfId)}')` : void 0, [edge.markerStart, rfId]);
+    const markerEndUrl = (0, import_react7.useMemo)(() => edge.markerEnd ? `url('#${getMarkerId(edge.markerEnd, rfId)}')` : void 0, [edge.markerEnd, rfId]);
     if (edge.hidden || sourceX === null || sourceY === null || targetX === null || targetY === null) {
       return null;
     }
@@ -34597,7 +34683,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       }
     ]), onClick: onEdgeClick, onDoubleClick: onEdgeDoubleClick, onContextMenu: onEdgeContextMenu, onMouseEnter: onEdgeMouseEnter, onMouseMove: onEdgeMouseMove, onMouseLeave: onEdgeMouseLeave, onKeyDown: isFocusable ? onKeyDown : void 0, tabIndex: isFocusable ? 0 : void 0, role: edge.ariaRole ?? (isFocusable ? "group" : "img"), "aria-roledescription": "edge", "data-id": id2, "data-testid": `rf__edge-${id2}`, "aria-label": edge.ariaLabel === null ? void 0 : edge.ariaLabel || `Edge from ${edge.source} to ${edge.target}`, "aria-describedby": isFocusable ? `${ARIA_EDGE_DESC_KEY}-${rfId}` : void 0, ref: edgeRef, ...edge.domAttributes, children: [!reconnecting && (0, import_jsx_runtime6.jsx)(EdgeComponent, { id: id2, source: edge.source, target: edge.target, type: edge.type, selected: edge.selected, animated: edge.animated, selectable: isSelectable, deletable: edge.deletable ?? true, label: edge.label, labelStyle: edge.labelStyle, labelShowBg: edge.labelShowBg, labelBgStyle: edge.labelBgStyle, labelBgPadding: edge.labelBgPadding, labelBgBorderRadius: edge.labelBgBorderRadius, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition, data: edge.data, style: edge.style, sourceHandleId: edge.sourceHandle, targetHandleId: edge.targetHandle, markerStart: markerStartUrl, markerEnd: markerEndUrl, pathOptions: "pathOptions" in edge ? edge.pathOptions : void 0, interactionWidth: edge.interactionWidth }), isReconnectable && (0, import_jsx_runtime6.jsx)(EdgeUpdateAnchors, { edge, isReconnectable, reconnectRadius, onReconnect, onReconnectStart, onReconnectEnd, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition, setUpdateHover, setReconnecting })] }) });
   }
-  var EdgeWrapper$1 = (0, import_react6.memo)(EdgeWrapper);
+  var EdgeWrapper$1 = (0, import_react7.memo)(EdgeWrapper);
   var selector$a = (s) => ({
     edgesFocusable: s.edgesFocusable,
     edgesReconnectable: s.edgesReconnectable,
@@ -34613,7 +34699,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     })] });
   }
   EdgeRendererComponent.displayName = "EdgeRenderer";
-  var EdgeRenderer = (0, import_react6.memo)(EdgeRendererComponent);
+  var EdgeRenderer = (0, import_react7.memo)(EdgeRendererComponent);
   var selector$9 = (s) => `translate(${s.transform[0]}px,${s.transform[1]}px) scale(${s.transform[2]})`;
   function Viewport({ children: children2 }) {
     const transform2 = useStore(selector$9);
@@ -34621,8 +34707,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
   function useOnInitHandler(onInit) {
     const rfInstance = useReactFlow();
-    const isInitialized = (0, import_react6.useRef)(false);
-    (0, import_react6.useEffect)(() => {
+    const isInitialized = (0, import_react7.useRef)(false);
+    (0, import_react7.useEffect)(() => {
       if (!isInitialized.current && rfInstance.viewportInitialized && onInit) {
         setTimeout(() => onInit(rfInstance), 1);
         isInitialized.current = true;
@@ -34633,7 +34719,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   function useViewportSync(viewport) {
     const syncViewport = useStore(selector$8);
     const store = useStoreApi();
-    (0, import_react6.useEffect)(() => {
+    (0, import_react7.useEffect)(() => {
       if (viewport) {
         syncViewport?.(viewport);
         store.setState({ transform: [viewport.x, viewport.y, viewport.zoom] });
@@ -34714,9 +34800,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   ConnectionLine.displayName = "ConnectionLine";
   var emptyTypes = {};
   function useNodeOrEdgeTypesWarning(nodeOrEdgeTypes = emptyTypes) {
-    const typesRef = (0, import_react6.useRef)(nodeOrEdgeTypes);
+    const typesRef = (0, import_react7.useRef)(nodeOrEdgeTypes);
     const store = useStoreApi();
-    (0, import_react6.useEffect)(() => {
+    (0, import_react7.useEffect)(() => {
       if (true) {
         const usedKeys = /* @__PURE__ */ new Set([...Object.keys(typesRef.current), ...Object.keys(nodeOrEdgeTypes)]);
         for (const key of usedKeys) {
@@ -34731,8 +34817,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
   function useStylesLoadedWarning() {
     const store = useStoreApi();
-    const checked = (0, import_react6.useRef)(false);
-    (0, import_react6.useEffect)(() => {
+    const checked = (0, import_react7.useRef)(false);
+    (0, import_react7.useEffect)(() => {
       if (true) {
         if (!checked.current) {
           const pane = document.querySelector(".react-flow__pane");
@@ -34753,7 +34839,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return (0, import_jsx_runtime6.jsx)(FlowRenderer, { onPaneClick, onPaneMouseEnter, onPaneMouseMove, onPaneMouseLeave, onPaneContextMenu, onPaneScroll, paneClickDistance, deleteKeyCode, selectionKeyCode, selectionOnDrag, selectionMode, onSelectionStart, onSelectionEnd, multiSelectionKeyCode, panActivationKeyCode, zoomActivationKeyCode, elementsSelectable, zoomOnScroll, zoomOnPinch, zoomOnDoubleClick, panOnScroll, panOnScrollSpeed, panOnScrollMode, panOnDrag, defaultViewport: defaultViewport2, translateExtent, minZoom, maxZoom, onSelectionContextMenu, preventScrolling, noDragClassName, noWheelClassName, noPanClassName, disableKeyboardA11y, onViewportChange, isControlledViewport: !!viewport, children: (0, import_jsx_runtime6.jsxs)(Viewport, { children: [(0, import_jsx_runtime6.jsx)(EdgeRenderer, { edgeTypes, onEdgeClick, onEdgeDoubleClick, onReconnect, onReconnectStart, onReconnectEnd, onlyRenderVisibleElements, onEdgeContextMenu, onEdgeMouseEnter, onEdgeMouseMove, onEdgeMouseLeave, reconnectRadius, defaultMarkerColor, noPanClassName, disableKeyboardA11y, rfId }), (0, import_jsx_runtime6.jsx)(ConnectionLineWrapper, { style: connectionLineStyle, type: connectionLineType, component: connectionLineComponent, containerStyle: connectionLineContainerStyle }), (0, import_jsx_runtime6.jsx)("div", { className: "react-flow__edgelabel-renderer" }), (0, import_jsx_runtime6.jsx)(NodeRenderer, { nodeTypes: nodeTypes2, onNodeClick, onNodeDoubleClick, onNodeMouseEnter, onNodeMouseMove, onNodeMouseLeave, onNodeContextMenu, nodeClickDistance, onlyRenderVisibleElements, noPanClassName, noDragClassName, disableKeyboardA11y, nodeExtent, rfId }), (0, import_jsx_runtime6.jsx)("div", { className: "react-flow__viewport-portal" })] }) });
   }
   GraphViewComponent.displayName = "GraphView";
-  var GraphView = (0, import_react6.memo)(GraphViewComponent);
+  var GraphView = (0, import_react7.memo)(GraphViewComponent);
   var getInitialState = ({ nodes, edges, defaultNodes, defaultEdges, width, height, fitView, fitViewOptions, minZoom = 0.5, maxZoom = 2, nodeOrigin, nodeExtent, zIndexMode = "basic" } = {}) => {
     const nodeLookup = /* @__PURE__ */ new Map();
     const parentLookup = /* @__PURE__ */ new Map();
@@ -35122,7 +35208,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     };
   }, Object.is);
   function ReactFlowProvider({ initialNodes: nodes, initialEdges: edges, defaultNodes, defaultEdges, initialWidth: width, initialHeight: height, initialMinZoom: minZoom, initialMaxZoom: maxZoom, initialFitViewOptions: fitViewOptions, fitView, nodeOrigin, nodeExtent, zIndexMode, children: children2 }) {
-    const [store] = (0, import_react6.useState)(() => createStore2({
+    const [store] = (0, import_react7.useState)(() => createStore2({
       nodes,
       edges,
       defaultNodes,
@@ -35140,7 +35226,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return (0, import_jsx_runtime6.jsx)(Provider$1, { value: store, children: (0, import_jsx_runtime6.jsx)(BatchProvider, { children: children2 }) });
   }
   function Wrapper({ children: children2, nodes, edges, defaultNodes, defaultEdges, width, height, fitView, fitViewOptions, minZoom, maxZoom, nodeOrigin, nodeExtent, zIndexMode }) {
-    const isWrapped = (0, import_react6.useContext)(StoreContext);
+    const isWrapped = (0, import_react7.useContext)(StoreContext);
     if (isWrapped) {
       return (0, import_jsx_runtime6.jsx)(import_jsx_runtime6.Fragment, { children: children2 });
     }
@@ -35156,7 +35242,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   function ReactFlow({ nodes, edges, defaultNodes, defaultEdges, className, nodeTypes: nodeTypes2, edgeTypes, onNodeClick, onEdgeClick, onInit, onMove, onMoveStart, onMoveEnd, onConnect, onConnectStart, onConnectEnd, onClickConnectStart, onClickConnectEnd, onNodeMouseEnter, onNodeMouseMove, onNodeMouseLeave, onNodeContextMenu, onNodeDoubleClick, onNodeDragStart, onNodeDrag, onNodeDragStop, onNodesDelete, onEdgesDelete, onDelete, onSelectionChange, onSelectionDragStart, onSelectionDrag, onSelectionDragStop, onSelectionContextMenu, onSelectionStart, onSelectionEnd, onBeforeDelete, connectionMode, connectionLineType = ConnectionLineType.Bezier, connectionLineStyle, connectionLineComponent, connectionLineContainerStyle, deleteKeyCode = "Backspace", selectionKeyCode = "Shift", selectionOnDrag = false, selectionMode = SelectionMode.Full, panActivationKeyCode = "Space", multiSelectionKeyCode = isMacOs() ? "Meta" : "Control", zoomActivationKeyCode = isMacOs() ? "Meta" : "Control", snapToGrid, snapGrid, onlyRenderVisibleElements = false, selectNodesOnDrag, nodesDraggable, autoPanOnNodeFocus, nodesConnectable, nodesFocusable, nodeOrigin = defaultNodeOrigin, edgesFocusable, edgesReconnectable, elementsSelectable = true, defaultViewport: defaultViewport$1 = defaultViewport, minZoom = 0.5, maxZoom = 2, translateExtent = infiniteExtent, preventScrolling = true, nodeExtent, defaultMarkerColor = "#b1b1b7", zoomOnScroll = true, zoomOnPinch = true, panOnScroll = false, panOnScrollSpeed = 0.5, panOnScrollMode = PanOnScrollMode.Free, zoomOnDoubleClick = true, panOnDrag = true, onPaneClick, onPaneMouseEnter, onPaneMouseMove, onPaneMouseLeave, onPaneScroll, onPaneContextMenu, paneClickDistance = 1, nodeClickDistance = 0, children: children2, onReconnect, onReconnectStart, onReconnectEnd, onEdgeContextMenu, onEdgeDoubleClick, onEdgeMouseEnter, onEdgeMouseMove, onEdgeMouseLeave, reconnectRadius = 10, onNodesChange, onEdgesChange, noDragClassName = "nodrag", noWheelClassName = "nowheel", noPanClassName = "nopan", fitView, fitViewOptions, connectOnClick, attributionPosition, proOptions, defaultEdgeOptions, elevateNodesOnSelect = true, elevateEdgesOnSelect = false, disableKeyboardA11y = false, autoPanOnConnect, autoPanOnNodeDrag, autoPanSpeed, connectionRadius, isValidConnection, onError, style: style2, id: id2, nodeDragThreshold, connectionDragThreshold, viewport, onViewportChange, width, height, colorMode = "light", debug, onScroll, ariaLabelConfig, zIndexMode = "basic", ...rest }, ref) {
     const rfId = id2 || "1";
     const colorModeClassName = useColorModeClass(colorMode);
-    const wrapperOnScroll = (0, import_react6.useCallback)((e) => {
+    const wrapperOnScroll = (0, import_react7.useCallback)((e) => {
       e.currentTarget.scrollTo({ top: 0, left: 0, behavior: "instant" });
       onScroll?.(e);
     }, [onScroll]);
@@ -35164,13 +35250,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
   var index = fixedForwardRef(ReactFlow);
   function useNodesState(initialNodes) {
-    const [nodes, setNodes] = (0, import_react6.useState)(initialNodes);
-    const onNodesChange = (0, import_react6.useCallback)((changes) => setNodes((nds) => applyNodeChanges(changes, nds)), []);
+    const [nodes, setNodes] = (0, import_react7.useState)(initialNodes);
+    const onNodesChange = (0, import_react7.useCallback)((changes) => setNodes((nds) => applyNodeChanges(changes, nds)), []);
     return [nodes, setNodes, onNodesChange];
   }
   function useEdgesState(initialEdges) {
-    const [edges, setEdges] = (0, import_react6.useState)(initialEdges);
-    const onEdgesChange = (0, import_react6.useCallback)((changes) => setEdges((eds) => applyEdgeChanges(changes, eds)), []);
+    const [edges, setEdges] = (0, import_react7.useState)(initialEdges);
+    const onEdgesChange = (0, import_react7.useCallback)((changes) => setEdges((eds) => applyEdgeChanges(changes, eds)), []);
     return [edges, setEdges, onEdgesChange];
   }
   var error014 = errorMessages["error014"]();
@@ -35207,7 +35293,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     className,
     patternClassName
   }) {
-    const ref = (0, import_react6.useRef)(null);
+    const ref = (0, import_react7.useRef)(null);
     const { transform: transform2, patternId } = useStore(selector$3, shallow$1);
     const patternSize = size || defaultSize[variant];
     const isDots = variant === BackgroundVariant.Dots;
@@ -35230,7 +35316,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     }, ref, "data-testid": "rf__background", children: [(0, import_jsx_runtime6.jsx)("pattern", { id: _patternId, x: transform2[0] % scaledGap[0], y: transform2[1] % scaledGap[1], width: scaledGap[0], height: scaledGap[1], patternUnits: "userSpaceOnUse", patternTransform: `translate(-${scaledOffset[0]},-${scaledOffset[1]})`, children: isDots ? (0, import_jsx_runtime6.jsx)(DotPattern, { radius: scaledSize / 2, className: patternClassName }) : (0, import_jsx_runtime6.jsx)(LinePattern, { dimensions: patternDimensions, lineWidth, variant, className: patternClassName }) }), (0, import_jsx_runtime6.jsx)("rect", { x: "0", y: "0", width: "100%", height: "100%", fill: `url(#${_patternId})` })] });
   }
   BackgroundComponent.displayName = "Background";
-  var Background = (0, import_react6.memo)(BackgroundComponent);
+  var Background = (0, import_react7.memo)(BackgroundComponent);
   function PlusIcon() {
     return (0, import_jsx_runtime6.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 32 32", children: (0, import_jsx_runtime6.jsx)("path", { d: "M32 18.133H18.133V32h-4.266V18.133H0v-4.266h13.867V0h4.266v13.867H32z" }) });
   }
@@ -35283,7 +35369,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return (0, import_jsx_runtime6.jsxs)(Panel, { className: cc(["react-flow__controls", orientationClass, className]), position, style: style2, "data-testid": "rf__controls", "aria-label": ariaLabel ?? ariaLabelConfig["controls.ariaLabel"], children: [showZoom && (0, import_jsx_runtime6.jsxs)(import_jsx_runtime6.Fragment, { children: [(0, import_jsx_runtime6.jsx)(ControlButton, { onClick: onZoomInHandler, className: "react-flow__controls-zoomin", title: ariaLabelConfig["controls.zoomIn.ariaLabel"], "aria-label": ariaLabelConfig["controls.zoomIn.ariaLabel"], disabled: maxZoomReached, children: (0, import_jsx_runtime6.jsx)(PlusIcon, {}) }), (0, import_jsx_runtime6.jsx)(ControlButton, { onClick: onZoomOutHandler, className: "react-flow__controls-zoomout", title: ariaLabelConfig["controls.zoomOut.ariaLabel"], "aria-label": ariaLabelConfig["controls.zoomOut.ariaLabel"], disabled: minZoomReached, children: (0, import_jsx_runtime6.jsx)(MinusIcon, {}) })] }), showFitView && (0, import_jsx_runtime6.jsx)(ControlButton, { className: "react-flow__controls-fitview", onClick: onFitViewHandler, title: ariaLabelConfig["controls.fitView.ariaLabel"], "aria-label": ariaLabelConfig["controls.fitView.ariaLabel"], children: (0, import_jsx_runtime6.jsx)(FitViewIcon, {}) }), showInteractive && (0, import_jsx_runtime6.jsx)(ControlButton, { className: "react-flow__controls-interactive", onClick: onToggleInteractivity, title: ariaLabelConfig["controls.interactive.ariaLabel"], "aria-label": ariaLabelConfig["controls.interactive.ariaLabel"], children: isInteractive ? (0, import_jsx_runtime6.jsx)(UnlockIcon, {}) : (0, import_jsx_runtime6.jsx)(LockIcon, {}) }), children2] });
   }
   ControlsComponent.displayName = "Controls";
-  var Controls = (0, import_react6.memo)(ControlsComponent);
+  var Controls = (0, import_react7.memo)(ControlsComponent);
   function MiniMapNodeComponent({ id: id2, x, y, width, height, style: style2, color: color2, strokeColor, strokeWidth, className, borderRadius, shapeRendering, selected: selected2, onClick }) {
     const { background, backgroundColor } = style2 || {};
     const fill = color2 || background || backgroundColor;
@@ -35293,7 +35379,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       strokeWidth
     }, shapeRendering, onClick: onClick ? (event) => onClick(event, id2) : void 0 });
   }
-  var MiniMapNode = (0, import_react6.memo)(MiniMapNodeComponent);
+  var MiniMapNode = (0, import_react7.memo)(MiniMapNodeComponent);
   var selectorNodeIds = (s) => s.nodes.map((node) => node.id);
   var getAttrFunction = (func) => func instanceof Function ? func : () => func;
   function MiniMapNodes({
@@ -35347,8 +35433,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     }
     return (0, import_jsx_runtime6.jsx)(NodeComponent, { x, y, width, height, style: node.style, selected: !!node.selected, className: nodeClassNameFunc(node), color: nodeColorFunc(node), borderRadius: nodeBorderRadius, strokeColor: nodeStrokeColorFunc(node), strokeWidth: nodeStrokeWidth, shapeRendering, onClick, id: node.id });
   }
-  var NodeComponentWrapper = (0, import_react6.memo)(NodeComponentWrapperInner);
-  var MiniMapNodes$1 = (0, import_react6.memo)(MiniMapNodes);
+  var NodeComponentWrapper = (0, import_react7.memo)(NodeComponentWrapperInner);
+  var MiniMapNodes$1 = (0, import_react7.memo)(MiniMapNodes);
   var defaultWidth = 200;
   var defaultHeight = 150;
   var filterHidden = (node) => !node.hidden;
@@ -35399,7 +35485,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     offsetScale = 5
   }) {
     const store = useStoreApi();
-    const svg = (0, import_react6.useRef)(null);
+    const svg = (0, import_react7.useRef)(null);
     const { boundingRect, viewBB, rfId, panZoom, translateExtent, flowWidth, flowHeight, ariaLabelConfig } = useStore(selector$1, shallow$1);
     const elementWidth = style2?.width ?? defaultWidth;
     const elementHeight = style2?.height ?? defaultHeight;
@@ -35414,10 +35500,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const width = viewWidth + offset * 2;
     const height = viewHeight + offset * 2;
     const labelledBy = `${ARIA_LABEL_KEY}-${rfId}`;
-    const viewScaleRef = (0, import_react6.useRef)(0);
-    const minimapInstance = (0, import_react6.useRef)();
+    const viewScaleRef = (0, import_react7.useRef)(0);
+    const minimapInstance = (0, import_react7.useRef)();
     viewScaleRef.current = viewScale;
-    (0, import_react6.useEffect)(() => {
+    (0, import_react7.useEffect)(() => {
       if (svg.current && panZoom) {
         minimapInstance.current = XYMinimap({
           domNode: svg.current,
@@ -35430,7 +35516,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         };
       }
     }, [panZoom]);
-    (0, import_react6.useEffect)(() => {
+    (0, import_react7.useEffect)(() => {
       minimapInstance.current?.update({
         translateExtent,
         width: flowWidth,
@@ -35445,7 +35531,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       const [x2, y2] = minimapInstance.current?.pointer(event) || [0, 0];
       onClick(event, { x: x2, y: y2 });
     } : void 0;
-    const onSvgNodeClick = onNodeClick ? (0, import_react6.useCallback)((event, nodeId) => {
+    const onSvgNodeClick = onNodeClick ? (0, import_react7.useCallback)((event, nodeId) => {
       const node = store.getState().nodeLookup.get(nodeId).internals.userNode;
       onNodeClick(event, node);
     }, []) : void 0;
@@ -35463,7 +35549,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         M${viewBB.x},${viewBB.y}h${viewBB.width}v${viewBB.height}h${-viewBB.width}z`, fillRule: "evenodd", pointerEvents: "none" })] }) });
   }
   MiniMapComponent.displayName = "MiniMap";
-  var MiniMap = (0, import_react6.memo)(MiniMapComponent);
+  var MiniMap = (0, import_react7.memo)(MiniMapComponent);
   var scaleSelector = (calculateScale) => (store) => calculateScale ? `${Math.max(1 / store.transform[2], 1)}` : void 0;
   var defaultPositions = {
     [ResizeControlVariant.Line]: "right",
@@ -35473,12 +35559,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const contextNodeId = useNodeId();
     const id2 = typeof nodeId === "string" ? nodeId : contextNodeId;
     const store = useStoreApi();
-    const resizeControlRef = (0, import_react6.useRef)(null);
+    const resizeControlRef = (0, import_react7.useRef)(null);
     const isHandleControl = variant === ResizeControlVariant.Handle;
-    const scale = useStore((0, import_react6.useCallback)(scaleSelector(isHandleControl && autoScale), [isHandleControl, autoScale]), shallow$1);
-    const resizer = (0, import_react6.useRef)(null);
+    const scale = useStore((0, import_react7.useCallback)(scaleSelector(isHandleControl && autoScale), [isHandleControl, autoScale]), shallow$1);
+    const resizer = (0, import_react7.useRef)(null);
     const controlPosition = position ?? defaultPositions[variant];
-    (0, import_react6.useEffect)(() => {
+    (0, import_react7.useEffect)(() => {
       if (!resizeControlRef.current || !id2) {
         return;
       }
@@ -35605,10 +35691,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ...color2 && { [isHandleControl ? "backgroundColor" : "borderColor"]: color2 }
     }, children: children2 });
   }
-  var NodeResizeControl = (0, import_react6.memo)(ResizeControl);
+  var NodeResizeControl = (0, import_react7.memo)(ResizeControl);
 
   // src/admin/components/editor/ScenarioCanvas.tsx
-  var import_react9 = __toESM(require_react());
+  var import_react10 = __toESM(require_react());
 
   // node_modules/uuid/dist/stringify.js
   var byteToHex = [];
@@ -35657,16 +35743,57 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   // src/admin/components/editor/NodeTypes.tsx
   var import_jsx_runtime7 = __toESM(require_jsx_runtime());
   var NODE_COLORS = {
-    message: { bg: "#eff6ff", border: "#3b82f6", header: "#2563eb", text: "#1e3a8a" },
-    condition: { bg: "#fffbeb", border: "#f59e0b", header: "#d97706", text: "#78350f" },
-    action: { bg: "#f0fdf4", border: "#22c55e", header: "#16a34a", text: "#14532d" },
-    end: { bg: "#fef2f2", border: "#ef4444", header: "#dc2626", text: "#7f1d1d" }
+    message: { bg: "oklch(96% 0.03 248)", border: "oklch(70% 0.12 248)", header: "oklch(52% 0.18 248)", text: "oklch(32% 0.16 248)" },
+    condition: { bg: "oklch(96% 0.04 65)", border: "oklch(74% 0.12 65)", header: "oklch(62% 0.16 65)", text: "oklch(36% 0.14 65)" },
+    action: { bg: "oklch(96% 0.03 192)", border: "oklch(72% 0.10 192)", header: "oklch(56% 0.16 192)", text: "oklch(34% 0.14 192)" },
+    end: { bg: "oklch(96% 0.015 265)", border: "oklch(72% 0.06 265)", header: "oklch(48% 0.10 265)", text: "oklch(32% 0.10 265)" }
   };
   var NODE_ICONS = {
-    message: "\u{1F4AC}",
-    condition: "\u{1F500}",
-    action: "\u26A1",
-    end: "\u{1F3C1}"
+    message: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+      "svg",
+      {
+        width: "14",
+        height: "14",
+        viewBox: "0 0 16 16",
+        fill: "none",
+        stroke: "currentColor",
+        strokeWidth: "1.8",
+        strokeLinecap: "round",
+        strokeLinejoin: "round",
+        children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("path", { d: "M14 10.5A1.5 1.5 0 0 1 12.5 12H5L2 15V4.5A1.5 1.5 0 0 1 3.5 3h9A1.5 1.5 0 0 1 14 4.5z" })
+      }
+    ),
+    condition: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+      "svg",
+      {
+        width: "14",
+        height: "14",
+        viewBox: "0 0 16 16",
+        fill: "none",
+        stroke: "currentColor",
+        strokeWidth: "1.8",
+        strokeLinejoin: "round",
+        children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("path", { d: "M8 1.5L14.5 8 8 14.5 1.5 8z" })
+      }
+    ),
+    action: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("svg", { width: "14", height: "14", viewBox: "0 0 16 16", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("path", { d: "M9.5 1.5L3 9.5h5L6.5 14.5 14 6.5H9L9.5 1.5z" }) }),
+    end: /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
+      "svg",
+      {
+        width: "14",
+        height: "14",
+        viewBox: "0 0 16 16",
+        fill: "none",
+        stroke: "currentColor",
+        strokeWidth: "1.8",
+        strokeLinecap: "round",
+        strokeLinejoin: "round",
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("circle", { cx: "8", cy: "8", r: "6.5" }),
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("polyline", { points: "5,8.5 7,10.5 11,6" })
+        ]
+      }
+    )
   };
   var NODE_LABELS = {
     message: "\u30E1\u30C3\u30BB\u30FC\u30B8",
@@ -35675,9 +35802,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     end: "\u7D42\u7AEF"
   };
   function dropOffColor(rate) {
-    if (rate >= 0.5) return "#ef4444";
-    if (rate >= 0.2) return "#f59e0b";
-    return "#22c55e";
+    if (rate >= 0.5) return "oklch(52% 0.20 25)";
+    if (rate >= 0.2) return "oklch(62% 0.16 65)";
+    return "oklch(56% 0.16 145)";
   }
   function NodeShell({
     type,
@@ -35688,8 +35815,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     isBottleneck
   }) {
     const c = NODE_COLORS[type];
-    const borderColor = isBottleneck ? "#ef4444" : analytics ? dropOffColor(analytics.drop_off_rate) : selected2 ? "#6366f1" : c.border;
-    const boxShadow = isBottleneck ? "0 0 0 3px rgba(239,68,68,.35)" : selected2 ? "0 0 0 3px #c7d2fe" : "0 2px 6px rgba(0,0,0,.10)";
+    const borderColor = isBottleneck ? "oklch(52% 0.20 25)" : analytics ? dropOffColor(analytics.drop_off_rate) : selected2 ? "oklch(62% 0.18 265)" : c.border;
+    const boxShadow = isBottleneck ? "0 0 0 3px oklch(52% 0.20 25 / 0.35)" : selected2 ? "0 0 0 3px oklch(80% 0.10 265 / 0.6)" : "0 2px 6px rgba(0,0,0,.10)";
     return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: {
       background: c.bg,
       border: `2px solid ${borderColor}`,
@@ -35715,7 +35842,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { children: NODE_ICONS[type] }),
         /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }, children: label || NODE_LABELS[type] }),
         isBottleneck && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: {
-          background: "#ef4444",
+          background: "oklch(52% 0.20 25)",
           color: "#fff",
           fontSize: 9,
           fontWeight: 700,
@@ -35740,7 +35867,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           gap: 3,
           fontSize: 11,
           fontWeight: 700,
-          color: "#374151"
+          color: "oklch(28% 0.02 75)"
         }, children: [
           "\u{1F441} ",
           analytics.visit_count.toLocaleString()
@@ -35820,8 +35947,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             a && Object.keys(a.branch_percentages).length > 0 && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { display: "flex", gap: 8, marginTop: 4 }, children: Object.entries(a.branch_percentages).map(([label, pct]) => /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("span", { style: {
               fontSize: 10,
               fontWeight: 700,
-              color: label === "true" ? "#16a34a" : "#dc2626",
-              background: label === "true" ? "#dcfce7" : "#fee2e2",
+              color: label === "true" ? "oklch(38% 0.15 145)" : "oklch(40% 0.18 25)",
+              background: label === "true" ? "oklch(94% 0.05 145)" : "oklch(95% 0.04 25)",
               borderRadius: 99,
               padding: "1px 6px"
             }, children: [
@@ -35879,7 +36006,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               " ",
               d.action_type
             ] }),
-            d.action_type === "qr" && d.qr_content && /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("p", { style: { margin: "3px 0 0", fontSize: 11, color: "#166534", wordBreak: "break-all" }, children: [
+            d.action_type === "qr" && d.qr_content && /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("p", { style: { margin: "3px 0 0", fontSize: 11, color: "oklch(36% 0.14 145)", wordBreak: "break-all" }, children: [
               truncate(d.qr_content, 40),
               d.qr_variable && d.qr_variable !== "qr_url" ? ` \u2192 ${d.qr_variable}` : ""
             ] })
@@ -36476,18 +36603,18 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const { t } = useTranslation();
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes.map(apiNodeToRF));
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges.map(apiEdgeToRF));
-    const [selectedNodeId, setSelectedNodeId] = (0, import_react9.useState)(null);
-    const reactFlowWrapper = (0, import_react9.useRef)(null);
-    const [analyticsMode, setAnalyticsMode] = (0, import_react9.useState)(false);
-    const [period, setPeriod] = (0, import_react9.useState)("7d");
-    const [analyticsReport, setAnalyticsReport] = (0, import_react9.useState)(null);
-    const [analyticsLoading, setAnalyticsLoading] = (0, import_react9.useState)(false);
-    const [analyticsNoData, setAnalyticsNoData] = (0, import_react9.useState)(false);
-    (0, import_react9.useEffect)(() => {
+    const [selectedNodeId, setSelectedNodeId] = (0, import_react10.useState)(null);
+    const reactFlowWrapper = (0, import_react10.useRef)(null);
+    const [analyticsMode, setAnalyticsMode] = (0, import_react10.useState)(false);
+    const [period, setPeriod] = (0, import_react10.useState)("7d");
+    const [analyticsReport, setAnalyticsReport] = (0, import_react10.useState)(null);
+    const [analyticsLoading, setAnalyticsLoading] = (0, import_react10.useState)(false);
+    const [analyticsNoData, setAnalyticsNoData] = (0, import_react10.useState)(false);
+    (0, import_react10.useEffect)(() => {
       setNodes(initialNodes.map(apiNodeToRF));
       setEdges(initialEdges.map(apiEdgeToRF));
     }, [initialNodes.length, initialEdges.length]);
-    (0, import_react9.useEffect)(() => {
+    (0, import_react10.useEffect)(() => {
       if (!analyticsMode) {
         setNodes((nds) => nds.map((n) => {
           const { _analytics, _isBottleneck, ...rest } = n.data;
@@ -36530,7 +36657,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         cancelled = true;
       };
     }, [analyticsMode, period, scenarioId]);
-    const onConnect = (0, import_react9.useCallback)((connection) => {
+    const onConnect = (0, import_react10.useCallback)((connection) => {
       setEdges((eds) => addEdge({ ...connection, id: `e-${v4_default()}` }, eds));
     }, [setEdges]);
     function addNode(type) {
@@ -36595,7 +36722,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           },
           onPaneClick: () => setSelectedNodeId(null),
           fitView: true,
-          fitViewOptions: { padding: 0.2 },
+          fitViewOptions: { padding: 0.6, maxZoom: 0.85 },
           deleteKeyCode: analyticsMode ? null : "Delete",
           nodesDraggable: !analyticsMode,
           nodesConnectable: !analyticsMode,
@@ -36756,17 +36883,17 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const isNew = id2 === void 0;
     const nav = useNavigate();
     const { t } = useTranslation();
-    const [name, setName] = (0, import_react10.useState)("");
-    const [description, setDescription] = (0, import_react10.useState)("");
-    const [status, setStatus] = (0, import_react10.useState)("draft");
-    const [nodes, setNodes] = (0, import_react10.useState)([]);
-    const [edges, setEdges] = (0, import_react10.useState)([]);
-    const [credentials, setCredentials] = (0, import_react10.useState)([]);
-    const [loading, setLoading] = (0, import_react10.useState)(!isNew);
-    const [saving, setSaving] = (0, import_react10.useState)(false);
-    const [error, setError] = (0, import_react10.useState)(null);
-    const [savedMsg, setSavedMsg] = (0, import_react10.useState)("");
-    (0, import_react10.useEffect)(() => {
+    const [name, setName] = (0, import_react11.useState)("");
+    const [description, setDescription] = (0, import_react11.useState)("");
+    const [status, setStatus] = (0, import_react11.useState)("draft");
+    const [nodes, setNodes] = (0, import_react11.useState)([]);
+    const [edges, setEdges] = (0, import_react11.useState)([]);
+    const [credentials, setCredentials] = (0, import_react11.useState)([]);
+    const [loading, setLoading] = (0, import_react11.useState)(!isNew);
+    const [saving, setSaving] = (0, import_react11.useState)(false);
+    const [error, setError] = (0, import_react11.useState)(null);
+    const [savedMsg, setSavedMsg] = (0, import_react11.useState)("");
+    (0, import_react11.useEffect)(() => {
       void listCredentials().then((r) => setCredentials(r.data)).catch(() => {
       });
       if (isNew) return;
@@ -36963,7 +37090,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/AppearancePage.tsx
-  var import_react11 = __toESM(require_react());
+  var import_react12 = __toESM(require_react());
   var import_jsx_runtime11 = __toESM(require_jsx_runtime());
   function ColorSwatch({ color: color2 }) {
     return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: {
@@ -36979,11 +37106,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
   function AppearancePage() {
     const { t } = useTranslation();
-    const [form, setForm] = (0, import_react11.useState)(null);
-    const [loading, setLoading] = (0, import_react11.useState)(true);
-    const [saving, setSaving] = (0, import_react11.useState)(false);
-    const [error, setError] = (0, import_react11.useState)(null);
-    const [saved, setSaved] = (0, import_react11.useState)(false);
+    const [form, setForm] = (0, import_react12.useState)(null);
+    const [loading, setLoading] = (0, import_react12.useState)(true);
+    const [saving, setSaving] = (0, import_react12.useState)(false);
+    const [error, setError] = (0, import_react12.useState)(null);
+    const [saved, setSaved] = (0, import_react12.useState)(false);
     const positionOptions = [
       { value: "bottom-right", label: t("appearance.position.bottomRight") },
       { value: "bottom-left", label: t("appearance.position.bottomLeft") },
@@ -36996,7 +37123,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       { value: "exit_intent", label: t("appearance.trigger.exitIntent") },
       { value: "manual", label: t("appearance.trigger.manual") }
     ];
-    (0, import_react11.useEffect)(() => {
+    (0, import_react12.useEffect)(() => {
       void (async () => {
         try {
           setForm(await getAppearance());
@@ -37160,7 +37287,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/CredentialsPage.tsx
-  var import_react12 = __toESM(require_react());
+  var import_react13 = __toESM(require_react());
   var import_jsx_runtime12 = __toESM(require_jsx_runtime());
   var ADAPTER_COLORS = {
     http: { bg: "#e0f2fe", color: "#0369a1" },
@@ -37181,13 +37308,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
   function CredentialsPage() {
     const { t } = useTranslation();
-    const [creds, setCreds] = (0, import_react12.useState)([]);
-    const [loading, setLoading] = (0, import_react12.useState)(true);
-    const [error, setError] = (0, import_react12.useState)(null);
-    const [showForm, setShowForm] = (0, import_react12.useState)(false);
-    const [name, setName] = (0, import_react12.useState)("");
-    const [adapter, setAdapter] = (0, import_react12.useState)("http");
-    const [saving, setSaving] = (0, import_react12.useState)(false);
+    const [creds, setCreds] = (0, import_react13.useState)([]);
+    const [loading, setLoading] = (0, import_react13.useState)(true);
+    const [error, setError] = (0, import_react13.useState)(null);
+    const [showForm, setShowForm] = (0, import_react13.useState)(false);
+    const [name, setName] = (0, import_react13.useState)("");
+    const [adapter, setAdapter] = (0, import_react13.useState)("http");
+    const [saving, setSaving] = (0, import_react13.useState)(false);
     const adapterOptions = [
       { value: "http", label: t("credentials.adapter.http") },
       { value: "email", label: t("credentials.adapter.email") },
@@ -37206,7 +37333,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         setLoading(false);
       }
     }
-    (0, import_react12.useEffect)(() => {
+    (0, import_react13.useEffect)(() => {
       void load();
     }, []);
     async function handleCreate(e) {
@@ -37422,7 +37549,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/ActionLogsPage.tsx
-  var import_react13 = __toESM(require_react());
+  var import_react14 = __toESM(require_react());
   var import_jsx_runtime14 = __toESM(require_jsx_runtime());
   var ADAPTER_ICONS = {
     email: "\u{1F4E7}",
@@ -37451,15 +37578,15 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
   function ActionLogsPage() {
     const { t } = useTranslation();
-    const [logs, setLogs] = (0, import_react13.useState)([]);
-    const [total, setTotal] = (0, import_react13.useState)(0);
-    const [loading, setLoading] = (0, import_react13.useState)(true);
-    const [error, setError] = (0, import_react13.useState)(null);
-    const [adapter, setAdapter] = (0, import_react13.useState)("");
-    const [status, setStatus] = (0, import_react13.useState)("");
-    const [offset, setOffset] = (0, import_react13.useState)(0);
+    const [logs, setLogs] = (0, import_react14.useState)([]);
+    const [total, setTotal] = (0, import_react14.useState)(0);
+    const [loading, setLoading] = (0, import_react14.useState)(true);
+    const [error, setError] = (0, import_react14.useState)(null);
+    const [adapter, setAdapter] = (0, import_react14.useState)("");
+    const [status, setStatus] = (0, import_react14.useState)("");
+    const [offset, setOffset] = (0, import_react14.useState)(0);
     const limit = 50;
-    (0, import_react13.useEffect)(() => {
+    (0, import_react14.useEffect)(() => {
       setLoading(true);
       setError(null);
       void listActionLogs({
@@ -37683,7 +37810,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/DashboardPage.tsx
-  var import_react14 = __toESM(require_react());
+  var import_react15 = __toESM(require_react());
   var import_jsx_runtime15 = __toESM(require_jsx_runtime());
   function KpiCard({
     label,
@@ -37789,10 +37916,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
   function DashboardPage() {
     const { t } = useTranslation();
-    const [stats, setStats] = (0, import_react14.useState)(null);
-    const [loading, setLoading] = (0, import_react14.useState)(true);
-    const [error, setError] = (0, import_react14.useState)(null);
-    (0, import_react14.useEffect)(() => {
+    const [stats, setStats] = (0, import_react15.useState)(null);
+    const [loading, setLoading] = (0, import_react15.useState)(true);
+    const [error, setError] = (0, import_react15.useState)(null);
+    (0, import_react15.useEffect)(() => {
       setLoading(true);
       setError(null);
       void getDashboard().then((res) => setStats(res.data)).catch((err) => {
@@ -37878,7 +38005,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/SessionsPage.tsx
-  var import_react15 = __toESM(require_react());
+  var import_react16 = __toESM(require_react());
   var import_jsx_runtime16 = __toESM(require_jsx_runtime());
   var OUTCOME_COLORS = {
     active: { bg: "oklch(96% 0.05 220)", fg: "oklch(38% 0.15 220)", border: "oklch(83% 0.10 220)" },
@@ -37911,10 +38038,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     onClose
   }) {
     const { t } = useTranslation();
-    const [detail, setDetail] = (0, import_react15.useState)(null);
-    const [loading, setLoading] = (0, import_react15.useState)(true);
-    const [error, setError] = (0, import_react15.useState)(null);
-    (0, import_react15.useEffect)(() => {
+    const [detail, setDetail] = (0, import_react16.useState)(null);
+    const [loading, setLoading] = (0, import_react16.useState)(true);
+    const [error, setError] = (0, import_react16.useState)(null);
+    (0, import_react16.useEffect)(() => {
       setLoading(true);
       setError(null);
       void getSessionDetail(sessionId).then((res) => setDetail(res.data)).catch((err) => {
@@ -38092,16 +38219,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
   function SessionsPage() {
     const { t } = useTranslation();
-    const [sessions, setSessions] = (0, import_react15.useState)([]);
-    const [total, setTotal] = (0, import_react15.useState)(0);
-    const [loading, setLoading] = (0, import_react15.useState)(true);
-    const [error, setError] = (0, import_react15.useState)(null);
-    const [selectedId, setSelectedId] = (0, import_react15.useState)(null);
-    const [outcome, setOutcome] = (0, import_react15.useState)("");
-    const [hasConversion, setHasConversion] = (0, import_react15.useState)("");
-    const [offset, setOffset] = (0, import_react15.useState)(0);
+    const [sessions, setSessions] = (0, import_react16.useState)([]);
+    const [total, setTotal] = (0, import_react16.useState)(0);
+    const [loading, setLoading] = (0, import_react16.useState)(true);
+    const [error, setError] = (0, import_react16.useState)(null);
+    const [selectedId, setSelectedId] = (0, import_react16.useState)(null);
+    const [outcome, setOutcome] = (0, import_react16.useState)("");
+    const [hasConversion, setHasConversion] = (0, import_react16.useState)("");
+    const [offset, setOffset] = (0, import_react16.useState)(0);
     const limit = 50;
-    (0, import_react15.useEffect)(() => {
+    (0, import_react16.useEffect)(() => {
       setLoading(true);
       setError(null);
       void listSessions({
@@ -38346,7 +38473,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var container = document.getElementById("root");
   if (!container) throw new Error("Root element #root not found");
   (0, import_client.createRoot)(container).render(
-    /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(import_react16.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(I18nProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(App, {}) }) })
+    /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(import_react17.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(I18nProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(App, {}) }) })
   );
 })();
 /*! Bundled license information:

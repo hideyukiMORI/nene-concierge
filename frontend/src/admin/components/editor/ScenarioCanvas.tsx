@@ -332,7 +332,7 @@ export default function ScenarioCanvas({
                     onNodeClick={(_, node) => { if (!analyticsMode) setSelectedNodeId(node.id); }}
                     onPaneClick={() => setSelectedNodeId(null)}
                     fitView
-                    fitViewOptions={{ padding: 0.2 }}
+                    fitViewOptions={{ padding: 0.6, maxZoom: 0.85 }}
                     deleteKeyCode={analyticsMode ? null : 'Delete'}
                     nodesDraggable={!analyticsMode}
                     nodesConnectable={!analyticsMode}

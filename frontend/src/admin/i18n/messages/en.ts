@@ -43,12 +43,14 @@ export const en = {
     'common.error.delete':  'Failed to delete.',
 
     // ── Nav ───────────────────────────────────────────────────────────────────
-    'nav.brand':       'NeNe Concierge',
-    'nav.scenarios':   'Scenarios',
-    'nav.appearance':  'Appearance',
-    'nav.credentials': 'Action Credentials',
-    'nav.settings':    'Settings',
-    'nav.logout':      'Log out',
+    'nav.brand':            'NeNe Concierge',
+    'nav.scenarios':        'Scenarios',
+    'nav.appearance':       'Appearance',
+    'nav.credentials':      'Action Credentials',
+    'nav.settings':         'Settings',
+    'nav.logout':           'Log out',
+    'nav.collapseSidebar':  'Collapse sidebar',
+    'nav.expandSidebar':    'Expand sidebar',
 
     // ── Auth ──────────────────────────────────────────────────────────────────
     'auth.appTitle':          'NeNe Concierge',

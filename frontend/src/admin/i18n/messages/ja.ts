@@ -36,12 +36,14 @@ export const ja: Partial<MessageCatalog> = {
     'common.error.delete':  '削除に失敗しました。',
 
     // ── Nav ───────────────────────────────────────────────────────────────────
-    'nav.brand':       'NeNe Concierge',
-    'nav.scenarios':   'シナリオ',
-    'nav.appearance':  '外観設定',
-    'nav.credentials': 'アクションクレデンシャル',
-    'nav.settings':    '設定',
-    'nav.logout':      'ログアウト',
+    'nav.brand':            'NeNe Concierge',
+    'nav.scenarios':        'シナリオ',
+    'nav.appearance':       '外観設定',
+    'nav.credentials':      'アクションクレデンシャル',
+    'nav.settings':         '設定',
+    'nav.logout':           'ログアウト',
+    'nav.collapseSidebar':  'サイドバーを閉じる',
+    'nav.expandSidebar':    'サイドバーを開く',
 
     // ── Auth ──────────────────────────────────────────────────────────────────
     'auth.appTitle':         'NeNe Concierge',

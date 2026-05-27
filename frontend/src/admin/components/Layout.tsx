@@ -1,9 +1,12 @@
+import { useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router';
 import { clearToken, getStoredEmail } from '../auth.js';
 import { T } from '../theme.js';
 import { useTranslation, LOCALES, SUPPORTED_LOCALE_IDS } from '../i18n/index.js';
 import type { SupportedLocale } from '../i18n/index.js';
 import { useTheme } from '../theme/index.js';
+
+const SIDEBAR_OPEN_KEY = 'nene_admin_sidebar_open';
 
 // ── Shared focus/blur helpers (DOM mutation — no re-render) ───────────────────
 
@@ -28,7 +31,7 @@ const NAV_ICONS: Record<string, string> = {
     '/settings':    '⚙',
 };
 
-function NavItem({ to, label }: { to: string; label: string }) {
+function NavItem({ to, label, open }: { to: string; label: string; open: boolean }) {
     const loc    = useLocation();
     const active = loc.pathname.startsWith(to);
     const icon   = NAV_ICONS[to] ?? '·';
@@ -36,15 +39,20 @@ function NavItem({ to, label }: { to: string; label: string }) {
     return (
         <Link
             to={to}
+            title={open ? undefined : label}
             style={{
-                display: 'flex', alignItems: 'center', gap: 10,
-                padding: '7px 12px', margin: '1px 0',
+                display: 'flex', alignItems: 'center',
+                justifyContent: open ? 'flex-start' : 'center',
+                gap: open ? 10 : 0,
+                padding: open ? '7px 12px' : '7px 0',
+                margin: '1px 0',
                 color: active ? T.sidebarTitle : T.sidebarText,
                 textDecoration: 'none',
                 borderRadius: T.radiusMd,
                 background: active ? T.sidebarActive : 'transparent',
                 fontWeight: active ? 600 : 400,
                 fontSize: T.fontBase,
+                overflow: 'hidden', whiteSpace: 'nowrap',
                 transition: `background ${T.transitionFast}, color ${T.transitionFast}`,
             }}
             onMouseEnter={e => {
@@ -63,7 +71,7 @@ function NavItem({ to, label }: { to: string; label: string }) {
             <span style={{ opacity: 0.75, fontSize: 13, lineHeight: 1, flexShrink: 0 }}>
                 {icon}
             </span>
-            <span>{label}</span>
+            {open && <span>{label}</span>}
         </Link>
     );
 }
@@ -86,6 +94,16 @@ export default function Layout() {
     const { themeVariant, toggleVariant, canToggleVariant } = useTheme();
     const email = getStoredEmail();
 
+    // ── Sidebar open/close (persisted) ────────────────────────────────────────
+    const [open, setOpen] = useState(() =>
+        localStorage.getItem(SIDEBAR_OPEN_KEY) !== 'false',
+    );
+    function toggleSidebar() {
+        const next = !open;
+        setOpen(next);
+        localStorage.setItem(SIDEBAR_OPEN_KEY, String(next));
+    }
+
     function logout() {
         clearToken();
         nav('/');
@@ -106,106 +124,166 @@ export default function Layout() {
         <div style={{ display: 'flex', minHeight: '100vh' }}>
             {/* ── Sidebar ── */}
             <aside style={{
-                width: T.sidebarWidth, flexShrink: 0,
+                width: open ? T.sidebarWidth : '52px',
+                flexShrink: 0,
                 background: T.sidebar, color: T.sidebarText,
                 display: 'flex', flexDirection: 'column',
                 borderRight: `1px solid ${T.sidebarBorder}`,
-                position: 'sticky', top: 0, height: '100vh', overflowY: 'auto',
+                position: 'sticky', top: 0, height: '100vh',
+                overflow: 'hidden',
+                transition: 'width 200ms ease',
             }}>
-                {/* Brand header — nene-records h-14 flex items-center gap-2 px-4 */}
+                {/* Brand header */}
                 <div style={{
-                    display: 'flex', alignItems: 'center', gap: 8,
-                    height: 56, padding: '0 16px', flexShrink: 0,
+                    display: 'flex', alignItems: 'center',
+                    height: 56, flexShrink: 0,
+                    padding: open ? '0 8px 0 16px' : '0',
+                    justifyContent: open ? 'flex-start' : 'center',
                     borderBottom: `1px solid ${T.sidebarBorder}`,
+                    gap: 8,
                 }}>
-                    <span style={{
-                        flex: 1, fontWeight: 600, fontSize: T.fontBase,
-                        color: T.sidebarTitle, letterSpacing: '0.01em',
-                        overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-                    }}>
-                        {t('nav.brand')}
-                    </span>
-                    <span style={{
-                        background: T.primary, color: '#fff',
-                        padding: '2px 7px', borderRadius: T.radiusSm,
-                        fontSize: T.fontXs, fontWeight: 700,
-                        letterSpacing: '0.06em', textTransform: 'uppercase',
-                        flexShrink: 0,
-                    }}>
-                        Admin
-                    </span>
+                    {open && (
+                        <>
+                            <span style={{
+                                flex: 1, fontWeight: 600, fontSize: T.fontBase,
+                                color: T.sidebarTitle, letterSpacing: '0.01em',
+                                overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                            }}>
+                                {t('nav.brand')}
+                            </span>
+                            <span style={{
+                                background: T.primary, color: '#fff',
+                                padding: '2px 7px', borderRadius: T.radiusSm,
+                                fontSize: T.fontXs, fontWeight: 700,
+                                letterSpacing: '0.06em', textTransform: 'uppercase',
+                                flexShrink: 0,
+                            }}>
+                                Admin
+                            </span>
+                        </>
+                    )}
+                    {/* Toggle button */}
+                    <button
+                        onClick={toggleSidebar}
+                        title={open ? t('nav.collapseSidebar') : t('nav.expandSidebar')}
+                        aria-label={open ? t('nav.collapseSidebar') : t('nav.expandSidebar')}
+                        style={{
+                            ...sidebarIconBtn,
+                            background: 'transparent',
+                            border: 'none',
+                            fontSize: 16,
+                        }}
+                        onMouseEnter={e => { e.currentTarget.style.background = T.sidebarHover; e.currentTarget.style.color = T.sidebarTitle; }}
+                        onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = T.sidebarText; }}
+                    >
+                        {open ? '‹' : '›'}
+                    </button>
                 </div>
 
-                {/* Nav links — nene-records flex-1 overflow-y-auto px-3 py-4 */}
-                <nav style={{ flex: 1, padding: '12px 8px', overflowY: 'auto' }} aria-label="Main">
-                    <NavItem to="/dashboard"   label={t('nav.dashboard')} />
-                    <NavItem to="/scenarios"   label={t('nav.scenarios')} />
+                {/* Nav links */}
+                <nav style={{
+                    flex: 1,
+                    padding: open ? '12px 8px' : '12px 4px',
+                    overflowY: 'auto', overflowX: 'hidden',
+                }} aria-label="Main">
+                    <NavItem to="/dashboard"   label={t('nav.dashboard')}   open={open} />
+                    <NavItem to="/scenarios"   label={t('nav.scenarios')}   open={open} />
 
                     <NavDivider />
 
-                    <NavItem to="/appearance"  label={t('nav.appearance')} />
-                    <NavItem to="/credentials" label={t('nav.credentials')} />
-                    <NavItem to="/action-logs" label={t('nav.actionLogs')} />
-                    <NavItem to="/sessions"    label={t('nav.sessions')} />
+                    <NavItem to="/appearance"  label={t('nav.appearance')}  open={open} />
+                    <NavItem to="/credentials" label={t('nav.credentials')} open={open} />
+                    <NavItem to="/action-logs" label={t('nav.actionLogs')}  open={open} />
+                    <NavItem to="/sessions"    label={t('nav.sessions')}    open={open} />
 
                     <NavDivider />
 
-                    <NavItem to="/settings"    label={t('nav.settings')} />
+                    <NavItem to="/settings"    label={t('nav.settings')}    open={open} />
                 </nav>
 
-                {/* Bottom: email + lang + theme + logout — nene-records space-y-2 border-t p-3 */}
+                {/* Bottom: email + lang + theme + logout */}
                 <div style={{
-                    flexShrink: 0, padding: '10px 12px 12px',
+                    flexShrink: 0,
+                    padding: open ? '10px 12px 12px' : '8px 4px',
                     borderTop: `1px solid ${T.sidebarBorder}`,
+                    display: 'flex', flexDirection: 'column',
+                    alignItems: open ? 'stretch' : 'center',
+                    gap: open ? 0 : 6,
                 }}>
-                    {/* User email */}
-                    {email && (
-                        <div style={{
-                            fontSize: T.fontXs, color: T.sidebarMuted,
-                            padding: '0 2px', marginBottom: 8,
-                            overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-                        }} title={email}>
-                            {email}
-                        </div>
+                    {open && (
+                        <>
+                            {/* User email */}
+                            {email && (
+                                <div style={{
+                                    fontSize: T.fontXs, color: T.sidebarMuted,
+                                    padding: '0 2px', marginBottom: 8,
+                                    overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                                }} title={email}>
+                                    {email}
+                                </div>
+                            )}
+
+                            {/* Controls row */}
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                                {/* Language selector */}
+                                <select
+                                    value={locale}
+                                    onChange={e => setLocale(e.target.value as SupportedLocale)}
+                                    aria-label="Language"
+                                    style={{
+                                        flex: 1, minWidth: 0,
+                                        height: T.controlHeightXs, padding: '0 8px',
+                                        boxSizing: 'border-box',
+                                        borderRadius: T.radiusMd,
+                                        border: `1px solid ${T.sidebarBorder}`,
+                                        background: T.sidebarActive, color: T.sidebarText,
+                                        fontSize: T.fontXs, cursor: 'pointer', outline: 'none',
+                                    }}
+                                >
+                                    {SUPPORTED_LOCALE_IDS.map(id => (
+                                        <option key={id} value={id}>{LOCALES[id].label}</option>
+                                    ))}
+                                </select>
+
+                                {/* Theme toggle */}
+                                {canToggleVariant && (
+                                    <button
+                                        onClick={toggleVariant}
+                                        aria-label={themeVariant === 'dark' ? t('theme.toggleLight') : t('theme.toggleDark')}
+                                        title={themeVariant === 'dark' ? t('theme.toggleLight') : t('theme.toggleDark')}
+                                        style={sidebarIconBtn}
+                                        onMouseEnter={e => { e.currentTarget.style.background = T.sidebarHover; e.currentTarget.style.color = T.sidebarTitle; }}
+                                        onMouseLeave={e => { e.currentTarget.style.background = T.sidebarActive; e.currentTarget.style.color = T.sidebarText; }}
+                                    >
+                                        {themeVariant === 'dark' ? '☀' : '🌙'}
+                                    </button>
+                                )}
+
+                                {/* Logout */}
+                                <button
+                                    onClick={logout}
+                                    title={t('nav.logout')}
+                                    aria-label={t('nav.logout')}
+                                    style={sidebarIconBtn}
+                                    onMouseEnter={e => {
+                                        e.currentTarget.style.background = 'oklch(15% 0.05 25 / 0.8)';
+                                        e.currentTarget.style.color = 'oklch(75% 0.08 25)';
+                                        e.currentTarget.style.borderColor = 'oklch(30% 0.08 25)';
+                                    }}
+                                    onMouseLeave={e => {
+                                        e.currentTarget.style.background = T.sidebarActive;
+                                        e.currentTarget.style.color = T.sidebarText;
+                                        e.currentTarget.style.borderColor = T.sidebarBorder;
+                                    }}
+                                >
+                                    ↪
+                                </button>
+                            </div>
+                        </>
                     )}
 
-                    {/* Controls row */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                        {/* Language selector */}
-                        <select
-                            value={locale}
-                            onChange={e => setLocale(e.target.value as SupportedLocale)}
-                            aria-label="Language"
-                            style={{
-                                flex: 1, minWidth: 0,
-                                height: T.controlHeightXs, padding: '0 8px',
-                                boxSizing: 'border-box',
-                                borderRadius: T.radiusMd,
-                                border: `1px solid ${T.sidebarBorder}`,
-                                background: T.sidebarActive, color: T.sidebarText,
-                                fontSize: T.fontXs, cursor: 'pointer', outline: 'none',
-                            }}
-                        >
-                            {SUPPORTED_LOCALE_IDS.map(id => (
-                                <option key={id} value={id}>{LOCALES[id].label}</option>
-                            ))}
-                        </select>
-
-                        {/* Theme toggle */}
-                        {canToggleVariant && (
-                            <button
-                                onClick={toggleVariant}
-                                aria-label={themeVariant === 'dark' ? t('theme.toggleLight') : t('theme.toggleDark')}
-                                title={themeVariant === 'dark' ? t('theme.toggleLight') : t('theme.toggleDark')}
-                                style={sidebarIconBtn}
-                                onMouseEnter={e => { e.currentTarget.style.background = T.sidebarHover; e.currentTarget.style.color = T.sidebarTitle; }}
-                                onMouseLeave={e => { e.currentTarget.style.background = T.sidebarActive; e.currentTarget.style.color = T.sidebarText; }}
-                            >
-                                {themeVariant === 'dark' ? '☀' : '🌙'}
-                            </button>
-                        )}
-
-                        {/* Logout */}
+                    {/* Collapsed: show only logout */}
+                    {!open && (
                         <button
                             onClick={logout}
                             title={t('nav.logout')}
@@ -224,7 +302,7 @@ export default function Layout() {
                         >
                             ↪
                         </button>
-                    </div>
+                    )}
                 </div>
             </aside>
 
