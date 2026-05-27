@@ -36536,91 +36536,70 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   function AnalyticsSummaryPanel({
     report,
     loading,
-    noData
+    noData,
+    period,
+    onPeriodChange
   }) {
     const { t } = useTranslation();
-    if (loading) {
-      return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: {
-        width: 220,
-        padding: "20px 16px",
-        background: T.surface,
-        borderLeft: `1px solid ${T.border}`,
-        color: T.textMuted,
-        fontSize: T.fontSm,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center"
-      }, children: t("canvas.analytics.loading") });
-    }
-    if (noData || !report) {
-      return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: {
-        width: 220,
-        padding: "20px 16px",
-        background: T.surface,
-        borderLeft: `1px solid ${T.border}`,
-        color: T.textMuted,
-        fontSize: T.fontSm,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        textAlign: "center",
-        lineHeight: 1.5
-      }, children: t("canvas.analytics.noData") });
-    }
-    const cRate = report.total_sessions > 0 ? Math.round(report.converted_sessions / report.total_sessions * 100) : 0;
-    const dRate = report.total_sessions > 0 ? Math.round(report.completed_sessions / report.total_sessions * 100) : 0;
-    function StatRow({ label, value, sub }) {
-      return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: {
-        display: "flex",
-        alignItems: "baseline",
-        justifyContent: "space-between",
-        padding: "8px 0",
-        borderBottom: `1px solid ${T.border}`
-      }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { fontSize: T.fontSm, color: T.textMuted }, children: label }),
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("span", { style: { fontSize: T.fontMd, fontWeight: 700, color: T.textStrong }, children: [
-          value.toLocaleString(),
-          sub && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { fontSize: T.fontXs, fontWeight: 400, color: T.textMuted, marginLeft: 4 }, children: sub })
-        ] })
-      ] });
-    }
-    return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: {
-      width: 220,
-      background: T.surface,
-      borderLeft: `1px solid ${T.border}`,
-      display: "flex",
-      flexDirection: "column",
-      overflowY: "auto"
-    }, children: [
+    return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", flexDirection: "column", height: "100%" }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: {
-        padding: "12px 14px 8px",
+        display: "flex",
+        gap: 2,
+        padding: "8px 10px",
         borderBottom: `1px solid ${T.border}`,
-        fontSize: T.fontSm,
-        fontWeight: 700,
-        color: T.textStrong
+        flexShrink: 0
       }, children: [
-        "\u{1F4CA} ",
-        t("canvas.analyticsMode")
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { fontSize: T.fontXs, color: T.textMuted, alignSelf: "center", marginRight: 4 }, children: "\u{1F4CA}" }),
+        PERIODS.map((p) => /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+          "button",
+          {
+            onClick: () => onPeriodChange(p),
+            style: {
+              padding: "2px 7px",
+              fontSize: T.fontXs,
+              fontWeight: p === period ? 700 : 400,
+              border: `1px solid ${p === period ? T.primary : T.border}`,
+              borderRadius: T.radiusSm,
+              cursor: "pointer",
+              background: p === period ? T.primaryLight : "transparent",
+              color: p === period ? T.primaryText : T.textMuted
+            },
+            children: PERIOD_LABELS[p]
+          },
+          p
+        ))
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { padding: "4px 14px 14px" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(StatRow, { label: t("canvas.analytics.sessions"), value: report.total_sessions }),
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(StatRow, { label: t("canvas.analytics.completed"), value: report.completed_sessions, sub: `${dRate}%` }),
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(StatRow, { label: t("canvas.analytics.converted"), value: report.converted_sessions, sub: `${cRate}%` })
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { padding: "4px 14px", fontSize: T.fontXs, color: T.textMuted }, children: [
-        report.period_from,
-        " \u2013 ",
-        report.period_to
-      ] })
+      loading ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { flex: 1, display: "flex", alignItems: "center", justifyContent: "center", color: T.textMuted, fontSize: T.fontSm }, children: t("canvas.analytics.loading") }) : noData || !report ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { flex: 1, display: "flex", alignItems: "center", justifyContent: "center", color: T.textMuted, fontSize: T.fontSm, textAlign: "center", padding: 16, lineHeight: 1.5 }, children: t("canvas.analytics.noData") }) : /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { flex: 1, overflowY: "auto", padding: "8px 12px" }, children: (() => {
+        const cRate = report.total_sessions > 0 ? Math.round(report.converted_sessions / report.total_sessions * 100) : 0;
+        const dRate = report.total_sessions > 0 ? Math.round(report.completed_sessions / report.total_sessions * 100) : 0;
+        function StatRow({ label, value, sub }) {
+          return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", alignItems: "baseline", justifyContent: "space-between", padding: "8px 0", borderBottom: `1px solid ${T.border}` }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { fontSize: T.fontSm, color: T.textMuted }, children: label }),
+            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("span", { style: { fontSize: T.fontMd, fontWeight: 700, color: T.textStrong }, children: [
+              value.toLocaleString(),
+              sub && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { fontSize: T.fontXs, fontWeight: 400, color: T.textMuted, marginLeft: 4 }, children: sub })
+            ] })
+          ] });
+        }
+        return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(import_jsx_runtime9.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(StatRow, { label: t("canvas.analytics.sessions"), value: report.total_sessions }),
+          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(StatRow, { label: t("canvas.analytics.completed"), value: report.completed_sessions, sub: `${dRate}%` }),
+          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(StatRow, { label: t("canvas.analytics.converted"), value: report.converted_sessions, sub: `${cRate}%` }),
+          /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { marginTop: 8, fontSize: T.fontXs, color: T.textMuted }, children: [
+            report.period_from,
+            " \u2013 ",
+            report.period_to
+          ] })
+        ] });
+      })() })
     ] });
   }
-  var ScenarioCanvas = (0, import_react10.forwardRef)(function ScenarioCanvas2({ scenarioId, initialNodes, initialEdges, credentials, onSave }, ref) {
+  var ScenarioCanvas = (0, import_react10.forwardRef)(function ScenarioCanvas2({ scenarioId, initialNodes, initialEdges, credentials, onSave, analyticsMode }, ref) {
     const { t } = useTranslation();
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes.map(apiNodeToRF));
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges.map(apiEdgeToRF));
     const [selectedNodeId, setSelectedNodeId] = (0, import_react10.useState)(null);
     const reactFlowWrapper = (0, import_react10.useRef)(null);
-    const [analyticsMode, setAnalyticsMode] = (0, import_react10.useState)(false);
     const [period, setPeriod] = (0, import_react10.useState)("7d");
     const [analyticsReport, setAnalyticsReport] = (0, import_react10.useState)(null);
     const [analyticsLoading, setAnalyticsLoading] = (0, import_react10.useState)(false);
@@ -36656,11 +36635,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         const bottleneckSet = new Set(report.bottlenecks);
         setNodes((nds) => nds.map((n) => ({
           ...n,
-          data: {
-            ...n.data,
-            _analytics: analyticsMap.get(n.id),
-            _isBottleneck: bottleneckSet.has(n.id)
-          }
+          data: { ...n.data, _analytics: analyticsMap.get(n.id), _isBottleneck: bottleneckSet.has(n.id) }
         })));
         setAnalyticsLoading(false);
       }).catch(() => {
@@ -36675,7 +36650,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const onConnect = (0, import_react10.useCallback)((connection) => {
       setEdges((eds) => addEdge({ ...connection, id: `e-${v4_default()}` }, eds));
     }, [setEdges]);
-    function addNode(type) {
+    const addNode = (0, import_react10.useCallback)((type) => {
       const id2 = v4_default();
       const defaults = {
         message: { text: "", choices: [], variable_name: "" },
@@ -36687,16 +36662,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       const newNode = {
         id: id2,
         type,
-        position: { x: 100 + Math.random() * 200, y: 80 + Math.random() * 200 },
+        position: { x: 120 + Math.random() * 200, y: 80 + Math.random() * 180 },
         data: { label: defaultLabel, ...defaults[type] }
       };
       setNodes((nds) => [...nds, newNode]);
       setSelectedNodeId(id2);
-    }
+    }, [setNodes, t]);
     function handleNodeChange(id2, label, data2) {
-      setNodes((nds) => nds.map(
-        (n) => n.id === id2 ? { ...n, data: { label, ...data2 } } : n
-      ));
+      setNodes((nds) => nds.map((n) => n.id === id2 ? { ...n, data: { label, ...data2 } } : n));
     }
     function handleNodeDelete(id2) {
       setNodes((nds) => nds.filter((n) => n.id !== id2));
@@ -36706,20 +36679,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const handleSave = (0, import_react10.useCallback)(() => {
       onSave(nodes.map(rfNodeToApi), edges.map(rfEdgeToApi));
     }, [nodes, edges, onSave]);
-    (0, import_react10.useImperativeHandle)(ref, () => ({ triggerSave: handleSave }), [handleSave]);
+    (0, import_react10.useImperativeHandle)(ref, () => ({ triggerSave: handleSave, addNode }), [handleSave, addNode]);
     const selectedNode = !analyticsMode ? nodes.find((n) => n.id === selectedNodeId) ?? null : null;
-    function segBtn(active) {
-      return {
-        padding: "5px 12px",
-        fontSize: T.fontSm,
-        fontWeight: active ? 700 : 400,
-        border: "none",
-        cursor: "pointer",
-        background: active ? T.primary : "transparent",
-        color: active ? T.primaryFg : T.text,
-        transition: "background 0.1s, color 0.1s"
-      };
-    }
     const showRightPanel = analyticsMode || selectedNode !== null;
     return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { position: "relative", height: "100%" }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { ref: reactFlowWrapper, style: { position: "absolute", inset: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
@@ -36750,91 +36711,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 nodeColor: (n) => NODE_COLORS[n.type]?.header ?? T.sidebarMuted,
                 style: { background: T.tableHeader, border: `1px solid ${T.border}` }
               }
-            ),
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Panel, { position: "top-left", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: 6 }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: {
-                display: "flex",
-                borderRadius: T.radiusMd,
-                border: `1px solid ${T.border}`,
-                overflow: "hidden",
-                background: T.surface,
-                boxShadow: T.shadowCard
-              }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("button", { style: segBtn(!analyticsMode), onClick: () => setAnalyticsMode(false), children: [
-                  "\u270F\uFE0F ",
-                  t("canvas.editMode")
-                ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
-                  "button",
-                  {
-                    style: { ...segBtn(analyticsMode), borderLeft: `1px solid ${T.border}` },
-                    onClick: () => setAnalyticsMode(true),
-                    children: [
-                      "\u{1F4CA} ",
-                      t("canvas.analyticsMode")
-                    ]
-                  }
-                )
-              ] }),
-              !analyticsMode && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: {
-                display: "flex",
-                gap: 5,
-                padding: 8,
-                background: T.surface,
-                borderRadius: T.radiusLg,
-                border: `1px solid ${T.border}`,
-                boxShadow: T.shadowCard
-              }, children: ["message", "condition", "action", "end"].map((type) => {
-                const c = NODE_COLORS[type];
-                const label = t(`node.type.${type}`);
-                return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
-                  "button",
-                  {
-                    onClick: () => addNode(type),
-                    title: t("node.addToCanvas", { type: label }),
-                    style: {
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 4,
-                      padding: "5px 9px",
-                      borderRadius: T.radiusMd,
-                      background: c.bg,
-                      border: `1.5px solid ${c.border}`,
-                      color: c.text,
-                      fontWeight: 600,
-                      fontSize: T.fontSm,
-                      cursor: "pointer"
-                    },
-                    children: [
-                      NODE_ICONS[type],
-                      " ",
-                      label
-                    ]
-                  },
-                  type
-                );
-              }) }),
-              analyticsMode && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: {
-                display: "flex",
-                background: T.surface,
-                border: `1px solid ${T.border}`,
-                borderRadius: T.radiusMd,
-                overflow: "hidden",
-                boxShadow: T.shadowCard
-              }, children: PERIODS.map((p, i) => /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
-                "button",
-                {
-                  onClick: () => setPeriod(p),
-                  style: {
-                    ...segBtn(period === p),
-                    borderLeft: i > 0 ? `1px solid ${T.border}` : "none",
-                    padding: "5px 10px"
-                  },
-                  children: PERIOD_LABELS[p]
-                },
-                p
-              )) })
-            ] }) })
+            )
           ]
         }
       ) }),
@@ -36857,15 +36734,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         {
           report: analyticsReport,
           loading: analyticsLoading,
-          noData: analyticsNoData
+          noData: analyticsNoData,
+          period,
+          onPeriodChange: setPeriod
         }
-      ) : selectedNode && /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(import_jsx_runtime9.Fragment, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: {
-          display: "flex",
-          justifyContent: "flex-end",
-          padding: "4px 6px 0",
-          flexShrink: 0
-        }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+      ) : selectedNode ? /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(import_jsx_runtime9.Fragment, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { display: "flex", justifyContent: "flex-end", padding: "4px 6px 0", flexShrink: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
           "button",
           {
             onClick: () => setSelectedNodeId(null),
@@ -36898,7 +36772,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             onDelete: handleNodeDelete
           }
         ) })
-      ] }) })
+      ] }) : null })
     ] });
   });
   var ScenarioCanvas_default = ScenarioCanvas;
@@ -36908,6 +36782,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var PencilIcon = () => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("svg", { width: "11", height: "11", viewBox: "0 0 16 16", fill: "currentColor", "aria-hidden": true, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("path", { d: "M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z" }) });
   var ChevronDownIcon = () => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("svg", { width: "10", height: "10", viewBox: "0 0 16 16", fill: "currentColor", "aria-hidden": true, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("path", { d: "M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" }) });
   var ChevronUpIcon = () => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("svg", { width: "10", height: "10", viewBox: "0 0 16 16", fill: "currentColor", "aria-hidden": true, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("path", { d: "M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z" }) });
+  var NODE_TYPES = ["message", "condition", "action", "end"];
   function ScenarioFormPage() {
     const { id: id2 } = useParams();
     const isNew = id2 === void 0;
@@ -36930,6 +36805,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const [showStatusDrop, setShowStatusDrop] = (0, import_react11.useState)(false);
     const statusDropRef = (0, import_react11.useRef)(null);
     const [showDetails, setShowDetails] = (0, import_react11.useState)(isNew);
+    const [analyticsMode, setAnalyticsMode] = (0, import_react11.useState)(false);
     (0, import_react11.useEffect)(() => {
       void listCredentials().then((r) => setCredentials(r.data)).catch(() => {
       });
@@ -37057,24 +36933,19 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       { value: "archived", label: t("scenario.status.archived") }
     ];
     if (loading) return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { color: T.textMuted, marginTop: 40, padding: "0 24px" }, children: t("common.loading") });
-    const divider = {
-      width: 1,
-      height: 20,
-      background: T.border,
-      flexShrink: 0
-    };
+    const divider = { width: 1, height: 20, background: T.border, flexShrink: 0 };
     return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column", flex: 1, overflow: "hidden" }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: {
         display: "flex",
         alignItems: "center",
-        gap: 6,
+        gap: 5,
         padding: "0 10px",
         height: 48,
         flexShrink: 0,
         borderBottom: `1px solid ${T.border}`,
         background: T.surface
       }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(Btn, { variant: "ghost", onClick: () => nav("/scenarios"), style: { padding: "0 8px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(Btn, { variant: "ghost", onClick: () => nav("/scenarios"), style: { padding: "0 8px", flexShrink: 0 }, children: [
           "\u2190 ",
           t("common.backToList")
         ] }),
@@ -37107,8 +36978,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               borderRadius: T.radiusSm,
               padding: "3px 8px",
               background: T.surface,
-              minWidth: 180,
-              maxWidth: 360,
+              minWidth: 160,
+              maxWidth: 300,
               outline: "none"
             }
           }
@@ -37129,7 +37000,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               cursor: "text",
               padding: "3px 6px",
               borderRadius: T.radiusSm,
-              maxWidth: 320,
+              maxWidth: 260,
               overflow: "hidden",
               textOverflow: "ellipsis",
               whiteSpace: "nowrap"
@@ -37146,7 +37017,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             ]
           }
         ),
-        !isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { ref: statusDropRef, style: { position: "relative" }, children: [
+        !isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { ref: statusDropRef, style: { position: "relative", flexShrink: 0 }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
             "button",
             {
@@ -37209,12 +37080,78 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             o.value
           )) })
         ] }),
+        !isNew && !analyticsMode && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: divider }),
+          NODE_TYPES.map((type) => {
+            const c = NODE_COLORS[type];
+            const label = t(`node.type.${type}`);
+            return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+              "button",
+              {
+                onClick: () => canvasRef.current?.addNode(type),
+                title: t("node.addToCanvas", { type: label }),
+                style: {
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 5,
+                  padding: "4px 9px",
+                  borderRadius: T.radiusMd,
+                  background: c.bg,
+                  border: `1.5px solid ${c.border}`,
+                  color: c.text,
+                  fontWeight: 600,
+                  fontSize: T.fontSm,
+                  cursor: "pointer",
+                  flexShrink: 0,
+                  transition: "filter 0.1s"
+                },
+                onMouseEnter: (e) => {
+                  e.currentTarget.style.filter = "brightness(0.93)";
+                },
+                onMouseLeave: (e) => {
+                  e.currentTarget.style.filter = "none";
+                },
+                children: [
+                  NODE_ICONS[type],
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { children: label })
+                ]
+              },
+              type
+            );
+          })
+        ] }),
         /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { flex: 1 } }),
-        savedMsg && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: T.fontBase, color: T.successText, fontWeight: 600, whiteSpace: "nowrap" }, children: [
+        savedMsg && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: T.fontBase, color: T.successText, fontWeight: 600, whiteSpace: "nowrap", flexShrink: 0 }, children: [
           "\u2713 ",
           savedMsg
         ] }),
-        !isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Btn, { disabled: saving, onClick: () => canvasRef.current?.triggerSave(), children: saving ? t("common.saving") : t("canvas.save") }),
+        !isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+          "button",
+          {
+            onClick: () => setAnalyticsMode((v) => !v),
+            title: t("canvas.analyticsMode"),
+            style: {
+              display: "flex",
+              alignItems: "center",
+              gap: 4,
+              padding: "0 9px",
+              height: 28,
+              flexShrink: 0,
+              background: analyticsMode ? T.primaryLight : "transparent",
+              border: `1px solid ${analyticsMode ? T.primaryBorder : T.border}`,
+              borderRadius: T.radiusSm,
+              cursor: "pointer",
+              fontSize: T.fontXs,
+              fontWeight: 600,
+              color: analyticsMode ? T.primaryText : T.textMuted
+            },
+            children: [
+              "\u{1F4CA} ",
+              t("canvas.analyticsMode")
+            ]
+          }
+        ),
+        !isNew && !analyticsMode && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Btn, { disabled: saving, onClick: () => canvasRef.current?.triggerSave(), children: saving ? t("common.saving") : t("canvas.save") }),
         !isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
           "button",
           {
@@ -37226,6 +37163,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               gap: 4,
               padding: "0 8px",
               height: 28,
+              flexShrink: 0,
               background: showDetails ? T.primaryLight : "transparent",
               border: `1px solid ${showDetails ? T.primaryBorder : T.border}`,
               borderRadius: T.radiusSm,
@@ -37264,13 +37202,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         borderBottom: `1px solid ${T.border}`
       }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { flex: 1 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("label", { style: {
-            display: "block",
-            fontSize: T.fontXs,
-            fontWeight: 600,
-            color: T.textMuted,
-            marginBottom: 3
-          }, children: t("scenarioForm.descLabel") }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("label", { style: { display: "block", fontSize: T.fontXs, fontWeight: 600, color: T.textMuted, marginBottom: 3 }, children: t("scenarioForm.descLabel") }),
           /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
             "input",
             {
@@ -37290,16 +37222,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             }
           )
         ] }),
-        isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-          Btn,
-          {
-            disabled: saving || !(draftName.trim() || name.trim()),
-            onClick: () => {
-              void handleCreate();
-            },
-            children: saving ? t("common.creating") : t("common.create")
-          }
-        ),
+        isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Btn, { disabled: saving || !(draftName.trim() || name.trim()), onClick: () => {
+          void handleCreate();
+        }, children: saving ? t("common.creating") : t("common.create") }),
         !isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Btn, { disabled: saving, onClick: () => {
           void saveMeta();
         }, children: saving ? t("common.saving") : t("common.save") })
@@ -37313,7 +37238,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           initialNodes: nodes,
           initialEdges: edges,
           credentials,
-          onSave: handleGraphSave
+          onSave: handleGraphSave,
+          analyticsMode
         }
       ) }),
       isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: {
