@@ -23,24 +23,35 @@ Last updated: 2026-05-27
 
 ---
 
-## 次フェーズ（Phase 1）— シナリオエンジン MVP
+**Phase 1 — Scenario Engine MVP: 進行中 🔄**
 
-Issue 化してから着手すること。
-
-| 優先 | 項目 | メモ |
+| 項目 | 状態 | Issue |
 | --- | --- | --- |
-| P1 | `organizations`, `organization_users` スキーマ + マイグレーション | ADR 0004 |
-| P1 | `Organization` モジュール（src/Organization/） | nene-records パターン準拠 |
-| P1 | `OrgResolverMiddleware` + 解決戦略 4 種 | ADR 0004 |
-| P1 | JWT Bearer 認証（AdminAuth モジュール） | nene-records パターン準拠 |
-| P1 | `scenarios`, `nodes`, `edges` スキーマ + マイグレーション | `organization_id` 付き |
-| P1 | `sessions`, `messages` スキーマ + `outcome` + `has_conversion` | ADR 0005 |
-| P1 | **`session_node_events`** スキーマ + マイグレーション | ADR 0005 — Phase 1 で必須 |
-| P1 | シナリオ CRUD API + OpenAPI | |
-| P1 | セッション作成 / ステップ / 終了 API（訪問者向け） | |
-| P1 | **Engine がノード遷移時に `session_node_event` を記録** | ADR 0005 |
-| P1 | `message` / `end` ノードタイプ | |
-| P1 | PHPUnit テスト（SQLite） | |
+| `organizations`, `organization_users` スキーマ + マイグレーション | ✅ | #7 |
+| `Organization` モジュール（src/Organization/） | ✅ | #7 |
+| `OrgResolverMiddleware` + 解決戦略 4 種 | ✅ | #7 |
+| JWT Bearer 認証（AdminAuth モジュール） | ✅ | #7 |
+| `scenarios`, `nodes`, `edges` スキーマ + マイグレーション | 🔲 | #8 |
+| `sessions`, `messages` スキーマ + `outcome` + `has_conversion` | 🔲 | #8 |
+| **`session_node_events`** スキーマ + マイグレーション | 🔲 | #8 |
+| シナリオ CRUD API + OpenAPI | 🔲 | #8 |
+| セッション作成 / ステップ / 終了 API（訪問者向け） | 🔲 | #8 |
+| **Engine がノード遷移時に `session_node_event` を記録** | 🔲 | #8 |
+| `message` / `end` ノードタイプ | 🔲 | #8 |
+| PHPUnit テスト（SQLite） | 🔲 | #8 |
+
+---
+
+## 次の作業（Issue #8）
+
+```
+feat(scenario+engine): Phase 1 シナリオエンジン MVP
+```
+
+- シナリオ CRUD + バージョン管理（scenarios / nodes / edges テーブル）
+- セッション管理（sessions + session_node_events テーブル、ADR 0005）
+- Engine: メッセージノード → 終端ノードの最小ステートマシン
+- OpenAPI 拡張
 
 ---
 
