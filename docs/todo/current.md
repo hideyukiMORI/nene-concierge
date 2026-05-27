@@ -1,6 +1,6 @@
 # Current Work
 
-Last updated: 2026-05-28
+Last updated: 2026-05-27
 
 ## 状態サマリー
 
@@ -167,6 +167,26 @@ Last updated: 2026-05-28
 | public_html/admin/index.html: :root ブロックに --nca-* 変数定義 | ✅ | #28 |
 | frontend/src/admin/theme.ts: T.* 定数ファイル（nene-corpus cssVars パターン） | ✅ | #28 |
 | 全8コンポーネントのハードコード値を T.* に置換 | ✅ | #28 |
+
+---
+
+**管理画面 6言語ローカライズ — 完了 ✅**
+
+| 項目 | 状態 | Issue |
+| --- | --- | --- |
+| frontend/src/admin/i18n/ ディレクトリ新設 | ✅ | #30 |
+| locales.ts: SupportedLocale 型・LOCALES・resolveLocale() | ✅ | #30 |
+| translate.ts: {{param}} 補間付き translate() | ✅ | #30 |
+| i18n-context.tsx: I18nProvider / useTranslation() | ✅ | #30 |
+| messages/en.ts: 英語カタログ（ソースオブトゥルース） | ✅ | #30 |
+| messages/ja.ts: 日本語 | ✅ | #30 |
+| messages/fr.ts: フランス語 | ✅ | #30 |
+| messages/zh-Hans.ts: 中国語（簡体字） | ✅ | #30 |
+| messages/pt-BR.ts: ポルトガル語（ブラジル） | ✅ | #30 |
+| messages/de.ts: ドイツ語 | ✅ | #30 |
+| 全8コンポーネントを useTranslation() に移行 | ✅ | #30 |
+| サイドバーフッターにロケールセレクタ追加 | ✅ | #30 |
+| FOUC 防止の早期ロケール検出（index.tsx） | ✅ | #30 |
 
 ---
 
