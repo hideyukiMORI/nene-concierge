@@ -410,10 +410,10 @@ export function Btn({
 }
 
 export function Badge({ status }: { status: 'draft' | 'published' | 'archived' }) {
-    const cfg = {
-        draft:     { bg: T.badgeDraftBg, color: T.badgeDraftColor },
-        published: { bg: T.badgePubBg,   color: T.badgePubColor   },
-        archived:  { bg: T.badgeArchBg,  color: T.badgeArchColor  },
+    const colors = {
+        draft:     T.badgeDraftColor,
+        published: T.badgePubColor,
+        archived:  T.badgeArchColor,
     } as const;
     const { t } = useTranslation();
     const labels = {
@@ -421,13 +421,8 @@ export function Badge({ status }: { status: 'draft' | 'published' | 'archived' }
         published: t('scenario.status.published'),
         archived:  t('scenario.status.archived'),
     };
-    const { bg, color } = cfg[status];
     return (
-        <span style={{
-            background: bg, color, padding: '3px 10px',
-            borderRadius: T.radiusXl, fontSize: T.fontSm, fontWeight: 600,
-            display: 'inline-block',
-        }}>
+        <span style={{ color: colors[status], fontSize: T.fontSm, fontWeight: 600 }}>
             {labels[status]}
         </span>
     );

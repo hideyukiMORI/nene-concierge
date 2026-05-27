@@ -299,34 +299,56 @@ export default function ScenarioFormPage() {
                     </div>
                 )}
 
-                {/* ═══ ノードパレット (既存シナリオ・編集モードのみ) ════════════ */}
-                {!isNew && !analyticsMode && (
+                {/* ═══ ノードパレット / Analytics 退出ボタン ══════════════════ */}
+                {!isNew && (
                     <>
                         <div style={divider} />
-                        {NODE_TYPES.map(type => {
-                            const c = NODE_COLORS[type];
-                            const label = t(`node.type.${type}` as Parameters<typeof t>[0]);
-                            return (
-                                <button
-                                    key={type}
-                                    onClick={() => canvasRef.current?.addNode(type)}
-                                    title={t('node.addToCanvas', { type: label })}
-                                    style={{
-                                        display: 'flex', alignItems: 'center', gap: 5,
-                                        padding: '4px 10px', borderRadius: T.radiusMd,
-                                        background: c.header, border: 'none',
-                                        color: '#fff', fontWeight: 600, fontSize: T.fontSm,
-                                        cursor: 'pointer', flexShrink: 0,
-                                        transition: 'filter 0.1s',
-                                    }}
-                                    onMouseEnter={e => { e.currentTarget.style.filter = 'brightness(0.93)'; }}
-                                    onMouseLeave={e => { e.currentTarget.style.filter = 'none'; }}
-                                >
-                                    {NODE_ICONS[type]}
-                                    <span>{label}</span>
-                                </button>
-                            );
-                        })}
+                        {analyticsMode ? (
+                            /* Analytics モード中: 編集に戻る方法を明示 */
+                            <button
+                                onClick={() => setAnalyticsMode(false)}
+                                style={{
+                                    display: 'flex', alignItems: 'center', gap: 4,
+                                    padding: '1px 8px', height: 22, borderRadius: T.radiusMd,
+                                    background: T.primary, border: 'none',
+                                    color: '#fff', fontWeight: 700, fontSize: '10px',
+                                    cursor: 'pointer', flexShrink: 0,
+                                    letterSpacing: '0.01em',
+                                }}
+                                onMouseEnter={e => { e.currentTarget.style.filter = 'brightness(1.1)'; }}
+                                onMouseLeave={e => { e.currentTarget.style.filter = 'none'; }}
+                            >
+                                ← {t('canvas.editMode')}
+                            </button>
+                        ) : (
+                            /* 編集モード: ノードパレット */
+                            NODE_TYPES.map(type => {
+                                const c = NODE_COLORS[type];
+                                const label = t(`node.type.${type}` as Parameters<typeof t>[0]);
+                                return (
+                                    <button
+                                        key={type}
+                                        onClick={() => canvasRef.current?.addNode(type)}
+                                        title={t('node.addToCanvas', { type: label })}
+                                        style={{
+                                            display: 'flex', alignItems: 'center', gap: 3,
+                                            padding: '1px 6px', height: 22, borderRadius: T.radiusMd,
+                                            background: c.header, border: 'none',
+                                            color: '#fff', fontWeight: 600, fontSize: '10px',
+                                            cursor: 'pointer', flexShrink: 0,
+                                            letterSpacing: '0.01em',
+                                        }}
+                                        onMouseEnter={e => { e.currentTarget.style.filter = 'brightness(1.08)'; }}
+                                        onMouseLeave={e => { e.currentTarget.style.filter = 'none'; }}
+                                    >
+                                        <span style={{ display: 'inline-flex', transform: 'scale(0.8)', transformOrigin: 'center', lineHeight: 0 }}>
+                                            {NODE_ICONS[type]}
+                                        </span>
+                                        <span>{label}</span>
+                                    </button>
+                                );
+                            })
+                        )}
                     </>
                 )}
 

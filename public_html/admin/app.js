@@ -26495,10 +26495,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     );
   }
   function Badge({ status }) {
-    const cfg = {
-      draft: { bg: T.badgeDraftBg, color: T.badgeDraftColor },
-      published: { bg: T.badgePubBg, color: T.badgePubColor },
-      archived: { bg: T.badgeArchBg, color: T.badgeArchColor }
+    const colors = {
+      draft: T.badgeDraftColor,
+      published: T.badgePubColor,
+      archived: T.badgeArchColor
     };
     const { t } = useTranslation();
     const labels = {
@@ -26506,16 +26506,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       published: t("scenario.status.published"),
       archived: t("scenario.status.archived")
     };
-    const { bg, color: color2 } = cfg[status];
-    return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: {
-      background: bg,
-      color: color2,
-      padding: "3px 10px",
-      borderRadius: T.radiusXl,
-      fontSize: T.fontSm,
-      fontWeight: 600,
-      display: "inline-block"
-    }, children: labels[status] });
+    return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: { color: colors[status], fontSize: T.fontSm, fontWeight: 600 }, children: labels[status] });
   }
   function ErrorMsg({ msg }) {
     if (!msg) return null;
@@ -37078,45 +37069,83 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             o.value
           )) })
         ] }),
-        !isNew && !analyticsMode && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
+        !isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
           /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: divider }),
-          NODE_TYPES.map((type) => {
-            const c = NODE_COLORS[type];
-            const label = t(`node.type.${type}`);
-            return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+          analyticsMode ? (
+            /* Analytics モード中: 編集に戻る方法を明示 */
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
               "button",
               {
-                onClick: () => canvasRef.current?.addNode(type),
-                title: t("node.addToCanvas", { type: label }),
+                onClick: () => setAnalyticsMode(false),
                 style: {
                   display: "flex",
                   alignItems: "center",
-                  gap: 5,
-                  padding: "4px 10px",
+                  gap: 4,
+                  padding: "1px 8px",
+                  height: 22,
                   borderRadius: T.radiusMd,
-                  background: c.header,
+                  background: T.primary,
                   border: "none",
                   color: "#fff",
-                  fontWeight: 600,
-                  fontSize: T.fontSm,
+                  fontWeight: 700,
+                  fontSize: "10px",
                   cursor: "pointer",
                   flexShrink: 0,
-                  transition: "filter 0.1s"
+                  letterSpacing: "0.01em"
                 },
                 onMouseEnter: (e) => {
-                  e.currentTarget.style.filter = "brightness(0.93)";
+                  e.currentTarget.style.filter = "brightness(1.1)";
                 },
                 onMouseLeave: (e) => {
                   e.currentTarget.style.filter = "none";
                 },
                 children: [
-                  NODE_ICONS[type],
-                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { children: label })
+                  "\u2190 ",
+                  t("canvas.editMode")
                 ]
-              },
-              type
-            );
-          })
+              }
+            )
+          ) : (
+            /* 編集モード: ノードパレット */
+            NODE_TYPES.map((type) => {
+              const c = NODE_COLORS[type];
+              const label = t(`node.type.${type}`);
+              return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+                "button",
+                {
+                  onClick: () => canvasRef.current?.addNode(type),
+                  title: t("node.addToCanvas", { type: label }),
+                  style: {
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 3,
+                    padding: "1px 6px",
+                    height: 22,
+                    borderRadius: T.radiusMd,
+                    background: c.header,
+                    border: "none",
+                    color: "#fff",
+                    fontWeight: 600,
+                    fontSize: "10px",
+                    cursor: "pointer",
+                    flexShrink: 0,
+                    letterSpacing: "0.01em"
+                  },
+                  onMouseEnter: (e) => {
+                    e.currentTarget.style.filter = "brightness(1.08)";
+                  },
+                  onMouseLeave: (e) => {
+                    e.currentTarget.style.filter = "none";
+                  },
+                  children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { display: "inline-flex", transform: "scale(0.8)", transformOrigin: "center", lineHeight: 0 }, children: NODE_ICONS[type] }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { children: label })
+                  ]
+                },
+                type
+              );
+            })
+          )
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { flex: 1 } }),
         savedMsg && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: T.fontBase, color: T.successText, fontWeight: 600, whiteSpace: "nowrap", flexShrink: 0 }, children: [
