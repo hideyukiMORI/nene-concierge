@@ -115,4 +115,10 @@ export const zhHans: Partial<MessageCatalog> = {
 
     'canvas.save':   '💾 保存',
     'canvas.saving': '保存中…',
+
+
+    // ── Theme ─────────────────────────────────────────────────────────────────
+    'theme.toggleLight': '切换到浅色模式',
+    'theme.toggleDark':  '切换到深色模式',
+    'theme.label':       '主题',
 }

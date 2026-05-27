@@ -3,6 +3,8 @@ import { clearToken } from '../auth.js';
 import { T } from '../theme.js';
 import { useTranslation, LOCALES, SUPPORTED_LOCALE_IDS } from '../i18n/index.js';
 import type { SupportedLocale } from '../i18n/index.js';
+import { useTheme, ADMIN_THEME_DEFS } from '../theme/index.js';
+import type { AdminThemeId, ThemeVariant } from '../theme/index.js';
 
 // ── NavItem ───────────────────────────────────────────────────────────────────
 
@@ -38,11 +40,70 @@ function NavItem({ to, label }: { to: string; label: string }) {
     );
 }
 
+// ── ThemeSwatch ───────────────────────────────────────────────────────────────
+
+function ThemeSwatch({ def, isSelected, currentVariant, onSelect }: {
+    def: typeof ADMIN_THEME_DEFS[number];
+    isSelected: boolean;
+    currentVariant: ThemeVariant;
+    onSelect: (id: AdminThemeId, variant?: ThemeVariant) => void;
+}) {
+    const displayVariant: ThemeVariant = isSelected ? currentVariant : (def.variants[0] as ThemeVariant);
+    const preview = def.preview[displayVariant];
+    if (!preview) return null;
+    return (
+        <div title={def.name} style={{ position: 'relative' }}>
+            <button
+                onClick={() => onSelect(def.id)}
+                aria-pressed={isSelected}
+                style={{
+                    width: 36, height: 30,
+                    borderRadius: T.radiusMd,
+                    border: isSelected
+                        ? `2px solid ${T.primary}`
+                        : `2px solid transparent`,
+                    overflow: 'hidden', cursor: 'pointer', padding: 0,
+                    outline: 'none', display: 'flex',
+                    transition: 'border-color 0.12s',
+                }}
+                onMouseEnter={e => {
+                    if (!isSelected) (e.currentTarget as HTMLElement).style.borderColor = T.sidebarText;
+                }}
+                onMouseLeave={e => {
+                    if (!isSelected) (e.currentTarget as HTMLElement).style.borderColor = 'transparent';
+                }}
+            >
+                {/* mini sidebar strip */}
+                <span style={{
+                    width: 10, height: '100%', background: preview.sidebar,
+                    display: 'flex', flexDirection: 'column',
+                    alignItems: 'center', paddingTop: 5, gap: 2,
+                }}>
+                    <span style={{ width: 5, height: 1, borderRadius: 1, background: preview.accent, opacity: 0.9 }} />
+                    <span style={{ width: 5, height: 1, borderRadius: 1, background: preview.accent, opacity: 0.4 }} />
+                    <span style={{ width: 5, height: 1, borderRadius: 1, background: preview.accent, opacity: 0.4 }} />
+                </span>
+                {/* mini content area */}
+                <span style={{
+                    flex: 1, background: preview.surface, height: '100%',
+                    display: 'flex', flexDirection: 'column',
+                    padding: '4px 3px', gap: 2,
+                }}>
+                    <span style={{ width: '70%', height: 2, borderRadius: 1, background: preview.accent }} />
+                    <span style={{ width: '100%', height: 1, borderRadius: 1, background: preview.sidebar, opacity: 0.15 }} />
+                    <span style={{ width: '80%',  height: 1, borderRadius: 1, background: preview.sidebar, opacity: 0.15 }} />
+                </span>
+            </button>
+        </div>
+    );
+}
+
 // ── Layout ────────────────────────────────────────────────────────────────────
 
 export default function Layout() {
     const nav = useNavigate();
     const { t, locale, setLocale } = useTranslation();
+    const { adminThemeId, themeVariant, setAdminTheme, toggleVariant, canToggleVariant } = useTheme();
 
     function logout() {
         clearToken();
@@ -91,10 +152,53 @@ export default function Layout() {
                     <NavItem to="/credentials" label={t('nav.credentials')} />
                 </nav>
 
+                {/* Footer: theme picker */}
+                <div style={{
+                    flexShrink: 0, padding: '10px 10px 0',
+                    borderTop: `1px solid ${T.sidebarBorder}`,
+                }}>
+                    <div style={{
+                        display: 'flex', alignItems: 'center', gap: 6,
+                        marginBottom: 8,
+                    }}>
+                        <span style={{ fontSize: T.fontXs, color: T.sidebarMuted, flex: 1 }}>
+                            {t('theme.label')}
+                        </span>
+                        {/* light/dark toggle — selected theme のみ表示 */}
+                        {canToggleVariant && (
+                            <button
+                                onClick={toggleVariant}
+                                aria-label={themeVariant === 'dark' ? t('theme.toggleLight') : t('theme.toggleDark')}
+                                title={themeVariant === 'dark' ? t('theme.toggleLight') : t('theme.toggleDark')}
+                                style={{
+                                    background: T.sidebarActive,
+                                    border: `1px solid ${T.sidebarBorder}`,
+                                    color: T.sidebarText,
+                                    padding: '3px 6px', borderRadius: T.radiusSm,
+                                    cursor: 'pointer', fontSize: 12,
+                                    lineHeight: 1, transition: 'background 0.12s',
+                                }}
+                            >
+                                {themeVariant === 'dark' ? '☀' : '🌙'}
+                            </button>
+                        )}
+                    </div>
+                    <div style={{ display: 'flex', gap: 5, marginBottom: 10 }}>
+                        {ADMIN_THEME_DEFS.map(def => (
+                            <ThemeSwatch
+                                key={def.id}
+                                def={def}
+                                isSelected={def.id === adminThemeId}
+                                currentVariant={themeVariant}
+                                onSelect={setAdminTheme}
+                            />
+                        ))}
+                    </div>
+                </div>
+
                 {/* Footer: locale + logout */}
                 <div style={{
-                    flexShrink: 0, padding: '12px 10px',
-                    borderTop: `1px solid ${T.sidebarBorder}`,
+                    flexShrink: 0, padding: '0 10px 12px',
                     display: 'flex', alignItems: 'center', gap: 6,
                 }}>
                     <select

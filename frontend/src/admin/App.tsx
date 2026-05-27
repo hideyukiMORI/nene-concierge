@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router';
 import { isAuthenticated } from './auth.js';
+import { ThemeProvider } from './theme/index.js';
 import Layout from './components/Layout.js';
 import LoginPage         from './components/LoginPage.js';
 import ScenariosPage     from './components/ScenariosPage.js';
@@ -14,6 +15,7 @@ function RequireAuth() {
 
 export default function App() {
     return (
+        <ThemeProvider>
         <BrowserRouter basename="/admin">
             <Routes>
                 {/* Public */}
@@ -38,5 +40,6 @@ export default function App() {
                 <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
         </BrowserRouter>
+        </ThemeProvider>
     );
 }

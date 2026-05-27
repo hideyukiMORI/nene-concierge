@@ -115,4 +115,10 @@ export const ptBR: Partial<MessageCatalog> = {
 
     'canvas.save':   '💾 Salvar',
     'canvas.saving': 'Salvando…',
+
+
+    // ── Theme ─────────────────────────────────────────────────────────────────
+    'theme.toggleLight': 'Mudar para modo claro',
+    'theme.toggleDark':  'Mudar para modo escuro',
+    'theme.label':       'Tema',
 }

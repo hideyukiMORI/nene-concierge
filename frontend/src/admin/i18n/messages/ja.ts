@@ -165,4 +165,10 @@ export const ja: Partial<MessageCatalog> = {
     // ── Canvas ────────────────────────────────────────────────────────────────
     'canvas.save':   '💾 保存',
     'canvas.saving': '保存中…',
+
+
+    // ── Theme ─────────────────────────────────────────────────────────────────
+    'theme.toggleLight': 'ライトモードに切り替え',
+    'theme.toggleDark':  'ダークモードに切り替え',
+    'theme.label':       'テーマ',
 }
