@@ -29,7 +29,14 @@ export const NODE_LABELS: Record<ChatNodeType, string> = {
 
 export interface MessageData  { text?: string; choices?: string[]; variable_name?: string; }
 export interface ConditionData { variable?: string; operator?: string; value?: string; }
-export interface ActionData   { action_type?: string; credential_id?: number; }
+export interface ActionData {
+    action_type?:  string;
+    credential_id?: number;
+    /** QR adapter params */
+    qr_content?:  string;
+    qr_variable?: string;
+    qr_size?:     number;
+}
 export interface EndData      { outcome?: string; }
 
 // ── Analytics カラーヘルパー ──────────────────────────────────────────────────
@@ -230,7 +237,7 @@ export function ConditionNode({ data, selected }: NodeProps) {
 // ── action ────────────────────────────────────────────────────────────────────
 
 const ACTION_ICONS: Record<string, string> = {
-    email: '📧', slack: '💬', chatwork: '🗨️', http: '🌐',
+    email: '📧', slack: '💬', chatwork: '🗨️', http: '🌐', qr: '◻',
 };
 
 export function ActionNode({ data, selected }: NodeProps) {
@@ -247,6 +254,13 @@ export function ActionNode({ data, selected }: NodeProps) {
                 {d.action_type && (
                     <p style={{ margin: 0, fontSize: 12 }}>
                         {ACTION_ICONS[d.action_type] ?? '🔧'} {d.action_type}
+                    </p>
+                )}
+                {d.action_type === 'qr' && d.qr_content && (
+                    <p style={{ margin: '3px 0 0', fontSize: 11, color: '#166534', wordBreak: 'break-all' }}>
+                        {truncate(d.qr_content, 40)}
+                        {d.qr_variable && d.qr_variable !== 'qr_url'
+                            ? ` → ${d.qr_variable}` : ''}
                     </p>
                 )}
             </NodeShell>

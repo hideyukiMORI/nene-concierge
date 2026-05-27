@@ -111,6 +111,15 @@ export const zhHans: Partial<MessageCatalog> = {
     'node.compareValue': '比较值',
     'node.actionType':   '动作类型',
     'node.credential':   '凭证',
+
+    'node.qrCode':               'QR 码',
+    'node.qrContent':            '内容（URL 或文本）',
+    'node.qrContentPlaceholder': 'https://example.com/{{user_id}}',
+    'node.qrContentHint':        '支持 {{变量}} 插值。',
+    'node.qrVariable':           '输出变量名',
+    'node.qrVariablePlaceholder': 'qr_url',
+    'node.qrSize':               '图像尺寸（px，64–800）',
+
     'node.outcome':      '结果',
     'node.delete':       '🗑 删除此节点',
 

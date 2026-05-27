@@ -150,6 +150,14 @@ export const ja: Partial<MessageCatalog> = {
     'node.credential':    'クレデンシャル',
     'node.credentialNone': '— 選択 —',
 
+    'node.qrCode':               'QR コード',
+    'node.qrContent':            'コンテンツ（URL またはテキスト）',
+    'node.qrContentPlaceholder': 'https://example.com/{{user_id}}',
+    'node.qrContentHint':        '{{変数名}} による補間が使えます。',
+    'node.qrVariable':           '出力変数名',
+    'node.qrVariablePlaceholder': 'qr_url',
+    'node.qrSize':               '画像サイズ（px、64〜800）',
+
     'node.outcome':           'アウトカム',
     'node.outcome.completed': 'completed — 完了',
     'node.outcome.abandoned': 'abandoned — 離脱',

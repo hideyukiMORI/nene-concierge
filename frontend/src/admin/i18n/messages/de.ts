@@ -111,6 +111,15 @@ export const de: Partial<MessageCatalog> = {
     'node.compareValue': 'Vergleichswert',
     'node.actionType':   'Aktionstyp',
     'node.credential':   'Zugangsdaten',
+
+    'node.qrCode':               'QR-Code',
+    'node.qrContent':            'Inhalt (URL oder Text)',
+    'node.qrContentPlaceholder': 'https://example.com/{{user_id}}',
+    'node.qrContentHint':        '{{Variable}} Interpolation wird unterstützt.',
+    'node.qrVariable':           'Ausgabevariablenname',
+    'node.qrVariablePlaceholder': 'qr_url',
+    'node.qrSize':               'Bildgröße (px, 64–800)',
+
     'node.outcome':      'Ergebnis',
     'node.delete':       '🗑 Diesen Knoten löschen',
 

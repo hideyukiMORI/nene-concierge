@@ -185,6 +185,8 @@ export default function NodeConfigPanel({ node, credentials, onChange, onDelete 
     // ── action ────────────────────────────────────────────────────────────────
     function ActionConfig() {
         const d = data as ActionData;
+        const isQr = (d.action_type ?? 'http') === 'qr';
+
         return (
             <>
                 <LabelInput label={t('node.label')} value={label} onChange={setLabel} />
@@ -199,23 +201,67 @@ export default function NodeConfigPanel({ node, credentials, onChange, onDelete 
                         <option value="email">Email</option>
                         <option value="slack">Slack</option>
                         <option value="chatwork">Chatwork</option>
+                        <option value="qr">◻ {t('node.qrCode')}</option>
                     </select>
                 </div>
-                <div>
-                    <label style={S.label}>{t('node.credential')}</label>
-                    <select
-                        style={S.select}
-                        value={String(d.credential_id ?? '')}
-                        onChange={e => setData({ credential_id: e.target.value ? Number(e.target.value) : undefined })}
-                    >
-                        <option value="">{t('node.credentialNone')}</option>
-                        {credentials
-                            .filter(c => !d.action_type || c.adapter === d.action_type)
-                            .map(c => (
-                                <option key={c.id} value={c.id}>{c.name}</option>
-                            ))}
-                    </select>
-                </div>
+
+                {/* QR 専用フィールド */}
+                {isQr && (
+                    <>
+                        <div style={S.section}>
+                            <label style={S.label}>{t('node.qrContent')}</label>
+                            <textarea
+                                style={S.textarea}
+                                value={d.qr_content ?? ''}
+                                onChange={e => setData({ qr_content: e.target.value })}
+                                placeholder={t('node.qrContentPlaceholder')}
+                            />
+                            <p style={{ margin: '4px 0 0', fontSize: T.fontXs, color: T.textMuted }}>
+                                {t('node.qrContentHint')}
+                            </p>
+                        </div>
+                        <div>
+                            <label style={S.label}>{t('node.qrVariable')}</label>
+                            <input
+                                style={S.input}
+                                value={d.qr_variable ?? ''}
+                                onChange={e => setData({ qr_variable: e.target.value || undefined })}
+                                placeholder={t('node.qrVariablePlaceholder')}
+                            />
+                        </div>
+                        <div>
+                            <label style={S.label}>{t('node.qrSize')}</label>
+                            <input
+                                type="number"
+                                min={64}
+                                max={800}
+                                step={8}
+                                style={S.input}
+                                value={d.qr_size ?? 200}
+                                onChange={e => setData({ qr_size: Number(e.target.value) || undefined })}
+                            />
+                        </div>
+                    </>
+                )}
+
+                {/* クレデンシャル（QR は不要） */}
+                {!isQr && (
+                    <div>
+                        <label style={S.label}>{t('node.credential')}</label>
+                        <select
+                            style={S.select}
+                            value={String(d.credential_id ?? '')}
+                            onChange={e => setData({ credential_id: e.target.value ? Number(e.target.value) : undefined })}
+                        >
+                            <option value="">{t('node.credentialNone')}</option>
+                            {credentials
+                                .filter(c => !d.action_type || c.adapter === d.action_type)
+                                .map(c => (
+                                    <option key={c.id} value={c.id}>{c.name}</option>
+                                ))}
+                        </select>
+                    </div>
+                )}
             </>
         );
     }
