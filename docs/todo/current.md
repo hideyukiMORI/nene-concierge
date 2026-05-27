@@ -125,6 +125,23 @@ Last updated: 2026-05-27
 
 ---
 
+**Admin UI — 完了 ✅**
+
+| 項目 | 状態 | Issue |
+| --- | --- | --- |
+| React 19 + React Router v7 + TypeScript による管理画面 SPA | ✅ | #23 |
+| esbuild esnext ターゲット（admin は常にモダンブラウザ） | ✅ | #23 |
+| 認証: JWT localStorage (nene_admin_token) / LoginPage | ✅ | #23 |
+| RequireAuth + Layout ネストルーティング（Outlet 方式） | ✅ | #23 |
+| ScenariosPage: 一覧・削除・Badge ステータス表示 | ✅ | #23 |
+| ScenarioFormPage: 新規作成・編集・削除・公開 | ✅ | #23 |
+| AppearancePage: カラーピッカー + 位置・トリガー設定 | ✅ | #23 |
+| CredentialsPage: クレデンシャル一覧・作成・削除 | ✅ | #23 |
+| 共通 UI: PageTitle / Card / Btn / Badge / ErrorMsg / Field / Select | ✅ | #23 |
+| public_html/admin/index.html + app.js ビルド成果物 | ✅ | #23 |
+
+---
+
 ## Operating Notes
 
 - このファイルはマイルストーン完了時またはセッション終了時に更新する。
