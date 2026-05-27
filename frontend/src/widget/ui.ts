@@ -98,10 +98,33 @@ export function createWidgetDom(appearance: AppearanceConfig): WidgetElements {
     return { host, shadow, launcher, launcherBtn, overlay, messages, choices };
 }
 
+/** data:image/... URI にマッチするパターン */
+const DATA_IMAGE_RE = /(data:image\/[a-z+]+;base64,[A-Za-z0-9+/=]+)/g;
+
+/**
+ * テキスト内の data:image/... URI を <img> として描画し、
+ * それ以外のテキスト部分はそのまま表示する。
+ */
+function renderMessageContent(bubble: HTMLDivElement, text: string): void {
+    const parts = text.split(DATA_IMAGE_RE);
+
+    for (const part of parts) {
+        if (part.startsWith('data:image/')) {
+            const img = document.createElement('img');
+            img.src = part;
+            img.alt = 'QR code';
+            img.style.cssText = 'display:block;max-width:200px;height:auto;border-radius:6px;margin:4px 0;';
+            bubble.appendChild(img);
+        } else if (part !== '') {
+            bubble.appendChild(document.createTextNode(part));
+        }
+    }
+}
+
 export function addMessage(messages: HTMLDivElement, text: string): void {
     const bubble = document.createElement('div');
     bubble.className = 'message-bubble';
-    bubble.textContent = text;
+    renderMessageContent(bubble, text);
     messages.appendChild(bubble);
     bubble.scrollIntoView({ behavior: 'smooth', block: 'end' });
 }

@@ -266,10 +266,25 @@ var NeNeWidget = (() => {
     });
     return { host, shadow, launcher, launcherBtn, overlay, messages, choices };
   }
+  var DATA_IMAGE_RE = /(data:image\/[a-z+]+;base64,[A-Za-z0-9+/=]+)/g;
+  function renderMessageContent(bubble, text) {
+    const parts = text.split(DATA_IMAGE_RE);
+    for (const part of parts) {
+      if (part.startsWith("data:image/")) {
+        const img = document.createElement("img");
+        img.src = part;
+        img.alt = "QR code";
+        img.style.cssText = "display:block;max-width:200px;height:auto;border-radius:6px;margin:4px 0;";
+        bubble.appendChild(img);
+      } else if (part !== "") {
+        bubble.appendChild(document.createTextNode(part));
+      }
+    }
+  }
   function addMessage(messages, text) {
     const bubble = document.createElement("div");
     bubble.className = "message-bubble";
-    bubble.textContent = text;
+    renderMessageContent(bubble, text);
     messages.appendChild(bubble);
     bubble.scrollIntoView({ behavior: "smooth", block: "end" });
   }

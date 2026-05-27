@@ -32,7 +32,7 @@ final readonly class SlackActionAdapter implements ActionAdapterInterface
     }
 
     /** @param array<string, mixed> $params */
-    public function execute(array $params, int $organizationId): void
+    public function execute(array $params, int $organizationId): array
     {
         $webhookUrl = (string) ($params['webhook_url'] ?? '');
         $text       = (string) ($params['text'] ?? '');
@@ -63,5 +63,7 @@ final readonly class SlackActionAdapter implements ActionAdapterInterface
         if ($status < 200 || $status >= 300) {
             throw new ActionException("SlackActionAdapter: Slack webhook returned HTTP {$status}.");
         }
+
+        return [];
     }
 }

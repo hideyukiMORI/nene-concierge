@@ -18,7 +18,14 @@ interface ActionAdapterInterface
     public function adapterType(): string;
 
     /**
-     * @param array<string, mixed> $params
+     * Execute the action and return any output variables to merge into the session.
+     *
+     * Most adapters return an empty array (fire-and-forget).
+     * Adapters that produce data (e.g. QR code) return named variables
+     * that the engine will write into the session's variable store.
+     *
+     * @param  array<string, mixed>  $params
+     * @return array<string, string> Output variables (empty for most adapters)
      */
-    public function execute(array $params, int $organizationId): void;
+    public function execute(array $params, int $organizationId): array;
 }

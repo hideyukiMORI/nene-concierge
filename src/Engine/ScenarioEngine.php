@@ -179,7 +179,7 @@ final readonly class ScenarioEngine
         // Execute action node synchronously; set has_conversion on success
         if ($nextNode->type === ScenarioNodeType::Action && !$isPreview) {
             try {
-                $this->actionDispatcher->dispatch(
+                $outputVars = $this->actionDispatcher->dispatch(
                     $nextNode->data,
                     $organizationId,
                     $sessionId,
@@ -187,6 +187,10 @@ final readonly class ScenarioEngine
                     $nextNode->nodeId,
                 );
                 $hasConversion = true;
+                // Merge adapter output variables into session variables
+                if ($outputVars !== []) {
+                    $variables = array_merge($variables, $outputVars);
+                }
             } catch (ActionException) {
                 // Action failed — logged by dispatcher; session continues
             }

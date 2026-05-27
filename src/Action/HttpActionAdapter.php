@@ -32,7 +32,7 @@ final readonly class HttpActionAdapter implements ActionAdapterInterface
     }
 
     /** @param array<string, mixed> $params */
-    public function execute(array $params, int $organizationId): void
+    public function execute(array $params, int $organizationId): array
     {
         $url    = (string) ($params['url'] ?? '');
         $method = strtoupper((string) ($params['method'] ?? 'POST'));
@@ -61,5 +61,7 @@ final readonly class HttpActionAdapter implements ActionAdapterInterface
         if ($status < 200 || $status >= 300) {
             throw new ActionException("HttpActionAdapter: received HTTP {$status} from {$url}.");
         }
+
+        return [];
     }
 }

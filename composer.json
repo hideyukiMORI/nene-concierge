@@ -5,6 +5,7 @@
     "license": "MIT",
     "require": {
         "php": ">=8.4.1 <9.0",
+        "endroid/qr-code": "^6.1",
         "hideyukimori/nene2": "@dev",
         "psr/http-client": "^1.0",
         "psr/http-factory": "^1.0",
