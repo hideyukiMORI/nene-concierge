@@ -24765,6 +24765,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     primaryMuted: "var(--nca-color-primary-muted)",
     primaryText: "var(--nca-color-primary-text)",
     primaryBg: "var(--nca-color-primary-bg)",
+    /** primary ボタン/バッジの前景色 — 明るいテーマでは暗色に上書きされる */
+    primaryFg: "var(--nca-color-primary-fg)",
     // ── Danger ───────────────────────────────────────────────────────────────
     danger: "var(--nca-color-danger)",
     dangerBg: "var(--nca-color-danger-bg)",
@@ -26223,7 +26225,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             }, children: t("nav.brand") }),
             /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: {
               background: T.primary,
-              color: "#fff",
+              color: T.primaryFg,
               padding: "2px 7px",
               borderRadius: T.radiusSm,
               fontSize: T.fontXs,
@@ -26428,7 +26430,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       justifyContent: "center",
       height: T.controlHeight,
       // ← CSS 変数 — 直書き禁止
-      padding: "0 16px",
+      padding: "0 12px",
       gap: 6,
       borderRadius: T.radiusMd,
       fontWeight: 600,
@@ -26443,7 +26445,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       textDecoration: "none"
     };
     const variants = {
-      primary: { background: T.primary, color: "#fff", borderColor: T.primary },
+      primary: { background: T.primary, color: T.primaryFg, borderColor: T.primary },
       danger: { background: T.danger, color: "#fff", borderColor: T.danger },
       ghost: { background: "transparent", color: T.primary, borderColor: T.primary }
     };
@@ -36841,15 +36843,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 onClick: handleSave,
                 disabled: saving,
                 style: {
-                  padding: "8px 20px",
-                  borderRadius: 8,
+                  padding: "6px 14px",
+                  borderRadius: 6,
                   background: saving ? T.primaryMuted : T.primary,
-                  color: "#fff",
+                  color: T.primaryFg,
                   border: "none",
                   fontWeight: 700,
-                  fontSize: T.fontMd,
+                  fontSize: T.fontBase,
                   cursor: saving ? "not-allowed" : "pointer",
-                  boxShadow: "0 2px 6px rgba(37,99,235,.35)"
+                  opacity: saving ? 0.65 : 1,
+                  boxShadow: "0 1px 4px rgba(0,0,0,.15)"
                 },
                 children: saving ? t("canvas.saving") : t("canvas.save")
               }

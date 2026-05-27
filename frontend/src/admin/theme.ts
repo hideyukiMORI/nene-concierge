@@ -16,6 +16,8 @@ export const T = {
     primaryMuted:   'var(--nca-color-primary-muted)',
     primaryText:    'var(--nca-color-primary-text)',
     primaryBg:      'var(--nca-color-primary-bg)',
+    /** primary ボタン/バッジの前景色 — 明るいテーマでは暗色に上書きされる */
+    primaryFg:      'var(--nca-color-primary-fg)',
 
     // ── Danger ───────────────────────────────────────────────────────────────
     danger:         'var(--nca-color-danger)',

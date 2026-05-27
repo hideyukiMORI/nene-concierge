@@ -441,12 +441,13 @@ export default function ScenarioCanvas({
                                 onClick={handleSave}
                                 disabled={saving}
                                 style={{
-                                    padding: '8px 20px', borderRadius: 8,
+                                    padding: '6px 14px', borderRadius: 6,
                                     background: saving ? T.primaryMuted : T.primary,
-                                    color: '#fff', border: 'none',
-                                    fontWeight: 700, fontSize: T.fontMd,
+                                    color: T.primaryFg, border: 'none',
+                                    fontWeight: 700, fontSize: T.fontBase,
                                     cursor: saving ? 'not-allowed' : 'pointer',
-                                    boxShadow: '0 2px 6px rgba(37,99,235,.35)',
+                                    opacity: saving ? 0.65 : 1,
+                                    boxShadow: '0 1px 4px rgba(0,0,0,.15)',
                                 }}
                             >
                                 {saving ? t('canvas.saving') : t('canvas.save')}

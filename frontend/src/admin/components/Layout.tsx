@@ -152,7 +152,7 @@ export default function Layout() {
                                 {t('nav.brand')}
                             </span>
                             <span style={{
-                                background: T.primary, color: '#fff',
+                                background: T.primary, color: T.primaryFg,
                                 padding: '2px 7px', borderRadius: T.radiusSm,
                                 fontSize: T.fontXs, fontWeight: 700,
                                 letterSpacing: '0.06em', textTransform: 'uppercase',
@@ -370,7 +370,7 @@ export function Btn({
     const base: React.CSSProperties = {
         display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
         height: T.controlHeight,   // ← CSS 変数 — 直書き禁止
-        padding: '0 16px', gap: 6,
+        padding: '0 12px', gap: 6,
         borderRadius: T.radiusMd, fontWeight: 600, fontSize: T.fontBase,
         cursor: disabled ? 'not-allowed' : 'pointer',
         border: '1.5px solid transparent',
@@ -380,8 +380,8 @@ export function Btn({
         textDecoration: 'none',
     };
     const variants: Record<string, React.CSSProperties> = {
-        primary: { background: T.primary, color: '#fff', borderColor: T.primary  },
-        danger:  { background: T.danger,  color: '#fff', borderColor: T.danger   },
+        primary: { background: T.primary, color: T.primaryFg, borderColor: T.primary  },
+        danger:  { background: T.danger,  color: '#fff',      borderColor: T.danger   },
         ghost:   { background: 'transparent', color: T.primary, borderColor: T.primary },
     };
     return (
