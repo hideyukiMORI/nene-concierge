@@ -79,6 +79,19 @@ Last updated: 2026-05-27
 
 ---
 
+**Phase 5 — Import / Export: 完了 ✅**
+
+| 項目 | 状態 | Issue |
+| --- | --- | --- |
+| ScenarioExportDocument VO（SCHEMA_VERSION=1） | ✅ | #17 |
+| ExportScenarioUseCase / ExportScenarioHandler（GET /api/v1/scenarios/{id}/export） | ✅ | #17 |
+| ImportScenarioUseCase / ImportScenarioHandler（POST /api/v1/scenarios/import） | ✅ | #17 |
+| ノード ID 再生成（UUID v4）・エッジ参照リマップ | ✅ | #17 |
+| OpenAPI / MCP catalog に export/import ツール追加（20 ツール） | ✅ | #17 |
+| ラウンドトリップテスト 12 本 | ✅ | #17 |
+
+---
+
 ## Operating Notes
 
 - このファイルはマイルストーン完了時またはセッション終了時に更新する。
