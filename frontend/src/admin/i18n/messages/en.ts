@@ -86,6 +86,7 @@ export const en = {
     'scenarioForm.descPlaceholder':   'Brief description of this scenario…',
     'scenarioForm.statusLabel':       'Status',
     'scenarioForm.canvasHint':        'Create the scenario to open the canvas editor.',
+    'scenarioForm.detailsToggle':     'Details',
     'scenarioForm.loadError':         'Failed to load scenario.',
     'scenarioForm.saveError':         'Failed to save.',
     'scenarioForm.graphSaveError':    'Failed to save graph.',

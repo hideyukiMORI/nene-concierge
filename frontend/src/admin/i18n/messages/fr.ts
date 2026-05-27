@@ -66,6 +66,7 @@ export const fr: Partial<MessageCatalog> = {
     'scenarioForm.descPlaceholder': 'Brève description de ce scénario…',
     'scenarioForm.statusLabel':     'Statut',
     'scenarioForm.canvasHint':      "Créez le scénario pour ouvrir l'éditeur de canevas.",
+    'scenarioForm.detailsToggle':   'Détails',
     'scenarioForm.saveError':       "Échec de l'enregistrement.",
     'scenarioForm.graphSaveError':  "Échec de l'enregistrement du graphe.",
     'scenarioForm.deleteError':     'Échec de la suppression.',

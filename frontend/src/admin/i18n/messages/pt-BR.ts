@@ -66,6 +66,7 @@ export const ptBR: Partial<MessageCatalog> = {
     'scenarioForm.descPlaceholder': 'Breve descrição deste cenário…',
     'scenarioForm.statusLabel':     'Status',
     'scenarioForm.canvasHint':      'Crie o cenário para abrir o editor de canvas.',
+    'scenarioForm.detailsToggle':   'Detalhes',
     'scenarioForm.saveError':       'Falha ao salvar.',
     'scenarioForm.graphSaveError':  'Falha ao salvar o grafo.',
     'scenarioForm.deleteError':     'Falha ao excluir.',

@@ -24953,6 +24953,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "scenarioForm.descPlaceholder": "Brief description of this scenario\u2026",
     "scenarioForm.statusLabel": "Status",
     "scenarioForm.canvasHint": "Create the scenario to open the canvas editor.",
+    "scenarioForm.detailsToggle": "Details",
     "scenarioForm.loadError": "Failed to load scenario.",
     "scenarioForm.saveError": "Failed to save.",
     "scenarioForm.graphSaveError": "Failed to save graph.",
@@ -25179,6 +25180,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "scenarioForm.descPlaceholder": "\u3053\u306E\u30B7\u30CA\u30EA\u30AA\u306E\u6982\u8981\u2026",
     "scenarioForm.statusLabel": "\u30B9\u30C6\u30FC\u30BF\u30B9",
     "scenarioForm.canvasHint": "\u30B7\u30CA\u30EA\u30AA\u3092\u4F5C\u6210\u3059\u308B\u3068\u30AD\u30E3\u30F3\u30D0\u30B9\u30A8\u30C7\u30A3\u30BF\u304C\u958B\u304D\u307E\u3059",
+    "scenarioForm.detailsToggle": "\u8A73\u7D30",
     "scenarioForm.loadError": "\u53D6\u5F97\u306B\u5931\u6557\u3057\u307E\u3057\u305F\u3002",
     "scenarioForm.saveError": "\u4FDD\u5B58\u306B\u5931\u6557\u3057\u307E\u3057\u305F\u3002",
     "scenarioForm.graphSaveError": "\u30B0\u30E9\u30D5\u306E\u4FDD\u5B58\u306B\u5931\u6557\u3057\u307E\u3057\u305F\u3002",
@@ -25392,6 +25394,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "scenarioForm.descPlaceholder": "Br\xE8ve description de ce sc\xE9nario\u2026",
     "scenarioForm.statusLabel": "Statut",
     "scenarioForm.canvasHint": "Cr\xE9ez le sc\xE9nario pour ouvrir l'\xE9diteur de canevas.",
+    "scenarioForm.detailsToggle": "D\xE9tails",
     "scenarioForm.saveError": "\xC9chec de l'enregistrement.",
     "scenarioForm.graphSaveError": "\xC9chec de l'enregistrement du graphe.",
     "scenarioForm.deleteError": "\xC9chec de la suppression.",
@@ -25564,6 +25567,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "scenarioForm.descPlaceholder": "\u6B64\u573A\u666F\u7684\u7B80\u8981\u8BF4\u660E\u2026",
     "scenarioForm.statusLabel": "\u72B6\u6001",
     "scenarioForm.canvasHint": "\u521B\u5EFA\u573A\u666F\u540E\u5373\u53EF\u6253\u5F00\u6D41\u7A0B\u56FE\u7F16\u8F91\u5668\u3002",
+    "scenarioForm.detailsToggle": "\u8BE6\u60C5",
     "scenarioForm.saveError": "\u4FDD\u5B58\u5931\u8D25\u3002",
     "scenarioForm.graphSaveError": "\u4FDD\u5B58\u6D41\u7A0B\u56FE\u5931\u8D25\u3002",
     "scenarioForm.deleteError": "\u5220\u9664\u5931\u8D25\u3002",
@@ -25736,6 +25740,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "scenarioForm.descPlaceholder": "Breve descri\xE7\xE3o deste cen\xE1rio\u2026",
     "scenarioForm.statusLabel": "Status",
     "scenarioForm.canvasHint": "Crie o cen\xE1rio para abrir o editor de canvas.",
+    "scenarioForm.detailsToggle": "Detalhes",
     "scenarioForm.saveError": "Falha ao salvar.",
     "scenarioForm.graphSaveError": "Falha ao salvar o grafo.",
     "scenarioForm.deleteError": "Falha ao excluir.",
@@ -25908,6 +25913,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "scenarioForm.descPlaceholder": "Kurze Beschreibung dieses Szenarios\u2026",
     "scenarioForm.statusLabel": "Status",
     "scenarioForm.canvasHint": "Erstellen Sie das Szenario, um den Canvas-Editor zu \xF6ffnen.",
+    "scenarioForm.detailsToggle": "Details",
     "scenarioForm.saveError": "Speichern fehlgeschlagen.",
     "scenarioForm.graphSaveError": "Graph konnte nicht gespeichert werden.",
     "scenarioForm.deleteError": "L\xF6schen fehlgeschlagen.",
@@ -36899,6 +36905,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // src/admin/components/ScenarioFormPage.tsx
   var import_jsx_runtime10 = __toESM(require_jsx_runtime());
+  var PencilIcon = () => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("svg", { width: "11", height: "11", viewBox: "0 0 16 16", fill: "currentColor", "aria-hidden": true, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("path", { d: "M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z" }) });
+  var ChevronDownIcon = () => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("svg", { width: "10", height: "10", viewBox: "0 0 16 16", fill: "currentColor", "aria-hidden": true, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("path", { d: "M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" }) });
+  var ChevronUpIcon = () => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("svg", { width: "10", height: "10", viewBox: "0 0 16 16", fill: "currentColor", "aria-hidden": true, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("path", { d: "M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z" }) });
   function ScenarioFormPage() {
     const { id: id2 } = useParams();
     const isNew = id2 === void 0;
@@ -36915,10 +36924,19 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const [error, setError] = (0, import_react11.useState)(null);
     const [savedMsg, setSavedMsg] = (0, import_react11.useState)("");
     const canvasRef = (0, import_react11.useRef)(null);
+    const [editingName, setEditingName] = (0, import_react11.useState)(isNew);
+    const [draftName, setDraftName] = (0, import_react11.useState)("");
+    const nameInputRef = (0, import_react11.useRef)(null);
+    const [showStatusDrop, setShowStatusDrop] = (0, import_react11.useState)(false);
+    const statusDropRef = (0, import_react11.useRef)(null);
+    const [showDetails, setShowDetails] = (0, import_react11.useState)(isNew);
     (0, import_react11.useEffect)(() => {
       void listCredentials().then((r) => setCredentials(r.data)).catch(() => {
       });
-      if (isNew) return;
+      if (isNew) {
+        setTimeout(() => nameInputRef.current?.focus(), 50);
+        return;
+      }
       void (async () => {
         try {
           const s = await getScenario(Number(id2));
@@ -36934,18 +36952,72 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }
       })();
     }, [id2, isNew]);
-    async function handleMetaSave(e) {
-      e.preventDefault();
+    (0, import_react11.useEffect)(() => {
+      if (!showStatusDrop) return;
+      function onClickOutside(e) {
+        if (statusDropRef.current && !statusDropRef.current.contains(e.target)) {
+          setShowStatusDrop(false);
+        }
+      }
+      document.addEventListener("mousedown", onClickOutside);
+      return () => document.removeEventListener("mousedown", onClickOutside);
+    }, [showStatusDrop]);
+    function startEditName() {
+      setDraftName(name);
+      setEditingName(true);
+      setTimeout(() => {
+        nameInputRef.current?.focus();
+        nameInputRef.current?.select();
+      }, 0);
+    }
+    async function commitName() {
+      const trimmed = draftName.trim();
+      if (trimmed === "") {
+        setEditingName(false);
+        return;
+      }
+      if (trimmed === name) {
+        setEditingName(false);
+        return;
+      }
+      setName(trimmed);
+      setEditingName(false);
+      if (!isNew) await saveMeta({ nameOverride: trimmed });
+    }
+    function cancelEditName() {
+      setEditingName(false);
+      setDraftName(name);
+    }
+    async function changeStatus(s) {
+      setStatus(s);
+      setShowStatusDrop(false);
+      if (!isNew) await saveMeta({ statusOverride: s });
+    }
+    async function saveMeta(overrides) {
+      if (isNew) return;
       setSaving(true);
       setError(null);
       try {
-        if (isNew) {
-          const res = await createScenario({ name, ...description ? { description } : {} });
-          nav(`/scenarios/${res.id}`);
-          return;
-        }
-        await updateScenario(Number(id2), { name, description: description || null, status });
+        await updateScenario(Number(id2), {
+          name: overrides?.nameOverride ?? name,
+          description: description || null,
+          status: overrides?.statusOverride ?? status
+        });
         flash(t("scenarioForm.metaSaved"));
+      } catch (err) {
+        setError(err instanceof ApiError ? err.message : t("scenarioForm.saveError"));
+      } finally {
+        setSaving(false);
+      }
+    }
+    async function handleCreate() {
+      const trimmed = draftName.trim() || name.trim();
+      if (!trimmed) return;
+      setSaving(true);
+      setError(null);
+      try {
+        const res = await createScenario({ name: trimmed, ...description ? { description } : {} });
+        nav(`/scenarios/${res.id}`);
       } catch (err) {
         setError(err instanceof ApiError ? err.message : t("scenarioForm.saveError"));
       } finally {
@@ -36984,121 +37056,255 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       { value: "published", label: t("scenario.status.published") },
       { value: "archived", label: t("scenario.status.archived") }
     ];
-    if (loading) return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { color: T.textMuted, marginTop: 40 }, children: t("common.loading") });
+    if (loading) return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { color: T.textMuted, marginTop: 40, padding: "0 24px" }, children: t("common.loading") });
+    const divider = {
+      width: 1,
+      height: 20,
+      background: T.border,
+      flexShrink: 0
+    };
     return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column", flex: 1, overflow: "hidden" }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: {
         display: "flex",
         alignItems: "center",
-        gap: 12,
-        padding: "10px 16px",
+        gap: 6,
+        padding: "0 10px",
+        height: 48,
+        flexShrink: 0,
         borderBottom: `1px solid ${T.border}`,
-        background: T.surface,
-        flexShrink: 0
+        background: T.surface
       }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(PageTitle, { style: { margin: 0, fontSize: T.fontXl }, children: isNew ? t("scenarioForm.newTitle") : name }),
-        !isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Badge, { status }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(Btn, { variant: "ghost", onClick: () => nav("/scenarios"), style: { padding: "0 8px" }, children: [
+          "\u2190 ",
+          t("common.backToList")
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: divider }),
+        editingName ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+          "input",
+          {
+            ref: nameInputRef,
+            value: draftName,
+            onChange: (e) => setDraftName(e.target.value),
+            onBlur: () => {
+              void commitName();
+            },
+            onKeyDown: (e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                void commitName();
+              }
+              if (e.key === "Escape") {
+                e.preventDefault();
+                cancelEditName();
+              }
+            },
+            placeholder: t("scenarioForm.namePlaceholder"),
+            style: {
+              fontSize: T.fontMd,
+              fontWeight: 600,
+              color: T.textStrong,
+              border: `1.5px solid ${T.primary}`,
+              borderRadius: T.radiusSm,
+              padding: "3px 8px",
+              background: T.surface,
+              minWidth: 180,
+              maxWidth: 360,
+              outline: "none"
+            }
+          }
+        ) : /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+          "button",
+          {
+            onClick: startEditName,
+            title: t("scenarioForm.nameLabel"),
+            style: {
+              display: "flex",
+              alignItems: "center",
+              gap: 5,
+              fontSize: T.fontMd,
+              fontWeight: 600,
+              color: T.textStrong,
+              background: "transparent",
+              border: "none",
+              cursor: "text",
+              padding: "3px 6px",
+              borderRadius: T.radiusSm,
+              maxWidth: 320,
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap"
+            },
+            onMouseEnter: (e) => {
+              e.currentTarget.style.background = T.surfaceHover;
+            },
+            onMouseLeave: (e) => {
+              e.currentTarget.style.background = "transparent";
+            },
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { overflow: "hidden", textOverflow: "ellipsis" }, children: name || /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { color: T.textMuted, fontWeight: 400 }, children: t("scenarioForm.namePlaceholder") }) }),
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { color: T.textMuted, flexShrink: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(PencilIcon, {}) })
+            ]
+          }
+        ),
+        !isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { ref: statusDropRef, style: { position: "relative" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+            "button",
+            {
+              onClick: () => setShowStatusDrop((v) => !v),
+              style: {
+                display: "flex",
+                alignItems: "center",
+                gap: 3,
+                background: "transparent",
+                border: "none",
+                cursor: "pointer",
+                padding: "2px 4px",
+                borderRadius: T.radiusSm
+              },
+              title: t("scenarioForm.statusLabel"),
+              children: [
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Badge, { status }),
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { color: T.textMuted }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(ChevronDownIcon, {}) })
+              ]
+            }
+          ),
+          showStatusDrop && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: {
+            position: "absolute",
+            top: "calc(100% + 4px)",
+            left: 0,
+            background: T.surface,
+            border: `1px solid ${T.border}`,
+            borderRadius: T.radiusMd,
+            boxShadow: "0 4px 12px rgba(0,0,0,.12)",
+            zIndex: 200,
+            overflow: "hidden",
+            minWidth: 130
+          }, children: statusOptions.map((o) => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+            "button",
+            {
+              onClick: () => {
+                void changeStatus(o.value);
+              },
+              style: {
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                width: "100%",
+                padding: "7px 12px",
+                background: o.value === status ? T.primaryLight : "transparent",
+                border: "none",
+                cursor: "pointer",
+                fontSize: T.fontBase,
+                color: T.text,
+                textAlign: "left"
+              },
+              onMouseEnter: (e) => {
+                if (o.value !== status) e.currentTarget.style.background = T.surfaceHover;
+              },
+              onMouseLeave: (e) => {
+                if (o.value !== status) e.currentTarget.style.background = "transparent";
+              },
+              children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Badge, { status: o.value })
+            },
+            o.value
+          )) })
+        ] }),
         /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { flex: 1 } }),
-        savedMsg && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: T.fontBase, color: T.successText, fontWeight: 600 }, children: [
+        savedMsg && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: T.fontBase, color: T.successText, fontWeight: 600, whiteSpace: "nowrap" }, children: [
           "\u2713 ",
           savedMsg
         ] }),
-        !isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-            Btn,
-            {
-              disabled: saving,
-              onClick: () => canvasRef.current?.triggerSave(),
-              children: saving ? t("common.saving") : t("canvas.save")
-            }
-          ),
-          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Btn, { variant: "danger", onClick: () => void handleDelete(), children: t("common.delete") })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Btn, { variant: "ghost", onClick: () => nav("/scenarios"), children: t("common.backToList") })
+        !isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Btn, { disabled: saving, onClick: () => canvasRef.current?.triggerSave(), children: saving ? t("common.saving") : t("canvas.save") }),
+        !isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+          "button",
+          {
+            onClick: () => setShowDetails((v) => !v),
+            title: t("scenarioForm.detailsToggle"),
+            style: {
+              display: "flex",
+              alignItems: "center",
+              gap: 4,
+              padding: "0 8px",
+              height: 28,
+              background: showDetails ? T.primaryLight : "transparent",
+              border: `1px solid ${showDetails ? T.primaryBorder : T.border}`,
+              borderRadius: T.radiusSm,
+              cursor: "pointer",
+              fontSize: T.fontXs,
+              fontWeight: 600,
+              color: showDetails ? T.primaryText : T.textMuted
+            },
+            children: [
+              t("scenarioForm.detailsToggle"),
+              showDetails ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(ChevronUpIcon, {}) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(ChevronDownIcon, {})
+            ]
+          }
+        ),
+        isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+          Btn,
+          {
+            disabled: saving || !(draftName.trim() || name.trim()),
+            onClick: () => {
+              void handleCreate();
+            },
+            children: saving ? t("common.creating") : t("common.create")
+          }
+        ),
+        !isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Btn, { variant: "danger", onClick: () => {
+          void handleDelete();
+        }, children: t("common.delete") })
       ] }),
-      error && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { padding: "8px 16px", background: T.dangerBg, flexShrink: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(ErrorMsg, { msg: error }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
-        "form",
-        {
-          onSubmit: (e) => {
-            void handleMetaSave(e);
-          },
-          style: {
-            display: "flex",
-            gap: 10,
-            alignItems: "flex-end",
-            padding: "10px 16px",
-            background: T.bg,
-            borderBottom: `1px solid ${T.border}`,
-            flexShrink: 0,
-            flexWrap: "wrap"
-          },
-          children: [
-            /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { flex: "1 1 200px" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("label", { style: { display: "block", fontSize: T.fontXs, fontWeight: 600, color: T.textMuted, marginBottom: 3 }, children: [
-                t("scenarioForm.nameLabel"),
-                " *"
-              ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                "input",
-                {
-                  value: name,
-                  onChange: (e) => setName(e.target.value),
-                  required: true,
-                  placeholder: t("scenarioForm.namePlaceholder"),
-                  style: {
-                    width: "100%",
-                    padding: "7px 10px",
-                    borderRadius: T.radiusSm,
-                    border: `1.5px solid ${T.borderInput}`,
-                    fontSize: T.fontBase,
-                    boxSizing: "border-box"
-                  }
-                }
-              )
-            ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { flex: "2 1 300px" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("label", { style: { display: "block", fontSize: T.fontXs, fontWeight: 600, color: T.textMuted, marginBottom: 3 }, children: t("scenarioForm.descLabel") }),
-              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                "input",
-                {
-                  value: description,
-                  onChange: (e) => setDescription(e.target.value),
-                  placeholder: t("scenarioForm.descPlaceholder"),
-                  style: {
-                    width: "100%",
-                    padding: "7px 10px",
-                    borderRadius: T.radiusSm,
-                    border: `1.5px solid ${T.borderInput}`,
-                    fontSize: T.fontBase,
-                    boxSizing: "border-box"
-                  }
-                }
-              )
-            ] }),
-            !isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { flex: "0 0 120px" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("label", { style: { display: "block", fontSize: T.fontXs, fontWeight: 600, color: T.textMuted, marginBottom: 3 }, children: t("scenarioForm.statusLabel") }),
-              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                "select",
-                {
-                  value: status,
-                  onChange: (e) => setStatus(e.target.value),
-                  style: {
-                    width: "100%",
-                    padding: "7px 10px",
-                    borderRadius: T.radiusSm,
-                    border: `1.5px solid ${T.borderInput}`,
-                    fontSize: T.fontBase,
-                    background: T.surface,
-                    boxSizing: "border-box"
-                  },
-                  children: statusOptions.map((o) => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("option", { value: o.value, children: o.label }, o.value))
-                }
-              )
-            ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Btn, { type: "submit", disabled: saving, children: saving ? t("common.saving") : isNew ? t("common.create") : t("common.save") })
-          ]
-        }
-      ),
+      showDetails && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: {
+        display: "flex",
+        gap: 10,
+        alignItems: "flex-end",
+        padding: "8px 12px",
+        flexShrink: 0,
+        background: T.bg,
+        borderBottom: `1px solid ${T.border}`
+      }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { flex: 1 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("label", { style: {
+            display: "block",
+            fontSize: T.fontXs,
+            fontWeight: 600,
+            color: T.textMuted,
+            marginBottom: 3
+          }, children: t("scenarioForm.descLabel") }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+            "input",
+            {
+              value: description,
+              onChange: (e) => setDescription(e.target.value),
+              placeholder: t("scenarioForm.descPlaceholder"),
+              style: {
+                width: "100%",
+                padding: "5px 9px",
+                borderRadius: T.radiusSm,
+                border: `1.5px solid ${T.borderInput}`,
+                fontSize: T.fontBase,
+                boxSizing: "border-box",
+                background: T.surface,
+                color: T.text
+              }
+            }
+          )
+        ] }),
+        isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+          Btn,
+          {
+            disabled: saving || !(draftName.trim() || name.trim()),
+            onClick: () => {
+              void handleCreate();
+            },
+            children: saving ? t("common.creating") : t("common.create")
+          }
+        ),
+        !isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Btn, { disabled: saving, onClick: () => {
+          void saveMeta();
+        }, children: saving ? t("common.saving") : t("common.save") })
+      ] }),
+      error && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { padding: "6px 16px", background: T.dangerBg, flexShrink: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(ErrorMsg, { msg: error }) }),
       !isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { flex: 1, overflow: "hidden" }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
         ScenarioCanvas_default,
         {
@@ -37110,14 +37316,19 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           onSave: handleGraphSave
         }
       ) }),
-      isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: {
+      isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: {
         flex: 1,
         display: "flex",
+        flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
+        gap: 8,
         color: T.textMuted,
         fontSize: T.fontMd
-      }, children: t("scenarioForm.canvasHint") })
+      }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontSize: 32 }, children: "\u2726" }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { children: t("scenarioForm.canvasHint") })
+      ] })
     ] });
   }
 

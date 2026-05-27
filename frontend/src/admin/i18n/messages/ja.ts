@@ -79,6 +79,7 @@ export const ja: Partial<MessageCatalog> = {
     'scenarioForm.descPlaceholder': 'このシナリオの概要…',
     'scenarioForm.statusLabel':     'ステータス',
     'scenarioForm.canvasHint':      'シナリオを作成するとキャンバスエディタが開きます',
+    'scenarioForm.detailsToggle':   '詳細',
     'scenarioForm.loadError':       '取得に失敗しました。',
     'scenarioForm.saveError':       '保存に失敗しました。',
     'scenarioForm.graphSaveError':  'グラフの保存に失敗しました。',

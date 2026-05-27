@@ -66,6 +66,7 @@ export const de: Partial<MessageCatalog> = {
     'scenarioForm.descPlaceholder': 'Kurze Beschreibung dieses Szenarios…',
     'scenarioForm.statusLabel':     'Status',
     'scenarioForm.canvasHint':      'Erstellen Sie das Szenario, um den Canvas-Editor zu öffnen.',
+    'scenarioForm.detailsToggle':   'Details',
     'scenarioForm.saveError':       'Speichern fehlgeschlagen.',
     'scenarioForm.graphSaveError':  'Graph konnte nicht gespeichert werden.',
     'scenarioForm.deleteError':     'Löschen fehlgeschlagen.',

@@ -66,6 +66,7 @@ export const zhHans: Partial<MessageCatalog> = {
     'scenarioForm.descPlaceholder': '此场景的简要说明…',
     'scenarioForm.statusLabel':     '状态',
     'scenarioForm.canvasHint':      '创建场景后即可打开流程图编辑器。',
+    'scenarioForm.detailsToggle':   '详情',
     'scenarioForm.saveError':       '保存失败。',
     'scenarioForm.graphSaveError':  '保存流程图失败。',
     'scenarioForm.deleteError':     '删除失败。',
