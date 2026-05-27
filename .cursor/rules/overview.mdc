@@ -1,0 +1,30 @@
+---
+description: NeNe Concierge overview for Cursor AI
+alwaysApply: true
+---
+
+# NeNe Concierge
+
+Self-hosted chat scenario platform on NENE2 (PHP 8.4).
+
+## What it is
+- Visual scenario editor (React flow canvas) + AI scenario authoring via MCP/API
+- Embed widget for conversion-focused chat on any same-origin page
+- Action engine: email, Slack, Chatwork, external HTTP from scenario nodes
+- Dual deployment: Tier A (shared hosting) and Tier B (Docker/VPS)
+
+## Key rules
+- Issue-driven. No code/doc/config change without a GitHub Issue.
+- No direct commits to `main`. Branch → PR → merge.
+- Conventional Commits: `type(scope): 日本語説明 (#issue)`
+- Handler → UseCase → Repository layering. No SQL in handlers.
+- MCP tools: operator/AI only. Never expose to embed widget visitors.
+- No DB access for AI/MCP tools. HTTP boundaries only.
+- `declare(strict_types=1)` in every PHP file.
+
+## Entry points
+- Agent/AI: `AGENTS.md`
+- Current tasks: `docs/todo/current.md`
+- Product vision: `docs/explanation/product-vision.md`
+- Roadmap: `docs/roadmap.md`
+- Full AI guide: `CLAUDE.md`

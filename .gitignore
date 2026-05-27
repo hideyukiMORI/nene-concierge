@@ -1,0 +1,26 @@
+# PHP
+vendor/
+composer.lock
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Build outputs
+public_html/assets/
+node_modules/
+frontend/dist/
+
+# Logs and cache
+var/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
