@@ -63,15 +63,26 @@ final readonly class EngineServiceProvider implements ServiceProviderInterface
                     return new PdoSessionMessageRepository($query);
                 },
             )
+            // ── Engine utilities ───────────────────────────────────────────────
+            ->set(
+                ConditionEvaluator::class,
+                static fn (): ConditionEvaluator => new ConditionEvaluator(),
+            )
+            ->set(
+                VariableInterpolator::class,
+                static fn (): VariableInterpolator => new VariableInterpolator(),
+            )
             // ── Engine ─────────────────────────────────────────────────────────
             ->set(
                 ScenarioEngine::class,
                 static function (ContainerInterface $c): ScenarioEngine {
-                    $scenarios = $c->get(ScenarioRepositoryInterface::class);
-                    $nodes     = $c->get(ScenarioNodeRepositoryInterface::class);
-                    $edges     = $c->get(ScenarioEdgeRepositoryInterface::class);
-                    $sessions  = $c->get(ChatSessionRepositoryInterface::class);
-                    $events    = $c->get(SessionNodeEventRepositoryInterface::class);
+                    $scenarios   = $c->get(ScenarioRepositoryInterface::class);
+                    $nodes       = $c->get(ScenarioNodeRepositoryInterface::class);
+                    $edges       = $c->get(ScenarioEdgeRepositoryInterface::class);
+                    $sessions    = $c->get(ChatSessionRepositoryInterface::class);
+                    $events      = $c->get(SessionNodeEventRepositoryInterface::class);
+                    $conditions  = $c->get(ConditionEvaluator::class);
+                    $interpolator = $c->get(VariableInterpolator::class);
 
                     if (!$scenarios instanceof ScenarioRepositoryInterface) {
                         throw new LogicException('Scenario repository service is invalid.');
@@ -93,7 +104,15 @@ final readonly class EngineServiceProvider implements ServiceProviderInterface
                         throw new LogicException('Session node event repository service is invalid.');
                     }
 
-                    return new ScenarioEngine($scenarios, $nodes, $edges, $sessions, $events);
+                    if (!$conditions instanceof ConditionEvaluator) {
+                        throw new LogicException('ConditionEvaluator service is invalid.');
+                    }
+
+                    if (!$interpolator instanceof VariableInterpolator) {
+                        throw new LogicException('VariableInterpolator service is invalid.');
+                    }
+
+                    return new ScenarioEngine($scenarios, $nodes, $edges, $sessions, $events, $conditions, $interpolator);
                 },
             )
             // ── Handlers ───────────────────────────────────────────────────────
@@ -131,6 +150,40 @@ final readonly class EngineServiceProvider implements ServiceProviderInterface
                     return new StepSessionHandler($engine, $json);
                 },
             )
+            ->set(
+                PreviewStartHandler::class,
+                static function (ContainerInterface $c): PreviewStartHandler {
+                    $engine = $c->get(ScenarioEngine::class);
+                    $json   = $c->get(JsonResponseFactory::class);
+
+                    if (!$engine instanceof ScenarioEngine) {
+                        throw new LogicException('ScenarioEngine service is invalid.');
+                    }
+
+                    if (!$json instanceof JsonResponseFactory) {
+                        throw new LogicException('JSON response factory service is invalid.');
+                    }
+
+                    return new PreviewStartHandler($engine, $json);
+                },
+            )
+            ->set(
+                PreviewStepHandler::class,
+                static function (ContainerInterface $c): PreviewStepHandler {
+                    $engine = $c->get(ScenarioEngine::class);
+                    $json   = $c->get(JsonResponseFactory::class);
+
+                    if (!$engine instanceof ScenarioEngine) {
+                        throw new LogicException('ScenarioEngine service is invalid.');
+                    }
+
+                    if (!$json instanceof JsonResponseFactory) {
+                        throw new LogicException('JSON response factory service is invalid.');
+                    }
+
+                    return new PreviewStepHandler($engine, $json);
+                },
+            )
             // ── Exception handler ──────────────────────────────────────────────
             ->set(
                 EngineExceptionHandler::class,
@@ -148,8 +201,10 @@ final readonly class EngineServiceProvider implements ServiceProviderInterface
             ->set(
                 EngineRouteRegistrar::class,
                 static function (ContainerInterface $c): EngineRouteRegistrar {
-                    $start = $c->get(StartSessionHandler::class);
-                    $step  = $c->get(StepSessionHandler::class);
+                    $start        = $c->get(StartSessionHandler::class);
+                    $step         = $c->get(StepSessionHandler::class);
+                    $previewStart = $c->get(PreviewStartHandler::class);
+                    $previewStep  = $c->get(PreviewStepHandler::class);
 
                     if (!$start instanceof StartSessionHandler) {
                         throw new LogicException('StartSession handler service is invalid.');
@@ -159,7 +214,15 @@ final readonly class EngineServiceProvider implements ServiceProviderInterface
                         throw new LogicException('StepSession handler service is invalid.');
                     }
 
-                    return new EngineRouteRegistrar($start, $step);
+                    if (!$previewStart instanceof PreviewStartHandler) {
+                        throw new LogicException('PreviewStart handler service is invalid.');
+                    }
+
+                    if (!$previewStep instanceof PreviewStepHandler) {
+                        throw new LogicException('PreviewStep handler service is invalid.');
+                    }
+
+                    return new EngineRouteRegistrar($start, $step, $previewStart, $previewStep);
                 },
             );
     }

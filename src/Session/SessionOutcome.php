@@ -10,4 +10,5 @@ enum SessionOutcome: string
     case Completed = 'completed';
     case Dropped   = 'dropped';
     case Converted = 'converted';
+    case Preview   = 'preview';
 }

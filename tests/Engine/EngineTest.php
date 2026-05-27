@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace NeNeConcierge\Tests\Engine;
 
+use NeNeConcierge\Engine\ConditionEvaluator;
 use NeNeConcierge\Engine\EngineException;
 use NeNeConcierge\Engine\ScenarioEngine;
+use NeNeConcierge\Engine\VariableInterpolator;
 use NeNeConcierge\Scenario\ScenarioEdge;
 use NeNeConcierge\Scenario\ScenarioNode;
 use NeNeConcierge\Scenario\ScenarioNodeType;
@@ -39,6 +41,8 @@ final class EngineTest extends TestCase
             $this->edgeRepo,
             $this->sessionRepo,
             $this->eventRepo,
+            new ConditionEvaluator(),
+            new VariableInterpolator(),
         );
     }
 
