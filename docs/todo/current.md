@@ -142,6 +142,24 @@ Last updated: 2026-05-27
 
 ---
 
+**ビジュアルシナリオエディタ — 完了 ✅**
+
+| 項目 | 状態 | Issue |
+| --- | --- | --- |
+| PUT /api/v1/scenarios/{id}/graph — ノード・エッジ一括保存 | ✅ | #25 |
+| SaveScenarioGraphHandler / UseCase / Input VO 3 種 | ✅ | #25 |
+| PHPUnit 7 テスト (118 tests 全通過) | ✅ | #25 |
+| OpenAPI v0.4.0: SaveScenarioGraphRequest スキーマ | ✅ | #25 |
+| MCP catalog: saveScenarioGraph (write) ツール | ✅ | #25 |
+| @xyflow/react (React Flow v12) キャンバスエディタ | ✅ | #26 |
+| 4 種カスタムノード (message / condition / action / end) | ✅ | #26 |
+| ノードパレット・ドラッグ移動・エッジ接続・Delete 削除 | ✅ | #26 |
+| NodeConfigPanel: 右パネルでノードタイプ別設定編集 | ✅ | #26 |
+| ScenarioFormPage: メタ情報バー + キャンバス統合レイアウト | ✅ | #26 |
+| app.css バンドル (React Flow スタイル 17.2 KB) | ✅ | #26 |
+
+---
+
 ## Operating Notes
 
 - このファイルはマイルストーン完了時またはセッション終了時に更新する。
