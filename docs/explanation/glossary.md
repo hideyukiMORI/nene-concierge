@@ -14,6 +14,19 @@ Canonical English terms for NeNe Concierge documentation, OpenAPI, code comments
 
 ---
 
+## Multi-tenancy
+
+| Canonical term | Definition | Japanese note | Do not use |
+| --- | --- | --- | --- |
+| **organization** | A tenant unit. One organization corresponds to one operator company or client. All data rows carry `organization_id`. ADR 0004. | 組織 / テナント | "tenant" (acceptable in code comments; public docs use **organization**) |
+| **organization slug** | A URL-safe identifier for an organization used in subdomain or path-prefix resolution (e.g., `acme`). Unique across the instance. | 組織スラッグ | "tenant key", "org key" |
+| **organization_id** | The integer partition key present in every tenant-scoped table. `DEFAULT 0` is the single-tenant sentinel. | 組織 ID | "tenant_id" (use `organization_id` in schema and code) |
+| **single-tenant sentinel** | `organization_id = 0` used by self-hosted single-org installs. No `organizations` row is required. | シングルテナント番兵値 | — |
+| **tenant resolution** | The process of determining `organization_id` from an incoming HTTP request. Configured by `TENANT_RESOLUTION` env var. | テナント解決 | "org detection" |
+| **superadmin** | A system-level operator who can manage organizations across the instance. Bypasses normal org resolution. | スーパーアドミン | "root admin", "system admin" |
+
+---
+
 ## Deployment and product shape
 
 | Canonical term | Definition | Japanese note | Do not use |
@@ -35,8 +48,11 @@ Canonical English terms for NeNe Concierge documentation, OpenAPI, code comments
 | **node** | A single step in a scenario. Types: `message`, `condition`, `action`, `end`. Table: `nodes`. | ノード | "step", "block" |
 | **edge** | A directed connection between two nodes. Carries the condition label when leaving a `condition` node. Table: `edges`. | エッジ / 遷移 | "link", "arrow" |
 | **condition node** | A node that branches the flow based on visitor input or context variables. | 条件ノード | "branch node", "if node" |
-| **action node** | A node that triggers an external operation (email, Slack, Chatwork, HTTP). | アクションノード | "webhook node", "integration node" |
+| **action node** | A node that triggers an external operation (email, Slack, Chatwork, HTTP, QR code issuance). | アクションノード | "webhook node", "integration node" |
 | **message node** | A node that displays text (and optionally collects visitor input). | メッセージノード | "chat bubble node", "text node" |
+| **media node** | A node that displays rich content: image slider, media carousel, or PDF/resource viewer. Phase 4. | メディアノード | "slider node", "image node" |
+| **product node** | A node that renders a NeNe Shop product card inside the scenario. Phase 6. | 商品ノード | "shop node" |
+| **booking node** | A node that renders a NeNe Booking availability picker inside the scenario. Phase 6. | 予約ノード | "reservation node" |
 | **end node** | A terminal node that closes the session. | 終端ノード | "exit node", "close node" |
 | **canvas** | The visual editing surface in the scenario editor (React flow graph). | キャンバス | "editor", "diagram" (unless referring to the whole editor UI) |
 
@@ -50,6 +66,7 @@ Canonical English terms for NeNe Concierge documentation, OpenAPI, code comments
 | **action adapter** | A PHP class that implements one action type (e.g., `SlackActionAdapter`). Module: `Action/`. | アクションアダプター | "integration", "connector" |
 | **action log** | An audit record of each action execution: timestamp, action type, outcome, scenario/session context. Table: `action_logs`. | アクションログ | "webhook log", "notification log" |
 | **HTTP action** | An action that calls a configurable external HTTP endpoint (POST/GET with payload). | HTTP アクション | "webhook" (acceptable in user-facing copy only) |
+| **QR action** | An action that generates a QR code (coupon, ticket, confirmation slip) at a scenario step. The QR payload and expiry are configurable. | QR アクション | "QR code node" (the node type is `action`; QR is the adapter) |
 
 ---
 
@@ -82,5 +99,7 @@ Canonical English terms for NeNe Concierge documentation, OpenAPI, code comments
 | Canonical term | Definition |
 | --- | --- |
 | **NENE2** | The PHP micro-framework runtime (`hideyukimori/nene2`). |
-| **NeNe Records** | Optional upstream CMS; NeNe Concierge may call its read APIs. |
+| **NeNe Records** | Optional upstream CMS; NeNe Concierge may call its read APIs for content in message nodes. |
+| **NeNe Shop** | A NeNe Records extension (or sibling product) providing a simple shopping cart / purchase flow. NeNe Concierge integrates via HTTP for product display and purchase confirmation inside scenarios. |
+| **NeNe Booking** | A NeNe Records extension (or sibling product) providing a reservation / appointment booking flow. NeNe Concierge integrates via HTTP for availability display and reservation confirmation inside scenarios. |
 | **NeNe Corpus** | Optional upstream knowledge base; NeNe Concierge may call its search APIs for FAQ-branch content. |
