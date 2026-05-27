@@ -1,0 +1,70 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      APP_ENV: ${APP_ENV:-local}
+      APP_DEBUG: ${APP_DEBUG:-true}
+      APP_NAME: ${APP_NAME:-"NeNe Concierge"}
+      NENE2_MACHINE_API_KEY: ${NENE2_MACHINE_API_KEY:-}
+      NENE2_LOCAL_JWT_SECRET: ${NENE2_LOCAL_JWT_SECRET:-}
+      PROBLEM_DETAILS_BASE_URL: ${PROBLEM_DETAILS_BASE_URL:-https://nene-concierge.dev/problems/}
+      DATABASE_URL: ${DATABASE_URL:-}
+      DB_ENV: ${DB_ENV:-local}
+      DB_ADAPTER: ${DB_ADAPTER:-mysql}
+      DB_HOST: ${DB_HOST:-mysql}
+      DB_PORT: ${DB_PORT:-3306}
+      DB_NAME: ${DB_NAME:-nene_concierge}
+      DB_USER: ${DB_USER:-nene_concierge}
+      DB_PASSWORD: ${DB_PASSWORD:-nene_concierge}
+      DB_CHARSET: ${DB_CHARSET:-utf8mb4}
+      TENANT_RESOLUTION: ${TENANT_RESOLUTION:-single}
+      ORG_SLUG: ${ORG_SLUG:-}
+    ports:
+      - "${NENE_CONCIERGE_PORT:-8090}:80"
+    volumes:
+      - .:/var/www/html
+      - ../NENE2:/var/www/NENE2:ro
+      - composer-cache:/root/.composer/cache
+    command: ["/bin/sh", "/var/www/html/docker/app/entrypoint.sh"]
+
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: ${DB_NAME:-nene_concierge}
+      MYSQL_USER: ${DB_USER:-nene_concierge}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-nene_concierge}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-nene_concierge_root}
+    ports:
+      - "${NENE_CONCIERGE_MYSQL_PORT:-3390}:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "mysqladmin ping -h localhost -u$${MYSQL_USER} -p$${MYSQL_PASSWORD} --silent",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  phpmyadmin:
+    build:
+      context: ./docker/phpmyadmin
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+    ports:
+      - "${NENE_CONCIERGE_PHPMYADMIN_PORT:-8091}:80"
+
+volumes:
+  mysql-data:
+  composer-cache:

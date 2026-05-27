@@ -1,0 +1,98 @@
+openapi: 3.1.0
+
+info:
+  title: NeNe Concierge API
+  description: |
+    Self-hosted chat scenario platform API.
+
+    **Environments:**
+    - Local: `http://localhost:8090`
+    - Production: `https://<your-domain>`
+
+    **Authentication:** JWT Bearer (operator endpoints). Visitor-facing endpoints are open.
+  version: 0.1.0
+  contact:
+    name: NeNe Concierge
+    url: https://github.com/hideyukiMORI/nene-concierge
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:8090
+    description: Local development (Docker Compose)
+
+paths:
+  /health:
+    get:
+      operationId: getHealth
+      summary: Health check
+      description: Returns the operational status of the API. Always open; no authentication required.
+      tags:
+        - System
+      responses:
+        "200":
+          description: Service is healthy.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+              example:
+                status: ok
+                service: NENE2 — the PHP micro-framework
+        "503":
+          description: Service is degraded (one or more health checks failed).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+
+components:
+  schemas:
+    HealthResponse:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          enum:
+            - ok
+            - degraded
+          description: Overall service health status.
+        service:
+          type: string
+          description: Framework name and version string.
+        checks:
+          type: object
+          description: Per-dependency health check results (present only when checks are registered).
+          additionalProperties:
+            type: string
+            enum:
+              - ok
+              - error
+
+    ProblemDetails:
+      type: object
+      required:
+        - type
+        - title
+        - status
+      properties:
+        type:
+          type: string
+          format: uri
+          description: "Problem type URI (e.g. https://nene-concierge.dev/problems/unauthorized)"
+        title:
+          type: string
+          description: Short human-readable summary.
+        status:
+          type: integer
+          description: HTTP status code.
+        detail:
+          type: string
+          description: Human-readable explanation specific to this occurrence.
+        instance:
+          type: string
+          format: uri
+          description: URI reference identifying this specific occurrence.
