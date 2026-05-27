@@ -1,0 +1,10 @@
+RewriteEngine On
+RewriteBase /admin/
+
+# ファイル・ディレクトリが実在する場合はそのまま返す（JS/CSS/フォント等）
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# それ以外（SPA ルート）はすべて index.html に転送
+RewriteRule ^ index.html [L]
