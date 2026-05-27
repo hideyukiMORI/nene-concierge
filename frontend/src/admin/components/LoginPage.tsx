@@ -38,12 +38,20 @@ export default function LoginPage() {
             <div style={{
                 background: T.surface, borderRadius: T.radiusLg,
                 padding: '40px 36px', width: 380,
-                boxShadow: '0 4px 24px rgba(0,0,0,0.08)',
+                boxShadow: '0 4px 20px oklch(0% 0 0 / 0.10)',
                 border: `1px solid ${T.border}`,
             }}>
-                <h1 style={{ fontSize: T.font2xl, fontWeight: 700, marginBottom: 8 }}>
-                    {t('auth.appTitle')}
-                </h1>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+                    <h1 style={{ fontSize: T.font2xl, fontWeight: 700, flex: 1 }}>
+                        {t('auth.appTitle')}
+                    </h1>
+                    <span style={{
+                        background: T.primary, color: '#fff',
+                        padding: '2px 7px', borderRadius: 4,
+                        fontSize: T.fontXs, fontWeight: 700,
+                        letterSpacing: '0.06em', textTransform: 'uppercase',
+                    }}>Admin</span>
+                </div>
                 <p style={{ color: T.textMuted, marginBottom: 28, fontSize: T.fontMd }}>
                     {t('auth.subtitle')}
                 </p>
