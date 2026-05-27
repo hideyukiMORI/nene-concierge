@@ -29,8 +29,11 @@ final class SpyActionAdapter implements ActionAdapterInterface
         return $this->type;
     }
 
+    /** @var array<string, string> */
+    public array $outputVars = [];
+
     /** @param array<string, mixed> $params */
-    public function execute(array $params, int $organizationId): void
+    public function execute(array $params, int $organizationId): array
     {
         $this->called         = true;
         $this->receivedParams = $params;
@@ -38,5 +41,7 @@ final class SpyActionAdapter implements ActionAdapterInterface
         if ($this->throws) {
             throw new ActionException('SpyActionAdapter: forced failure.');
         }
+
+        return $this->outputVars;
     }
 }

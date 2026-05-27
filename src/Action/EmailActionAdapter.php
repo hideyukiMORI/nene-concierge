@@ -36,7 +36,7 @@ final readonly class EmailActionAdapter implements ActionAdapterInterface
     }
 
     /** @param array<string, mixed> $params */
-    public function execute(array $params, int $organizationId): void
+    public function execute(array $params, int $organizationId): array
     {
         $to      = (string) ($params['to'] ?? '');
         $subject = (string) ($params['subject'] ?? '');
@@ -53,6 +53,8 @@ final readonly class EmailActionAdapter implements ActionAdapterInterface
         } else {
             $this->sendViaMail($to, $subject, $body, $params);
         }
+
+        return [];
     }
 
     /** @param array<string, mixed> $params */

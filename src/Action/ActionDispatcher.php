@@ -26,6 +26,8 @@ final readonly class ActionDispatcher
     /**
      * @param array<string, mixed> $nodeData   The action node's data_json
      *
+     * @return array<string, string> Output variables returned by the adapter (empty for most)
+     *
      * @throws ActionException
      */
     public function dispatch(
@@ -34,7 +36,7 @@ final readonly class ActionDispatcher
         string $sessionId,
         int    $scenarioId,
         string $nodeId,
-    ): void {
+    ): array {
         $adapterType = (string) ($nodeData['adapter'] ?? '');
 
         /** @var array<string, mixed> $params */
@@ -59,7 +61,7 @@ final readonly class ActionDispatcher
         }
 
         try {
-            $adapter->execute($params, $organizationId);
+            $outputVars = $adapter->execute($params, $organizationId);
 
             $this->logs->append(new ActionLog(
                 organizationId: $organizationId,
@@ -70,6 +72,8 @@ final readonly class ActionDispatcher
                 status:         'success',
                 executedAt:     $now,
             ));
+
+            return $outputVars;
         } catch (ActionException $e) {
             $this->logs->append(new ActionLog(
                 organizationId: $organizationId,

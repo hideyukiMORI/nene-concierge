@@ -33,7 +33,7 @@ final readonly class ChatworkActionAdapter implements ActionAdapterInterface
     }
 
     /** @param array<string, mixed> $params */
-    public function execute(array $params, int $organizationId): void
+    public function execute(array $params, int $organizationId): array
     {
         $apiToken = (string) ($params['api_token'] ?? '');
         $roomId   = (string) ($params['room_id'] ?? '');
@@ -57,5 +57,7 @@ final readonly class ChatworkActionAdapter implements ActionAdapterInterface
         if ($status < 200 || $status >= 300) {
             throw new ActionException("ChatworkActionAdapter: Chatwork API returned HTTP {$status}.");
         }
+
+        return [];
     }
 }

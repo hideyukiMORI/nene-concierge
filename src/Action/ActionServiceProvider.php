@@ -153,6 +153,11 @@ final readonly class ActionServiceProvider implements ServiceProviderInterface
                     return new ChatworkActionAdapter($client, $reqFac, $strFac);
                 },
             )
+            // ── QR code adapter ────────────────────────────────────────────────
+            ->set(
+                QrCodeActionAdapter::class,
+                static fn (): QrCodeActionAdapter => new QrCodeActionAdapter(),
+            )
             // ── Action dispatcher ──────────────────────────────────────────────
             ->set(
                 ActionDispatcher::class,
@@ -161,6 +166,7 @@ final readonly class ActionServiceProvider implements ServiceProviderInterface
                     $email     = $c->get(EmailActionAdapter::class);
                     $slack     = $c->get(SlackActionAdapter::class);
                     $chatwork  = $c->get(ChatworkActionAdapter::class);
+                    $qr        = $c->get(QrCodeActionAdapter::class);
                     $logs      = $c->get(ActionLogRepositoryInterface::class);
 
                     if (!$http instanceof HttpActionAdapter) {
@@ -179,11 +185,15 @@ final readonly class ActionServiceProvider implements ServiceProviderInterface
                         throw new LogicException('ChatworkActionAdapter service is invalid.');
                     }
 
+                    if (!$qr instanceof QrCodeActionAdapter) {
+                        throw new LogicException('QrCodeActionAdapter service is invalid.');
+                    }
+
                     if (!$logs instanceof ActionLogRepositoryInterface) {
                         throw new LogicException('ActionLog repository service is invalid.');
                     }
 
-                    return new ActionDispatcher([$http, $email, $slack, $chatwork], $logs);
+                    return new ActionDispatcher([$http, $email, $slack, $chatwork, $qr], $logs);
                 },
             )
             // ── Action credential CRUD handlers ────────────────────────────────
