@@ -26,8 +26,8 @@ final readonly class PdoChatSessionRepository implements ChatSessionRepositoryIn
     public function save(ChatSession $session): void
     {
         $this->query->execute(
-            'INSERT INTO sessions (id, organization_id, scenario_id, current_node_id, outcome, has_conversion, started_at, ended_at, created_at)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())',
+            'INSERT INTO sessions (id, organization_id, scenario_id, current_node_id, outcome, has_conversion, variables_json, started_at, ended_at, created_at)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())',
             [
                 $session->id,
                 $session->organizationId,
@@ -35,6 +35,7 @@ final readonly class PdoChatSessionRepository implements ChatSessionRepositoryIn
                 $session->currentNodeId,
                 $session->outcome->value,
                 (int) $session->hasConversion,
+                json_encode($session->variables, JSON_THROW_ON_ERROR),
                 $session->startedAt,
                 $session->endedAt,
             ],
@@ -44,12 +45,13 @@ final readonly class PdoChatSessionRepository implements ChatSessionRepositoryIn
     public function update(ChatSession $session): void
     {
         $this->query->execute(
-            'UPDATE sessions SET current_node_id = ?, outcome = ?, has_conversion = ?, ended_at = ?
+            'UPDATE sessions SET current_node_id = ?, outcome = ?, has_conversion = ?, variables_json = ?, ended_at = ?
              WHERE id = ? AND organization_id = ?',
             [
                 $session->currentNodeId,
                 $session->outcome->value,
                 (int) $session->hasConversion,
+                json_encode($session->variables, JSON_THROW_ON_ERROR),
                 $session->endedAt,
                 $session->id,
                 $session->organizationId,
@@ -60,6 +62,9 @@ final readonly class PdoChatSessionRepository implements ChatSessionRepositoryIn
     /** @param array<string, mixed> $row */
     private function hydrate(array $row): ChatSession
     {
+        /** @var array<string, string> $variables */
+        $variables = json_decode((string) ($row['variables_json'] ?? '{}'), true, 512, JSON_THROW_ON_ERROR);
+
         return new ChatSession(
             id:             (string) $row['id'],
             organizationId: (int) $row['organization_id'],
@@ -68,6 +73,7 @@ final readonly class PdoChatSessionRepository implements ChatSessionRepositoryIn
             outcome:        SessionOutcome::from((string) $row['outcome']),
             hasConversion:  (bool) $row['has_conversion'],
             startedAt:      (string) $row['started_at'],
+            variables:      $variables,
             endedAt:        isset($row['ended_at']) ? (string) $row['ended_at'] : null,
         );
     }

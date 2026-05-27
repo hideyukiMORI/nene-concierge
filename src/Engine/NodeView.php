@@ -12,17 +12,20 @@ use NeNeConcierge\Scenario\ScenarioNodeType;
  * Returned to the visitor via the HTTP response so the embed widget knows
  * what to render next, which choices are available, and whether the session
  * has ended.
+ *
+ * label is the text after variable interpolation.
+ * For condition nodes, choices contains only the matching outgoing edges.
  */
 final readonly class NodeView
 {
     /**
-     * @param list<ChoiceView> $choices
+     * @param list<ChoiceView>      $choices
+     * @param array<string, mixed>  $data
      */
     public function __construct(
         public string           $nodeId,
         public ScenarioNodeType $type,
         public string           $label,
-        /** @var array<string, mixed> */
         public array            $data,
         public array            $choices,
         public bool             $isTerminal,
