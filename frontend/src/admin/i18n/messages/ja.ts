@@ -1,0 +1,168 @@
+import type { MessageCatalog } from './en'
+
+export const ja: Partial<MessageCatalog> = {
+    // ── Locale names ──────────────────────────────────────────────────────────
+    'locale.en':      'English',
+    'locale.ja':      '日本語',
+    'locale.fr':      'Français',
+    'locale.zh-Hans': '中文（简体）',
+    'locale.pt-BR':   'Português (Brasil)',
+    'locale.de':      'Deutsch',
+
+    // ── Common ────────────────────────────────────────────────────────────────
+    'common.loading':       '読み込み中…',
+    'common.saving':        '保存中…',
+    'common.save':          '保存',
+    'common.create':        '作成',
+    'common.creating':      '作成中…',
+    'common.delete':        '削除',
+    'common.edit':          '編集',
+    'common.cancel':        'キャンセル',
+    'common.backToList':    '一覧へ戻る',
+    'common.new':           '＋ 新規作成',
+    'common.add':           '＋ 追加',
+    'common.id':            'ID',
+    'common.name':          '名前',
+    'common.description':   '説明',
+    'common.status':        'ステータス',
+    'common.actions':       '操作',
+    'common.createdAt':     '作成日',
+    'common.optional':      '（任意）',
+    'common.required':      '*',
+
+    'common.error.unknown': 'エラーが発生しました。',
+    'common.error.fetch':   'データの取得に失敗しました。',
+    'common.error.save':    '保存に失敗しました。',
+    'common.error.delete':  '削除に失敗しました。',
+
+    // ── Nav ───────────────────────────────────────────────────────────────────
+    'nav.brand':       'NeNe Concierge',
+    'nav.scenarios':   'シナリオ',
+    'nav.appearance':  '外観設定',
+    'nav.credentials': 'アクションクレデンシャル',
+    'nav.logout':      'ログアウト',
+
+    // ── Auth ──────────────────────────────────────────────────────────────────
+    'auth.appTitle':         'NeNe Concierge',
+    'auth.subtitle':         '管理画面にログイン',
+    'auth.emailLabel':       'メールアドレス',
+    'auth.emailPlaceholder': 'admin@example.com',
+    'auth.passwordLabel':    'パスワード',
+    'auth.pwPlaceholder':    '••••••••',
+    'auth.signIn':           'ログイン',
+    'auth.signingIn':        'ログイン中…',
+    'auth.error':            'ログインに失敗しました。',
+
+    // ── Scenarios list ────────────────────────────────────────────────────────
+    'scenarios.pageTitle':     'シナリオ',
+    'scenarios.empty':         'シナリオがありません。',
+    'scenarios.emptyHint':     '「新規作成」から始めましょう。',
+    'scenarios.loadError':     'データの取得に失敗しました。',
+    'scenarios.deleteError':   '削除に失敗しました。',
+    'scenarios.confirmDelete': '「{{name}}」を削除しますか？この操作は取り消せません。',
+
+    'scenario.status.draft':     'ドラフト',
+    'scenario.status.published': '公開中',
+    'scenario.status.archived':  'アーカイブ',
+
+    // ── Scenario form / editor ────────────────────────────────────────────────
+    'scenarioForm.newTitle':        '新規シナリオ',
+    'scenarioForm.metaSaved':       'メタ情報を保存しました',
+    'scenarioForm.graphSaved':      'グラフを保存しました',
+    'scenarioForm.nameLabel':       'シナリオ名',
+    'scenarioForm.namePlaceholder': '例: 問い合わせ対応フロー',
+    'scenarioForm.descLabel':       '説明（任意）',
+    'scenarioForm.descPlaceholder': 'このシナリオの概要…',
+    'scenarioForm.statusLabel':     'ステータス',
+    'scenarioForm.canvasHint':      'シナリオを作成するとキャンバスエディタが開きます',
+    'scenarioForm.loadError':       '取得に失敗しました。',
+    'scenarioForm.saveError':       '保存に失敗しました。',
+    'scenarioForm.graphSaveError':  'グラフの保存に失敗しました。',
+    'scenarioForm.deleteError':     '削除に失敗しました。',
+
+    // ── Appearance ────────────────────────────────────────────────────────────
+    'appearance.pageTitle':          '外観設定',
+    'appearance.primaryColor':       'プライマリカラー',
+    'appearance.secondaryColor':     'セカンダリカラー（文字色）',
+    'appearance.position':           '表示位置',
+    'appearance.trigger':            'トリガー',
+    'appearance.iconUrl':            'アイコン URL（任意）',
+    'appearance.iconPlaceholder':    'https://example.com/icon.png',
+    'appearance.welcomeText':        'ウェルカムテキスト（任意）',
+    'appearance.welcomePlaceholder': 'ご用件はありますか？',
+    'appearance.saved':              '✓ 保存しました。',
+    'appearance.loadError':          '取得に失敗しました。',
+    'appearance.saveError':          '保存に失敗しました。',
+
+    'appearance.position.bottomRight': '右下',
+    'appearance.position.bottomLeft':  '左下',
+    'appearance.position.topRight':    '右上',
+    'appearance.position.topLeft':     '左上',
+
+    'appearance.trigger.pageLoad':   'ページ読み込み時（自動オープン）',
+    'appearance.trigger.scroll':     'スクロール時',
+    'appearance.trigger.exitIntent': '離脱意図',
+    'appearance.trigger.manual':     '手動（ボタンクリックのみ）',
+
+    // ── Credentials ───────────────────────────────────────────────────────────
+    'credentials.pageTitle':       'アクションクレデンシャル',
+    'credentials.newTitle':        '新規クレデンシャル',
+    'credentials.nameLabel':       '名前',
+    'credentials.namePlaceholder': '例: Slack 通知 webhook',
+    'credentials.adapterLabel':    'アダプター',
+    'credentials.secretHint':      '※ 機密設定（URL・トークン等）は作成後に API で別途更新してください。',
+    'credentials.empty':           'クレデンシャルがありません。',
+    'credentials.loadError':       '取得に失敗しました。',
+    'credentials.saveError':       '作成に失敗しました。',
+    'credentials.deleteError':     '削除に失敗しました。',
+    'credentials.confirmDelete':   '「{{name}}」を削除しますか？',
+
+    'credentials.adapter.http':     'HTTP（外部 API）',
+    'credentials.adapter.email':    'Email',
+    'credentials.adapter.slack':    'Slack',
+    'credentials.adapter.chatwork': 'Chatwork',
+
+    // ── Node types ────────────────────────────────────────────────────────────
+    'node.type.message':   'メッセージ',
+    'node.type.condition': '条件分岐',
+    'node.type.action':    'アクション',
+    'node.type.end':       '終端',
+
+    // ── Node config panel ─────────────────────────────────────────────────────
+    'node.label':              'ラベル',
+    'node.messageText':        'メッセージテキスト',
+    'node.messagePlaceholder': '訪問者に表示するメッセージ…',
+    'node.choices':            '選択肢（クイックリプライ）',
+    'node.addChoice':          '＋ 選択肢を追加',
+    'node.addChoicePrompt':    '選択肢テキストを入力',
+    'node.variableName':       '変数名（入力を収集する場合）',
+    'node.variablePlaceholder': '例: user_name',
+
+    'node.conditionVar':            '変数名',
+    'node.conditionVarPlaceholder': '例: user_answer',
+    'node.operator':                '演算子',
+    'node.compareValue':            '比較値',
+    'node.compareValuePlaceholder': '比較する値',
+    'node.conditionHint':           '下のハンドル: 左=true / 右=false',
+
+    'node.actionType':    'アクションタイプ',
+    'node.credential':    'クレデンシャル',
+    'node.credentialNone': '— 選択 —',
+
+    'node.outcome':           'アウトカム',
+    'node.outcome.completed': 'completed — 完了',
+    'node.outcome.abandoned': 'abandoned — 離脱',
+
+    'node.operator.eq':        '= 等しい',
+    'node.operator.neq':       '≠ 等しくない',
+    'node.operator.contains':  'contains 含む',
+    'node.operator.exists':    'exists 存在する',
+    'node.operator.not_exists': 'not_exists 存在しない',
+
+    'node.addToCanvas': '{{type}}ノードを追加',
+    'node.delete':      '🗑 このノードを削除',
+
+    // ── Canvas ────────────────────────────────────────────────────────────────
+    'canvas.save':   '💾 保存',
+    'canvas.saving': '保存中…',
+}

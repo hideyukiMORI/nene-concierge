@@ -1,8 +1,9 @@
 import type { Node } from '@xyflow/react';
 import type { CredentialSummary, ChatNodeType } from '../../api.js';
-import { NODE_COLORS, NODE_ICONS, NODE_LABELS } from './NodeTypes.js';
+import { NODE_COLORS, NODE_ICONS } from './NodeTypes.js';
 import type { MessageData, ConditionData, ActionData, EndData } from './NodeTypes.js';
 import { T } from '../../theme.js';
+import { useTranslation } from '../../i18n/index.js';
 
 interface Props {
     node:        Node;
@@ -55,6 +56,7 @@ function LabelInput({ label, value, onChange }: {
 }
 
 export default function NodeConfigPanel({ node, credentials, onChange, onDelete }: Props) {
+    const { t }  = useTranslation();
     const type   = node.type as ChatNodeType;
     const data   = node.data as Record<string, unknown>;
     const label  = String(data['label'] ?? '');
@@ -73,7 +75,7 @@ export default function NodeConfigPanel({ node, credentials, onChange, onDelete 
         const choices: string[] = d.choices ?? [];
 
         function addChoice() {
-            const v = prompt('選択肢テキストを入力');
+            const v = prompt(t('node.addChoicePrompt'));
             if (v) setData({ choices: [...choices, v] });
         }
         function removeChoice(i: number) {
@@ -82,18 +84,18 @@ export default function NodeConfigPanel({ node, credentials, onChange, onDelete 
 
         return (
             <>
-                <LabelInput label="ラベル" value={label} onChange={setLabel} />
+                <LabelInput label={t('node.label')} value={label} onChange={setLabel} />
                 <div style={S.section}>
-                    <label style={S.label}>メッセージテキスト</label>
+                    <label style={S.label}>{t('node.messageText')}</label>
                     <textarea
                         style={S.textarea}
                         value={String(d.text ?? '')}
                         onChange={e => setData({ text: e.target.value })}
-                        placeholder="訪問者に表示するメッセージ…"
+                        placeholder={t('node.messagePlaceholder')}
                     />
                 </div>
                 <div style={S.section}>
-                    <label style={S.label}>選択肢（クイックリプライ）</label>
+                    <label style={S.label}>{t('node.choices')}</label>
                     <div style={S.tagList}>
                         {choices.map((c, i) => (
                             <span key={i} style={S.tag}>
@@ -117,16 +119,16 @@ export default function NodeConfigPanel({ node, credentials, onChange, onDelete 
                             cursor: 'pointer', width: '100%',
                         }}
                     >
-                        ＋ 選択肢を追加
+                        {t('node.addChoice')}
                     </button>
                 </div>
                 <div style={S.section}>
-                    <label style={S.label}>変数名（入力を収集する場合）</label>
+                    <label style={S.label}>{t('node.variableName')}</label>
                     <input
                         style={S.input}
                         value={String(d.variable_name ?? '')}
                         onChange={e => setData({ variable_name: e.target.value || undefined })}
-                        placeholder="例: user_name"
+                        placeholder={t('node.variablePlaceholder')}
                     />
                 </div>
             </>
@@ -138,43 +140,43 @@ export default function NodeConfigPanel({ node, credentials, onChange, onDelete 
         const d = data as ConditionData;
         return (
             <>
-                <LabelInput label="ラベル" value={label} onChange={setLabel} />
+                <LabelInput label={t('node.label')} value={label} onChange={setLabel} />
                 <div style={S.section}>
-                    <label style={S.label}>変数名</label>
+                    <label style={S.label}>{t('node.conditionVar')}</label>
                     <input
                         style={S.input}
                         value={d.variable ?? ''}
                         onChange={e => setData({ variable: e.target.value })}
-                        placeholder="例: user_answer"
+                        placeholder={t('node.conditionVarPlaceholder')}
                     />
                 </div>
                 <div>
-                    <label style={S.label}>演算子</label>
+                    <label style={S.label}>{t('node.operator')}</label>
                     <select
                         style={S.select}
                         value={d.operator ?? 'eq'}
                         onChange={e => setData({ operator: e.target.value })}
                     >
-                        <option value="eq">= 等しい</option>
-                        <option value="neq">≠ 等しくない</option>
-                        <option value="contains">contains 含む</option>
-                        <option value="exists">exists 存在する</option>
-                        <option value="not_exists">not_exists 存在しない</option>
+                        <option value="eq">{t('node.operator.eq')}</option>
+                        <option value="neq">{t('node.operator.neq')}</option>
+                        <option value="contains">{t('node.operator.contains')}</option>
+                        <option value="exists">{t('node.operator.exists')}</option>
+                        <option value="not_exists">{t('node.operator.not_exists')}</option>
                     </select>
                 </div>
                 {(d.operator !== 'exists' && d.operator !== 'not_exists') && (
                     <div>
-                        <label style={S.label}>比較値</label>
+                        <label style={S.label}>{t('node.compareValue')}</label>
                         <input
                             style={S.input}
                             value={d.value ?? ''}
                             onChange={e => setData({ value: e.target.value })}
-                            placeholder="比較する値"
+                            placeholder={t('node.compareValuePlaceholder')}
                         />
                     </div>
                 )}
                 <p style={{ fontSize: T.fontXs, color: T.textMuted, margin: 0 }}>
-                    下のハンドル: 左=true / 右=false
+                    {t('node.conditionHint')}
                 </p>
             </>
         );
@@ -185,9 +187,9 @@ export default function NodeConfigPanel({ node, credentials, onChange, onDelete 
         const d = data as ActionData;
         return (
             <>
-                <LabelInput label="ラベル" value={label} onChange={setLabel} />
+                <LabelInput label={t('node.label')} value={label} onChange={setLabel} />
                 <div style={S.section}>
-                    <label style={S.label}>アクションタイプ</label>
+                    <label style={S.label}>{t('node.actionType')}</label>
                     <select
                         style={S.select}
                         value={d.action_type ?? 'http'}
@@ -200,13 +202,13 @@ export default function NodeConfigPanel({ node, credentials, onChange, onDelete 
                     </select>
                 </div>
                 <div>
-                    <label style={S.label}>クレデンシャル</label>
+                    <label style={S.label}>{t('node.credential')}</label>
                     <select
                         style={S.select}
                         value={String(d.credential_id ?? '')}
                         onChange={e => setData({ credential_id: e.target.value ? Number(e.target.value) : undefined })}
                     >
-                        <option value="">— 選択 —</option>
+                        <option value="">{t('node.credentialNone')}</option>
                         {credentials
                             .filter(c => !d.action_type || c.adapter === d.action_type)
                             .map(c => (
@@ -223,21 +225,23 @@ export default function NodeConfigPanel({ node, credentials, onChange, onDelete 
         const d = data as EndData;
         return (
             <>
-                <LabelInput label="ラベル" value={label} onChange={setLabel} />
+                <LabelInput label={t('node.label')} value={label} onChange={setLabel} />
                 <div style={S.section}>
-                    <label style={S.label}>アウトカム</label>
+                    <label style={S.label}>{t('node.outcome')}</label>
                     <select
                         style={S.select}
                         value={d.outcome ?? 'completed'}
                         onChange={e => setData({ outcome: e.target.value })}
                     >
-                        <option value="completed">completed — 完了</option>
-                        <option value="abandoned">abandoned — 離脱</option>
+                        <option value="completed">{t('node.outcome.completed')}</option>
+                        <option value="abandoned">{t('node.outcome.abandoned')}</option>
                     </select>
                 </div>
             </>
         );
     }
+
+    const typeLabel = t(`node.type.${type}` as Parameters<typeof t>[0]);
 
     return (
         <div style={S.panel}>
@@ -249,7 +253,7 @@ export default function NodeConfigPanel({ node, credentials, onChange, onDelete 
                 display: 'flex', alignItems: 'center', gap: 8,
             }}>
                 <span>{NODE_ICONS[type]}</span>
-                <span>{NODE_LABELS[type]}</span>
+                <span>{typeLabel}</span>
             </div>
 
             {/* フォーム */}
@@ -269,7 +273,7 @@ export default function NodeConfigPanel({ node, credentials, onChange, onDelete 
                         cursor: 'pointer', fontSize: T.fontBase, fontWeight: 600,
                     }}
                 >
-                    🗑 このノードを削除
+                    {t('node.delete')}
                 </button>
             </div>
         </div>

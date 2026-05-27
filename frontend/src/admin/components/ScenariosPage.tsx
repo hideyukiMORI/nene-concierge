@@ -3,8 +3,10 @@ import { Link } from 'react-router';
 import { listScenarios, deleteScenario, ScenarioSummary, ApiError } from '../api.js';
 import { PageTitle, Card, Btn, Badge, ErrorMsg } from './Layout.js';
 import { T } from '../theme.js';
+import { useTranslation } from '../i18n/index.js';
 
 export default function ScenariosPage() {
+    const { t } = useTranslation();
     const [scenarios, setScenarios] = useState<ScenarioSummary[]>([]);
     const [loading, setLoading]     = useState(true);
     const [error, setError]         = useState<string | null>(null);
@@ -16,7 +18,7 @@ export default function ScenariosPage() {
             const res = await listScenarios();
             setScenarios(res.data);
         } catch (err) {
-            setError(err instanceof ApiError ? err.message : 'データの取得に失敗しました。');
+            setError(err instanceof ApiError ? err.message : t('scenarios.loadError'));
         } finally {
             setLoading(false);
         }
@@ -25,30 +27,31 @@ export default function ScenariosPage() {
     useEffect(() => { void load(); }, []);
 
     async function handleDelete(id: number, name: string) {
-        if (!confirm(`「${name}」を削除しますか？この操作は取り消せません。`)) return;
+        if (!confirm(t('scenarios.confirmDelete', { name }))) return;
         try {
             await deleteScenario(id);
             setScenarios(prev => prev.filter(s => s.id !== id));
         } catch (err) {
-            alert(err instanceof ApiError ? err.message : '削除に失敗しました。');
+            alert(err instanceof ApiError ? err.message : t('scenarios.deleteError'));
         }
     }
 
     return (
         <div>
             <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:24 }}>
-                <PageTitle>シナリオ</PageTitle>
+                <PageTitle>{t('scenarios.pageTitle')}</PageTitle>
                 <Link to="/scenarios/new">
-                    <Btn>＋ 新規作成</Btn>
+                    <Btn>{t('common.new')}</Btn>
                 </Link>
             </div>
             <ErrorMsg msg={error} />
             {loading ? (
-                <p style={{ color: T.textMuted }}>読み込み中…</p>
+                <p style={{ color: T.textMuted }}>{t('common.loading')}</p>
             ) : scenarios.length === 0 ? (
                 <Card>
                     <p style={{ color: T.textMuted, textAlign:'center', padding:'40px 0' }}>
-                        シナリオがありません。「新規作成」から始めましょう。
+                        {t('scenarios.empty')}<br />
+                        <span style={{ fontSize: T.fontSm }}>{t('scenarios.emptyHint')}</span>
                     </p>
                 </Card>
             ) : (
@@ -56,7 +59,13 @@ export default function ScenariosPage() {
                     <table style={{ width:'100%', borderCollapse:'collapse' }}>
                         <thead>
                             <tr style={{ borderBottom: `1px solid ${T.borderLight}`, background: T.tableHeader }}>
-                                {['ID','名前','説明','ステータス','操作'].map(h => (
+                                {[
+                                    t('common.id'),
+                                    t('common.name'),
+                                    t('common.description'),
+                                    t('common.status'),
+                                    t('common.actions'),
+                                ].map(h => (
                                     <th key={h} style={{
                                         padding:'10px 16px', textAlign:'left',
                                         fontSize: T.fontSm, fontWeight: 600, color: T.textMuted,
@@ -82,10 +91,10 @@ export default function ScenariosPage() {
                                     <td style={{ padding:'12px 16px' }}>
                                         <div style={{ display:'flex', gap:8 }}>
                                             <Link to={`/scenarios/${s.id}`}>
-                                                <Btn variant="ghost">編集</Btn>
+                                                <Btn variant="ghost">{t('common.edit')}</Btn>
                                             </Link>
                                             <Btn variant="danger" onClick={() => void handleDelete(s.id, s.name)}>
-                                                削除
+                                                {t('common.delete')}
                                             </Btn>
                                         </div>
                                     </td>

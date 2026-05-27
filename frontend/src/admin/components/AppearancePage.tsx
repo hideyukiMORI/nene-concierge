@@ -2,19 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getAppearance, upsertAppearance, AppearanceData, ApiError } from '../api.js';
 import { PageTitle, Card, Btn, ErrorMsg, Field, Select } from './Layout.js';
 import { T } from '../theme.js';
-
-const POSITION_OPTIONS = [
-    { value: 'bottom-right', label: '右下' },
-    { value: 'bottom-left',  label: '左下' },
-    { value: 'top-right',    label: '右上' },
-    { value: 'top-left',     label: '左上' },
-];
-const TRIGGER_OPTIONS = [
-    { value: 'page_load',   label: 'ページ読み込み時（自動オープン）' },
-    { value: 'scroll',      label: 'スクロール時' },
-    { value: 'exit_intent', label: '離脱意図' },
-    { value: 'manual',      label: '手動（ボタンクリックのみ）' },
-];
+import { useTranslation } from '../i18n/index.js';
 
 function ColorSwatch({ color }: { color: string }) {
     return (
@@ -28,18 +16,32 @@ function ColorSwatch({ color }: { color: string }) {
 }
 
 export default function AppearancePage() {
+    const { t } = useTranslation();
     const [form, setForm]       = useState<AppearanceData | null>(null);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving]   = useState(false);
     const [error, setError]     = useState<string | null>(null);
     const [saved, setSaved]     = useState(false);
 
+    const positionOptions = [
+        { value: 'bottom-right', label: t('appearance.position.bottomRight') },
+        { value: 'bottom-left',  label: t('appearance.position.bottomLeft')  },
+        { value: 'top-right',    label: t('appearance.position.topRight')    },
+        { value: 'top-left',     label: t('appearance.position.topLeft')     },
+    ];
+    const triggerOptions = [
+        { value: 'page_load',   label: t('appearance.trigger.pageLoad')   },
+        { value: 'scroll',      label: t('appearance.trigger.scroll')     },
+        { value: 'exit_intent', label: t('appearance.trigger.exitIntent') },
+        { value: 'manual',      label: t('appearance.trigger.manual')     },
+    ];
+
     useEffect(() => {
         void (async () => {
             try {
                 setForm(await getAppearance());
             } catch (err) {
-                setError(err instanceof ApiError ? err.message : '取得に失敗しました。');
+                setError(err instanceof ApiError ? err.message : t('appearance.loadError'));
             } finally {
                 setLoading(false);
             }
@@ -62,18 +64,18 @@ export default function AppearancePage() {
             setSaved(true);
             setTimeout(() => setSaved(false), 2500);
         } catch (err) {
-            setError(err instanceof ApiError ? err.message : '保存に失敗しました。');
+            setError(err instanceof ApiError ? err.message : t('appearance.saveError'));
         } finally {
             setSaving(false);
         }
     }
 
-    if (loading) return <p style={{ color: T.textMuted, marginTop: 40 }}>読み込み中…</p>;
+    if (loading) return <p style={{ color: T.textMuted, marginTop: 40 }}>{t('common.loading')}</p>;
     if (!form)   return <ErrorMsg msg={error} />;
 
     return (
         <div style={{ maxWidth: 560 }}>
-            <PageTitle>外観設定</PageTitle>
+            <PageTitle>{t('appearance.pageTitle')}</PageTitle>
             <Card>
                 <ErrorMsg msg={error} />
                 {saved && (
@@ -82,13 +84,13 @@ export default function AppearancePage() {
                         color: T.successText, borderRadius: T.radiusMd,
                         padding: '10px 14px', marginBottom: 16, fontSize: T.fontBase,
                     }}>
-                        ✓ 保存しました。
+                        {t('appearance.saved')}
                     </div>
                 )}
                 <form onSubmit={e => { void handleSubmit(e); }}>
                     <label style={{ display:'block', marginBottom:16 }}>
                         <span style={{ display:'block', fontWeight:600, marginBottom:4, fontSize: T.fontBase }}>
-                            プライマリカラー
+                            {t('appearance.primaryColor')}
                         </span>
                         <div style={{ display:'flex', alignItems:'center', gap:8 }}>
                             <ColorSwatch color={form.color_primary} />
@@ -110,7 +112,7 @@ export default function AppearancePage() {
                     </label>
                     <label style={{ display:'block', marginBottom:16 }}>
                         <span style={{ display:'block', fontWeight:600, marginBottom:4, fontSize: T.fontBase }}>
-                            セカンダリカラー（文字色）
+                            {t('appearance.secondaryColor')}
                         </span>
                         <div style={{ display:'flex', alignItems:'center', gap:8 }}>
                             <ColorSwatch color={form.color_secondary} />
@@ -130,26 +132,26 @@ export default function AppearancePage() {
                             />
                         </div>
                     </label>
-                    <Select label="表示位置" value={form.position}
+                    <Select label={t('appearance.position')} value={form.position}
                         onChange={v => set('position', v as AppearanceData['position'])}
-                        options={POSITION_OPTIONS} />
-                    <Select label="トリガー" value={form.trigger_type}
+                        options={positionOptions} />
+                    <Select label={t('appearance.trigger')} value={form.trigger_type}
                         onChange={v => set('trigger_type', v as AppearanceData['trigger_type'])}
-                        options={TRIGGER_OPTIONS} />
+                        options={triggerOptions} />
                     <Field
-                        label="アイコン URL（任意）"
+                        label={t('appearance.iconUrl')}
                         value={form.icon_url ?? ''}
                         onChange={v => set('icon_url', v || null)}
-                        placeholder="https://example.com/icon.png"
+                        placeholder={t('appearance.iconPlaceholder')}
                     />
                     <Field
-                        label="ウェルカムテキスト（任意）"
+                        label={t('appearance.welcomeText')}
                         value={form.welcome_text ?? ''}
                         onChange={v => set('welcome_text', v || null)}
-                        placeholder="ご用件はありますか？"
+                        placeholder={t('appearance.welcomePlaceholder')}
                     />
                     <Btn type="submit" disabled={saving}>
-                        {saving ? '保存中…' : '保存'}
+                        {saving ? t('common.saving') : t('common.save')}
                     </Btn>
                 </form>
             </Card>

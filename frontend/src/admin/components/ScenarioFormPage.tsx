@@ -8,21 +8,17 @@ import {
 } from '../api.js';
 import { PageTitle, Btn, Badge, ErrorMsg } from './Layout.js';
 import { T } from '../theme.js';
+import { useTranslation } from '../i18n/index.js';
 import ScenarioCanvas from './editor/ScenarioCanvas.js';
 
 // React Flow の CSS を読み込む（esbuild がバンドル時に app.css へ出力する）
 import '@xyflow/react/dist/style.css';
 
-const STATUS_OPTIONS = [
-    { value: 'draft',     label: 'ドラフト' },
-    { value: 'published', label: '公開中' },
-    { value: 'archived',  label: 'アーカイブ' },
-] as const;
-
 export default function ScenarioFormPage() {
     const { id }  = useParams<{ id?: string }>();
     const isNew   = id === undefined;
     const nav     = useNavigate();
+    const { t }   = useTranslation();
 
     // ── メタ情報 ────────────────────────────────────────────────────────────
     const [name, setName]               = useState('');
@@ -54,7 +50,7 @@ export default function ScenarioFormPage() {
                 setNodes(s.nodes);
                 setEdges(s.edges);
             } catch (err) {
-                setError(err instanceof ApiError ? err.message : '取得に失敗しました。');
+                setError(err instanceof ApiError ? err.message : t('scenarioForm.loadError'));
             } finally {
                 setLoading(false);
             }
@@ -73,9 +69,9 @@ export default function ScenarioFormPage() {
                 return;
             }
             await updateScenario(Number(id), { name, description: description || null, status });
-            flash('メタ情報を保存しました');
+            flash(t('scenarioForm.metaSaved'));
         } catch (err) {
-            setError(err instanceof ApiError ? err.message : '保存に失敗しました。');
+            setError(err instanceof ApiError ? err.message : t('scenarioForm.saveError'));
         } finally {
             setSaving(false);
         }
@@ -89,9 +85,9 @@ export default function ScenarioFormPage() {
             await saveScenarioGraph(Number(id), newNodes, newEdges);
             setNodes(newNodes);
             setEdges(newEdges);
-            flash('グラフを保存しました');
+            flash(t('scenarioForm.graphSaved'));
         } catch (err) {
-            setError(err instanceof ApiError ? err.message : 'グラフの保存に失敗しました。');
+            setError(err instanceof ApiError ? err.message : t('scenarioForm.graphSaveError'));
         } finally {
             setSaving(false);
         }
@@ -99,12 +95,12 @@ export default function ScenarioFormPage() {
 
     // ── 削除 ────────────────────────────────────────────────────────────────
     async function handleDelete() {
-        if (!confirm(`「${name}」を削除しますか？この操作は取り消せません。`)) return;
+        if (!confirm(t('scenarios.confirmDelete', { name }))) return;
         try {
             await deleteScenario(Number(id));
             nav('/scenarios');
         } catch (err) {
-            setError(err instanceof ApiError ? err.message : '削除に失敗しました。');
+            setError(err instanceof ApiError ? err.message : t('scenarioForm.deleteError'));
         }
     }
 
@@ -113,7 +109,13 @@ export default function ScenarioFormPage() {
         setTimeout(() => setSavedMsg(''), 2500);
     }
 
-    if (loading) return <p style={{ color: T.textMuted, marginTop: 40 }}>読み込み中…</p>;
+    const statusOptions = [
+        { value: 'draft',     label: t('scenario.status.draft') },
+        { value: 'published', label: t('scenario.status.published') },
+        { value: 'archived',  label: t('scenario.status.archived') },
+    ] as const;
+
+    if (loading) return <p style={{ color: T.textMuted, marginTop: 40 }}>{t('common.loading')}</p>;
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 64px)', gap: 0 }}>
@@ -125,7 +127,7 @@ export default function ScenarioFormPage() {
                 background: T.surface, flexShrink: 0,
             }}>
                 <PageTitle style={{ margin: 0, fontSize: T.fontXl }}>
-                    {isNew ? '新規シナリオ' : name}
+                    {isNew ? t('scenarioForm.newTitle') : name}
                 </PageTitle>
                 {!isNew && <Badge status={status} />}
                 <div style={{ flex: 1 }} />
@@ -135,9 +137,9 @@ export default function ScenarioFormPage() {
                     </span>
                 )}
                 {!isNew && (
-                    <Btn variant="danger" onClick={() => void handleDelete()}>削除</Btn>
+                    <Btn variant="danger" onClick={() => void handleDelete()}>{t('common.delete')}</Btn>
                 )}
-                <Btn variant="ghost" onClick={() => nav('/scenarios')}>一覧へ戻る</Btn>
+                <Btn variant="ghost" onClick={() => nav('/scenarios')}>{t('common.backToList')}</Btn>
             </div>
 
             {/* ── エラー表示 ── */}
@@ -159,11 +161,11 @@ export default function ScenarioFormPage() {
             >
                 <div style={{ flex: '1 1 200px' }}>
                     <label style={{ display: 'block', fontSize: T.fontXs, fontWeight: 600, color: T.textMuted, marginBottom: 3 }}>
-                        シナリオ名 *
+                        {t('scenarioForm.nameLabel')} *
                     </label>
                     <input
                         value={name} onChange={e => setName(e.target.value)}
-                        required placeholder="例: 問い合わせ対応フロー"
+                        required placeholder={t('scenarioForm.namePlaceholder')}
                         style={{
                             width: '100%', padding: '7px 10px',
                             borderRadius: T.radiusSm, border: `1.5px solid ${T.borderInput}`,
@@ -173,11 +175,11 @@ export default function ScenarioFormPage() {
                 </div>
                 <div style={{ flex: '2 1 300px' }}>
                     <label style={{ display: 'block', fontSize: T.fontXs, fontWeight: 600, color: T.textMuted, marginBottom: 3 }}>
-                        説明（任意）
+                        {t('scenarioForm.descLabel')}
                     </label>
                     <input
                         value={description} onChange={e => setDescription(e.target.value)}
-                        placeholder="このシナリオの概要…"
+                        placeholder={t('scenarioForm.descPlaceholder')}
                         style={{
                             width: '100%', padding: '7px 10px',
                             borderRadius: T.radiusSm, border: `1.5px solid ${T.borderInput}`,
@@ -188,7 +190,7 @@ export default function ScenarioFormPage() {
                 {!isNew && (
                     <div style={{ flex: '0 0 120px' }}>
                         <label style={{ display: 'block', fontSize: T.fontXs, fontWeight: 600, color: T.textMuted, marginBottom: 3 }}>
-                            ステータス
+                            {t('scenarioForm.statusLabel')}
                         </label>
                         <select
                             value={status}
@@ -199,14 +201,14 @@ export default function ScenarioFormPage() {
                                 fontSize: T.fontBase, background: T.surface, boxSizing: 'border-box',
                             }}
                         >
-                            {STATUS_OPTIONS.map(o => (
+                            {statusOptions.map(o => (
                                 <option key={o.value} value={o.value}>{o.label}</option>
                             ))}
                         </select>
                     </div>
                 )}
                 <Btn type="submit" disabled={saving}>
-                    {isNew ? '作成' : '保存'}
+                    {saving ? t('common.saving') : (isNew ? t('common.create') : t('common.save'))}
                 </Btn>
             </form>
 
@@ -228,7 +230,7 @@ export default function ScenarioFormPage() {
                     flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',
                     color: T.textMuted, fontSize: T.fontMd,
                 }}>
-                    シナリオを作成するとキャンバスエディタが開きます
+                    {t('scenarioForm.canvasHint')}
                 </div>
             )}
         </div>
