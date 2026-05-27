@@ -1,0 +1,415 @@
+{
+  "version": 1,
+  "source": "docs/openapi/openapi.yaml",
+  "tools": [
+    {
+      "name": "getHealth",
+      "title": "Health Check",
+      "description": "Returns the operational status of the NeNe Concierge API. Use this as a first call to verify the server is reachable.",
+      "safety": "read",
+      "source": {
+        "type": "openapi",
+        "operationId": "getHealth",
+        "method": "GET",
+        "path": "/health"
+      },
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "responseSchemaRef": "#/components/schemas/HealthResponse"
+    },
+    {
+      "name": "listOrganizations",
+      "title": "List Organizations",
+      "description": "Returns all organizations accessible to the authenticated operator. Use this to find organization IDs before working with scenarios.",
+      "safety": "read",
+      "source": {
+        "type": "openapi",
+        "operationId": "listOrganizations",
+        "method": "GET",
+        "path": "/api/v1/organizations"
+      },
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "responseSchemaRef": "#/components/schemas/OrganizationListResponse"
+    },
+    {
+      "name": "getOrganizationById",
+      "title": "Get Organization",
+      "description": "Returns a single organization by its integer ID.",
+      "safety": "read",
+      "source": {
+        "type": "openapi",
+        "operationId": "getOrganizationById",
+        "method": "GET",
+        "path": "/api/v1/organizations/{id}"
+      },
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer", "description": "Organization ID." }
+        }
+      },
+      "responseSchemaRef": "#/components/schemas/OrganizationResponse"
+    },
+    {
+      "name": "listScenarios",
+      "title": "List Scenarios",
+      "description": "Returns all scenarios (draft and published) for the authenticated operator's organization. Use this to find scenario IDs.",
+      "safety": "read",
+      "source": {
+        "type": "openapi",
+        "operationId": "listScenarios",
+        "method": "GET",
+        "path": "/api/v1/scenarios"
+      },
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "responseSchemaRef": "#/components/schemas/ScenarioListResponse"
+    },
+    {
+      "name": "getScenarioById",
+      "title": "Get Scenario",
+      "description": "Returns a single scenario with its full node and edge graph. Use this to read the current scenario structure before making edits.",
+      "safety": "read",
+      "source": {
+        "type": "openapi",
+        "operationId": "getScenarioById",
+        "method": "GET",
+        "path": "/api/v1/scenarios/{id}"
+      },
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer", "description": "Scenario ID." }
+        }
+      },
+      "responseSchemaRef": "#/components/schemas/ScenarioDetailResponse"
+    },
+    {
+      "name": "getScenarioAnalytics",
+      "title": "Get Scenario Analytics",
+      "description": "Returns aggregated analytics for a scenario: total sessions, completion rate, per-node visit counts, average dwell times, drop-off rates, branch percentages, and bottleneck nodes (drop-off rate ≥ 0.5). Preview sessions are excluded. Use period=7d for the last 7 days.",
+      "safety": "read",
+      "source": {
+        "type": "openapi",
+        "operationId": "getScenarioAnalytics",
+        "method": "GET",
+        "path": "/api/v1/scenarios/{id}/analytics"
+      },
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id"],
+        "properties": {
+          "id":     { "type": "integer", "description": "Scenario ID." },
+          "period": { "type": "string",  "description": "Analysis period: 1d, 7d, 30d, 90d, or custom. Defaults to 7d." },
+          "from":   { "type": "string",  "description": "Start date (YYYY-MM-DD). Required when period=custom." },
+          "to":     { "type": "string",  "description": "End date (YYYY-MM-DD). Required when period=custom." }
+        }
+      },
+      "responseSchemaRef": "#/components/schemas/ScenarioAnalyticsResponse"
+    },
+    {
+      "name": "listActionCredentials",
+      "title": "List Action Credentials",
+      "description": "Returns all action credentials for the organization. The config (secrets) field is omitted from list responses.",
+      "safety": "read",
+      "source": {
+        "type": "openapi",
+        "operationId": "listActionCredentials",
+        "method": "GET",
+        "path": "/api/v1/action-credentials"
+      },
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "responseSchemaRef": "#/components/schemas/ActionCredentialListResponse"
+    },
+    {
+      "name": "createOrganization",
+      "title": "Create Organization",
+      "description": "Creates a new organization with a unique slug. The slug is used for subdomain-based org resolution. Use plan=free for new organizations.",
+      "safety": "write",
+      "source": {
+        "type": "openapi",
+        "operationId": "createOrganization",
+        "method": "POST",
+        "path": "/api/v1/organizations"
+      },
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "slug"],
+        "properties": {
+          "name":          { "type": "string", "description": "Display name of the organization." },
+          "slug":          { "type": "string", "description": "URL-safe slug (lowercase alphanumeric and hyphens, e.g. 'my-company')." },
+          "plan":          { "type": "string", "description": "Subscription plan: free, starter, pro, or enterprise. Defaults to free." },
+          "custom_domain": { "type": "string", "description": "Custom domain for org resolution (optional)." }
+        }
+      },
+      "responseSchemaRef": null
+    },
+    {
+      "name": "updateOrganization",
+      "title": "Update Organization",
+      "description": "Partially updates an organization. Only the fields you provide are changed. Use this to rename, change plan, or toggle active state.",
+      "safety": "write",
+      "source": {
+        "type": "openapi",
+        "operationId": "updateOrganization",
+        "method": "PATCH",
+        "path": "/api/v1/organizations/{id}"
+      },
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id"],
+        "properties": {
+          "id":            { "type": "integer", "description": "Organization ID." },
+          "name":          { "type": "string" },
+          "slug":          { "type": "string" },
+          "plan":          { "type": "string" },
+          "custom_domain": { "type": "string" },
+          "is_active":     { "type": "boolean" }
+        }
+      },
+      "responseSchemaRef": null
+    },
+    {
+      "name": "createScenario",
+      "title": "Create Scenario",
+      "description": "Creates a new chat scenario in draft status. You can provide an initial set of nodes and edges, or add them later with updateScenario. Node types: message (shows text to visitor), condition (auto-routes based on variables), action (triggers email/Slack/HTTP), end (terminates the session).",
+      "safety": "write",
+      "source": {
+        "type": "openapi",
+        "operationId": "createScenario",
+        "method": "POST",
+        "path": "/api/v1/scenarios"
+      },
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name"],
+        "properties": {
+          "name":        { "type": "string", "description": "Scenario display name." },
+          "description": { "type": "string", "description": "Optional description." },
+          "nodes": {
+            "type": "array",
+            "description": "Initial nodes. Each node needs node_id (UUID), type (message/condition/action/end), label.",
+            "items": { "type": "object" }
+          },
+          "edges": {
+            "type": "array",
+            "description": "Initial edges. Each edge needs source_node_id and target_node_id. Optional label for branch names.",
+            "items": { "type": "object" }
+          }
+        }
+      },
+      "responseSchemaRef": null
+    },
+    {
+      "name": "updateScenario",
+      "title": "Update Scenario",
+      "description": "Partially updates a scenario. Passing nodes or edges REPLACES the entire set (not a merge). Use status=published to make a scenario live, status=draft to revert. Always fetch the current scenario first with getScenarioById before making edits.",
+      "safety": "write",
+      "source": {
+        "type": "openapi",
+        "operationId": "updateScenario",
+        "method": "PATCH",
+        "path": "/api/v1/scenarios/{id}"
+      },
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id"],
+        "properties": {
+          "id":          { "type": "integer", "description": "Scenario ID." },
+          "name":        { "type": "string" },
+          "description": { "type": "string" },
+          "status":      { "type": "string", "description": "draft, published, or archived." },
+          "nodes": {
+            "type": "array",
+            "description": "Full replacement set of nodes.",
+            "items": { "type": "object" }
+          },
+          "edges": {
+            "type": "array",
+            "description": "Full replacement set of edges.",
+            "items": { "type": "object" }
+          }
+        }
+      },
+      "responseSchemaRef": null
+    },
+    {
+      "name": "startPreviewSession",
+      "title": "Start Preview Session",
+      "description": "Starts a preview session for any scenario (draft or published). Preview sessions are excluded from analytics and never trigger action adapters. Use this to test a scenario before publishing.",
+      "safety": "write",
+      "source": {
+        "type": "openapi",
+        "operationId": "startPreviewSession",
+        "method": "POST",
+        "path": "/api/v1/scenarios/{id}/preview/start"
+      },
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer", "description": "Scenario ID to preview." }
+        }
+      },
+      "responseSchemaRef": null
+    },
+    {
+      "name": "stepPreviewSession",
+      "title": "Step Preview Session",
+      "description": "Advances a preview session to the next node. Pass target_node_id for message nodes. For condition nodes, target_node_id may be omitted (auto-routed by engine). Optionally pass answer to simulate variable collection.",
+      "safety": "write",
+      "source": {
+        "type": "openapi",
+        "operationId": "stepPreviewSession",
+        "method": "POST",
+        "path": "/api/v1/scenarios/{id}/preview/step/{session_id}"
+      },
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "session_id"],
+        "properties": {
+          "id":             { "type": "integer", "description": "Scenario ID." },
+          "session_id":     { "type": "string",  "description": "Preview session UUID from startPreviewSession." },
+          "target_node_id": { "type": "string",  "description": "Next node ID (required for message nodes, optional for condition nodes)." },
+          "answer":         { "type": "string",  "description": "Visitor answer to collect as a variable." }
+        }
+      },
+      "responseSchemaRef": "#/components/schemas/SessionStepResponse"
+    },
+    {
+      "name": "createActionCredential",
+      "title": "Create Action Credential",
+      "description": "Creates a new action credential for use in action nodes. The config object holds adapter-specific secrets (webhook URLs, API tokens). Adapter types: http, email, slack, chatwork.",
+      "safety": "admin",
+      "source": {
+        "type": "openapi",
+        "operationId": "createActionCredential",
+        "method": "POST",
+        "path": "/api/v1/action-credentials"
+      },
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "adapter"],
+        "properties": {
+          "name":    { "type": "string", "description": "Human-readable label (e.g. 'Production Slack webhook')." },
+          "adapter": { "type": "string", "description": "Adapter type: http, email, slack, or chatwork." },
+          "config":  { "type": "object", "description": "Adapter-specific config (secrets)." }
+        }
+      },
+      "responseSchemaRef": null
+    },
+    {
+      "name": "updateActionCredential",
+      "title": "Update Action Credential",
+      "description": "Partially updates an action credential. Only provided fields are changed.",
+      "safety": "admin",
+      "source": {
+        "type": "openapi",
+        "operationId": "updateActionCredential",
+        "method": "PATCH",
+        "path": "/api/v1/action-credentials/{id}"
+      },
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id"],
+        "properties": {
+          "id":      { "type": "integer", "description": "Credential ID." },
+          "name":    { "type": "string" },
+          "adapter": { "type": "string" },
+          "config":  { "type": "object" }
+        }
+      },
+      "responseSchemaRef": null
+    },
+    {
+      "name": "deleteScenario",
+      "title": "Delete Scenario",
+      "description": "Permanently deletes a scenario, its nodes, and edges. This cannot be undone. Always confirm the scenario ID before calling.",
+      "safety": "destructive",
+      "source": {
+        "type": "openapi",
+        "operationId": "deleteScenario",
+        "method": "DELETE",
+        "path": "/api/v1/scenarios/{id}"
+      },
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer", "description": "Scenario ID to delete." }
+        }
+      },
+      "responseSchemaRef": null
+    },
+    {
+      "name": "deleteActionCredential",
+      "title": "Delete Action Credential",
+      "description": "Permanently deletes an action credential. Any scenario action nodes referencing this credential will fail at runtime. Confirm the credential ID before calling.",
+      "safety": "destructive",
+      "source": {
+        "type": "openapi",
+        "operationId": "deleteActionCredential",
+        "method": "DELETE",
+        "path": "/api/v1/action-credentials/{id}"
+      },
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer", "description": "Credential ID to delete." }
+        }
+      },
+      "responseSchemaRef": null
+    },
+    {
+      "name": "deleteOrganization",
+      "title": "Delete Organization",
+      "description": "Permanently deletes an organization and all associated data. This cannot be undone. Use with extreme caution.",
+      "safety": "destructive",
+      "source": {
+        "type": "openapi",
+        "operationId": "deleteOrganization",
+        "method": "DELETE",
+        "path": "/api/v1/organizations/{id}"
+      },
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer", "description": "Organization ID to delete." }
+        }
+      },
+      "responseSchemaRef": null
+    }
+  ]
+}
