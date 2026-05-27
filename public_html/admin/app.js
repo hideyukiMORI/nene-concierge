@@ -24603,14 +24603,22 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // src/admin/auth.ts
   var TOKEN_KEY = "nene_admin_token";
+  var EMAIL_KEY = "nene_admin_email";
   function getToken() {
     return localStorage.getItem(TOKEN_KEY);
   }
   function setToken(token) {
     localStorage.setItem(TOKEN_KEY, token);
   }
+  function getStoredEmail() {
+    return localStorage.getItem(EMAIL_KEY);
+  }
+  function setStoredEmail(email) {
+    localStorage.setItem(EMAIL_KEY, email);
+  }
   function clearToken() {
     localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(EMAIL_KEY);
   }
   function isAuthenticated() {
     return getToken() !== null;
@@ -24810,7 +24818,15 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     sidebarWidth: "var(--nca-sidebar-width)",
     // ── Shadow ───────────────────────────────────────────────────────────────
     shadowCard: "var(--nca-shadow-card)",
-    shadowFocus: "var(--nca-shadow-focus)"
+    shadowFocus: "var(--nca-shadow-focus)",
+    // ── Control heights ──────────────────────────────────────────────────────
+    // :root の --nca-control-height* を変えるだけでサイト全体に反映される
+    controlHeight: "var(--nca-control-height)",
+    controlHeightSm: "var(--nca-control-height-sm)",
+    controlHeightXs: "var(--nca-control-height-xs)",
+    // ── Motion ───────────────────────────────────────────────────────────────
+    transitionFast: "var(--nca-transition-fast)",
+    transitionNormal: "var(--nca-transition-normal)"
   };
 
   // src/admin/i18n/i18n-context.tsx
@@ -26059,18 +26075,28 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     el.style.borderColor = T.borderInput;
     el.style.boxShadow = "none";
   }
+  var NAV_ICONS = {
+    "/dashboard": "\u229E",
+    "/scenarios": "\u2261",
+    "/appearance": "\u25CE",
+    "/credentials": "\u25C6",
+    "/action-logs": "\u2263",
+    "/sessions": "\u25CB",
+    "/settings": "\u2699"
+  };
   function NavItem({ to, label }) {
     const loc = useLocation();
     const active = loc.pathname.startsWith(to);
-    return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+    const icon = NAV_ICONS[to] ?? "\xB7";
+    return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
       Link,
       {
         to,
         style: {
           display: "flex",
           alignItems: "center",
-          // 9px left-pad + 3px left-border = 12px visual indent (avoids layout-shift on activation)
-          padding: "8px 12px 8px 9px",
+          gap: 10,
+          padding: "7px 12px",
           margin: "1px 0",
           color: active ? T.sidebarTitle : T.sidebarText,
           textDecoration: "none",
@@ -26078,8 +26104,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           background: active ? T.sidebarActive : "transparent",
           fontWeight: active ? 600 : 400,
           fontSize: T.fontBase,
-          transition: "background 120ms ease, color 120ms ease",
-          borderLeft: active ? `3px solid ${T.primary}` : "3px solid transparent"
+          transition: `background ${T.transitionFast}, color ${T.transitionFast}`
         },
         onMouseEnter: (e) => {
           if (!active) {
@@ -26093,33 +26118,44 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             e.currentTarget.style.color = T.sidebarText;
           }
         },
-        children: label
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: { opacity: 0.75, fontSize: 13, lineHeight: 1, flexShrink: 0 }, children: icon }),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: label })
+        ]
       }
     );
+  }
+  function NavDivider() {
+    return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { style: {
+      margin: "10px 0",
+      borderTop: `1px solid ${T.sidebarBorder}`,
+      opacity: 0.5
+    } });
   }
   function Layout() {
     const nav = useNavigate();
     const { t, locale, setLocale } = useTranslation();
     const { themeVariant: themeVariant2, toggleVariant, canToggleVariant: canToggleVariant2 } = useTheme();
+    const email = getStoredEmail();
     function logout() {
       clearToken();
       nav("/");
     }
-    const sidebarBtnStyle = {
+    const sidebarIconBtn = {
       flexShrink: 0,
       display: "inline-flex",
       alignItems: "center",
       justifyContent: "center",
-      height: "28px",
-      padding: "0 9px",
+      width: T.controlHeightXs,
+      height: T.controlHeightXs,
       background: T.sidebarActive,
       border: `1px solid ${T.sidebarBorder}`,
       color: T.sidebarText,
       borderRadius: T.radiusMd,
       cursor: "pointer",
-      fontSize: T.fontSm,
+      fontSize: 14,
       lineHeight: 1,
-      transition: "background 120ms ease, color 120ms ease, border-color 120ms ease"
+      transition: `background ${T.transitionFast}, color ${T.transitionFast}, border-color ${T.transitionFast}`
     };
     return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { style: { display: "flex", minHeight: "100vh" }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("aside", { style: {
@@ -26141,15 +26177,15 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           gap: 8,
           height: 56,
           padding: "0 16px",
-          borderBottom: `1px solid ${T.sidebarBorder}`,
-          flexShrink: 0
+          flexShrink: 0,
+          borderBottom: `1px solid ${T.sidebarBorder}`
         }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: {
             flex: 1,
-            fontWeight: 700,
-            fontSize: T.fontMd,
+            fontWeight: 600,
+            fontSize: T.fontBase,
             color: T.sidebarTitle,
-            letterSpacing: "-0.01em",
+            letterSpacing: "0.01em",
             overflow: "hidden",
             textOverflow: "ellipsis",
             whiteSpace: "nowrap"
@@ -26158,7 +26194,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             background: T.primary,
             color: "#fff",
             padding: "2px 7px",
-            borderRadius: 4,
+            borderRadius: T.radiusSm,
             fontSize: T.fontXs,
             fontWeight: 700,
             letterSpacing: "0.06em",
@@ -26166,82 +26202,94 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             flexShrink: 0
           }, children: "Admin" })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("nav", { style: { flex: 1, padding: "10px 8px" }, "aria-label": "Main", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("nav", { style: { flex: 1, padding: "12px 8px", overflowY: "auto" }, "aria-label": "Main", children: [
           /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/dashboard", label: t("nav.dashboard") }),
           /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/scenarios", label: t("nav.scenarios") }),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavDivider, {}),
           /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/appearance", label: t("nav.appearance") }),
           /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/credentials", label: t("nav.credentials") }),
           /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/action-logs", label: t("nav.actionLogs") }),
           /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/sessions", label: t("nav.sessions") }),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavDivider, {}),
           /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/settings", label: t("nav.settings") })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { style: {
           flexShrink: 0,
-          padding: "8px 10px 12px",
-          borderTop: `1px solid ${T.sidebarBorder}`,
-          display: "flex",
-          alignItems: "center",
-          gap: 6
+          padding: "10px 12px 12px",
+          borderTop: `1px solid ${T.sidebarBorder}`
         }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-            "select",
-            {
-              value: locale,
-              onChange: (e) => setLocale(e.target.value),
-              "aria-label": "Language",
-              style: {
-                flex: 1,
-                minWidth: 0,
-                height: "28px",
-                padding: "0 8px",
-                borderRadius: T.radiusMd,
-                border: `1px solid ${T.sidebarBorder}`,
-                background: T.sidebarActive,
-                color: T.sidebarText,
-                fontSize: T.fontSm,
-                cursor: "pointer",
-                outline: "none",
-                boxSizing: "border-box"
-              },
-              children: SUPPORTED_LOCALE_IDS.map((id2) => /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("option", { value: id2, children: LOCALES[id2].label }, id2))
-            }
-          ),
-          canToggleVariant2 && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-            "button",
-            {
-              onClick: toggleVariant,
-              "aria-label": themeVariant2 === "dark" ? t("theme.toggleLight") : t("theme.toggleDark"),
-              title: themeVariant2 === "dark" ? t("theme.toggleLight") : t("theme.toggleDark"),
-              style: sidebarBtnStyle,
-              onMouseEnter: (e) => {
-                e.currentTarget.style.background = T.sidebarHover;
-              },
-              onMouseLeave: (e) => {
-                e.currentTarget.style.background = T.sidebarActive;
-              },
-              children: themeVariant2 === "dark" ? "\u2600" : "\u{1F319}"
-            }
-          ),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-            "button",
-            {
-              onClick: logout,
-              title: t("nav.logout"),
-              "aria-label": t("nav.logout"),
-              style: sidebarBtnStyle,
-              onMouseEnter: (e) => {
-                e.currentTarget.style.background = "oklch(15% 0.05 25 / 0.8)";
-                e.currentTarget.style.color = "oklch(75% 0.08 25)";
-                e.currentTarget.style.borderColor = "oklch(30% 0.08 25)";
-              },
-              onMouseLeave: (e) => {
-                e.currentTarget.style.background = T.sidebarActive;
-                e.currentTarget.style.color = T.sidebarText;
-                e.currentTarget.style.borderColor = T.sidebarBorder;
-              },
-              children: t("nav.logout")
-            }
-          )
+          email && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { style: {
+            fontSize: T.fontXs,
+            color: T.sidebarMuted,
+            padding: "0 2px",
+            marginBottom: 8,
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap"
+          }, title: email, children: email }),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 6 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+              "select",
+              {
+                value: locale,
+                onChange: (e) => setLocale(e.target.value),
+                "aria-label": "Language",
+                style: {
+                  flex: 1,
+                  minWidth: 0,
+                  height: T.controlHeightXs,
+                  padding: "0 8px",
+                  boxSizing: "border-box",
+                  borderRadius: T.radiusMd,
+                  border: `1px solid ${T.sidebarBorder}`,
+                  background: T.sidebarActive,
+                  color: T.sidebarText,
+                  fontSize: T.fontXs,
+                  cursor: "pointer",
+                  outline: "none"
+                },
+                children: SUPPORTED_LOCALE_IDS.map((id2) => /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("option", { value: id2, children: LOCALES[id2].label }, id2))
+              }
+            ),
+            canToggleVariant2 && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+              "button",
+              {
+                onClick: toggleVariant,
+                "aria-label": themeVariant2 === "dark" ? t("theme.toggleLight") : t("theme.toggleDark"),
+                title: themeVariant2 === "dark" ? t("theme.toggleLight") : t("theme.toggleDark"),
+                style: sidebarIconBtn,
+                onMouseEnter: (e) => {
+                  e.currentTarget.style.background = T.sidebarHover;
+                  e.currentTarget.style.color = T.sidebarTitle;
+                },
+                onMouseLeave: (e) => {
+                  e.currentTarget.style.background = T.sidebarActive;
+                  e.currentTarget.style.color = T.sidebarText;
+                },
+                children: themeVariant2 === "dark" ? "\u2600" : "\u{1F319}"
+              }
+            ),
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+              "button",
+              {
+                onClick: logout,
+                title: t("nav.logout"),
+                "aria-label": t("nav.logout"),
+                style: sidebarIconBtn,
+                onMouseEnter: (e) => {
+                  e.currentTarget.style.background = "oklch(15% 0.05 25 / 0.8)";
+                  e.currentTarget.style.color = "oklch(75% 0.08 25)";
+                  e.currentTarget.style.borderColor = "oklch(30% 0.08 25)";
+                },
+                onMouseLeave: (e) => {
+                  e.currentTarget.style.background = T.sidebarActive;
+                  e.currentTarget.style.color = T.sidebarText;
+                  e.currentTarget.style.borderColor = T.sidebarBorder;
+                },
+                children: "\u21AA"
+              }
+            )
+          ] })
         ] })
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("main", { style: {
@@ -26292,7 +26340,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       display: "inline-flex",
       alignItems: "center",
       justifyContent: "center",
-      height: "36px",
+      height: T.controlHeight,
+      // ← CSS 変数 — 直書き禁止
       padding: "0 16px",
       gap: 6,
       borderRadius: T.radiusMd,
@@ -26304,7 +26353,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       lineHeight: 1,
       whiteSpace: "nowrap",
       opacity: disabled ? 0.55 : 1,
-      transition: "filter 150ms ease, opacity 150ms ease",
+      transition: `filter ${T.transitionFast}, opacity ${T.transitionFast}`,
       textDecoration: "none"
     };
     const variants = {
@@ -26384,9 +26433,18 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       lineHeight: "1.5"
     }, children: msg });
   }
-  var FIELD_INPUT_STYLE = {
+  var FIELD_LABEL_STYLE = {
+    display: "block",
+    fontWeight: 600,
+    marginBottom: 5,
+    fontSize: T.fontSm,
+    color: T.textStrong,
+    lineHeight: "1.4"
+  };
+  var FIELD_INPUT_BASE = {
     width: "100%",
-    height: "36px",
+    height: T.controlHeight,
+    // ← CSS 変数
     padding: "0 12px",
     boxSizing: "border-box",
     borderRadius: T.radiusMd,
@@ -26395,15 +26453,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     outline: "none",
     background: T.surface,
     color: T.text,
-    transition: "border-color 150ms ease, box-shadow 150ms ease"
-  };
-  var FIELD_LABEL_STYLE = {
-    display: "block",
-    fontWeight: 600,
-    marginBottom: 5,
-    fontSize: T.fontSm,
-    color: T.textStrong,
-    lineHeight: "1.4"
+    transition: `border-color ${T.transitionFast}, box-shadow ${T.transitionFast}`
   };
   function Field({
     label,
@@ -26426,7 +26476,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           onChange: (e) => onChange(e.target.value),
           placeholder,
           required,
-          style: FIELD_INPUT_STYLE,
+          style: FIELD_INPUT_BASE,
           onFocus: (e) => applyFocus(e.currentTarget),
           onBlur: (e) => removeFocus(e.currentTarget)
         }
@@ -26446,12 +26496,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         {
           value,
           onChange: (e) => onChange(e.target.value),
-          style: {
-            ...FIELD_INPUT_STYLE,
-            cursor: "pointer",
-            // padding adjustment: select needs extra-right room for arrow
-            padding: "0 12px"
-          },
+          style: { ...FIELD_INPUT_BASE, cursor: "pointer" },
           onFocus: (e) => applyFocus(e.currentTarget),
           onBlur: (e) => removeFocus(e.currentTarget),
           children: options.map((o) => /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("option", { value: o.value, children: o.label }, o.value))
@@ -26589,7 +26634,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       try {
         const res = await login(email, password);
         setToken(res.token);
-        nav("/scenarios");
+        setStoredEmail(res.email);
+        nav("/dashboard");
       } catch (err) {
         setError(err instanceof ApiError ? err.message : t("auth.error"));
       } finally {
@@ -35885,7 +35931,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     },
     input: {
       width: "100%",
-      height: "36px",
+      height: T.controlHeight,
       padding: "0 10px",
       boxSizing: "border-box",
       borderRadius: T.radiusMd,
@@ -35898,7 +35944,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     },
     select: {
       width: "100%",
-      height: "36px",
+      height: T.controlHeight,
       padding: "0 10px",
       boxSizing: "border-box",
       borderRadius: T.radiusMd,
@@ -36265,7 +36311,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             alignItems: "center",
             justifyContent: "center",
             width: "100%",
-            height: "36px",
+            height: T.controlHeight,
             boxSizing: "border-box",
             background: T.dangerBg,
             border: `1.5px solid ${T.dangerBorder}`,
@@ -37014,7 +37060,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                   placeholder: "#2563eb",
                   style: {
                     width: 100,
-                    height: "36px",
+                    height: T.controlHeight,
                     padding: "0 10px",
                     boxSizing: "border-box",
                     borderRadius: T.radiusMd,
@@ -37054,7 +37100,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                   placeholder: "#ffffff",
                   style: {
                     width: 100,
-                    height: "36px",
+                    height: T.controlHeight,
                     padding: "0 10px",
                     boxSizing: "border-box",
                     borderRadius: T.radiusMd,
@@ -37454,7 +37500,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 handleFilterChange();
               },
               style: {
-                height: "32px",
+                height: T.controlHeightSm,
                 padding: "0 8px",
                 boxSizing: "border-box",
                 borderRadius: T.radiusMd,
@@ -37487,7 +37533,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 handleFilterChange();
               },
               style: {
-                height: "32px",
+                height: T.controlHeightSm,
                 padding: "0 8px",
                 boxSizing: "border-box",
                 borderRadius: T.radiusMd,
@@ -37577,7 +37623,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             disabled: currentPage <= 1,
             onClick: () => setOffset(Math.max(0, offset - limit)),
             style: {
-              height: "32px",
+              height: T.controlHeightSm,
               padding: "0 14px",
               boxSizing: "border-box",
               borderRadius: T.radiusMd,
@@ -37610,7 +37656,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             disabled: currentPage >= totalPages,
             onClick: () => setOffset(offset + limit),
             style: {
-              height: "32px",
+              height: T.controlHeightSm,
               padding: "0 14px",
               boxSizing: "border-box",
               borderRadius: T.radiusMd,
@@ -38073,7 +38119,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const totalPages = Math.ceil(total / limit);
     const currentPage = Math.floor(offset / limit) + 1;
     const selectStyle = {
-      height: "32px",
+      height: T.controlHeightSm,
       padding: "0 8px",
       boxSizing: "border-box",
       borderRadius: T.radiusMd,
@@ -38193,7 +38239,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             disabled: currentPage <= 1,
             onClick: () => setOffset(Math.max(0, offset - limit)),
             style: {
-              height: "32px",
+              height: T.controlHeightSm,
               padding: "0 14px",
               boxSizing: "border-box",
               borderRadius: T.radiusMd,
@@ -38226,7 +38272,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             disabled: currentPage >= totalPages,
             onClick: () => setOffset(offset + limit),
             style: {
-              height: "32px",
+              height: T.controlHeightSm,
               padding: "0 14px",
               boxSizing: "border-box",
               borderRadius: T.radiusMd,

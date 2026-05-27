@@ -96,7 +96,7 @@ export default function AppearancePage() {
                                 onChange={e => set('color_primary', e.target.value)}
                                 maxLength={7} placeholder="#2563eb"
                                 style={{
-                                    width: 100, height: '36px', padding: '0 10px',
+                                    width: 100, height: T.controlHeight, padding: '0 10px',
                                     boxSizing: 'border-box',
                                     borderRadius: T.radiusMd,
                                     border: `1.5px solid ${T.borderInput}`, fontSize: T.fontBase,
@@ -124,7 +124,7 @@ export default function AppearancePage() {
                                 onChange={e => set('color_secondary', e.target.value)}
                                 maxLength={7} placeholder="#ffffff"
                                 style={{
-                                    width: 100, height: '36px', padding: '0 10px',
+                                    width: 100, height: T.controlHeight, padding: '0 10px',
                                     boxSizing: 'border-box',
                                     borderRadius: T.radiusMd,
                                     border: `1.5px solid ${T.borderInput}`, fontSize: T.fontBase,

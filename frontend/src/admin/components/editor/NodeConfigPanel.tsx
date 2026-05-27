@@ -4,6 +4,7 @@ import { NODE_COLORS, NODE_ICONS } from './NodeTypes.js';
 import type { MessageData, ConditionData, ActionData, EndData } from './NodeTypes.js';
 import { T } from '../../theme.js';
 import { applyFocus, removeFocus } from '../Layout.js';
+// T.controlHeight (= var(--nca-control-height)) で高さを一元管理
 import { useTranslation } from '../../i18n/index.js';
 
 interface Props {
@@ -29,7 +30,7 @@ const S = {
         marginBottom: 4, color: T.textStrong, lineHeight: '1.4',
     },
     input: {
-        width: '100%', height: '36px', padding: '0 10px',
+        width: '100%', height: T.controlHeight, padding: '0 10px',
         boxSizing: 'border-box' as const,
         borderRadius: T.radiusMd, border: `1.5px solid ${T.borderInput}`,
         fontSize: T.fontBase, outline: 'none',
@@ -37,7 +38,7 @@ const S = {
         transition: 'border-color 150ms ease, box-shadow 150ms ease',
     },
     select: {
-        width: '100%', height: '36px', padding: '0 10px',
+        width: '100%', height: T.controlHeight, padding: '0 10px',
         boxSizing: 'border-box' as const,
         borderRadius: T.radiusMd, border: `1.5px solid ${T.borderInput}`,
         fontSize: T.fontBase, background: T.surface, color: T.text,
@@ -353,7 +354,7 @@ export default function NodeConfigPanel({ node, credentials, onChange, onDelete 
                     onClick={() => onDelete(node.id)}
                     style={{
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        width: '100%', height: '36px',
+                        width: '100%', height: T.controlHeight,
                         boxSizing: 'border-box',
                         background: T.dangerBg, border: `1.5px solid ${T.dangerBorder}`,
                         color: T.dangerText, borderRadius: T.radiusMd,

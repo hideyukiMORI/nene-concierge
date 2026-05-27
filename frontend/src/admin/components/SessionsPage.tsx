@@ -268,7 +268,7 @@ export default function SessionsPage() {
     const currentPage = Math.floor(offset / limit) + 1;
 
     const selectStyle = {
-        height: '32px', padding: '0 8px', boxSizing: 'border-box',
+        height: T.controlHeightSm, padding: '0 8px', boxSizing: 'border-box',
         borderRadius: T.radiusMd,
         border: `1.5px solid ${T.borderInput}`, background: T.surface,
         color: T.text, fontSize: T.fontSm,
@@ -390,7 +390,7 @@ export default function SessionsPage() {
                         disabled={currentPage <= 1}
                         onClick={() => setOffset(Math.max(0, offset - limit))}
                         style={{
-                            height: '32px', padding: '0 14px', boxSizing: 'border-box',
+                            height: T.controlHeightSm, padding: '0 14px', boxSizing: 'border-box',
                             borderRadius: T.radiusMd,
                             border: `1.5px solid ${T.border}`, background: T.surface,
                             color: T.text, fontSize: T.fontSm, fontWeight: 500,
@@ -410,7 +410,7 @@ export default function SessionsPage() {
                         disabled={currentPage >= totalPages}
                         onClick={() => setOffset(offset + limit)}
                         style={{
-                            height: '32px', padding: '0 14px', boxSizing: 'border-box',
+                            height: T.controlHeightSm, padding: '0 14px', boxSizing: 'border-box',
                             borderRadius: T.radiusMd,
                             border: `1.5px solid ${T.border}`, background: T.surface,
                             color: T.text, fontSize: T.fontSm, fontWeight: 500,
