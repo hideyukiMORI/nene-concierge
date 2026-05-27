@@ -27,7 +27,7 @@ Goal: make contribution, AI operation, and NENE2 inheritance unambiguous.
 - Self-review checklists and contributing guide
 - NENE2 consumer scaffold, `GET /health`, OpenAPI baseline, CI
 
-**Status: in progress.**
+**Status: ✅ completed (2026-05-27).**
 
 Milestone: `docs/milestones/2026-05-governance-and-foundation.md`
 
