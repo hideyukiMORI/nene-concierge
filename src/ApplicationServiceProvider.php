@@ -11,10 +11,16 @@ use Nene2\Http\RequestScopedHolder;
 use NeNeConcierge\Auth\AuthRouteRegistrar;
 use NeNeConcierge\Auth\AuthServiceProvider;
 use NeNeConcierge\Auth\InvalidCredentialsExceptionHandler;
+use NeNeConcierge\Engine\EngineExceptionHandler;
+use NeNeConcierge\Engine\EngineRouteRegistrar;
+use NeNeConcierge\Engine\EngineServiceProvider;
 use NeNeConcierge\Organization\OrganizationNotFoundExceptionHandler;
 use NeNeConcierge\Organization\OrganizationRouteRegistrar;
 use NeNeConcierge\Organization\OrganizationServiceProvider;
 use NeNeConcierge\Organization\OrganizationSlugConflictExceptionHandler;
+use NeNeConcierge\Scenario\ScenarioNotFoundExceptionHandler;
+use NeNeConcierge\Scenario\ScenarioRouteRegistrar;
+use NeNeConcierge\Scenario\ScenarioServiceProvider;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -31,7 +37,9 @@ final readonly class ApplicationServiceProvider implements ServiceProviderInterf
     public function register(ContainerBuilder $builder): void
     {
         $builder->addProvider(new AuthServiceProvider());
+        $builder->addProvider(new EngineServiceProvider());
         $builder->addProvider(new OrganizationServiceProvider());
+        $builder->addProvider(new ScenarioServiceProvider());
 
         $builder
             ->set(
@@ -41,9 +49,15 @@ final readonly class ApplicationServiceProvider implements ServiceProviderInterf
             ->set(
                 self::EXCEPTION_HANDLERS,
                 static function (ContainerInterface $c): array {
+                    $engineError        = $c->get(EngineExceptionHandler::class);
                     $invalidCredentials = $c->get(InvalidCredentialsExceptionHandler::class);
                     $orgNotFound        = $c->get(OrganizationNotFoundExceptionHandler::class);
                     $orgSlugConflict    = $c->get(OrganizationSlugConflictExceptionHandler::class);
+                    $scenarioNotFound   = $c->get(ScenarioNotFoundExceptionHandler::class);
+
+                    if (!$engineError instanceof EngineExceptionHandler) {
+                        throw new LogicException('EngineExceptionHandler service is invalid.');
+                    }
 
                     if (!$invalidCredentials instanceof InvalidCredentialsExceptionHandler) {
                         throw new LogicException('InvalidCredentialsExceptionHandler service is invalid.');
@@ -57,24 +71,44 @@ final readonly class ApplicationServiceProvider implements ServiceProviderInterf
                         throw new LogicException('OrganizationSlugConflictExceptionHandler service is invalid.');
                     }
 
-                    return [$invalidCredentials, $orgNotFound, $orgSlugConflict];
+                    if (!$scenarioNotFound instanceof ScenarioNotFoundExceptionHandler) {
+                        throw new LogicException('ScenarioNotFoundExceptionHandler service is invalid.');
+                    }
+
+                    return [
+                        $engineError,
+                        $invalidCredentials,
+                        $orgNotFound,
+                        $orgSlugConflict,
+                        $scenarioNotFound,
+                    ];
                 },
             )
             ->set(
                 self::ROUTE_REGISTRARS,
                 static function (ContainerInterface $c): array {
-                    $auth = $c->get('nene-concierge.route_registrar.auth');
-                    $org  = $c->get(OrganizationRouteRegistrar::class);
+                    $auth    = $c->get('nene-concierge.route_registrar.auth');
+                    $engine  = $c->get(EngineRouteRegistrar::class);
+                    $org     = $c->get(OrganizationRouteRegistrar::class);
+                    $scenario = $c->get(ScenarioRouteRegistrar::class);
 
                     if (!$auth instanceof AuthRouteRegistrar) {
                         throw new LogicException('AuthRouteRegistrar service is invalid.');
+                    }
+
+                    if (!$engine instanceof EngineRouteRegistrar) {
+                        throw new LogicException('EngineRouteRegistrar service is invalid.');
                     }
 
                     if (!$org instanceof OrganizationRouteRegistrar) {
                         throw new LogicException('OrganizationRouteRegistrar service is invalid.');
                     }
 
-                    return [$auth, $org];
+                    if (!$scenario instanceof ScenarioRouteRegistrar) {
+                        throw new LogicException('ScenarioRouteRegistrar service is invalid.');
+                    }
+
+                    return [$auth, $engine, $org, $scenario];
                 },
             );
     }
