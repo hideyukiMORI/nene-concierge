@@ -24895,6 +24895,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "nav.scenarios": "Scenarios",
     "nav.appearance": "Appearance",
     "nav.credentials": "Action Credentials",
+    "nav.settings": "Settings",
     "nav.logout": "Log out",
     // ── Auth ──────────────────────────────────────────────────────────────────
     "auth.appTitle": "NeNe Concierge",
@@ -25003,6 +25004,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     // ── Canvas ────────────────────────────────────────────────────────────────
     "canvas.save": "\u{1F4BE} Save",
     "canvas.saving": "Saving\u2026",
+    // ── Settings ──────────────────────────────────────────────────────────────
+    "settings.pageTitle": "Settings",
+    "settings.adminTheme": "Admin Theme",
     // ── Theme ─────────────────────────────────────────────────────────────────
     "theme.toggleLight": "Switch to light mode",
     "theme.toggleDark": "Switch to dark mode",
@@ -25047,6 +25051,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "nav.scenarios": "\u30B7\u30CA\u30EA\u30AA",
     "nav.appearance": "\u5916\u89B3\u8A2D\u5B9A",
     "nav.credentials": "\u30A2\u30AF\u30B7\u30E7\u30F3\u30AF\u30EC\u30C7\u30F3\u30B7\u30E3\u30EB",
+    "nav.settings": "\u8A2D\u5B9A",
     "nav.logout": "\u30ED\u30B0\u30A2\u30A6\u30C8",
     // ── Auth ──────────────────────────────────────────────────────────────────
     "auth.appTitle": "NeNe Concierge",
@@ -25158,6 +25163,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     // ── Theme ─────────────────────────────────────────────────────────────────
     "theme.toggleLight": "\u30E9\u30A4\u30C8\u30E2\u30FC\u30C9\u306B\u5207\u308A\u66FF\u3048",
     "theme.toggleDark": "\u30C0\u30FC\u30AF\u30E2\u30FC\u30C9\u306B\u5207\u308A\u66FF\u3048",
+    // ── Settings ──────────────────────────────────────────────────────────────
+    "settings.pageTitle": "\u8A2D\u5B9A",
+    "settings.adminTheme": "\u7BA1\u7406\u753B\u9762\u30C6\u30FC\u30DE",
     "theme.label": "\u30C6\u30FC\u30DE"
   };
 
@@ -25191,6 +25199,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "nav.scenarios": "Sc\xE9narios",
     "nav.appearance": "Apparence",
     "nav.credentials": "Identifiants d'action",
+    "nav.settings": "Param\xE8tres",
     "nav.logout": "D\xE9connexion",
     "auth.appTitle": "NeNe Concierge",
     "auth.subtitle": "Connexion \xE0 l'administration",
@@ -25266,6 +25275,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     // ── Theme ─────────────────────────────────────────────────────────────────
     "theme.toggleLight": "Passer en mode clair",
     "theme.toggleDark": "Passer en mode sombre",
+    // ── Settings ──────────────────────────────────────────────────────────────
+    "settings.pageTitle": "Param\xE8tres",
+    "settings.adminTheme": "Th\xE8me d'administration",
     "theme.label": "Th\xE8me"
   };
 
@@ -25299,6 +25311,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "nav.scenarios": "\u573A\u666F",
     "nav.appearance": "\u5916\u89C2",
     "nav.credentials": "\u64CD\u4F5C\u51ED\u8BC1",
+    "nav.settings": "\u8BBE\u7F6E",
     "nav.logout": "\u9000\u51FA\u767B\u5F55",
     "auth.appTitle": "NeNe Concierge",
     "auth.subtitle": "\u767B\u5F55\u7BA1\u7406\u540E\u53F0",
@@ -25374,6 +25387,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     // ── Theme ─────────────────────────────────────────────────────────────────
     "theme.toggleLight": "\u5207\u6362\u5230\u6D45\u8272\u6A21\u5F0F",
     "theme.toggleDark": "\u5207\u6362\u5230\u6DF1\u8272\u6A21\u5F0F",
+    // ── Settings ──────────────────────────────────────────────────────────────
+    "settings.pageTitle": "\u8BBE\u7F6E",
+    "settings.adminTheme": "\u7BA1\u7406\u754C\u9762\u4E3B\u9898",
     "theme.label": "\u4E3B\u9898"
   };
 
@@ -25407,6 +25423,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "nav.scenarios": "Cen\xE1rios",
     "nav.appearance": "Apar\xEAncia",
     "nav.credentials": "Credenciais de a\xE7\xE3o",
+    "nav.settings": "Configura\xE7\xF5es",
     "nav.logout": "Sair",
     "auth.appTitle": "NeNe Concierge",
     "auth.subtitle": "Entrar na administra\xE7\xE3o",
@@ -25482,6 +25499,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     // ── Theme ─────────────────────────────────────────────────────────────────
     "theme.toggleLight": "Mudar para modo claro",
     "theme.toggleDark": "Mudar para modo escuro",
+    // ── Settings ──────────────────────────────────────────────────────────────
+    "settings.pageTitle": "Configura\xE7\xF5es",
+    "settings.adminTheme": "Tema do painel",
     "theme.label": "Tema"
   };
 
@@ -25515,6 +25535,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "nav.scenarios": "Szenarien",
     "nav.appearance": "Erscheinungsbild",
     "nav.credentials": "Aktions-Zugangsdaten",
+    "nav.settings": "Einstellungen",
     "nav.logout": "Abmelden",
     "auth.appTitle": "NeNe Concierge",
     "auth.subtitle": "Anmeldung f\xFCr die Verwaltung",
@@ -25590,6 +25611,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     // ── Theme ─────────────────────────────────────────────────────────────────
     "theme.toggleLight": "Zum hellen Modus wechseln",
     "theme.toggleDark": "Zum dunklen Modus wechseln",
+    // ── Settings ──────────────────────────────────────────────────────────────
+    "settings.pageTitle": "Einstellungen",
+    "settings.adminTheme": "Admin-Design",
     "theme.label": "Design"
   };
 
@@ -25700,69 +25724,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       }
     );
   }
-  function ThemeSwatch({ def, isSelected, currentVariant, onSelect }) {
-    const displayVariant = isSelected ? currentVariant : def.variants[0];
-    const preview = def.preview[displayVariant];
-    if (!preview) return null;
-    return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { title: def.name, style: { position: "relative" }, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
-      "button",
-      {
-        onClick: () => onSelect(def.id),
-        "aria-pressed": isSelected,
-        style: {
-          width: 36,
-          height: 30,
-          borderRadius: T.radiusMd,
-          border: isSelected ? `2px solid ${T.primary}` : `2px solid transparent`,
-          overflow: "hidden",
-          cursor: "pointer",
-          padding: 0,
-          outline: "none",
-          display: "flex",
-          transition: "border-color 0.12s"
-        },
-        onMouseEnter: (e) => {
-          if (!isSelected) e.currentTarget.style.borderColor = T.sidebarText;
-        },
-        onMouseLeave: (e) => {
-          if (!isSelected) e.currentTarget.style.borderColor = "transparent";
-        },
-        children: [
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("span", { style: {
-            width: 10,
-            height: "100%",
-            background: preview.sidebar,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            paddingTop: 5,
-            gap: 2
-          }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: { width: 5, height: 1, borderRadius: 1, background: preview.accent, opacity: 0.9 } }),
-            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: { width: 5, height: 1, borderRadius: 1, background: preview.accent, opacity: 0.4 } }),
-            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: { width: 5, height: 1, borderRadius: 1, background: preview.accent, opacity: 0.4 } })
-          ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("span", { style: {
-            flex: 1,
-            background: preview.surface,
-            height: "100%",
-            display: "flex",
-            flexDirection: "column",
-            padding: "4px 3px",
-            gap: 2
-          }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: { width: "70%", height: 2, borderRadius: 1, background: preview.accent } }),
-            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: { width: "100%", height: 1, borderRadius: 1, background: preview.sidebar, opacity: 0.15 } }),
-            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: { width: "80%", height: 1, borderRadius: 1, background: preview.sidebar, opacity: 0.15 } })
-          ] })
-        ]
-      }
-    ) });
-  }
   function Layout() {
     const nav = useNavigate();
     const { t, locale, setLocale } = useTranslation();
-    const { adminThemeId, themeVariant: themeVariant2, setAdminTheme, toggleVariant, canToggleVariant: canToggleVariant2 } = useTheme();
+    const { themeVariant: themeVariant2, toggleVariant, canToggleVariant: canToggleVariant2 } = useTheme();
     function logout() {
       clearToken();
       nav("/");
@@ -25815,55 +25780,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("nav", { style: { flex: 1, padding: "12px 8px" }, "aria-label": "Main", children: [
           /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/scenarios", label: t("nav.scenarios") }),
           /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/appearance", label: t("nav.appearance") }),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/credentials", label: t("nav.credentials") })
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/credentials", label: t("nav.credentials") }),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/settings", label: t("nav.settings") })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { style: {
           flexShrink: 0,
-          padding: "10px 10px 0",
-          borderTop: `1px solid ${T.sidebarBorder}`
-        }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { style: {
-            display: "flex",
-            alignItems: "center",
-            gap: 6,
-            marginBottom: 8
-          }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: { fontSize: T.fontXs, color: T.sidebarMuted, flex: 1 }, children: t("theme.label") }),
-            canToggleVariant2 && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-              "button",
-              {
-                onClick: toggleVariant,
-                "aria-label": themeVariant2 === "dark" ? t("theme.toggleLight") : t("theme.toggleDark"),
-                title: themeVariant2 === "dark" ? t("theme.toggleLight") : t("theme.toggleDark"),
-                style: {
-                  background: T.sidebarActive,
-                  border: `1px solid ${T.sidebarBorder}`,
-                  color: T.sidebarText,
-                  padding: "3px 6px",
-                  borderRadius: T.radiusSm,
-                  cursor: "pointer",
-                  fontSize: 12,
-                  lineHeight: 1,
-                  transition: "background 0.12s"
-                },
-                children: themeVariant2 === "dark" ? "\u2600" : "\u{1F319}"
-              }
-            )
-          ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { style: { display: "flex", gap: 5, marginBottom: 10 }, children: ADMIN_THEME_DEFS.map((def) => /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-            ThemeSwatch,
-            {
-              def,
-              isSelected: def.id === adminThemeId,
-              currentVariant: themeVariant2,
-              onSelect: setAdminTheme
-            },
-            def.id
-          )) })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { style: {
-          flexShrink: 0,
-          padding: "0 10px 12px",
+          padding: "10px 10px 12px",
+          borderTop: `1px solid ${T.sidebarBorder}`,
           display: "flex",
           alignItems: "center",
           gap: 6
@@ -25887,6 +25810,27 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 outline: "none"
               },
               children: SUPPORTED_LOCALE_IDS.map((id2) => /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("option", { value: id2, children: LOCALES[id2].label }, id2))
+            }
+          ),
+          canToggleVariant2 && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+            "button",
+            {
+              onClick: toggleVariant,
+              "aria-label": themeVariant2 === "dark" ? t("theme.toggleLight") : t("theme.toggleDark"),
+              title: themeVariant2 === "dark" ? t("theme.toggleLight") : t("theme.toggleDark"),
+              style: {
+                flexShrink: 0,
+                background: T.sidebarActive,
+                border: `1px solid ${T.sidebarBorder}`,
+                color: T.sidebarText,
+                padding: "6px 8px",
+                borderRadius: T.radiusMd,
+                cursor: "pointer",
+                fontSize: 14,
+                lineHeight: 1,
+                transition: "background 0.12s"
+              },
+              children: themeVariant2 === "dark" ? "\u2600" : "\u{1F319}"
             }
           ),
           /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
@@ -36344,28 +36288,157 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     ] });
   }
 
-  // src/admin/App.tsx
+  // src/admin/components/SettingsPage.tsx
   var import_jsx_runtime13 = __toESM(require_jsx_runtime());
+  function ThemeCard({ def, isSelected, currentVariant, onSelect, onToggle }) {
+    const { t } = useTranslation();
+    const displayVariant = isSelected ? currentVariant : def.variants[0];
+    const preview = def.preview[displayVariant];
+    if (!preview) return null;
+    return /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(
+      "div",
+      {
+        role: "button",
+        tabIndex: 0,
+        "aria-pressed": isSelected,
+        onClick: () => onSelect(def.id),
+        onKeyDown: (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            onSelect(def.id);
+          }
+        },
+        style: {
+          borderRadius: T.radiusMd,
+          border: `2px solid ${isSelected ? T.primary : T.border}`,
+          cursor: "pointer",
+          overflow: "hidden",
+          transition: "border-color 0.12s",
+          outline: "none"
+        },
+        onMouseEnter: (e) => {
+          if (!isSelected) e.currentTarget.style.borderColor = T.primaryMuted;
+        },
+        onMouseLeave: (e) => {
+          if (!isSelected) e.currentTarget.style.borderColor = T.border;
+        },
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: {
+            display: "flex",
+            height: 56,
+            borderBottom: `1px solid ${T.border}`,
+            overflow: "hidden"
+          }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: {
+              width: 28,
+              background: preview.sidebar,
+              flexShrink: 0,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              paddingTop: 8,
+              gap: 3
+            }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { style: { width: 14, height: 2, borderRadius: 2, background: preview.accent, opacity: 0.9 } }),
+              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { style: { width: 14, height: 2, borderRadius: 2, background: preview.accent, opacity: 0.35 } }),
+              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { style: { width: 14, height: 2, borderRadius: 2, background: preview.accent, opacity: 0.35 } })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: {
+              flex: 1,
+              background: preview.surface,
+              padding: "8px 10px"
+            }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { width: "60%", height: 3, borderRadius: 2, background: preview.accent, marginBottom: 6 } }),
+              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { width: "100%", height: 2, borderRadius: 2, background: preview.sidebar, opacity: 0.12, marginBottom: 3 } }),
+              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { width: "75%", height: 2, borderRadius: 2, background: preview.sidebar, opacity: 0.12 } })
+            ] })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: {
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: "6px 10px",
+            background: T.surface
+          }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { style: { fontSize: T.fontSm, fontWeight: isSelected ? 600 : 400, color: T.text }, children: def.name }),
+            isSelected && def.variants.length > 1 && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+              "button",
+              {
+                type: "button",
+                onClick: (e) => {
+                  e.stopPropagation();
+                  onToggle();
+                },
+                "aria-label": currentVariant === "dark" ? t("theme.toggleLight") : t("theme.toggleDark"),
+                title: currentVariant === "dark" ? t("theme.toggleLight") : t("theme.toggleDark"),
+                style: {
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  color: T.textMuted,
+                  padding: "2px 4px",
+                  borderRadius: T.radiusSm,
+                  fontSize: 14,
+                  lineHeight: 1,
+                  transition: "color 0.12s"
+                },
+                children: currentVariant === "dark" ? "\u2600" : "\u{1F319}"
+              }
+            )
+          ] })
+        ]
+      }
+    );
+  }
+  function SettingsPage() {
+    const { t } = useTranslation();
+    const { adminThemeId, themeVariant: themeVariant2, setAdminTheme, toggleVariant } = useTheme();
+    return /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(PageTitle, { children: t("settings.pageTitle") }),
+      /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(Card, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("h2", { style: { fontSize: T.fontLg, fontWeight: 700, marginBottom: 16, color: T.textStrong }, children: t("settings.adminTheme") }),
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: {
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))",
+          gap: 12
+        }, children: ADMIN_THEME_DEFS.map((def) => /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+          ThemeCard,
+          {
+            def,
+            isSelected: def.id === adminThemeId,
+            currentVariant: themeVariant2,
+            onSelect: (id2) => setAdminTheme(id2),
+            onToggle: toggleVariant
+          },
+          def.id
+        )) })
+      ] })
+    ] });
+  }
+
+  // src/admin/App.tsx
+  var import_jsx_runtime14 = __toESM(require_jsx_runtime());
   function RequireAuth() {
-    if (!isAuthenticated()) return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Navigate, { to: "/", replace: true });
-    return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Outlet, {});
+    if (!isAuthenticated()) return /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Navigate, { to: "/", replace: true });
+    return /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Outlet, {});
   }
   function App() {
-    return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(ThemeProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(BrowserRouter, { basename: "/admin", children: /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(Routes, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Route, { index: true, element: isAuthenticated() ? /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Navigate, { to: "/scenarios", replace: true }) : /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(LoginPage, {}) }),
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Route, { element: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(RequireAuth, {}), children: /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(Route, { element: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Layout, {}), children: [
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Route, { path: "scenarios", element: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(ScenariosPage, {}) }),
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Route, { path: "scenarios/new", element: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(ScenarioFormPage, {}) }),
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Route, { path: "scenarios/:id", element: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(ScenarioFormPage, {}) }),
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Route, { path: "appearance", element: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(AppearancePage, {}) }),
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Route, { path: "credentials", element: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(CredentialsPage, {}) })
+    return /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(ThemeProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(BrowserRouter, { basename: "/admin", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(Routes, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Route, { index: true, element: isAuthenticated() ? /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Navigate, { to: "/scenarios", replace: true }) : /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(LoginPage, {}) }),
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Route, { element: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(RequireAuth, {}), children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(Route, { element: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Layout, {}), children: [
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Route, { path: "scenarios", element: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(ScenariosPage, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Route, { path: "scenarios/new", element: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(ScenarioFormPage, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Route, { path: "scenarios/:id", element: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(ScenarioFormPage, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Route, { path: "appearance", element: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(AppearancePage, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Route, { path: "credentials", element: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(CredentialsPage, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Route, { path: "settings", element: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(SettingsPage, {}) })
       ] }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Route, { path: "*", element: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Navigate, { to: "/", replace: true }) })
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Route, { path: "*", element: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Navigate, { to: "/", replace: true }) })
     ] }) }) });
   }
 
   // src/admin/index.tsx
-  var import_jsx_runtime14 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime15 = __toESM(require_jsx_runtime());
   var storedLocale = (() => {
     try {
       return localStorage.getItem("nca-locale") ?? navigator.language;
@@ -36381,7 +36454,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var container = document.getElementById("root");
   if (!container) throw new Error("Root element #root not found");
   (0, import_client.createRoot)(container).render(
-    /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_react13.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(I18nProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(App, {}) }) })
+    /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(import_react13.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(I18nProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(App, {}) }) })
   );
 })();
 /*! Bundled license information:
