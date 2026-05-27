@@ -1,6 +1,8 @@
 import { Link, Outlet, useLocation, useNavigate } from 'react-router';
 import { clearToken } from '../auth.js';
 import { T } from '../theme.js';
+import { useTranslation, LOCALES, SUPPORTED_LOCALE_IDS } from '../i18n/index.js';
+import type { SupportedLocale } from '../i18n/index.js';
 
 const S = {
     shell:   { display:'flex', minHeight:'100vh' },
@@ -15,14 +17,8 @@ const S = {
     },
     nav:    { flex: 1, padding: '12px 0' },
     main:   { flex: 1, padding: '32px 40px', overflowY: 'auto' as const },
-    footer: { padding: '16px', borderTop: `1px solid ${T.sidebarBorder}` },
+    footer: { padding: '12px 16px', borderTop: `1px solid ${T.sidebarBorder}` },
 };
-
-const navItems = [
-    { to: '/scenarios',    label: 'シナリオ' },
-    { to: '/appearance',   label: '外観設定' },
-    { to: '/credentials',  label: 'アクションクレデンシャル' },
-];
 
 function NavLink({ to, label }: { to: string; label: string }) {
     const loc    = useLocation();
@@ -43,25 +39,48 @@ function NavLink({ to, label }: { to: string; label: string }) {
 
 export default function Layout() {
     const nav = useNavigate();
+    const { t, locale, setLocale } = useTranslation();
+
     function logout() {
         clearToken();
         nav('/');
     }
+
     return (
         <div style={S.shell}>
             <aside style={S.sidebar}>
-                <div style={S.logo}>NeNe Concierge</div>
+                <div style={S.logo}>{t('nav.brand')}</div>
                 <nav style={S.nav}>
-                    {navItems.map(i => <NavLink key={i.to} {...i} />)}
+                    <NavLink to="/scenarios"   label={t('nav.scenarios')} />
+                    <NavLink to="/appearance"  label={t('nav.appearance')} />
+                    <NavLink to="/credentials" label={t('nav.credentials')} />
                 </nav>
                 <div style={S.footer}>
+                    {/* ロケールセレクタ */}
+                    <select
+                        value={locale}
+                        onChange={e => setLocale(e.target.value as SupportedLocale)}
+                        style={{
+                            width: '100%', marginBottom: 8,
+                            padding: '5px 8px', borderRadius: T.radiusSm,
+                            border: `1px solid ${T.sidebarBorder}`,
+                            background: T.sidebarActive, color: T.sidebarText,
+                            fontSize: T.fontSm, cursor: 'pointer',
+                        }}
+                        aria-label="Language"
+                    >
+                        {SUPPORTED_LOCALE_IDS.map(id => (
+                            <option key={id} value={id}>{LOCALES[id].label}</option>
+                        ))}
+                    </select>
+                    {/* ログアウト */}
                     <button onClick={logout} style={{
                         background: 'none', border: `1px solid ${T.sidebarBorder}`,
                         color: T.sidebarMuted, padding: '6px 12px',
                         borderRadius: T.radiusSm, cursor: 'pointer',
                         fontSize: T.fontBase, width: '100%',
                     }}>
-                        ログアウト
+                        {t('nav.logout')}
                     </button>
                 </div>
             </aside>
@@ -118,17 +137,23 @@ export function Btn({
 
 export function Badge({ status }: { status: 'draft' | 'published' | 'archived' }) {
     const cfg = {
-        draft:     { bg: T.badgeDraftBg, color: T.badgeDraftColor, label: 'ドラフト' },
-        published: { bg: T.badgePubBg,   color: T.badgePubColor,   label: '公開中' },
-        archived:  { bg: T.badgeArchBg,  color: T.badgeArchColor,  label: 'アーカイブ' },
+        draft:     { bg: T.badgeDraftBg, color: T.badgeDraftColor },
+        published: { bg: T.badgePubBg,   color: T.badgePubColor   },
+        archived:  { bg: T.badgeArchBg,  color: T.badgeArchColor  },
     } as const;
-    const { bg, color, label } = cfg[status];
+    const { t } = useTranslation();
+    const labels = {
+        draft:     t('scenario.status.draft'),
+        published: t('scenario.status.published'),
+        archived:  t('scenario.status.archived'),
+    };
+    const { bg, color } = cfg[status];
     return (
         <span style={{
             background: bg, color, padding: '2px 10px',
             borderRadius: T.radiusXl, fontSize: T.fontSm, fontWeight: 600,
         }}>
-            {label}
+            {labels[status]}
         </span>
     );
 }

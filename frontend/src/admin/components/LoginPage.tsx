@@ -4,9 +4,11 @@ import { login, ApiError } from '../api.js';
 import { setToken } from '../auth.js';
 import { Btn, ErrorMsg, Field } from './Layout.js';
 import { T } from '../theme.js';
+import { useTranslation } from '../i18n/index.js';
 
 export default function LoginPage() {
     const nav = useNavigate();
+    const { t } = useTranslation();
     const [email, setEmail]       = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading]   = useState(false);
@@ -21,7 +23,7 @@ export default function LoginPage() {
             setToken(res.token);
             nav('/scenarios');
         } catch (err) {
-            setError(err instanceof ApiError ? err.message : 'ログインに失敗しました。');
+            setError(err instanceof ApiError ? err.message : t('auth.error'));
         } finally {
             setLoading(false);
         }
@@ -40,23 +42,23 @@ export default function LoginPage() {
                 border: `1px solid ${T.border}`,
             }}>
                 <h1 style={{ fontSize: T.font2xl, fontWeight: 700, marginBottom: 8 }}>
-                    NeNe Concierge
+                    {t('auth.appTitle')}
                 </h1>
                 <p style={{ color: T.textMuted, marginBottom: 28, fontSize: T.fontMd }}>
-                    管理画面にログイン
+                    {t('auth.subtitle')}
                 </p>
                 <ErrorMsg msg={error} />
                 <form onSubmit={e => { void handleSubmit(e); }}>
                     <Field
-                        label="メールアドレス" type="email" value={email}
-                        onChange={setEmail} required placeholder="admin@example.com"
+                        label={t('auth.emailLabel')} type="email" value={email}
+                        onChange={setEmail} required placeholder={t('auth.emailPlaceholder')}
                     />
                     <Field
-                        label="パスワード" type="password" value={password}
-                        onChange={setPassword} required placeholder="••••••••"
+                        label={t('auth.passwordLabel')} type="password" value={password}
+                        onChange={setPassword} required placeholder={t('auth.pwPlaceholder')}
                     />
                     <Btn type="submit" disabled={loading} style={{ width: '100%', padding: '10px' }}>
-                        {loading ? 'ログイン中…' : 'ログイン'}
+                        {loading ? t('auth.signingIn') : t('auth.signIn')}
                     </Btn>
                 </form>
             </div>

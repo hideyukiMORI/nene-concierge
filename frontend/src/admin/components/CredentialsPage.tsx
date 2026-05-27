@@ -5,13 +5,7 @@ import {
 } from '../api.js';
 import { PageTitle, Card, Btn, ErrorMsg, Field, Select } from './Layout.js';
 import { T } from '../theme.js';
-
-const ADAPTER_OPTIONS = [
-    { value: 'http',     label: 'HTTP（外部 API）' },
-    { value: 'email',    label: 'Email' },
-    { value: 'slack',    label: 'Slack' },
-    { value: 'chatwork', label: 'Chatwork' },
-];
+import { useTranslation } from '../i18n/index.js';
 
 // アダプター固有のセマンティックカラー（ブランドカラーはテーマに含めない）
 const ADAPTER_COLORS: Record<string, { bg: string; color: string }> = {
@@ -34,6 +28,7 @@ function AdapterBadge({ adapter }: { adapter: string }) {
 }
 
 export default function CredentialsPage() {
+    const { t } = useTranslation();
     const [creds, setCreds]       = useState<CredentialSummary[]>([]);
     const [loading, setLoading]   = useState(true);
     const [error, setError]       = useState<string | null>(null);
@@ -42,6 +37,13 @@ export default function CredentialsPage() {
     const [adapter, setAdapter]   = useState('http');
     const [saving, setSaving]     = useState(false);
 
+    const adapterOptions = [
+        { value: 'http',     label: t('credentials.adapter.http')     },
+        { value: 'email',    label: t('credentials.adapter.email')    },
+        { value: 'slack',    label: t('credentials.adapter.slack')    },
+        { value: 'chatwork', label: t('credentials.adapter.chatwork') },
+    ];
+
     async function load() {
         setLoading(true);
         setError(null);
@@ -49,7 +51,7 @@ export default function CredentialsPage() {
             const res = await listCredentials();
             setCreds(res.data);
         } catch (err) {
-            setError(err instanceof ApiError ? err.message : '取得に失敗しました。');
+            setError(err instanceof ApiError ? err.message : t('credentials.loadError'));
         } finally {
             setLoading(false);
         }
@@ -68,50 +70,58 @@ export default function CredentialsPage() {
             setShowForm(false);
             await load();
         } catch (err) {
-            setError(err instanceof ApiError ? err.message : '作成に失敗しました。');
+            setError(err instanceof ApiError ? err.message : t('credentials.saveError'));
         } finally {
             setSaving(false);
         }
     }
 
     async function handleDelete(id: number, credName: string) {
-        if (!confirm(`「${credName}」を削除しますか？`)) return;
+        if (!confirm(t('credentials.confirmDelete', { name: credName }))) return;
         try {
             await deleteCredential(id);
             setCreds(prev => prev.filter(c => c.id !== id));
         } catch (err) {
-            alert(err instanceof ApiError ? err.message : '削除に失敗しました。');
+            alert(err instanceof ApiError ? err.message : t('credentials.deleteError'));
         }
     }
 
     return (
         <div>
             <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:24 }}>
-                <PageTitle>アクションクレデンシャル</PageTitle>
+                <PageTitle>{t('credentials.pageTitle')}</PageTitle>
                 <Btn onClick={() => setShowForm(v => !v)}>
-                    {showForm ? 'キャンセル' : '＋ 追加'}
+                    {showForm ? t('common.cancel') : t('common.add')}
                 </Btn>
             </div>
             <ErrorMsg msg={error} />
             {showForm && (
                 <Card style={{ marginBottom:24 }}>
-                    <h2 style={{ fontWeight:700, marginBottom:16, fontSize: T.fontLg }}>新規クレデンシャル</h2>
+                    <h2 style={{ fontWeight:700, marginBottom:16, fontSize: T.fontLg }}>{t('credentials.newTitle')}</h2>
                     <form onSubmit={e => { void handleCreate(e); }}>
-                        <Field label="名前" value={name} onChange={setName} required placeholder="例: Slack 通知 webhook" />
-                        <Select label="アダプター" value={adapter} onChange={setAdapter} options={ADAPTER_OPTIONS} />
+                        <Field
+                            label={t('credentials.nameLabel')} value={name} onChange={setName}
+                            required placeholder={t('credentials.namePlaceholder')}
+                        />
+                        <Select
+                            label={t('credentials.adapterLabel')} value={adapter}
+                            onChange={setAdapter} options={adapterOptions}
+                        />
                         <p style={{ color: T.textMuted, fontSize: T.fontSm, marginBottom:16 }}>
-                            ※ 機密設定（URL・トークン等）は作成後に API で別途更新してください。
+                            {t('credentials.secretHint')}
                         </p>
-                        <Btn type="submit" disabled={saving}>{saving ? '作成中…' : '作成'}</Btn>
+                        <Btn type="submit" disabled={saving}>
+                            {saving ? t('common.creating') : t('common.create')}
+                        </Btn>
                     </form>
                 </Card>
             )}
             {loading ? (
-                <p style={{ color: T.textMuted }}>読み込み中…</p>
+                <p style={{ color: T.textMuted }}>{t('common.loading')}</p>
             ) : creds.length === 0 ? (
                 <Card>
                     <p style={{ color: T.textMuted, textAlign:'center', padding:'40px 0' }}>
-                        クレデンシャルがありません。
+                        {t('credentials.empty')}
                     </p>
                 </Card>
             ) : (
@@ -119,7 +129,13 @@ export default function CredentialsPage() {
                     <table style={{ width:'100%', borderCollapse:'collapse' }}>
                         <thead>
                             <tr style={{ borderBottom: `1px solid ${T.borderLight}`, background: T.tableHeader }}>
-                                {['ID','名前','アダプター','作成日','操作'].map(h => (
+                                {[
+                                    t('common.id'),
+                                    t('common.name'),
+                                    t('credentials.adapterLabel'),
+                                    t('common.createdAt'),
+                                    t('common.actions'),
+                                ].map(h => (
                                     <th key={h} style={{
                                         padding:'10px 16px', textAlign:'left',
                                         fontSize: T.fontSm, fontWeight:600, color: T.textMuted,
@@ -137,7 +153,9 @@ export default function CredentialsPage() {
                                         {c.created_at ? c.created_at.slice(0, 10) : '—'}
                                     </td>
                                     <td style={{ padding:'12px 16px' }}>
-                                        <Btn variant="danger" onClick={() => void handleDelete(c.id, c.name)}>削除</Btn>
+                                        <Btn variant="danger" onClick={() => void handleDelete(c.id, c.name)}>
+                                            {t('common.delete')}
+                                        </Btn>
                                     </td>
                                 </tr>
                             ))}

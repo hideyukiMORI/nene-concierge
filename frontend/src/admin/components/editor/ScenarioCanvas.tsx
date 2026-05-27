@@ -16,9 +16,10 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import type { ScenarioNode, ScenarioEdge, CredentialSummary, ChatNodeType } from '../../api.js';
-import { NODE_COLORS, NODE_ICONS, NODE_LABELS, MessageNode, ConditionNode, ActionNode, EndNode } from './NodeTypes.js';
+import { NODE_COLORS, NODE_ICONS, MessageNode, ConditionNode, ActionNode, EndNode } from './NodeTypes.js';
 import NodeConfigPanel from './NodeConfigPanel.js';
 import { T } from '../../theme.js';
+import { useTranslation } from '../../i18n/index.js';
 
 // ── React Flow ノードタイプ登録 ───────────────────────────────────────────────
 
@@ -83,6 +84,7 @@ interface Props {
 // ── コンポーネント ──────────────────────────────────────────────────────────────
 
 export default function ScenarioCanvas({ initialNodes, initialEdges, credentials, saving, onSave }: Props) {
+    const { t } = useTranslation();
     const [nodes, setNodes, onNodesChange] = useNodesState<Node>(initialNodes.map(apiNodeToRF));
     const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>(initialEdges.map(apiEdgeToRF));
     const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
@@ -108,11 +110,12 @@ export default function ScenarioCanvas({ initialNodes, initialEdges, credentials
             action:    { action_type: 'http', credential_id: undefined },
             end:       { outcome: 'completed' },
         };
+        const defaultLabel = t(`node.type.${type}` as Parameters<typeof t>[0]);
         const newNode: Node = {
             id,
             type,
             position: { x: 100 + Math.random() * 200, y: 80 + Math.random() * 200 },
-            data:     { label: NODE_LABELS[type], ...defaults[type] },
+            data:     { label: defaultLabel, ...defaults[type] },
         };
         setNodes(nds => [...nds, newNode]);
         setSelectedNodeId(id);
@@ -177,11 +180,12 @@ export default function ScenarioCanvas({ initialNodes, initialEdges, credentials
                         }}>
                             {(['message', 'condition', 'action', 'end'] as ChatNodeType[]).map(type => {
                                 const c = NODE_COLORS[type];
+                                const label = t(`node.type.${type}` as Parameters<typeof t>[0]);
                                 return (
                                     <button
                                         key={type}
                                         onClick={() => addNode(type)}
-                                        title={`${NODE_LABELS[type]}ノードを追加`}
+                                        title={t('node.addToCanvas', { type: label })}
                                         style={{
                                             display: 'flex', alignItems: 'center', gap: 5,
                                             padding: '6px 10px', borderRadius: T.radiusMd,
@@ -190,7 +194,7 @@ export default function ScenarioCanvas({ initialNodes, initialEdges, credentials
                                             cursor: 'pointer',
                                         }}
                                     >
-                                        {NODE_ICONS[type]} {NODE_LABELS[type]}
+                                        {NODE_ICONS[type]} {label}
                                     </button>
                                 );
                             })}
@@ -211,7 +215,7 @@ export default function ScenarioCanvas({ initialNodes, initialEdges, credentials
                                 boxShadow: '0 2px 6px rgba(37,99,235,.35)',
                             }}
                         >
-                            {saving ? '保存中…' : '💾 保存'}
+                            {saving ? t('canvas.saving') : t('canvas.save')}
                         </button>
                     </Panel>
                 </ReactFlow>
