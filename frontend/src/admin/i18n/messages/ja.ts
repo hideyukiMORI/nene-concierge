@@ -40,6 +40,7 @@ export const ja: Partial<MessageCatalog> = {
     'nav.scenarios':   'シナリオ',
     'nav.appearance':  '外観設定',
     'nav.credentials': 'アクションクレデンシャル',
+    'nav.settings':    '設定',
     'nav.logout':      'ログアウト',
 
     // ── Auth ──────────────────────────────────────────────────────────────────
@@ -170,5 +171,9 @@ export const ja: Partial<MessageCatalog> = {
     // ── Theme ─────────────────────────────────────────────────────────────────
     'theme.toggleLight': 'ライトモードに切り替え',
     'theme.toggleDark':  'ダークモードに切り替え',
+    // ── Settings ──────────────────────────────────────────────────────────────
+    'settings.pageTitle':  '設定',
+    'settings.adminTheme': '管理画面テーマ',
+
     'theme.label':       'テーマ',
 }

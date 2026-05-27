@@ -32,6 +32,7 @@ export const fr: Partial<MessageCatalog> = {
     'nav.scenarios':   'Scénarios',
     'nav.appearance':  'Apparence',
     'nav.credentials': "Identifiants d'action",
+    'nav.settings':    'Paramètres',
     'nav.logout':      'Déconnexion',
 
     'auth.appTitle':      'NeNe Concierge',
@@ -120,5 +121,9 @@ export const fr: Partial<MessageCatalog> = {
     // ── Theme ─────────────────────────────────────────────────────────────────
     'theme.toggleLight': 'Passer en mode clair',
     'theme.toggleDark':  'Passer en mode sombre',
+    // ── Settings ──────────────────────────────────────────────────────────────
+    'settings.pageTitle':  'Paramètres',
+    'settings.adminTheme': "Thème d'administration",
+
     'theme.label':       'Thème',
 }

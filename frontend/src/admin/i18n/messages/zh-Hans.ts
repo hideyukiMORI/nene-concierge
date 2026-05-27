@@ -32,6 +32,7 @@ export const zhHans: Partial<MessageCatalog> = {
     'nav.scenarios':   '场景',
     'nav.appearance':  '外观',
     'nav.credentials': '操作凭证',
+    'nav.settings':    '设置',
     'nav.logout':      '退出登录',
 
     'auth.appTitle':      'NeNe Concierge',
@@ -120,5 +121,9 @@ export const zhHans: Partial<MessageCatalog> = {
     // ── Theme ─────────────────────────────────────────────────────────────────
     'theme.toggleLight': '切换到浅色模式',
     'theme.toggleDark':  '切换到深色模式',
+    // ── Settings ──────────────────────────────────────────────────────────────
+    'settings.pageTitle':  '设置',
+    'settings.adminTheme': '管理界面主题',
+
     'theme.label':       '主题',
 }

@@ -47,6 +47,7 @@ export const en = {
     'nav.scenarios':   'Scenarios',
     'nav.appearance':  'Appearance',
     'nav.credentials': 'Action Credentials',
+    'nav.settings':    'Settings',
     'nav.logout':      'Log out',
 
     // ── Auth ──────────────────────────────────────────────────────────────────
@@ -172,6 +173,10 @@ export const en = {
     // ── Canvas ────────────────────────────────────────────────────────────────
     'canvas.save':   '💾 Save',
     'canvas.saving': 'Saving…',
+
+    // ── Settings ──────────────────────────────────────────────────────────────
+    'settings.pageTitle':  'Settings',
+    'settings.adminTheme': 'Admin Theme',
 
     // ── Theme ─────────────────────────────────────────────────────────────────
     'theme.toggleLight': 'Switch to light mode',
