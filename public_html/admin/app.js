@@ -39047,7 +39047,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ] })
     ] });
   }
-  var ScenarioCanvas = (0, import_react14.forwardRef)(function ScenarioCanvas2({ scenarioId, initialNodes, initialEdges, credentials, onSave, analyticsMode, onLiveNodeCount }, ref) {
+  var ScenarioCanvas = (0, import_react14.forwardRef)(function ScenarioCanvas2({ scenarioId, initialNodes, initialEdges, credentials, onSave, analyticsMode, onLiveNodeCount, onLiveStateChange }, ref) {
     const { t } = useTranslation();
     const { isMobile } = useLayout();
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes.map(apiNodeToRF));
@@ -39058,6 +39058,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     (0, import_react14.useEffect)(() => {
       onLiveNodeCount?.(nodes.length);
     }, [nodes.length, onLiveNodeCount]);
+    (0, import_react14.useEffect)(() => {
+      onLiveStateChange?.(nodes.map(rfNodeToApi), edges.map(rfEdgeToApi));
+    }, [nodes, edges, onLiveStateChange]);
     const [period, setPeriod] = (0, import_react14.useState)("7d");
     const [analyticsReport, setAnalyticsReport] = (0, import_react14.useState)(null);
     const [analyticsLoading, setAnalyticsLoading] = (0, import_react14.useState)(false);
@@ -39583,6 +39586,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const [error, setError] = (0, import_react15.useState)(null);
     const [savedMsg, setSavedMsg] = (0, import_react15.useState)("");
     const canvasRef = (0, import_react15.useRef)(null);
+    const liveStateRef = (0, import_react15.useRef)(null);
     const [editingName, setEditingName] = (0, import_react15.useState)(isNew);
     const [draftName, setDraftName] = (0, import_react15.useState)("");
     const nameInputRef = (0, import_react15.useRef)(null);
@@ -39591,6 +39595,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const [showDetails, setShowDetails] = (0, import_react15.useState)(isNew);
     const [analyticsMode, setAnalyticsMode] = (0, import_react15.useState)(false);
     (0, import_react15.useEffect)(() => {
+      liveStateRef.current = null;
       void listCredentials().then((r) => setCredentials(r.data)).catch(() => {
       });
       if (isNew) {
@@ -39984,12 +39989,15 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           {
             ref: canvasRef,
             scenarioId: Number(id2),
-            initialNodes: nodes,
-            initialEdges: edges,
+            initialNodes: liveStateRef.current?.nodes ?? nodes,
+            initialEdges: liveStateRef.current?.edges ?? edges,
             credentials,
             onSave: handleGraphSave,
             analyticsMode,
-            onLiveNodeCount: setLiveNodeCount
+            onLiveNodeCount: setLiveNodeCount,
+            onLiveStateChange: (n, e) => {
+              liveStateRef.current = { nodes: n, edges: e };
+            }
           }
         ) }),
         savedMsg && /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("span", { style: {
@@ -40418,11 +40426,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         {
           ref: canvasRef,
           scenarioId: Number(id2),
-          initialNodes: nodes,
-          initialEdges: edges,
+          initialNodes: liveStateRef.current?.nodes ?? nodes,
+          initialEdges: liveStateRef.current?.edges ?? edges,
           credentials,
           onSave: handleGraphSave,
-          analyticsMode
+          analyticsMode,
+          onLiveStateChange: (n, e) => {
+            liveStateRef.current = { nodes: n, edges: e };
+          }
         }
       ) }),
       isNew && /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: {
