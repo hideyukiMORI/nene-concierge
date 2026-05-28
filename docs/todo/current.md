@@ -312,6 +312,21 @@ Last updated: 2026-05-29 (User Management + Edit History 完了)
 
 ---
 
+**シナリオ編集履歴 横断ビュー — 完了 ✅** (PR #123)
+
+| 項目 | 状態 | Issue |
+| --- | --- | --- |
+| GET /api/v1/scenario-revisions (横断検索 + フィルター + ページネーション) | ✅ | #122 |
+| ScenarioRevisionRepositoryInterface: searchByOrganization() + countByOrganization() | ✅ | #122 |
+| LEFT JOIN scenarios で scenario_name 同梱 | ✅ | #122 |
+| /history ページ (PC table + モバイル card list) | ✅ | #122 |
+| フィルター: シナリオ / 操作種別 / 期間 / 検索キーワード | ✅ | #122 |
+| ページャ (limit 50, prev/next) | ✅ | #122 |
+| サイドバーに 履歴 ナビ追加 | ✅ | #122 |
+| en/ja に history.* / nav.history / common.prev / common.next | ✅ | #122 |
+
+---
+
 **Me エンドポイント + サイドバー組織表示 — 完了 ✅** (PR #121)
 
 | 項目 | 状態 | Issue |
