@@ -40665,8 +40665,45 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
   function SettingsPage() {
     const { adminThemeId, themeVariant: themeVariant2, setAdminTheme, toggleVariant } = useTheme();
+    const { isMobile } = useLayout();
     const selectedDef = ADMIN_THEME_DEFS.find((d) => d.id === adminThemeId);
     const accentColor = selectedDef?.preview[themeVariant2]?.accent ?? selectedDef?.preview[selectedDef.variants[0]]?.accent ?? T.primary;
+    if (isMobile) {
+      return /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: { minHeight: "100vh", background: T.bg }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+          MobileHeader,
+          {
+            title: "Settings",
+            subtitle: `${ADMIN_THEME_DEFS.length} themes`
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(MobileSectionHead, { label: "admin theme" }),
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { style: {
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: 8,
+          padding: "0 12px"
+        }, children: ADMIN_THEME_DEFS.map((def) => /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+          ThemeCard,
+          {
+            def,
+            isSelected: def.id === adminThemeId,
+            currentVariant: themeVariant2,
+            onSelect: (id2) => setAdminTheme(id2),
+            onToggle: toggleVariant
+          },
+          def.id
+        )) }),
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("p", { style: {
+          margin: "12px 12px 0",
+          fontSize: T.fontXs,
+          color: T.textMuted,
+          lineHeight: 1.5
+        }, children: "\u9078\u629E\u3059\u308B\u3068\u30D6\u30E9\u30A6\u30B6\u306B\u5373\u6642\u53CD\u6620\u3055\u308C\u3001\u30ED\u30B0\u30A2\u30A6\u30C8\u5F8C\u3082\u7DAD\u6301\u3055\u308C\u307E\u3059 (localStorage)\u3002" }),
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { style: { padding: "12px" }, children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(ThemeTerminal, { themeId: adminThemeId, accent: accentColor }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { style: { height: "calc(24px + env(safe-area-inset-bottom))" } })
+      ] });
+    }
     return /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { children: [
       /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(PageHead, { title: "Settings", subtitle: `admin theme \xB7 ${ADMIN_THEME_DEFS.length} options` }),
       /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(Card, { children: [

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { PageHead, Card, SectionHead } from './Layout.js';
+import { PageHead, Card, SectionHead, useLayout } from './Layout.js';
+import { MobileHeader, MobileSectionHead } from './mobile/index.js';
 import { T } from '../theme.js';
 import { useTranslation } from '../i18n/index.js';
 import { useTheme, ADMIN_THEME_DEFS } from '../theme/index.js';
@@ -259,11 +260,54 @@ function ThemeTerminal({ themeId, accent }: { themeId: AdminThemeId; accent: str
 
 export default function SettingsPage() {
     const { adminThemeId, themeVariant, setAdminTheme, toggleVariant } = useTheme();
+    const { isMobile } = useLayout();
 
     const selectedDef = ADMIN_THEME_DEFS.find(d => d.id === adminThemeId);
     const accentColor = selectedDef?.preview[themeVariant]?.accent
         ?? selectedDef?.preview[selectedDef.variants[0] as ThemeVariant]?.accent
         ?? T.primary;
+
+    // ─────────── Mobile layout ───────────
+    if (isMobile) {
+        return (
+            <div style={{ minHeight: '100vh', background: T.bg }}>
+                <MobileHeader
+                    title="Settings"
+                    subtitle={`${ADMIN_THEME_DEFS.length} themes`}
+                />
+
+                <MobileSectionHead label="admin theme"/>
+                <div style={{
+                    display: 'grid', gridTemplateColumns: '1fr 1fr',
+                    gap: 8, padding: '0 12px',
+                }}>
+                    {ADMIN_THEME_DEFS.map(def => (
+                        <ThemeCard
+                            key={def.id}
+                            def={def}
+                            isSelected={def.id === adminThemeId}
+                            currentVariant={themeVariant}
+                            onSelect={id => setAdminTheme(id)}
+                            onToggle={toggleVariant}
+                        />
+                    ))}
+                </div>
+
+                <p style={{
+                    margin: '12px 12px 0',
+                    fontSize: T.fontXs, color: T.textMuted, lineHeight: 1.5,
+                }}>
+                    選択するとブラウザに即時反映され、ログアウト後も維持されます (localStorage)。
+                </p>
+
+                <div style={{ padding: '12px' }}>
+                    <ThemeTerminal themeId={adminThemeId} accent={accentColor}/>
+                </div>
+
+                <div style={{ height: 'calc(24px + env(safe-area-inset-bottom))' }}/>
+            </div>
+        );
+    }
 
     return (
         <div>
