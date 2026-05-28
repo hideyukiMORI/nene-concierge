@@ -311,6 +311,8 @@ export const en = {
     'users.status.disabled':    'Disabled',
     'users.confirmDeleteTitle': 'Delete user',
     'users.confirmDelete':      'Delete "{{email}}"? Their access will be revoked immediately.',
+    'users.noSelection.title':  'No user selected',
+    'users.noSelection.hint':   'Click a row to edit, or use + New to create.',
 
     // ── Settings ──────────────────────────────────────────────────────────────
     'settings.pageTitle':  'Settings',

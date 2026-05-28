@@ -307,6 +307,8 @@ export const ja: Partial<MessageCatalog> = {
     'users.status.disabled':    '無効',
     'users.confirmDeleteTitle': 'ユーザーを削除',
     'users.confirmDelete':      '「{{email}}」を削除しますか？このユーザーのアクセスは即時失われます。',
+    'users.noSelection.title':  'ユーザー未選択',
+    'users.noSelection.hint':   '行をクリックで編集、または + 新規 で作成。',
 
     // ── Settings ──────────────────────────────────────────────────────────────
     'settings.pageTitle':  '設定',
