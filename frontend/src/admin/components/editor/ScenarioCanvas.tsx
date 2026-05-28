@@ -551,8 +551,10 @@ const ScenarioCanvas = forwardRef<ScenarioCanvasRef, Props>(function ScenarioCan
                                 background: T.minimapBg,
                                 border: `1px solid ${T.border}`,
                                 borderRadius: T.radiusMd,
-                                bottom: 32,
-                                right: 8,
+                                // ThemeSwitcher: bottom: 16, height: 32 → top edge at 48.
+                                // map の bottom = 48 + 16(gap) = 64。right は ThemeSwitcher と同じ 16。
+                                bottom: 64,
+                                right: 16,
                             }}
                             maskColor="oklch(0% 0 0 / 0.08)"
                             pannable
