@@ -34,6 +34,7 @@ final readonly class AdminApiAuthMiddleware implements MiddlewareInterface
     private const ADMIN_ONLY_PREFIXES = [
         '/api/v1/organizations',
         '/api/v1/users',
+        '/api/v1/me',
     ];
 
     public function __construct(

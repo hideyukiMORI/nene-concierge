@@ -65,6 +65,32 @@ export function login(email: string, password: string): Promise<LoginResponse> {
     });
 }
 
+// ── Me / Memberships ─────────────────────────────────────────────────────────
+
+export interface MeOrganization {
+    id:        number;
+    slug:      string;
+    name:      string;
+    is_active: boolean;
+}
+
+export interface MeMembership extends MeOrganization {
+    role: string;
+}
+
+export interface MeResponse {
+    id:                   number;
+    email:                string;
+    role:                 string;
+    status:               string;
+    organizations:        MeMembership[];
+    current_organization: MeOrganization | null;
+}
+
+export function getMe(): Promise<MeResponse> {
+    return request('/api/v1/me');
+}
+
 // ── Scenarios ─────────────────────────────────────────────────────────────────
 
 export interface ScenarioSummary {

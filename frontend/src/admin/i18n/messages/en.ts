@@ -302,6 +302,11 @@ export const en = {
     'theme.toggleDark':  'Switch to dark mode',
     'theme.label':       'Theme',
 
+    // ── Me / Memberships ─────────────────────────────────────────────────────
+    'me.currentOrg': 'Current organization',
+    'me.moreOrgs':   'more',
+    'me.noOrg':      'No organization',
+
     // ── Scenario edit history ─────────────────────────────────────────────────
     'history.title':            'Edit history',
     'history.empty':            'No history yet.',

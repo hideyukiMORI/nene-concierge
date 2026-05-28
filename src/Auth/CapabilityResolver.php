@@ -10,6 +10,11 @@ final class CapabilityResolver
     {
         $method = strtoupper($method);
 
+        // /api/v1/me: 認証済みであれば誰でも自分自身の情報を取得できる
+        if (str_starts_with($path, '/api/v1/me')) {
+            return null;
+        }
+
         // Organization management: superadmin only
         if (str_starts_with($path, '/api/v1/organizations')) {
             return Capability::ManageOrganizations;
