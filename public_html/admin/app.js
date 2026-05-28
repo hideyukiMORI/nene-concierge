@@ -36867,6 +36867,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     action: ActionNode,
     end: EndNode
   };
+  var MONO3 = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
   function apiNodeToRF(n) {
     return {
       id: n.node_id,
@@ -36951,7 +36952,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         function StatRow({ label, value, sub }) {
           return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", alignItems: "baseline", justifyContent: "space-between", padding: "8px 0", borderBottom: `1px solid ${T.border}` }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { fontSize: T.fontSm, color: T.textMuted }, children: label }),
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("span", { style: { fontSize: T.fontMd, fontWeight: 700, color: T.textStrong }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("span", { style: { fontSize: T.fontSm, fontWeight: 700, color: T.textStrong, fontFamily: MONO3 }, children: [
               value.toLocaleString(),
               sub && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { fontSize: T.fontXs, fontWeight: 400, color: T.textMuted, marginLeft: 4 }, children: sub })
             ] })
@@ -36961,13 +36962,125 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(StatRow, { label: t("canvas.analytics.sessions"), value: report.total_sessions }),
           /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(StatRow, { label: t("canvas.analytics.completed"), value: report.completed_sessions, sub: `${dRate}%` }),
           /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(StatRow, { label: t("canvas.analytics.converted"), value: report.converted_sessions, sub: `${cRate}%` }),
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { marginTop: 8, fontSize: T.fontXs, color: T.textMuted }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { marginTop: 8, fontSize: T.fontXs, color: T.textMuted, fontFamily: MONO3 }, children: [
             report.period_from,
             " \u2013 ",
             report.period_to
           ] })
         ] });
       })() })
+    ] });
+  }
+  var ZoomInIcon = () => /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
+    "svg",
+    {
+      width: "12",
+      height: "12",
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: "currentColor",
+      strokeWidth: "2.2",
+      strokeLinecap: "round",
+      "aria-hidden": true,
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("circle", { cx: "11", cy: "11", r: "7" }),
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("line", { x1: "21", y1: "21", x2: "16.65", y2: "16.65" }),
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("line", { x1: "11", y1: "8", x2: "11", y2: "14" }),
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("line", { x1: "8", y1: "11", x2: "14", y2: "11" })
+      ]
+    }
+  );
+  var ZoomOutIcon = () => /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
+    "svg",
+    {
+      width: "12",
+      height: "12",
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: "currentColor",
+      strokeWidth: "2.2",
+      strokeLinecap: "round",
+      "aria-hidden": true,
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("circle", { cx: "11", cy: "11", r: "7" }),
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("line", { x1: "21", y1: "21", x2: "16.65", y2: "16.65" }),
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("line", { x1: "8", y1: "11", x2: "14", y2: "11" })
+      ]
+    }
+  );
+  var FitViewIcon2 = () => /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+    "svg",
+    {
+      width: "12",
+      height: "12",
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: "currentColor",
+      strokeWidth: "2",
+      strokeLinecap: "round",
+      strokeLinejoin: "round",
+      "aria-hidden": true,
+      children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("path", { d: "M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3" })
+    }
+  );
+  function DockBtn({ onClick, title, children: children2 }) {
+    return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+      "button",
+      {
+        onClick,
+        title,
+        style: {
+          width: 28,
+          height: 28,
+          borderRadius: T.radiusSm,
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+          background: "transparent",
+          border: "none",
+          cursor: "pointer",
+          color: T.textMuted,
+          transition: `background ${T.transitionFast}, color ${T.transitionFast}`
+        },
+        onMouseEnter: (e) => {
+          e.currentTarget.style.background = T.surfaceHover;
+          e.currentTarget.style.color = T.text;
+        },
+        onMouseLeave: (e) => {
+          e.currentTarget.style.background = "transparent";
+          e.currentTarget.style.color = T.textMuted;
+        },
+        children: children2
+      }
+    );
+  }
+  function BottomDock({ nodeCount }) {
+    const { zoomIn, zoomOut, fitView } = useReactFlow();
+    return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 2,
+      background: T.glassDockBg,
+      border: `1px solid ${T.border}`,
+      borderRadius: T.radiusLg,
+      padding: "3px 6px",
+      boxShadow: T.shadowElevated
+    }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(DockBtn, { onClick: () => zoomOut({ duration: 150 }), title: "Zoom out", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(ZoomOutIcon, {}) }),
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(DockBtn, { onClick: () => fitView({ padding: 0.6, maxZoom: 0.85, duration: 200 }), title: "Fit view", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(FitViewIcon2, {}) }),
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(DockBtn, { onClick: () => zoomIn({ duration: 150 }), title: "Zoom in", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(ZoomInIcon, {}) }),
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { width: 1, height: 14, background: T.border, margin: "0 4px" } }),
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("span", { style: {
+        fontSize: 10.5,
+        fontFamily: MONO3,
+        color: T.textFaint,
+        padding: "0 4px",
+        whiteSpace: "nowrap",
+        userSelect: "none"
+      }, children: [
+        nodeCount,
+        " nodes"
+      ] })
     ] });
   }
   var ScenarioCanvas = (0, import_react11.forwardRef)(function ScenarioCanvas2({ scenarioId, initialNodes, initialEdges, credentials, onSave, analyticsMode }, ref) {
@@ -37059,56 +37172,72 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const selectedNode = !analyticsMode ? nodes.find((n) => n.id === selectedNodeId) ?? null : null;
     const showRightPanel = analyticsMode || selectedNode !== null;
     return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { position: "relative", height: "100%" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { ref: reactFlowWrapper, style: { position: "absolute", inset: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
-        index,
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+        "div",
         {
-          nodes,
-          edges,
-          nodeTypes,
-          onNodesChange,
-          onEdgesChange,
-          onConnect,
-          onNodeClick: (_, node) => {
-            if (!analyticsMode) setSelectedNodeId(node.id);
-          },
-          onPaneClick: () => setSelectedNodeId(null),
-          fitView: true,
-          fitViewOptions: { padding: 0.6, maxZoom: 0.85 },
-          deleteKeyCode: analyticsMode ? null : "Delete",
-          nodesDraggable: !analyticsMode,
-          nodesConnectable: !analyticsMode,
-          elementsSelectable: !analyticsMode,
-          children: [
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Background, { gap: 20, color: T.border }),
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Controls, {}),
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
-              MiniMap,
-              {
-                nodeColor: (n) => NODE_COLORS[n.type]?.header ?? T.sidebarMuted,
-                style: { background: T.tableHeader, border: `1px solid ${T.border}` }
-              }
-            )
-          ]
+          ref: reactFlowWrapper,
+          style: { position: "absolute", inset: 0, background: T.canvasBg },
+          children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
+            index,
+            {
+              nodes,
+              edges,
+              nodeTypes,
+              onNodesChange,
+              onEdgesChange,
+              onConnect,
+              onNodeClick: (_, node) => {
+                if (!analyticsMode) setSelectedNodeId(node.id);
+              },
+              onPaneClick: () => setSelectedNodeId(null),
+              fitView: true,
+              fitViewOptions: { padding: 0.6, maxZoom: 0.85 },
+              deleteKeyCode: analyticsMode ? null : "Delete",
+              nodesDraggable: !analyticsMode,
+              nodesConnectable: !analyticsMode,
+              elementsSelectable: !analyticsMode,
+              defaultEdgeOptions: {
+                style: { stroke: T.edgeStroke, strokeWidth: 1.5 }
+              },
+              children: [
+                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Background, { variant: BackgroundVariant.Dots, gap: 24, size: 1.5, color: T.canvasDot }),
+                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+                  MiniMap,
+                  {
+                    nodeColor: (n) => NODE_COLORS[n.type]?.header ?? T.sidebarMuted,
+                    style: {
+                      background: T.minimapBg,
+                      border: `1px solid ${T.border}`,
+                      borderRadius: T.radiusMd
+                    },
+                    maskColor: "oklch(0% 0 0 / 0.08)"
+                  }
+                ),
+                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Panel, { position: "bottom-center", style: { marginBottom: 14 }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(BottomDock, { nodeCount: nodes.length }) })
+              ]
+            }
+          )
         }
-      ) }),
+      ),
       /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: {
         position: "absolute",
         top: 0,
         right: 0,
         bottom: 0,
-        width: 264,
+        width: T.editorDrawerW,
         zIndex: 10,
-        background: T.surface,
-        borderLeft: `1px solid ${T.border}`,
-        boxShadow: "-6px 0 20px rgba(0,0,0,.07)",
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
-        // スライドアニメーション
         transform: showRightPanel ? "translateX(0)" : "translateX(100%)",
         transition: "transform 0.20s cubic-bezier(0.4, 0, 0.2, 1)",
         pointerEvents: showRightPanel ? "auto" : "none"
-      }, children: analyticsMode ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+      }, children: analyticsMode ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: {
+        height: "100%",
+        background: T.surfaceAlt,
+        borderLeft: `1px solid ${T.border}`,
+        boxShadow: `-6px 0 20px oklch(0% 0 0 / 0.07)`
+      }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
         AnalyticsSummaryPanel,
         {
           report: analyticsReport,
@@ -37117,61 +37246,23 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           period,
           onPeriodChange: setPeriod
         }
-      ) : selectedNode ? /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(import_jsx_runtime9.Fragment, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: {
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "6px 10px",
-          flexShrink: 0,
-          borderBottom: `1px solid ${T.border}`,
-          background: T.tableHeader
-        }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { fontSize: T.fontXs, fontWeight: 600, color: T.textMuted }, children: t("scenarioForm.detailsToggle") }),
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
-            "button",
-            {
-              onClick: () => setSelectedNodeId(null),
-              title: t("common.close"),
-              style: {
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                color: T.textMuted,
-                fontSize: 14,
-                lineHeight: 1,
-                padding: "1px 4px",
-                borderRadius: T.radiusSm,
-                display: "flex",
-                alignItems: "center"
-              },
-              onMouseEnter: (e) => {
-                e.currentTarget.style.background = T.border;
-              },
-              onMouseLeave: (e) => {
-                e.currentTarget.style.background = "none";
-              },
-              children: "\xD7"
-            }
-          )
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { flex: 1, overflowY: "auto" }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
-          NodeConfigPanel,
-          {
-            node: selectedNode,
-            credentials,
-            onChange: handleNodeChange,
-            onDelete: handleNodeDelete
-          }
-        ) })
-      ] }) : null })
+      ) }) : selectedNode ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+        NodeConfigPanel,
+        {
+          node: selectedNode,
+          credentials,
+          onChange: handleNodeChange,
+          onDelete: handleNodeDelete,
+          onClose: () => setSelectedNodeId(null)
+        }
+      ) : null })
     ] });
   });
   var ScenarioCanvas_default = ScenarioCanvas;
 
   // src/admin/components/ScenarioFormPage.tsx
   var import_jsx_runtime10 = __toESM(require_jsx_runtime());
-  var MONO3 = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
+  var MONO4 = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
   var IconBack = () => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
     "svg",
     {
@@ -37702,7 +37793,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             borderRadius: T.radiusSm,
             background: T.surfaceAlt,
             border: `1px solid ${T.border}`,
-            fontFamily: MONO3,
+            fontFamily: MONO4,
             fontSize: 9.5,
             color: T.textFaint
           }, children: "\u2318K" })
@@ -37716,7 +37807,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             letterSpacing: "0.08em",
             color: T.textFaint,
             textTransform: "uppercase",
-            fontFamily: MONO3,
+            fontFamily: MONO4,
             borderRight: `1px solid ${T.border}`,
             marginRight: 2
           }, children: "add" }),
@@ -37837,7 +37928,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             fontSize: T.fontXs,
             fontWeight: 600,
             color: T.textMuted,
-            fontFamily: MONO3,
+            fontFamily: MONO4,
             letterSpacing: "0.06em",
             textTransform: "uppercase",
             marginBottom: 4
