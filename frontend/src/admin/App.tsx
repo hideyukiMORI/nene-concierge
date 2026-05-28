@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router';
 import { isAuthenticated } from './auth.js';
 import { ThemeProvider } from './theme/index.js';
+import { ModalProvider } from './components/modal/index.js';
 import Layout from './components/Layout.js';
 import LoginPage         from './components/LoginPage.js';
 import ScenariosPage     from './components/ScenariosPage.js';
@@ -21,6 +22,7 @@ function RequireAuth() {
 export default function App() {
     return (
         <ThemeProvider>
+        <ModalProvider>
         <BrowserRouter basename="/admin">
             <Routes>
                 {/* Public */}
@@ -54,6 +56,7 @@ export default function App() {
         </BrowserRouter>
         {/* ThemeSwitcher: fixed overlay, visible on all authenticated pages */}
         {isAuthenticated() && <ThemeSwitcher />}
+        </ModalProvider>
         </ThemeProvider>
     );
 }

@@ -69,7 +69,8 @@ export const ja: Partial<MessageCatalog> = {
     'scenarios.emptyHint':     '「新規作成」から始めましょう。',
     'scenarios.loadError':     'データの取得に失敗しました。',
     'scenarios.deleteError':   '削除に失敗しました。',
-    'scenarios.confirmDelete': '「{{name}}」を削除しますか？この操作は取り消せません。',
+    'scenarios.confirmDeleteTitle': 'シナリオを削除',
+    'scenarios.confirmDelete': 'シナリオ「{{name}}」を完全に削除します。シナリオ・全セッション・実行ログを含むすべてのデータが消えます。この操作は取り消せません。',
 
     'scenario.status.draft':     'ドラフト',
     'scenario.status.published': '公開中',
@@ -126,7 +127,8 @@ export const ja: Partial<MessageCatalog> = {
     'credentials.loadError':       '取得に失敗しました。',
     'credentials.saveError':       '作成に失敗しました。',
     'credentials.deleteError':     '削除に失敗しました。',
-    'credentials.confirmDelete':   '「{{name}}」を削除しますか？',
+    'credentials.confirmDeleteTitle': 'クレデンシャルを削除',
+    'credentials.confirmDelete':   '「{{name}}」を削除します。このクレデンシャルを参照しているシナリオは動作しなくなります。',
 
     'credentials.adapter.http':     'HTTP（外部 API）',
     'credentials.adapter.email':    'Email',

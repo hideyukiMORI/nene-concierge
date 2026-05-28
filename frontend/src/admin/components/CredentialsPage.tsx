@@ -12,6 +12,7 @@ import {
     MobileHeader, FilterChips, Chip, CardList, ListItem, FAB,
     BottomSheet, SkeletonListItem, MetaDot,
 } from './mobile/index.js';
+import { useModals } from './modal/index.js';
 import { T } from '../theme.js';
 import { useTranslation } from '../i18n/index.js';
 
@@ -42,6 +43,7 @@ const TD: React.CSSProperties = {
 export default function CredentialsPage() {
     const { t } = useTranslation();
     const { isMobile } = useLayout();
+    const { confirm, alertDialog } = useModals();
     const [creds, setCreds]       = useState<CredentialSummary[]>([]);
     const [loading, setLoading]   = useState(true);
     const [error, setError]       = useState<string | null>(null);
@@ -91,12 +93,22 @@ export default function CredentialsPage() {
     }
 
     async function handleDelete(id: number, credName: string) {
-        if (!confirm(t('credentials.confirmDelete', { name: credName }))) return;
+        const ok = await confirm({
+            title: t('credentials.confirmDeleteTitle'),
+            description: t('credentials.confirmDelete', { name: credName }),
+            tone: 'danger',
+            confirmLabel: t('common.delete'),
+        });
+        if (!ok) return;
         try {
             await deleteCredential(id);
             setCreds(prev => prev.filter(c => c.id !== id));
         } catch (err) {
-            alert(err instanceof ApiError ? err.message : t('credentials.deleteError'));
+            void alertDialog({
+                title: t('credentials.deleteError'),
+                description: err instanceof ApiError ? err.message : undefined,
+                tone: 'danger',
+            });
         }
     }
 

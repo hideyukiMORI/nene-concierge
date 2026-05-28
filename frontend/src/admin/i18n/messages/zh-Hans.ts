@@ -57,6 +57,7 @@ export const zhHans: Partial<MessageCatalog> = {
     'scenarios.emptyHint':     '点击"新建"创建一个场景。',
     'scenarios.loadError':     '加载场景失败。',
     'scenarios.deleteError':   '删除失败。',
+    'scenarios.confirmDeleteTitle': '删除场景',
     'scenarios.confirmDelete': '删除"{{name}}"？此操作不可撤销。',
 
     'scenario.status.draft':     '草稿',
@@ -104,7 +105,8 @@ export const zhHans: Partial<MessageCatalog> = {
     'credentials.secretHint':    '* 敏感配置（URL、令牌等）可在创建后通过 API 更新。',
     'credentials.empty':         '暂无凭证。',
     'credentials.saveError':     '创建失败。',
-    'credentials.confirmDelete': '删除"{{name}}"？',
+    'credentials.confirmDeleteTitle': '删除凭据',
+    'credentials.confirmDelete': '删除"{{name}}"？引用此凭据的场景将停止工作。',
 
     'node.type.message':   '消息',
     'node.type.condition': '条件',

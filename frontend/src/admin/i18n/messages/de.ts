@@ -57,6 +57,7 @@ export const de: Partial<MessageCatalog> = {
     'scenarios.emptyHint':     'Klicken Sie auf „Neu", um eines zu erstellen.',
     'scenarios.loadError':     'Szenarien konnten nicht geladen werden.',
     'scenarios.deleteError':   'Löschen fehlgeschlagen.',
+    'scenarios.confirmDeleteTitle': 'Szenario löschen',
     'scenarios.confirmDelete': '„{{name}}" löschen? Diese Aktion kann nicht rückgängig gemacht werden.',
 
     'scenario.status.draft':     'Entwurf',
@@ -104,7 +105,8 @@ export const de: Partial<MessageCatalog> = {
     'credentials.secretHint':    '* Sensible Einstellungen können nach der Erstellung über die API aktualisiert werden.',
     'credentials.empty':         'Noch keine Zugangsdaten.',
     'credentials.saveError':     'Erstellen fehlgeschlagen.',
-    'credentials.confirmDelete': '„{{name}}" löschen?',
+    'credentials.confirmDeleteTitle': 'Anmeldedaten löschen',
+    'credentials.confirmDelete': '„{{name}}" löschen? Szenarien, die darauf verweisen, funktionieren dann nicht mehr.',
 
     'node.type.message':   'Nachricht',
     'node.type.condition': 'Bedingung',
