@@ -95,6 +95,7 @@ const I = {
     sun:       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>,
     moon:      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>,
     users:     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
+    history:   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><polyline points="3 3 3 8 8 8"/><polyline points="12 7 12 12 15 14"/></svg>,
 };
 
 const NAV_ITEMS = [
@@ -103,7 +104,8 @@ const NAV_ITEMS = [
     { to: '/appearance',  icon: I.palette,   key: 'nav.appearance' },
     { to: '/credentials', icon: I.key,       key: 'nav.credentials' },
     { to: '/action-logs', icon: I.logs,      key: 'nav.actionLogs' },
-    { to: '/sessions',    icon: I.sessions,  key: 'nav.sessions', divider: true },
+    { to: '/sessions',    icon: I.sessions,  key: 'nav.sessions' },
+    { to: '/history',     icon: I.history,   key: 'nav.history', divider: true },
     { to: '/users',       icon: I.users,     key: 'nav.users' },
     { to: '/settings',    icon: I.settings,  key: 'nav.settings' },
 ] as const;

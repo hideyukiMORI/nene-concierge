@@ -21738,7 +21738,7 @@ var NeNeAdmin = (() => {
               "The result of getSnapshot should be cached to avoid an infinite loop"
             ), didWarnUncachedGetSnapshot = true);
           }
-          cachedValue = useState25({
+          cachedValue = useState26({
             inst: { value, getSnapshot }
           });
           var inst = cachedValue[0].inst, forceUpdate = cachedValue[1];
@@ -21750,7 +21750,7 @@ var NeNeAdmin = (() => {
             },
             [subscribe, value, getSnapshot]
           );
-          useEffect24(
+          useEffect25(
             function() {
               checkIfSnapshotChanged(inst) && forceUpdate({ inst });
               return subscribe(function() {
@@ -21776,7 +21776,7 @@ var NeNeAdmin = (() => {
           return getSnapshot();
         }
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-        var React15 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState25 = React15.useState, useEffect24 = React15.useEffect, useLayoutEffect5 = React15.useLayoutEffect, useDebugValue2 = React15.useDebugValue, didWarnOld18Alpha = false, didWarnUncachedGetSnapshot = false, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
+        var React15 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState26 = React15.useState, useEffect25 = React15.useEffect, useLayoutEffect5 = React15.useLayoutEffect, useDebugValue2 = React15.useDebugValue, didWarnOld18Alpha = false, didWarnUncachedGetSnapshot = false, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
         exports.useSyncExternalStore = void 0 !== React15.useSyncExternalStore ? React15.useSyncExternalStore : shim;
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(Error());
       })();
@@ -21804,14 +21804,14 @@ var NeNeAdmin = (() => {
           return x === y && (0 !== x || 1 / x === 1 / y) || x !== x && y !== y;
         }
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-        var React15 = require_react(), shim = require_shim(), objectIs = "function" === typeof Object.is ? Object.is : is, useSyncExternalStore = shim.useSyncExternalStore, useRef11 = React15.useRef, useEffect24 = React15.useEffect, useMemo8 = React15.useMemo, useDebugValue2 = React15.useDebugValue;
+        var React15 = require_react(), shim = require_shim(), objectIs = "function" === typeof Object.is ? Object.is : is, useSyncExternalStore = shim.useSyncExternalStore, useRef11 = React15.useRef, useEffect25 = React15.useEffect, useMemo9 = React15.useMemo, useDebugValue2 = React15.useDebugValue;
         exports.useSyncExternalStoreWithSelector = function(subscribe, getSnapshot, getServerSnapshot, selector, isEqual) {
           var instRef = useRef11(null);
           if (null === instRef.current) {
             var inst = { hasValue: false, value: null };
             instRef.current = inst;
           } else inst = instRef.current;
-          instRef = useMemo8(
+          instRef = useMemo9(
             function() {
               function memoizedSelector(nextSnapshot) {
                 if (!hasMemo) {
@@ -21847,7 +21847,7 @@ var NeNeAdmin = (() => {
             [getSnapshot, getServerSnapshot, selector, isEqual]
           );
           var value = useSyncExternalStore(subscribe, instRef[0], instRef[1]);
-          useEffect24(
+          useEffect25(
             function() {
               inst.hasValue = true;
               inst.value = value;
@@ -21875,7 +21875,7 @@ var NeNeAdmin = (() => {
   });
 
   // src/admin/index.tsx
-  var import_react25 = __toESM(require_react());
+  var import_react26 = __toESM(require_react());
   var import_client = __toESM(require_client());
 
   // node_modules/react-router/dist/development/chunk-4N6VE7H7.mjs
@@ -24968,6 +24968,18 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   function getScenarioHistory(id2, limit = 50, offset = 0) {
     return request(`/api/v1/scenarios/${id2}/history?limit=${limit}&offset=${offset}`);
   }
+  function searchScenarioRevisions(filters, limit = 50, offset = 0) {
+    const params = new URLSearchParams();
+    if (filters.scenario_id !== void 0) params.set("scenario_id", String(filters.scenario_id));
+    if (filters.user_id !== void 0) params.set("user_id", String(filters.user_id));
+    if (filters.operation) params.set("operation", filters.operation);
+    if (filters.q) params.set("q", filters.q);
+    if (filters.date_from) params.set("date_from", filters.date_from);
+    if (filters.date_to) params.set("date_to", filters.date_to);
+    params.set("limit", String(limit));
+    params.set("offset", String(offset));
+    return request(`/api/v1/scenario-revisions?${params.toString()}`);
+  }
   function getScenarioAnalytics(id2, period = "7d") {
     return request(`/api/v1/scenarios/${id2}/analytics?period=${period}`);
   }
@@ -25308,6 +25320,24 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "sessions.detail.messages": "Messages",
     "sessions.detail.close": "Close",
     "sessions.detail.loadError": "Failed to load session detail.",
+    // ── History (scenario revisions cross-view — Issue #122) ─────────────────
+    "nav.history": "History",
+    "history.pageTitle": "Edit history",
+    "history.subtitle": "{{total}} revisions",
+    "history.searchPlaceholder": "Search name or user\u2026",
+    "history.allOps": "All operations",
+    "history.allScenarios": "All scenarios",
+    "history.filter.scenario": "scenario",
+    "history.filter.operation": "operation",
+    "history.filter.from": "from",
+    "history.filter.to": "to",
+    "history.col.operation": "Operation",
+    "history.col.scenario": "Scenario",
+    "history.col.user": "User",
+    "history.col.nodes": "Size",
+    "history.col.when": "When",
+    "common.prev": "prev",
+    "common.next": "next",
     // ── Users (admin user management — Issue #116) ───────────────────────────
     "nav.users": "Users",
     "users.pageTitle": "Users",
@@ -25592,6 +25622,24 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "sessions.detail.messages": "\u30E1\u30C3\u30BB\u30FC\u30B8",
     "sessions.detail.close": "\u9589\u3058\u308B",
     "sessions.detail.loadError": "\u30BB\u30C3\u30B7\u30E7\u30F3\u8A73\u7D30\u306E\u8AAD\u307F\u8FBC\u307F\u306B\u5931\u6557\u3057\u307E\u3057\u305F\u3002",
+    // ── 編集履歴 横断ビュー (Issue #122) ──────────────────────────────────────
+    "nav.history": "\u5C65\u6B74",
+    "history.pageTitle": "\u7DE8\u96C6\u5C65\u6B74",
+    "history.subtitle": "{{total}} \u4EF6",
+    "history.searchPlaceholder": "\u30B7\u30CA\u30EA\u30AA\u540D / \u30E6\u30FC\u30B6\u30FC\u3067\u691C\u7D22\u2026",
+    "history.allOps": "\u3059\u3079\u3066\u306E\u64CD\u4F5C",
+    "history.allScenarios": "\u3059\u3079\u3066\u306E\u30B7\u30CA\u30EA\u30AA",
+    "history.filter.scenario": "\u30B7\u30CA\u30EA\u30AA",
+    "history.filter.operation": "\u64CD\u4F5C",
+    "history.filter.from": "\u958B\u59CB\u65E5",
+    "history.filter.to": "\u7D42\u4E86\u65E5",
+    "history.col.operation": "\u64CD\u4F5C",
+    "history.col.scenario": "\u30B7\u30CA\u30EA\u30AA",
+    "history.col.user": "\u30E6\u30FC\u30B6\u30FC",
+    "history.col.nodes": "\u30B5\u30A4\u30BA",
+    "history.col.when": "\u65E5\u6642",
+    "common.prev": "\u524D",
+    "common.next": "\u6B21",
     // ── Users (Issue #116) ───────────────────────────────────────────────────
     "nav.users": "\u30E6\u30FC\u30B6\u30FC",
     "users.pageTitle": "\u30E6\u30FC\u30B6\u30FC\u7BA1\u7406",
@@ -26548,6 +26596,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("circle", { cx: "9", cy: "7", r: "4" }),
       /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "M23 21v-2a4 4 0 0 0-3-3.87" }),
       /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "M16 3.13a4 4 0 0 1 0 7.75" })
+    ] }),
+    history: /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("svg", { width: "15", height: "15", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.7", strokeLinecap: "round", strokeLinejoin: "round", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "M3 12a9 9 0 1 0 3-6.7L3 8" }),
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("polyline", { points: "3 3 3 8 8 8" }),
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("polyline", { points: "12 7 12 12 15 14" })
     ] })
   };
   var NAV_ITEMS = [
@@ -26556,7 +26609,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     { to: "/appearance", icon: I.palette, key: "nav.appearance" },
     { to: "/credentials", icon: I.key, key: "nav.credentials" },
     { to: "/action-logs", icon: I.logs, key: "nav.actionLogs" },
-    { to: "/sessions", icon: I.sessions, key: "nav.sessions", divider: true },
+    { to: "/sessions", icon: I.sessions, key: "nav.sessions" },
+    { to: "/history", icon: I.history, key: "nav.history", divider: true },
     { to: "/users", icon: I.users, key: "nav.users" },
     { to: "/settings", icon: I.settings, key: "nav.settings" }
   ];
@@ -28903,7 +28957,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const filtered = statusFilter ? scenarios.filter((s) => s.status === statusFilter) : scenarios;
     const published = scenarios.filter((s) => s.status === "published").length;
     const subtitle = loading ? "\u2026" : `${scenarios.length} total \xB7 ${published} published`;
-    const filterSelectStyle = {
+    const filterSelectStyle2 = {
       height: 26,
       padding: "0 8px",
       borderRadius: T.radiusMd,
@@ -29033,7 +29087,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           letterSpacing: "0.04em"
         }, children: [
           "status:",
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("select", { value: statusFilter, onChange: (e) => setStatusFilter(e.target.value), style: filterSelectStyle, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("select", { value: statusFilter, onChange: (e) => setStatusFilter(e.target.value), style: filterSelectStyle2, children: [
             /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "", children: "all" }),
             /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "published", children: "published" }),
             /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "draft", children: "draft" }),
@@ -29050,7 +29104,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           letterSpacing: "0.04em"
         }, children: [
           "sort:",
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("select", { style: filterSelectStyle, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("select", { style: filterSelectStyle2, children: [
             /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { children: "updated \u2193" }),
             /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { children: "name a\u2013z" }),
             /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { children: "created \u2193" })
@@ -42533,7 +42587,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const totalPages = Math.ceil(total / limit);
     const currentPage = Math.floor(offset / limit) + 1;
     const subtitle = loading ? "\u2026" : `${range} \xB7 ${total} records \xB7 ${failures} failed`;
-    const filterSelectStyle = {
+    const filterSelectStyle2 = {
       height: 26,
       padding: "0 8px",
       borderRadius: T.radiusMd,
@@ -42721,7 +42775,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 setAdapter(e.target.value);
                 handleFilterChange();
               },
-              style: filterSelectStyle,
+              style: filterSelectStyle2,
               children: [
                 /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("option", { value: "", children: "all" }),
                 /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("option", { value: "http", children: "http" }),
@@ -42750,7 +42804,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 setStatus(e.target.value);
                 handleFilterChange();
               },
-              style: filterSelectStyle,
+              style: filterSelectStyle2,
               children: [
                 /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("option", { value: "", children: "all" }),
                 /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("option", { value: "success", children: "success" }),
@@ -42774,7 +42828,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             {
               value: range,
               onChange: (e) => setRange(e.target.value),
-              style: filterSelectStyle,
+              style: filterSelectStyle2,
               children: [
                 /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("option", { children: "last 24h" }),
                 /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("option", { children: "last 7d" }),
@@ -43936,7 +43990,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const currentPage = Math.floor(offset / limit) + 1;
     const scenarioIds = [...new Set(sessions.map((s) => s.scenario_id))].sort((a, b) => a - b);
     const filtered = scenarioFilter ? sessions.filter((s) => String(s.scenario_id) === scenarioFilter) : sessions;
-    const filterSelectStyle = {
+    const filterSelectStyle2 = {
       height: 26,
       padding: "0 8px",
       borderRadius: T.radiusMd,
@@ -43948,7 +44002,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       cursor: "pointer",
       outline: "none"
     };
-    const PAG_BTN2 = {
+    const PAG_BTN3 = {
       height: T.controlHeightSm,
       padding: "0 14px",
       boxSizing: "border-box",
@@ -44046,7 +44100,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               disabled: currentPage <= 1,
               onClick: () => setOffset(Math.max(0, offset - limit)),
               style: {
-                ...PAG_BTN2,
+                ...PAG_BTN3,
                 opacity: currentPage <= 1 ? 0.45 : 1,
                 cursor: currentPage <= 1 ? "not-allowed" : "pointer"
               },
@@ -44064,7 +44118,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               disabled: currentPage >= totalPages,
               onClick: () => setOffset(offset + limit),
               style: {
-                ...PAG_BTN2,
+                ...PAG_BTN3,
                 opacity: currentPage >= totalPages ? 0.45 : 1,
                 cursor: currentPage >= totalPages ? "not-allowed" : "pointer"
               },
@@ -44154,7 +44208,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 setOutcome(e.target.value);
                 setOffset(0);
               },
-              style: filterSelectStyle,
+              style: filterSelectStyle2,
               children: [
                 /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("option", { value: "", children: "all" }),
                 /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("option", { value: "active", children: "active" }),
@@ -44183,7 +44237,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 setHasConversion(e.target.value);
                 setOffset(0);
               },
-              style: filterSelectStyle,
+              style: filterSelectStyle2,
               children: [
                 /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("option", { value: "", children: "all" }),
                 /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("option", { value: "1", children: "yes" }),
@@ -44207,7 +44261,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             {
               value: scenarioFilter,
               onChange: (e) => setScenarioFilter(e.target.value),
-              style: filterSelectStyle,
+              style: filterSelectStyle2,
               children: [
                 /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("option", { value: "", children: "all" }),
                 scenarioIds.map((id2) => /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("option", { value: String(id2), children: [
@@ -44284,7 +44338,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             disabled: currentPage <= 1,
             onClick: () => setOffset(Math.max(0, offset - limit)),
             style: {
-              ...PAG_BTN2,
+              ...PAG_BTN3,
               cursor: currentPage <= 1 ? "not-allowed" : "pointer",
               opacity: currentPage <= 1 ? 0.45 : 1
             },
@@ -44309,7 +44363,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             disabled: currentPage >= totalPages,
             onClick: () => setOffset(offset + limit),
             style: {
-              ...PAG_BTN2,
+              ...PAG_BTN3,
               cursor: currentPage >= totalPages ? "not-allowed" : "pointer",
               opacity: currentPage >= totalPages ? 0.45 : 1
             },
@@ -44791,16 +44845,444 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     ] });
   }
 
-  // src/admin/components/ThemeSwitcher.tsx
+  // src/admin/components/HistoryPage.tsx
   var import_react24 = __toESM(require_react());
   var import_jsx_runtime22 = __toESM(require_jsx_runtime());
-  var MONO17 = T.fontMono;
+  var MONO17 = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
+  var OPERATIONS = ["create", "update", "graph_save", "status_change", "delete"];
+  function opPillVariant(op) {
+    switch (op) {
+      case "create":
+        return "success";
+      case "update":
+        return "active";
+      case "graph_save":
+        return "active";
+      case "status_change":
+        return "draft";
+      case "delete":
+        return "failure";
+    }
+  }
+  var PAG_BTN2 = {
+    height: T.controlHeightSm,
+    padding: "0 14px",
+    boxSizing: "border-box",
+    borderRadius: T.radiusMd,
+    border: `1px solid ${T.border}`,
+    background: T.surface,
+    color: T.text,
+    fontSize: T.fontSm,
+    fontWeight: 500,
+    cursor: "pointer",
+    transition: "filter 150ms ease"
+  };
+  var TH7 = {
+    textAlign: "left",
+    padding: "10px 12px",
+    fontFamily: MONO17,
+    fontSize: T.fontXs,
+    color: T.textMuted,
+    letterSpacing: "0.06em",
+    textTransform: "uppercase",
+    fontWeight: 600,
+    background: T.surfaceAlt,
+    borderBottom: `1px solid ${T.border}`,
+    whiteSpace: "nowrap"
+  };
+  var TD6 = {
+    padding: "10px 12px",
+    fontSize: T.fontSm,
+    color: T.text,
+    verticalAlign: "middle"
+  };
+  var filterSelectStyle = {
+    height: 28,
+    padding: "0 8px",
+    borderRadius: T.radiusMd,
+    border: `1px solid ${T.border}`,
+    background: T.surface,
+    color: T.text,
+    fontSize: T.fontXs,
+    fontFamily: MONO17,
+    cursor: "pointer",
+    outline: "none"
+  };
+  var filterInputStyle = {
+    height: 28,
+    padding: "0 8px",
+    borderRadius: T.radiusMd,
+    border: `1px solid ${T.borderInput}`,
+    background: T.surface,
+    color: T.text,
+    fontSize: T.fontXs,
+    outline: "none",
+    boxSizing: "border-box"
+  };
+  function HistoryPage() {
+    const { t } = useTranslation();
+    const { isMobile } = useLayout();
+    const [items, setItems] = (0, import_react24.useState)([]);
+    const [total, setTotal] = (0, import_react24.useState)(0);
+    const [loading, setLoading] = (0, import_react24.useState)(true);
+    const [error, setError] = (0, import_react24.useState)(null);
+    const [scenarioId, setScenarioId] = (0, import_react24.useState)("");
+    const [operation, setOperation] = (0, import_react24.useState)("");
+    const [query, setQuery] = (0, import_react24.useState)("");
+    const [queryInput, setQueryInput] = (0, import_react24.useState)("");
+    const [dateFrom, setDateFrom] = (0, import_react24.useState)("");
+    const [dateTo, setDateTo] = (0, import_react24.useState)("");
+    const [offset, setOffset] = (0, import_react24.useState)(0);
+    const limit = 50;
+    const [scenarios, setScenarios] = (0, import_react24.useState)([]);
+    (0, import_react24.useEffect)(() => {
+      let cancelled = false;
+      listScenarios().then((r) => {
+        if (!cancelled) setScenarios(r.data);
+      }).catch(() => {
+      });
+      return () => {
+        cancelled = true;
+      };
+    }, []);
+    async function load() {
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await searchScenarioRevisions({
+          ...scenarioId ? { scenario_id: Number(scenarioId) } : {},
+          ...operation ? { operation } : {},
+          ...query ? { q: query } : {},
+          ...dateFrom ? { date_from: dateFrom } : {},
+          ...dateTo ? { date_to: dateTo } : {}
+        }, limit, offset);
+        setItems(res.data);
+        setTotal(res.meta.total);
+      } catch (err) {
+        setError(err instanceof ApiError ? err.message : t("common.error.fetch"));
+      } finally {
+        setLoading(false);
+      }
+    }
+    (0, import_react24.useEffect)(() => {
+      void load();
+    }, [scenarioId, operation, query, dateFrom, dateTo, offset]);
+    const subtitle = loading ? "\u2026" : t("history.subtitle", { total: String(total) });
+    const totalPages = Math.max(1, Math.ceil(total / limit));
+    const currentPage = Math.floor(offset / limit) + 1;
+    function resetOffset() {
+      setOffset(0);
+    }
+    const Pager = (0, import_react24.useMemo)(() => () => totalPages > 1 ? /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("div", { style: {
+      display: "flex",
+      justifyContent: "center",
+      gap: 8,
+      margin: "12px 0",
+      alignItems: "center",
+      fontFamily: MONO17,
+      fontSize: T.fontXs,
+      color: T.textMuted
+    }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)(
+        "button",
+        {
+          disabled: currentPage <= 1,
+          onClick: () => setOffset(Math.max(0, offset - limit)),
+          style: { ...PAG_BTN2, opacity: currentPage <= 1 ? 0.45 : 1, cursor: currentPage <= 1 ? "not-allowed" : "pointer" },
+          children: [
+            "\u2190 ",
+            t("common.prev")
+          ]
+        }
+      ),
+      /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("span", { children: [
+        currentPage,
+        " / ",
+        totalPages
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)(
+        "button",
+        {
+          disabled: currentPage >= totalPages,
+          onClick: () => setOffset(offset + limit),
+          style: { ...PAG_BTN2, opacity: currentPage >= totalPages ? 0.45 : 1, cursor: currentPage >= totalPages ? "not-allowed" : "pointer" },
+          children: [
+            t("common.next"),
+            " \u2192"
+          ]
+        }
+      )
+    ] }) : null, [totalPages, currentPage, offset, t]);
+    if (isMobile) {
+      return /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("div", { style: { minHeight: "100vh", background: T.bg }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
+          MobileHeader,
+          {
+            title: t("history.pageTitle"),
+            subtitle,
+            trailing: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(MobileIconBtn, { ariaLabel: t("common.refresh"), onClick: () => {
+              void load();
+            }, children: /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("svg", { width: "20", height: "20", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round", "aria-hidden": true, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("polyline", { points: "23 4 23 10 17 10" }),
+              /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("polyline", { points: "1 20 1 14 7 14" }),
+              /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("path", { d: "M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" })
+            ] }) })
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("div", { style: { padding: "8px 12px", display: "flex", gap: 6, flexWrap: "wrap" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
+            "input",
+            {
+              value: queryInput,
+              onChange: (e) => setQueryInput(e.target.value),
+              onKeyDown: (e) => {
+                if (e.key === "Enter") {
+                  setQuery(queryInput);
+                  resetOffset();
+                }
+              },
+              placeholder: t("history.searchPlaceholder"),
+              style: { ...filterInputStyle, flex: 1, minWidth: 0 }
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)(
+            "select",
+            {
+              value: operation,
+              onChange: (e) => {
+                setOperation(e.target.value);
+                resetOffset();
+              },
+              style: filterSelectStyle,
+              children: [
+                /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("option", { value: "", children: t("history.allOps") }),
+                OPERATIONS.map((op) => /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("option", { value: op, children: t(`history.op.${op}`) }, op))
+              ]
+            }
+          )
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)(FilterChips, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Chip, { active: scenarioId === "", onClick: () => {
+            setScenarioId("");
+            resetOffset();
+          }, children: t("history.allScenarios") }),
+          scenarios.slice(0, 8).map((s) => /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
+            Chip,
+            {
+              active: scenarioId === String(s.id),
+              onClick: () => {
+                setScenarioId(String(s.id));
+                resetOffset();
+              },
+              children: s.name
+            },
+            s.id
+          ))
+        ] }),
+        error && /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("div", { style: { padding: "12px 12px 0" }, children: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(ErrorMsg, { msg: error }) }),
+        loading ? /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("div", { style: { padding: "40px 24px", textAlign: "center", color: T.textMuted, fontSize: T.fontSm }, children: t("common.loading") }) : items.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("div", { style: { padding: "40px 24px", textAlign: "center", color: T.textMuted, fontSize: T.fontSm }, children: t("history.empty") }) : /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(CardList, { children: items.map((r, i) => /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
+          ListItem,
+          {
+            last: i === items.length - 1,
+            title: r.scenario_name ?? `#${r.scenario_id}`,
+            meta: /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)(import_jsx_runtime22.Fragment, { children: [
+              /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Pill, { variant: opPillVariant(r.operation), label: t(`history.op.${r.operation}`) }),
+              /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(MetaDot, {}),
+              /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("span", { children: r.user_email ?? t("history.unknownUser") }),
+              /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(MetaDot, {}),
+              /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("span", { style: { fontFamily: MONO17 }, children: r.created_at ?? "" })
+            ] }),
+            onClick: () => {
+            }
+          },
+          r.id
+        )) }),
+        /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Pager, {}),
+        /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("div", { style: { height: "calc(24px + env(safe-area-inset-bottom))" } })
+      ] });
+    }
+    return /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("div", { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(PageHead, { title: t("history.pageTitle"), subtitle }),
+      /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(ErrorMsg, { msg: error }),
+      /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("div", { style: { display: "flex", gap: 8, marginBottom: 12, flexWrap: "wrap", alignItems: "center" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("label", { style: {
+          display: "flex",
+          alignItems: "center",
+          gap: 5,
+          fontFamily: MONO17,
+          fontSize: T.fontXs,
+          color: T.textMuted
+        }, children: [
+          t("history.filter.scenario"),
+          ":",
+          /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)(
+            "select",
+            {
+              value: scenarioId,
+              onChange: (e) => {
+                setScenarioId(e.target.value);
+                resetOffset();
+              },
+              style: filterSelectStyle,
+              children: [
+                /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("option", { value: "", children: t("history.allScenarios") }),
+                scenarios.map((s) => /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("option", { value: s.id, children: s.name }, s.id))
+              ]
+            }
+          )
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("label", { style: {
+          display: "flex",
+          alignItems: "center",
+          gap: 5,
+          fontFamily: MONO17,
+          fontSize: T.fontXs,
+          color: T.textMuted
+        }, children: [
+          t("history.filter.operation"),
+          ":",
+          /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)(
+            "select",
+            {
+              value: operation,
+              onChange: (e) => {
+                setOperation(e.target.value);
+                resetOffset();
+              },
+              style: filterSelectStyle,
+              children: [
+                /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("option", { value: "", children: t("history.allOps") }),
+                OPERATIONS.map((op) => /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("option", { value: op, children: t(`history.op.${op}`) }, op))
+              ]
+            }
+          )
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("label", { style: {
+          display: "flex",
+          alignItems: "center",
+          gap: 5,
+          fontFamily: MONO17,
+          fontSize: T.fontXs,
+          color: T.textMuted
+        }, children: [
+          t("history.filter.from"),
+          ":",
+          /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
+            "input",
+            {
+              type: "date",
+              value: dateFrom,
+              onChange: (e) => {
+                setDateFrom(e.target.value);
+                resetOffset();
+              },
+              style: filterInputStyle
+            }
+          )
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("label", { style: {
+          display: "flex",
+          alignItems: "center",
+          gap: 5,
+          fontFamily: MONO17,
+          fontSize: T.fontXs,
+          color: T.textMuted
+        }, children: [
+          t("history.filter.to"),
+          ":",
+          /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
+            "input",
+            {
+              type: "date",
+              value: dateTo,
+              onChange: (e) => {
+                setDateTo(e.target.value);
+                resetOffset();
+              },
+              style: filterInputStyle
+            }
+          )
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
+          "input",
+          {
+            value: queryInput,
+            onChange: (e) => setQueryInput(e.target.value),
+            onKeyDown: (e) => {
+              if (e.key === "Enter") {
+                setQuery(queryInput);
+                resetOffset();
+              }
+            },
+            onBlur: () => {
+              if (queryInput !== query) {
+                setQuery(queryInput);
+                resetOffset();
+              }
+            },
+            placeholder: t("history.searchPlaceholder"),
+            style: { ...filterInputStyle, minWidth: 180 }
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("span", { style: { marginLeft: "auto", fontFamily: MONO17, fontSize: T.fontXs, color: T.textMuted }, children: [
+          total,
+          " records"
+        ] })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Card, { style: { padding: 0, overflow: "hidden" }, children: loading ? /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("p", { style: { padding: "20px 18px", color: T.textMuted }, children: t("common.loading") }) : items.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("p", { style: { padding: "20px 18px", color: T.textMuted }, children: t("history.empty") }) : /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("div", { style: { overflowX: "auto" }, children: /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("table", { style: { width: "100%", borderCollapse: "collapse" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("tr", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("th", { style: { ...TH7, width: 60 }, children: "#" }),
+          /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("th", { style: { ...TH7, width: 120 }, children: t("history.col.operation") }),
+          /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("th", { style: TH7, children: t("history.col.scenario") }),
+          /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("th", { style: { ...TH7, width: 220 }, children: t("history.col.user") }),
+          /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("th", { style: { ...TH7, width: 90 }, children: t("history.col.nodes") }),
+          /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("th", { style: { ...TH7, width: 170 }, children: t("history.col.when") })
+        ] }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("tbody", { children: items.map((r, i) => /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)(
+          "tr",
+          {
+            style: { borderBottom: i < items.length - 1 ? `1px solid ${T.border}` : "none" },
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("td", { style: { ...TD6, fontFamily: MONO17, color: T.textFaint }, children: r.revision_no }),
+              /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("td", { style: TD6, children: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Pill, { variant: opPillVariant(r.operation), label: t(`history.op.${r.operation}`) }) }),
+              /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("td", { style: TD6, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
+                  Link,
+                  {
+                    to: `/scenarios/${r.scenario_id}/edit`,
+                    style: { color: T.text, textDecoration: "none", fontWeight: 500 },
+                    children: r.scenario_name ?? `#${r.scenario_id}`
+                  }
+                ),
+                r.name && r.name !== r.scenario_name && /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("div", { style: { fontSize: T.fontXs, color: T.textMuted, marginTop: 2 }, children: r.name })
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("td", { style: { ...TD6, color: T.textMuted, fontSize: T.fontXs }, children: r.user_email ?? t("history.unknownUser") }),
+              /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("td", { style: { ...TD6, fontFamily: MONO17, fontSize: T.fontXs, color: T.textMuted }, children: [
+                r.node_count,
+                "N \xB7 ",
+                r.edge_count,
+                "E"
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("td", { style: { ...TD6, fontFamily: MONO17, fontSize: T.fontXs, color: T.textMuted }, children: r.created_at ?? "\u2014" })
+            ]
+          },
+          r.id
+        )) })
+      ] }) }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Pager, {})
+    ] });
+  }
+
+  // src/admin/components/ThemeSwitcher.tsx
+  var import_react25 = __toESM(require_react());
+  var import_jsx_runtime23 = __toESM(require_jsx_runtime());
+  var MONO18 = T.fontMono;
   function ThemeSwitcher() {
     const { adminThemeId, themeVariant: themeVariant2, setAdminTheme, toggleVariant } = useTheme();
     const bp = useBreakpoint();
-    const [open, setOpen] = (0, import_react24.useState)(false);
-    const containerRef = (0, import_react24.useRef)(null);
-    (0, import_react24.useEffect)(() => {
+    const [open, setOpen] = (0, import_react25.useState)(false);
+    const containerRef = (0, import_react25.useRef)(null);
+    (0, import_react25.useEffect)(() => {
       if (!open) return;
       function handleClick(e) {
         if (containerRef.current && !containerRef.current.contains(e.target)) {
@@ -44814,13 +45296,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const currentPreview = currentDef.preview[themeVariant2] ?? currentDef.preview[currentDef.variants[0]];
     const dotColor = currentPreview?.accent ?? T.primary;
     if (bp === "mobile") return null;
-    return /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)(
+    return /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)(
       "div",
       {
         ref: containerRef,
         style: { position: "fixed", right: 16, bottom: 16, zIndex: 200 },
         children: [
-          open && /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("div", { style: {
+          open && /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("div", { style: {
             position: "absolute",
             bottom: "calc(100% + 8px)",
             right: 0,
@@ -44831,8 +45313,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             boxShadow: T.shadowElevated,
             padding: 6
           }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("div", { style: {
-              fontFamily: MONO17,
+            /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("div", { style: {
+              fontFamily: MONO18,
               fontSize: 9.5,
               fontWeight: 700,
               letterSpacing: "0.08em",
@@ -44846,7 +45328,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               const displayVariant = isCurrent ? themeVariant2 : def.variants[0];
               const swatchPreview = def.preview[displayVariant] ?? def.preview[def.variants[0]];
               if (!swatchPreview) return null;
-              return /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)(
+              return /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)(
                 "div",
                 {
                   style: {
@@ -44871,7 +45353,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                     }
                   },
                   children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("span", { style: {
+                    /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("span", { style: {
                       width: 28,
                       height: 18,
                       borderRadius: 3,
@@ -44881,12 +45363,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                       gridTemplateColumns: "8px 1fr",
                       overflow: "hidden"
                     }, children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("span", { style: { height: "100%", background: swatchPreview.sidebar } }),
-                      /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("span", { style: {
+                      /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("span", { style: { height: "100%", background: swatchPreview.sidebar } }),
+                      /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("span", { style: {
                         height: "100%",
                         background: swatchPreview.surface,
                         position: "relative"
-                      }, children: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("span", { style: {
+                      }, children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("span", { style: {
                         position: "absolute",
                         left: 3,
                         top: 4,
@@ -44897,21 +45379,21 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                         opacity: 0.7
                       } }) })
                     ] }),
-                    /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("span", { style: {
+                    /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("span", { style: {
                       flex: 1,
                       fontSize: 12.5,
                       fontWeight: isCurrent ? 700 : 500,
                       color: isCurrent ? T.textStrong : T.text
                     }, children: [
                       def.name,
-                      darkOnly && /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("span", { style: {
-                        fontFamily: MONO17,
+                      darkOnly && /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("span", { style: {
+                        fontFamily: MONO18,
                         fontSize: 9.5,
                         color: T.textFaint,
                         marginLeft: 5
                       }, children: "dark only" })
                     ] }),
-                    /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)(
+                    /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)(
                       "div",
                       {
                         style: {
@@ -44925,7 +45407,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                         },
                         onClick: (e) => e.stopPropagation(),
                         children: [
-                          /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
+                          /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
                             "span",
                             {
                               title: "Light",
@@ -44955,7 +45437,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                               children: "\u2600"
                             }
                           ),
-                          /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
+                          /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
                             "span",
                             {
                               title: "Dark",
@@ -44991,17 +45473,17 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 def.id
               );
             }),
-            /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("div", { style: {
+            /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("div", { style: {
               marginTop: 4,
               padding: "8px 10px 4px",
-              fontFamily: MONO17,
+              fontFamily: MONO18,
               fontSize: 9.5,
               color: T.textFaint,
               letterSpacing: "0.04em",
               borderTop: `1px solid ${T.borderLight}`
             }, children: "Persists to localStorage \xB7 live preview only" })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)(
+          /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)(
             "button",
             {
               onClick: (e) => {
@@ -45030,7 +45512,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 e.currentTarget.style.background = T.surface;
               },
               children: [
-                /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("span", { style: {
+                /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("span", { style: {
                   width: 9,
                   height: 9,
                   borderRadius: 99,
@@ -45039,14 +45521,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                   boxShadow: `0 0 0 1px ${T.border}`,
                   flexShrink: 0
                 } }),
-                /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("span", { style: {
-                  fontFamily: MONO17,
+                /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("span", { style: {
+                  fontFamily: MONO18,
                   fontSize: 11,
                   fontWeight: 600,
                   letterSpacing: "0.04em",
                   color: T.textMuted
                 }, children: "theme:" }),
-                /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("span", { style: {
+                /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("span", { style: {
                   color: T.text,
                   fontWeight: 700,
                   fontSize: 12
@@ -45055,7 +45537,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                   " \xB7 ",
                   themeVariant2
                 ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("span", { style: {
+                /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("span", { style: {
                   color: T.textFaint,
                   fontSize: 10,
                   transform: open ? "rotate(180deg)" : "none",
@@ -45070,39 +45552,40 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/App.tsx
-  var import_jsx_runtime23 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime24 = __toESM(require_jsx_runtime());
   function RequireAuth() {
-    if (!isAuthenticated()) return /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Navigate, { to: "/", replace: true });
-    return /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Outlet, {});
+    if (!isAuthenticated()) return /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Navigate, { to: "/", replace: true });
+    return /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Outlet, {});
   }
   function App() {
-    return /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(ThemeProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)(ModalProvider, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(BrowserRouter, { basename: "/admin", children: /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)(Routes, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Route, { index: true, element: isAuthenticated() ? /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Navigate, { to: "/dashboard", replace: true }) : /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(LoginPage, {}) }),
-        /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)(Route, { element: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(RequireAuth, {}), children: [
-          /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)(Route, { element: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Layout, {}), children: [
-            /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Route, { path: "dashboard", element: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(DashboardPage, {}) }),
-            /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Route, { path: "scenarios", element: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(ScenariosPage, {}) }),
-            /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Route, { path: "appearance", element: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(AppearancePage, {}) }),
-            /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Route, { path: "credentials", element: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(CredentialsPage, {}) }),
-            /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Route, { path: "action-logs", element: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(ActionLogsPage, {}) }),
-            /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Route, { path: "sessions", element: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(SessionsPage, {}) }),
-            /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Route, { path: "users", element: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(UsersPage, {}) }),
-            /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Route, { path: "settings", element: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(SettingsPage, {}) })
+    return /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(ThemeProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)(ModalProvider, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(BrowserRouter, { basename: "/admin", children: /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)(Routes, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Route, { index: true, element: isAuthenticated() ? /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Navigate, { to: "/dashboard", replace: true }) : /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(LoginPage, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)(Route, { element: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(RequireAuth, {}), children: [
+          /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)(Route, { element: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Layout, {}), children: [
+            /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Route, { path: "dashboard", element: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(DashboardPage, {}) }),
+            /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Route, { path: "scenarios", element: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(ScenariosPage, {}) }),
+            /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Route, { path: "appearance", element: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(AppearancePage, {}) }),
+            /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Route, { path: "credentials", element: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(CredentialsPage, {}) }),
+            /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Route, { path: "action-logs", element: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(ActionLogsPage, {}) }),
+            /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Route, { path: "sessions", element: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(SessionsPage, {}) }),
+            /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Route, { path: "history", element: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(HistoryPage, {}) }),
+            /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Route, { path: "users", element: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(UsersPage, {}) }),
+            /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Route, { path: "settings", element: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(SettingsPage, {}) })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)(Route, { element: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Layout, { variant: "editor" }), children: [
-            /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Route, { path: "scenarios/new", element: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(ScenarioFormPage, {}) }),
-            /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Route, { path: "scenarios/:id", element: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(ScenarioFormPage, {}) })
+          /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)(Route, { element: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Layout, { variant: "editor" }), children: [
+            /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Route, { path: "scenarios/new", element: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(ScenarioFormPage, {}) }),
+            /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Route, { path: "scenarios/:id", element: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(ScenarioFormPage, {}) })
           ] })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Route, { path: "*", element: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Navigate, { to: "/", replace: true }) })
+        /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Route, { path: "*", element: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Navigate, { to: "/", replace: true }) })
       ] }) }),
-      isAuthenticated() && /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(ThemeSwitcher, {})
+      isAuthenticated() && /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(ThemeSwitcher, {})
     ] }) });
   }
 
   // src/admin/index.tsx
-  var import_jsx_runtime24 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime25 = __toESM(require_jsx_runtime());
   var storedLocale = (() => {
     try {
       return localStorage.getItem("nca-locale") ?? navigator.language;
@@ -45118,7 +45601,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var container = document.getElementById("root");
   if (!container) throw new Error("Root element #root not found");
   (0, import_client.createRoot)(container).render(
-    /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(import_react25.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(I18nProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(App, {}) }) })
+    /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(import_react26.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(I18nProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(App, {}) }) })
   );
 })();
 /*! Bundled license information:

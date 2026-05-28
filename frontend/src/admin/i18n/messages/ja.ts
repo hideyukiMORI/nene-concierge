@@ -259,6 +259,26 @@ export const ja: Partial<MessageCatalog> = {
     'sessions.detail.messages':  'メッセージ',
     'sessions.detail.close':     '閉じる',
     'sessions.detail.loadError': 'セッション詳細の読み込みに失敗しました。',
+
+    // ── 編集履歴 横断ビュー (Issue #122) ──────────────────────────────────────
+    'nav.history':                  '履歴',
+    'history.pageTitle':            '編集履歴',
+    'history.subtitle':             '{{total}} 件',
+    'history.searchPlaceholder':    'シナリオ名 / ユーザーで検索…',
+    'history.allOps':               'すべての操作',
+    'history.allScenarios':         'すべてのシナリオ',
+    'history.filter.scenario':      'シナリオ',
+    'history.filter.operation':     '操作',
+    'history.filter.from':          '開始日',
+    'history.filter.to':            '終了日',
+    'history.col.operation':        '操作',
+    'history.col.scenario':         'シナリオ',
+    'history.col.user':             'ユーザー',
+    'history.col.nodes':            'サイズ',
+    'history.col.when':             '日時',
+    'common.prev':                  '前',
+    'common.next':                  '次',
+
     // ── Users (Issue #116) ───────────────────────────────────────────────────
     'nav.users':                'ユーザー',
     'users.pageTitle':          'ユーザー管理',

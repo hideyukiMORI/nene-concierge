@@ -73,6 +73,120 @@ final readonly class PdoScenarioRevisionRepository implements ScenarioRevisionRe
         return (int) ($row['cnt'] ?? 0);
     }
 
+    /**
+     * @return list<array<string, mixed>>
+     */
+    public function searchByOrganization(
+        int $organizationId,
+        ?int $scenarioId,
+        ?int $userId,
+        ?string $operation,
+        ?string $query,
+        ?int $dateFromUnix,
+        ?int $dateToUnix,
+        int $limit,
+        int $offset,
+    ): array {
+        [$where, $params] = $this->buildWhere(
+            $organizationId,
+            $scenarioId,
+            $userId,
+            $operation,
+            $query,
+            $dateFromUnix,
+            $dateToUnix,
+        );
+
+        $sql = 'SELECT r.*, s.name AS scenario_name
+                FROM scenario_revisions r
+                LEFT JOIN scenarios s ON s.id = r.scenario_id
+                WHERE ' . $where . '
+                ORDER BY r.created_at DESC, r.id DESC
+                LIMIT ? OFFSET ?';
+
+        $params[] = $limit;
+        $params[] = $offset;
+
+        return $this->query->fetchAll($sql, $params);
+    }
+
+    public function countByOrganization(
+        int $organizationId,
+        ?int $scenarioId,
+        ?int $userId,
+        ?string $operation,
+        ?string $query,
+        ?int $dateFromUnix,
+        ?int $dateToUnix,
+    ): int {
+        [$where, $params] = $this->buildWhere(
+            $organizationId,
+            $scenarioId,
+            $userId,
+            $operation,
+            $query,
+            $dateFromUnix,
+            $dateToUnix,
+        );
+
+        $row = $this->query->fetchOne(
+            'SELECT COUNT(*) AS cnt FROM scenario_revisions r WHERE ' . $where,
+            $params,
+        );
+
+        return (int) ($row['cnt'] ?? 0);
+    }
+
+    /**
+     * @return array{0: string, 1: list<scalar|null>}
+     */
+    private function buildWhere(
+        int $organizationId,
+        ?int $scenarioId,
+        ?int $userId,
+        ?string $operation,
+        ?string $query,
+        ?int $dateFromUnix,
+        ?int $dateToUnix,
+    ): array {
+        $clauses = ['r.organization_id = ?'];
+        $params  = [$organizationId];
+
+        if ($scenarioId !== null) {
+            $clauses[] = 'r.scenario_id = ?';
+            $params[]  = $scenarioId;
+        }
+
+        if ($userId !== null) {
+            $clauses[] = 'r.user_id = ?';
+            $params[]  = $userId;
+        }
+
+        if ($operation !== null && $operation !== '') {
+            $clauses[] = 'r.operation = ?';
+            $params[]  = $operation;
+        }
+
+        if ($query !== null && $query !== '') {
+            $clauses[] = '(r.name LIKE ? OR r.user_email LIKE ?)';
+            $like      = '%' . $query . '%';
+            $params[]  = $like;
+            $params[]  = $like;
+        }
+
+        if ($dateFromUnix !== null) {
+            $clauses[] = 'r.created_at >= FROM_UNIXTIME(?)';
+            $params[]  = $dateFromUnix;
+        }
+
+        if ($dateToUnix !== null) {
+            $clauses[] = 'r.created_at < FROM_UNIXTIME(?)';
+            $params[]  = $dateToUnix;
+        }
+
+        return [implode(' AND ', $clauses), $params];
+    }
+
     /** @param array<string, mixed> $row */
     private function hydrate(array $row): ScenarioRevision
     {

@@ -172,6 +172,42 @@ export function getScenarioHistory(id: number, limit = 50, offset = 0): Promise<
     return request(`/api/v1/scenarios/${id}/history?limit=${limit}&offset=${offset}`);
 }
 
+export interface ScenarioRevisionListItem extends ScenarioRevision {
+    scenario_id:   number;
+    scenario_name: string | null;
+}
+
+export interface ScenarioRevisionsResponse {
+    data: ScenarioRevisionListItem[];
+    meta: { total: number; limit: number; offset: number };
+}
+
+export interface ScenarioRevisionsFilters {
+    scenario_id?: number;
+    user_id?:     number;
+    operation?:   ScenarioRevisionOperation;
+    q?:           string;
+    date_from?:   string;
+    date_to?:     string;
+}
+
+export function searchScenarioRevisions(
+    filters: ScenarioRevisionsFilters,
+    limit = 50,
+    offset = 0,
+): Promise<ScenarioRevisionsResponse> {
+    const params = new URLSearchParams();
+    if (filters.scenario_id !== undefined) params.set('scenario_id', String(filters.scenario_id));
+    if (filters.user_id     !== undefined) params.set('user_id',     String(filters.user_id));
+    if (filters.operation)                 params.set('operation',   filters.operation);
+    if (filters.q)                         params.set('q',           filters.q);
+    if (filters.date_from)                 params.set('date_from',   filters.date_from);
+    if (filters.date_to)                   params.set('date_to',     filters.date_to);
+    params.set('limit',  String(limit));
+    params.set('offset', String(offset));
+    return request(`/api/v1/scenario-revisions?${params.toString()}`);
+}
+
 // ── Analytics ────────────────────────────────────────────────────────────────
 
 export type AnalyticsPeriod = '1d' | '7d' | '30d' | '90d';

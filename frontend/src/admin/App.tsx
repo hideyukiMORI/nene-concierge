@@ -13,6 +13,7 @@ import ActionLogsPage   from './components/ActionLogsPage.js';
 import DashboardPage    from './components/DashboardPage.js';
 import SessionsPage     from './components/SessionsPage.js';
 import UsersPage        from './components/UsersPage.js';
+import HistoryPage      from './components/HistoryPage.js';
 import ThemeSwitcher    from './components/ThemeSwitcher.js';
 
 function RequireAuth() {
@@ -42,6 +43,7 @@ export default function App() {
                         <Route path="credentials"    element={<CredentialsPage />} />
                         <Route path="action-logs"    element={<ActionLogsPage />} />
                         <Route path="sessions"       element={<SessionsPage />} />
+                        <Route path="history"        element={<HistoryPage />} />
                         <Route path="users"          element={<UsersPage />} />
                         <Route path="settings"       element={<SettingsPage />} />
                     </Route>

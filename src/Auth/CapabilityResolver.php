@@ -35,6 +35,11 @@ final class CapabilityResolver
             return Capability::ViewScenarios;
         }
 
+        // Scenario revisions (cross-scenario history): read access for all viewers
+        if (str_starts_with($path, '/api/v1/scenario-revisions') && $method === 'GET') {
+            return Capability::ViewScenarios;
+        }
+
         return null;
     }
 
