@@ -16,6 +16,9 @@ use NeNeConcierge\Appearance\AppearanceServiceProvider;
 use NeNeConcierge\Auth\AuthRouteRegistrar;
 use NeNeConcierge\Auth\AuthServiceProvider;
 use NeNeConcierge\Auth\InvalidCredentialsExceptionHandler;
+use NeNeConcierge\Auth\UserEmailConflictExceptionHandler;
+use NeNeConcierge\Auth\UserNotFoundExceptionHandler;
+use NeNeConcierge\Auth\UserOperationForbiddenExceptionHandler;
 use NeNeConcierge\Dashboard\DashboardRouteRegistrar;
 use NeNeConcierge\Dashboard\DashboardServiceProvider;
 use NeNeConcierge\Engine\EngineExceptionHandler;
@@ -65,6 +68,9 @@ final readonly class ApplicationServiceProvider implements ServiceProviderInterf
                     $orgNotFound        = $c->get(OrganizationNotFoundExceptionHandler::class);
                     $orgSlugConflict    = $c->get(OrganizationSlugConflictExceptionHandler::class);
                     $scenarioNotFound   = $c->get(ScenarioNotFoundExceptionHandler::class);
+                    $userNotFound       = $c->get(UserNotFoundExceptionHandler::class);
+                    $userEmailConflict  = $c->get(UserEmailConflictExceptionHandler::class);
+                    $userOpForbidden    = $c->get(UserOperationForbiddenExceptionHandler::class);
 
                     if (!$actionCredNotFound instanceof ActionCredentialNotFoundExceptionHandler) {
                         throw new LogicException('ActionCredentialNotFoundExceptionHandler service is invalid.');
@@ -90,6 +96,18 @@ final readonly class ApplicationServiceProvider implements ServiceProviderInterf
                         throw new LogicException('ScenarioNotFoundExceptionHandler service is invalid.');
                     }
 
+                    if (!$userNotFound instanceof UserNotFoundExceptionHandler) {
+                        throw new LogicException('UserNotFoundExceptionHandler service is invalid.');
+                    }
+
+                    if (!$userEmailConflict instanceof UserEmailConflictExceptionHandler) {
+                        throw new LogicException('UserEmailConflictExceptionHandler service is invalid.');
+                    }
+
+                    if (!$userOpForbidden instanceof UserOperationForbiddenExceptionHandler) {
+                        throw new LogicException('UserOperationForbiddenExceptionHandler service is invalid.');
+                    }
+
                     return [
                         $actionCredNotFound,
                         $engineError,
@@ -97,6 +115,9 @@ final readonly class ApplicationServiceProvider implements ServiceProviderInterf
                         $orgNotFound,
                         $orgSlugConflict,
                         $scenarioNotFound,
+                        $userNotFound,
+                        $userEmailConflict,
+                        $userOpForbidden,
                     ];
                 },
             )
