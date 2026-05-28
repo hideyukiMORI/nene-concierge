@@ -1,51 +1,46 @@
 import { useEffect, useState } from 'react';
 import { listActionLogs, ApiError } from '../api.js';
 import type { ActionLogEntry } from '../api.js';
-import { PageTitle, Card, ErrorMsg } from './Layout.js';
+import { PageHead, Card, StatusPill, AdapterTag, ErrorMsg } from './Layout.js';
 import { T } from '../theme.js';
 import { useTranslation } from '../i18n/index.js';
 
-// ── アダプターアイコン ─────────────────────────────────────────────────────────
+const MONO = T.fontMono;
 
-const ADAPTER_ICONS: Record<string, string> = {
-    email:    '📧',
-    slack:    '💬',
-    chatwork: '🗨️',
-    http:     '🌐',
+const TH: React.CSSProperties = {
+    padding: '8px 14px', textAlign: 'left',
+    fontSize: T.fontXs, fontWeight: 700, color: T.textMuted,
+    fontFamily: MONO, letterSpacing: '0.05em', textTransform: 'uppercase',
+    background: T.surfaceAlt,
+    borderBottom: `1px solid ${T.border}`,
 };
 
-// ── ステータスバッジ ───────────────────────────────────────────────────────────
+const TD: React.CSSProperties = {
+    padding: '9px 14px', fontSize: T.fontSm, color: T.text,
+};
 
-function StatusBadge({ status }: { status: 'success' | 'failure' }) {
-    const isSuccess = status === 'success';
-    return (
-        <span style={{
-            display: 'inline-flex', alignItems: 'center', gap: 4,
-            padding: '2px 9px', borderRadius: 99,
-            fontSize: T.fontXs, fontWeight: 700,
-            background: isSuccess ? 'oklch(96% 0.04 150)' : 'oklch(97% 0.04 25)',
-            color:      isSuccess ? 'oklch(40% 0.14 150)' : 'oklch(40% 0.14 25)',
-            border: `1px solid ${isSuccess ? 'oklch(85% 0.09 150)' : 'oklch(87% 0.08 25)'}`,
-        }}>
-            {isSuccess ? '✓' : '✗'} {status}
-        </span>
-    );
-}
-
-// ── ActionLogsPage ────────────────────────────────────────────────────────────
+const PAG_BTN: React.CSSProperties = {
+    height: T.controlHeightSm, padding: '0 14px', boxSizing: 'border-box',
+    borderRadius: T.radiusMd,
+    border: `1px solid ${T.border}`, background: T.surface,
+    color: T.text, fontSize: T.fontSm, fontWeight: 500,
+    cursor: 'pointer',
+    transition: 'filter 150ms ease',
+};
 
 export default function ActionLogsPage() {
     const { t } = useTranslation();
 
-    const [logs, setLogs]         = useState<ActionLogEntry[]>([]);
-    const [total, setTotal]       = useState(0);
-    const [loading, setLoading]   = useState(true);
-    const [error, setError]       = useState<string | null>(null);
+    const [logs, setLogs]       = useState<ActionLogEntry[]>([]);
+    const [total, setTotal]     = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [error, setError]     = useState<string | null>(null);
 
-    // フィルター
-    const [adapter, setAdapter]   = useState('');
-    const [status, setStatus]     = useState('');
-    const [offset, setOffset]     = useState(0);
+    // filters
+    const [adapter, setAdapter] = useState('');
+    const [status, setStatus]   = useState('');
+    const [range, setRange]     = useState('last 24h'); // UI only
+    const [offset, setOffset]   = useState(0);
     const limit = 50;
 
     useEffect(() => {
@@ -54,8 +49,7 @@ export default function ActionLogsPage() {
         void listActionLogs({
             ...(adapter ? { adapter } : {}),
             ...(status  ? { status  } : {}),
-            limit,
-            offset,
+            limit, offset,
         }).then(res => {
             setLogs(res.data);
             setTotal(res.meta.total);
@@ -65,95 +59,114 @@ export default function ActionLogsPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [adapter, status, offset]);
 
-    function handleFilterChange() {
-        setOffset(0); // フィルター変更時はページをリセット
-    }
+    function handleFilterChange() { setOffset(0); }
 
-    const totalPages = Math.ceil(total / limit);
+    const failures    = logs.filter(l => l.status === 'failure').length;
+    const totalPages  = Math.ceil(total / limit);
     const currentPage = Math.floor(offset / limit) + 1;
+
+    const subtitle = loading
+        ? '…'
+        : `${range} · ${total} records · ${failures} failed`;
+
+    const filterSelectStyle: React.CSSProperties = {
+        height: 26, padding: '0 8px',
+        borderRadius: T.radiusMd, border: `1px solid ${T.border}`,
+        background: T.surface, color: T.text,
+        fontSize: T.fontXs, fontFamily: MONO,
+        cursor: 'pointer', outline: 'none',
+    };
 
     return (
         <div>
-            <PageTitle>{t('actionLogs.pageTitle')}</PageTitle>
+            <PageHead title="Action Logs" subtitle={subtitle}>
+                <button
+                    style={{
+                        height: T.controlHeight, padding: '0 12px',
+                        borderRadius: T.radiusMd, border: `1px solid ${T.border}`,
+                        background: 'transparent', color: T.primary,
+                        fontSize: T.fontSm, fontWeight: 600, cursor: 'pointer',
+                        display: 'inline-flex', alignItems: 'center', gap: 5,
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.filter = 'brightness(0.9)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.filter = ''; }}
+                >
+                    ↓ Export CSV
+                </button>
+            </PageHead>
 
-            {/* フィルターバー */}
-            <div style={{
-                display: 'flex', gap: 10, marginBottom: 16, flexWrap: 'wrap',
-                alignItems: 'center',
-            }}>
-                {/* Adapter フィルター */}
-                <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: T.fontSm, color: T.textMuted }}>
-                    {t('actionLogs.filterAdapter')}:
+            <ErrorMsg msg={error} />
+
+            {/* Filter bar */}
+            <div style={{ display: 'flex', gap: 8, marginBottom: 12, flexWrap: 'wrap', alignItems: 'center' }}>
+                <label style={{
+                    display: 'flex', alignItems: 'center', gap: 5,
+                    fontFamily: MONO, fontSize: T.fontXs, color: T.textMuted, letterSpacing: '0.04em',
+                }}>
+                    adapter:
                     <select
                         value={adapter}
                         onChange={e => { setAdapter(e.target.value); handleFilterChange(); }}
-                        style={{
-                            height: T.controlHeightSm, padding: '0 8px', boxSizing: 'border-box',
-                            borderRadius: T.radiusMd,
-                            border: `1.5px solid ${T.borderInput}`, background: T.surface,
-                            color: T.text, fontSize: T.fontSm, outline: 'none', cursor: 'pointer',
-                        }}
+                        style={filterSelectStyle}
                     >
-                        <option value="">{t('actionLogs.all')}</option>
-                        <option value="http">🌐 HTTP</option>
-                        <option value="email">📧 Email</option>
-                        <option value="slack">💬 Slack</option>
-                        <option value="chatwork">🗨️ Chatwork</option>
+                        <option value="">all</option>
+                        <option value="http">http</option>
+                        <option value="email">email</option>
+                        <option value="slack">slack</option>
+                        <option value="chatwork">chatwork</option>
                     </select>
                 </label>
-
-                {/* Status フィルター */}
-                <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: T.fontSm, color: T.textMuted }}>
-                    {t('actionLogs.filterStatus')}:
+                <label style={{
+                    display: 'flex', alignItems: 'center', gap: 5,
+                    fontFamily: MONO, fontSize: T.fontXs, color: T.textMuted, letterSpacing: '0.04em',
+                }}>
+                    status:
                     <select
                         value={status}
                         onChange={e => { setStatus(e.target.value); handleFilterChange(); }}
-                        style={{
-                            height: T.controlHeightSm, padding: '0 8px', boxSizing: 'border-box',
-                            borderRadius: T.radiusMd,
-                            border: `1.5px solid ${T.borderInput}`, background: T.surface,
-                            color: T.text, fontSize: T.fontSm, outline: 'none', cursor: 'pointer',
-                        }}
+                        style={filterSelectStyle}
                     >
-                        <option value="">{t('actionLogs.all')}</option>
-                        <option value="success">✓ success</option>
-                        <option value="failure">✗ failure</option>
+                        <option value="">all</option>
+                        <option value="success">success</option>
+                        <option value="failure">failure</option>
                     </select>
                 </label>
-
-                <span style={{ marginLeft: 'auto', fontSize: T.fontSm, color: T.textMuted }}>
+                <label style={{
+                    display: 'flex', alignItems: 'center', gap: 5,
+                    fontFamily: MONO, fontSize: T.fontXs, color: T.textMuted, letterSpacing: '0.04em',
+                }}>
+                    range:
+                    <select
+                        value={range}
+                        onChange={e => setRange(e.target.value)}
+                        style={filterSelectStyle}
+                    >
+                        <option>last 24h</option>
+                        <option>last 7d</option>
+                        <option>last 30d</option>
+                    </select>
+                </label>
+                <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: T.fontXs, color: T.textMuted }}>
                     {total} records
                 </span>
             </div>
 
-            <ErrorMsg msg={error} />
-
             <Card style={{ padding: 0, overflow: 'hidden' }}>
                 {loading ? (
-                    <p style={{ padding: '20px 24px', color: T.textMuted }}>{t('common.loading')}</p>
+                    <p style={{ padding: '20px 18px', color: T.textMuted }}>{t('common.loading')}</p>
                 ) : logs.length === 0 ? (
-                    <p style={{ padding: '20px 24px', color: T.textMuted }}>{t('actionLogs.empty')}</p>
+                    <p style={{ padding: '20px 18px', color: T.textMuted }}>{t('actionLogs.empty')}</p>
                 ) : (
                     <div style={{ overflowX: 'auto' }}>
-                        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: T.fontSm }}>
+                        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                             <thead>
-                                <tr style={{ background: T.tableHeader, borderBottom: `1px solid ${T.border}` }}>
-                                    {[
-                                        t('common.status'),
-                                        t('actionLogs.filterAdapter'),
-                                        t('actionLogs.sessionId'),
-                                        t('actionLogs.scenarioId'),
-                                        t('actionLogs.executedAt'),
-                                        t('actionLogs.error'),
-                                    ].map(h => (
-                                        <th key={h} style={{
-                                            padding: '10px 16px', textAlign: 'left',
-                                            fontWeight: 600, color: T.textMuted,
-                                            whiteSpace: 'nowrap',
-                                        }}>
-                                            {h}
-                                        </th>
-                                    ))}
+                                <tr>
+                                    <th style={{ ...TH, width: 100 }}>status</th>
+                                    <th style={{ ...TH, width: 110 }}>adapter</th>
+                                    <th style={{ ...TH, width: 130 }}>session</th>
+                                    <th style={{ ...TH, width: 80 }}>scenario</th>
+                                    <th style={{ ...TH, width: 150 }}>executed</th>
+                                    <th style={TH}>error / detail</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -161,28 +174,35 @@ export default function ActionLogsPage() {
                                     <tr
                                         key={log.id ?? i}
                                         style={{
-                                            borderBottom: `1px solid ${T.border}`,
-                                            background: i % 2 === 1 ? T.tableRow : 'transparent',
+                                            borderBottom: i < logs.length - 1 ? `1px solid ${T.border}` : 'none',
                                         }}
                                     >
-                                        <td style={{ padding: '9px 16px', whiteSpace: 'nowrap' }}>
-                                            <StatusBadge status={log.status} />
+                                        {/* status */}
+                                        <td style={TD}>
+                                            <StatusPill variant={log.status} />
                                         </td>
-                                        <td style={{ padding: '9px 16px', whiteSpace: 'nowrap', color: T.text }}>
-                                            {ADAPTER_ICONS[log.adapter] ?? '🔧'} {log.adapter}
+                                        {/* adapter */}
+                                        <td style={TD}>
+                                            <AdapterTag adapter={log.adapter} />
                                         </td>
-                                        <td style={{ padding: '9px 16px', fontFamily: 'monospace', fontSize: T.fontXs, color: T.textMuted }}>
+                                        {/* session */}
+                                        <td style={{ ...TD, fontFamily: MONO, fontSize: T.fontXs, color: T.textFaint }}>
                                             {log.session_id.slice(0, 8)}…
                                         </td>
-                                        <td style={{ padding: '9px 16px', color: T.textMuted }}>
+                                        {/* scenario */}
+                                        <td style={{ ...TD, fontFamily: MONO, fontSize: T.fontSm, color: T.text }}>
                                             #{log.scenario_id}
                                         </td>
-                                        <td style={{ padding: '9px 16px', whiteSpace: 'nowrap', color: T.textMuted }}>
+                                        {/* executed */}
+                                        <td style={{ ...TD, fontFamily: MONO, fontSize: T.fontSm, color: T.textMuted, whiteSpace: 'nowrap' }}>
                                             {log.executed_at}
                                         </td>
+                                        {/* error */}
                                         <td style={{
-                                            padding: '9px 16px', color: T.dangerText,
-                                            fontSize: T.fontXs, maxWidth: 280,
+                                            ...TD,
+                                            fontFamily: MONO, fontSize: T.fontXs,
+                                            color: log.status === 'failure' ? T.dangerFg : T.textMuted,
+                                            maxWidth: 280,
                                             overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
                                         }}>
                                             {log.error_message ?? '—'}
@@ -195,48 +215,39 @@ export default function ActionLogsPage() {
                 )}
             </Card>
 
-            {/* ページネーション */}
+            {/* Pagination */}
             {totalPages > 1 && (
                 <div style={{
                     display: 'flex', justifyContent: 'center', gap: 8,
                     marginTop: 16, alignItems: 'center',
+                    fontFamily: MONO, fontSize: T.fontXs, color: T.textMuted,
                 }}>
                     <button
                         disabled={currentPage <= 1}
                         onClick={() => setOffset(Math.max(0, offset - limit))}
                         style={{
-                            height: T.controlHeightSm, padding: '0 14px', boxSizing: 'border-box',
-                            borderRadius: T.radiusMd,
-                            border: `1.5px solid ${T.border}`, background: T.surface,
-                            color: T.text, fontSize: T.fontSm, fontWeight: 500,
+                            ...PAG_BTN,
                             cursor: currentPage <= 1 ? 'not-allowed' : 'pointer',
                             opacity: currentPage <= 1 ? 0.45 : 1,
-                            transition: 'filter 150ms ease',
                         }}
                         onMouseEnter={e => { if (currentPage > 1) e.currentTarget.style.filter = 'brightness(0.92)'; }}
                         onMouseLeave={e => { e.currentTarget.style.filter = ''; }}
                     >
-                        ← Prev
+                        ← prev
                     </button>
-                    <span style={{ fontSize: T.fontSm, color: T.textMuted }}>
-                        {currentPage} / {totalPages}
-                    </span>
+                    <span>page {currentPage} / {totalPages}</span>
                     <button
                         disabled={currentPage >= totalPages}
                         onClick={() => setOffset(offset + limit)}
                         style={{
-                            height: T.controlHeightSm, padding: '0 14px', boxSizing: 'border-box',
-                            borderRadius: T.radiusMd,
-                            border: `1.5px solid ${T.border}`, background: T.surface,
-                            color: T.text, fontSize: T.fontSm, fontWeight: 500,
+                            ...PAG_BTN,
                             cursor: currentPage >= totalPages ? 'not-allowed' : 'pointer',
                             opacity: currentPage >= totalPages ? 0.45 : 1,
-                            transition: 'filter 150ms ease',
                         }}
                         onMouseEnter={e => { if (currentPage < totalPages) e.currentTarget.style.filter = 'brightness(0.92)'; }}
                         onMouseLeave={e => { e.currentTarget.style.filter = ''; }}
                     >
-                        Next →
+                        next →
                     </button>
                 </div>
             )}

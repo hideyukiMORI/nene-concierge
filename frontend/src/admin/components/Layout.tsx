@@ -384,9 +384,9 @@ export default function Layout({ variant = 'default' }: { variant?: 'default' | 
 
             <main style={{
                 flex: 1, minWidth: 0, overflowY: 'auto',
-                background: T.bg, padding: '32px 40px',
+                background: T.bg, padding: '28px 36px 48px',
             }}>
-                <div style={{ maxWidth: 960, margin: '0 auto' }}>
+                <div style={{ maxWidth: 1100, margin: '0 auto' }}>
                     <Outlet />
                 </div>
             </main>
@@ -410,11 +410,125 @@ export function PageTitle({ children, style }: { children: React.ReactNode; styl
     );
 }
 
+// ── PageHead — title + subtitle (mono) + actions ──────────────────────────────
+export function PageHead({ title, subtitle, children }: {
+    title:     string;
+    subtitle?: string;
+    children?: React.ReactNode;
+}) {
+    return (
+        <div style={{
+            display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between',
+            gap: 12, marginBottom: 18,
+        }}>
+            <div>
+                <h1 style={{
+                    fontSize: T.font2xl, fontWeight: 700, marginBottom: 2,
+                    color: T.textStrong, letterSpacing: '-0.02em', lineHeight: 1.2,
+                }}>{title}</h1>
+                {subtitle && (
+                    <div style={{
+                        fontSize: T.fontSm, color: T.textMuted,
+                        fontFamily: T.fontMono, letterSpacing: '0.02em',
+                    }}>{subtitle}</div>
+                )}
+            </div>
+            {children && (
+                <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexShrink: 0 }}>
+                    {children}
+                </div>
+            )}
+        </div>
+    );
+}
+
+// ── StatusPill — dot + uppercase mono label ───────────────────────────────────
+type PillVariant = 'published' | 'draft' | 'archived' | 'success' | 'failure' | 'active' | 'completed' | 'converted' | 'abandoned' | 'dropped';
+const PILL_STYLES: Record<PillVariant, React.CSSProperties> = {
+    published:  { background: T.badgePubBg,    color: T.badgePubColor },
+    completed:  { background: T.badgePubBg,    color: T.badgePubColor },
+    converted:  { background: T.successPillBg, color: T.successFg },
+    success:    { background: T.successPillBg, color: T.successFg },
+    draft:      { background: T.badgeDraftBg,  color: T.badgeDraftColor },
+    archived:   { background: T.badgeArchBg,   color: T.badgeArchColor },
+    abandoned:  { background: T.badgeArchBg,   color: T.badgeArchColor },
+    dropped:    { background: T.badgeArchBg,   color: T.badgeArchColor },
+    failure:    { background: T.dangerBg, color: T.dangerFg, border: `1px solid ${T.dangerBorder}` },
+    active:     { background: T.primaryTint, color: T.primary },
+};
+export function StatusPill({ variant, label }: { variant: PillVariant; label?: string }) {
+    const s = PILL_STYLES[variant] ?? PILL_STYLES.draft;
+    const text = label ?? variant;
+    return (
+        <span style={{
+            display: 'inline-flex', alignItems: 'center', gap: 5,
+            height: 22, padding: '0 9px', borderRadius: T.radiusXl,
+            fontSize: T.fontXs, fontWeight: 700, fontFamily: T.fontMono,
+            letterSpacing: '0.04em', textTransform: 'uppercase',
+            ...s,
+        }}>
+            <span style={{ width: 5, height: 5, borderRadius: 99, background: 'currentColor', flexShrink: 0 }} />
+            {text}
+        </span>
+    );
+}
+
+// ── AdapterTag — muted brand color ────────────────────────────────────────────
+const ADAPTER_STYLES: Record<string, React.CSSProperties> = {
+    http:     { color: T.adapterHttp,     background: T.adapterHttpBg },
+    email:    { color: T.adapterEmail,    background: T.adapterEmailBg },
+    slack:    { color: T.adapterSlack,    background: T.adapterSlackBg },
+    chatwork: { color: T.adapterChatwork, background: T.adapterChatworkBg },
+};
+export function AdapterTag({ adapter }: { adapter: string }) {
+    const s = ADAPTER_STYLES[adapter] ?? { color: T.textMuted, background: T.surfaceAlt };
+    return (
+        <span style={{
+            display: 'inline-flex', alignItems: 'center', gap: 5,
+            fontFamily: T.fontMono, fontSize: T.fontXs, fontWeight: 700,
+            letterSpacing: '0.02em', padding: '2px 8px', borderRadius: T.radiusXl,
+            ...s,
+        }}>
+            <span style={{ width: 5, height: 5, borderRadius: 99, background: 'currentColor', flexShrink: 0 }} />
+            {adapter}
+        </span>
+    );
+}
+
+// ── SectionHead — mono uppercase label + horizontal rule ─────────────────────
+export function SectionHead({ label, children }: { label: string; children?: React.ReactNode }) {
+    return (
+        <div style={{
+            display: 'flex', alignItems: 'center', gap: 10,
+            marginBottom: 14,
+        }}>
+            <span style={{
+                fontSize: T.fontXs, fontWeight: 700, color: T.textMuted,
+                fontFamily: T.fontMono, letterSpacing: '0.06em', textTransform: 'uppercase',
+                flexShrink: 0,
+            }}>{label}</span>
+            <div style={{ flex: 1, height: 1, background: T.border }} />
+            {children}
+        </div>
+    );
+}
+
+// ── CardSub — mono label above card title ─────────────────────────────────────
+export function CardSub({ children }: { children: React.ReactNode }) {
+    return (
+        <div style={{
+            fontSize: T.fontXs, fontWeight: 600, color: T.textMuted,
+            fontFamily: T.fontMono, letterSpacing: '0.06em', textTransform: 'uppercase',
+            marginBottom: 4,
+        }}>{children}</div>
+    );
+}
+
 export function Card({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
     return (
         <div style={{
             background: T.surface, border: `1px solid ${T.border}`,
-            borderRadius: T.radiusLg, padding: '24px',
+            borderRadius: T.radiusLg, padding: '16px 18px',
             boxShadow: T.shadowCard, ...style,
         }}>{children}</div>
     );

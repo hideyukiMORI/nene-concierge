@@ -113,6 +113,19 @@ export const T = {
     controlHeightSm: 'var(--nca-control-height-sm)',
     controlHeightXs: 'var(--nca-control-height-xs)',
 
+    // ── Font mono ─────────────────────────────────────────────────────────────
+    fontMono: 'var(--nca-font-mono)',
+
+    // ── Adapter tag accents ───────────────────────────────────────────────────
+    adapterHttp:        'var(--nca-adapter-http)',
+    adapterHttpBg:      'var(--nca-adapter-http-bg)',
+    adapterEmail:       'var(--nca-adapter-email)',
+    adapterEmailBg:     'var(--nca-adapter-email-bg)',
+    adapterSlack:       'var(--nca-adapter-slack)',
+    adapterSlackBg:     'var(--nca-adapter-slack-bg)',
+    adapterChatwork:    'var(--nca-adapter-chatwork)',
+    adapterChatworkBg:  'var(--nca-adapter-chatwork-bg)',
+
     // ── Motion ───────────────────────────────────────────────────────────────
     transitionFast:   'var(--nca-transition-fast)',
     transitionNormal: 'var(--nca-transition-normal)',
