@@ -24,7 +24,7 @@ final readonly class DeleteUserHandler implements RequestHandlerInterface
         $id         = (int) ($parameters['id'] ?? 0);
 
         $claims          = (array) ($request->getAttribute('nene2.auth.claims') ?? []);
-        $requesterUserId = isset($claims['sub']) ? (int) $claims['sub'] : null;
+        $requesterUserId = isset($claims['user_id']) ? (int) $claims['user_id'] : null;
 
         $this->useCase->execute($id, $requesterUserId);
 

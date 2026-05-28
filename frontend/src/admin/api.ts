@@ -122,6 +122,30 @@ export function saveScenarioGraph(
     });
 }
 
+export type ScenarioRevisionOperation = 'create' | 'update' | 'graph_save' | 'status_change' | 'delete';
+
+export interface ScenarioRevision {
+    id:          number;
+    revision_no: number;
+    user_id:     number | null;
+    user_email:  string | null;
+    operation:   ScenarioRevisionOperation;
+    name:        string | null;
+    status:      string | null;
+    node_count:  number;
+    edge_count:  number;
+    created_at:  string | null;
+}
+
+export interface ScenarioHistoryResponse {
+    data: ScenarioRevision[];
+    meta: { total: number; limit: number; offset: number };
+}
+
+export function getScenarioHistory(id: number, limit = 50, offset = 0): Promise<ScenarioHistoryResponse> {
+    return request(`/api/v1/scenarios/${id}/history?limit=${limit}&offset=${offset}`);
+}
+
 // ── Analytics ────────────────────────────────────────────────────────────────
 
 export type AnalyticsPeriod = '1d' | '7d' | '30d' | '90d';

@@ -301,6 +301,16 @@ export const en = {
     'theme.toggleLight': 'Switch to light mode',
     'theme.toggleDark':  'Switch to dark mode',
     'theme.label':       'Theme',
+
+    // ── Scenario edit history ─────────────────────────────────────────────────
+    'history.title':            'Edit history',
+    'history.empty':            'No history yet.',
+    'history.unknownUser':      'Unknown user',
+    'history.op.create':        'Created',
+    'history.op.update':        'Edited',
+    'history.op.graph_save':    'Saved',
+    'history.op.status_change': 'Status',
+    'history.op.delete':        'Deleted',
 } as const
 
 /** Complete message catalog type — keys from the English source of truth, values are strings. */

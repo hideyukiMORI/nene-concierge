@@ -8,6 +8,7 @@ use Nene2\Http\JsonResponseFactory;
 use Nene2\Routing\Router;
 use Nene2\Validation\ValidationError;
 use Nene2\Validation\ValidationException;
+use NeNeConcierge\Auth\ActorContext;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -114,12 +115,15 @@ final readonly class SaveScenarioGraphHandler implements RequestHandlerInterface
             throw new ValidationException($errors);
         }
 
-        $this->useCase->execute(new SaveScenarioGraphInput(
-            scenarioId:     $scenarioId,
-            organizationId: $orgId,
-            nodes:          $nodeInputs,
-            edges:          $edgeInputs,
-        ));
+        $this->useCase->execute(
+            new SaveScenarioGraphInput(
+                scenarioId:     $scenarioId,
+                organizationId: $orgId,
+                nodes:          $nodeInputs,
+                edges:          $edgeInputs,
+            ),
+            ActorContext::fromRequest($request),
+        );
 
         return $this->response->create([], 204);
     }

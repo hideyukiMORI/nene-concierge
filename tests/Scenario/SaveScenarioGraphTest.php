@@ -6,6 +6,7 @@ namespace NeNeConcierge\Tests\Scenario;
 
 use Nene2\Routing\Router;
 use Nene2\Validation\ValidationException;
+use NeNeConcierge\Auth\ActorContext;
 use NeNeConcierge\Scenario\SaveScenarioGraphEdgeInput;
 use NeNeConcierge\Scenario\SaveScenarioGraphHandler;
 use NeNeConcierge\Scenario\SaveScenarioGraphInput;
@@ -14,6 +15,7 @@ use NeNeConcierge\Scenario\SaveScenarioGraphUseCase;
 use NeNeConcierge\Scenario\Scenario;
 use NeNeConcierge\Scenario\ScenarioNodeType;
 use NeNeConcierge\Scenario\ScenarioNotFoundException;
+use NeNeConcierge\Scenario\ScenarioRevisionRecorder;
 use NeNeConcierge\Scenario\ScenarioStatus;
 use PHPUnit\Framework\TestCase;
 
@@ -21,21 +23,26 @@ final class SaveScenarioGraphTest extends TestCase
 {
     private const int ORG = 1;
 
-    private InMemoryScenarioRepository     $scenarioRepo;
-    private InMemoryScenarioNodeRepository $nodeRepo;
-    private InMemoryScenarioEdgeRepository $edgeRepo;
-    private SaveScenarioGraphUseCase       $useCase;
+    private InMemoryScenarioRepository         $scenarioRepo;
+    private InMemoryScenarioNodeRepository     $nodeRepo;
+    private InMemoryScenarioEdgeRepository     $edgeRepo;
+    private InMemoryScenarioRevisionRepository $revisionRepo;
+    private SaveScenarioGraphUseCase           $useCase;
+    private ActorContext                       $actor;
 
     protected function setUp(): void
     {
         $this->scenarioRepo = new InMemoryScenarioRepository();
         $this->nodeRepo     = new InMemoryScenarioNodeRepository();
         $this->edgeRepo     = new InMemoryScenarioEdgeRepository();
+        $this->revisionRepo = new InMemoryScenarioRevisionRepository();
         $this->useCase      = new SaveScenarioGraphUseCase(
             $this->scenarioRepo,
             $this->nodeRepo,
             $this->edgeRepo,
+            new ScenarioRevisionRecorder($this->revisionRepo, $this->nodeRepo, $this->edgeRepo),
         );
+        $this->actor = new ActorContext(userId: 1, email: 'tester@example.com');
     }
 
     private function seedScenario(int $id = 1): Scenario
@@ -65,7 +72,7 @@ final class SaveScenarioGraphTest extends TestCase
             organizationId: self::ORG,
             nodes:          [],
             edges:          [],
-        ));
+        ), $this->actor);
 
         self::assertEmpty($this->nodeRepo->findByScenario(1, self::ORG));
         self::assertEmpty($this->edgeRepo->findByScenario(1, self::ORG));
@@ -99,7 +106,7 @@ final class SaveScenarioGraphTest extends TestCase
             edges:          [
                 new SaveScenarioGraphEdgeInput('aaa', 'bbb', null),
             ],
-        ));
+        ), $this->actor);
 
         $nodes = $this->nodeRepo->findByScenario(1, self::ORG);
         $edges = $this->edgeRepo->findByScenario(1, self::ORG);
@@ -129,7 +136,7 @@ final class SaveScenarioGraphTest extends TestCase
                 new SaveScenarioGraphEdgeInput('n1', 'n2', null),
                 new SaveScenarioGraphEdgeInput('n2', 'n3', null),
             ],
-        ));
+        ), $this->actor);
 
         // Second save: 2 nodes (replace)
         $this->useCase->execute(new SaveScenarioGraphInput(
@@ -142,7 +149,7 @@ final class SaveScenarioGraphTest extends TestCase
             edges:          [
                 new SaveScenarioGraphEdgeInput('x1', 'x2', 'go'),
             ],
-        ));
+        ), $this->actor);
 
         $nodes = $this->nodeRepo->findByScenario(1, self::ORG);
         $edges = $this->edgeRepo->findByScenario(1, self::ORG);
@@ -166,7 +173,7 @@ final class SaveScenarioGraphTest extends TestCase
                 new SaveScenarioGraphNodeInput('n1', ScenarioNodeType::Message, 'Msg', $data, 50.0, 75.0),
             ],
             edges:          [],
-        ));
+        ), $this->actor);
 
         $node = $this->nodeRepo->findByNodeId('n1', 1, self::ORG);
 
@@ -187,7 +194,7 @@ final class SaveScenarioGraphTest extends TestCase
             organizationId: self::ORG,
             nodes:          [],
             edges:          [],
-        ));
+        ), $this->actor);
     }
 
     public function testValidationErrorOnInvalidNodeType(): void

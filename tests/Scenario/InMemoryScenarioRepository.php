@@ -89,4 +89,25 @@ final class InMemoryScenarioRepository implements ScenarioRepositoryInterface
 
         unset($this->store[$id]);
     }
+
+    public function touchUpdatedBy(int $id, int $organizationId, ?int $userId): void
+    {
+        if (!isset($this->store[$id]) || $this->store[$id]->organizationId !== $organizationId) {
+            return;
+        }
+
+        $existing = $this->store[$id];
+
+        $this->store[$id] = new Scenario(
+            name:            $existing->name,
+            status:          $existing->status,
+            organizationId:  $existing->organizationId,
+            id:              $existing->id,
+            description:     $existing->description,
+            createdAt:       $existing->createdAt,
+            updatedAt:       date('Y-m-d H:i:s'),
+            createdByUserId: $existing->createdByUserId,
+            updatedByUserId: $userId,
+        );
+    }
 }

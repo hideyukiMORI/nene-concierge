@@ -4,16 +4,19 @@ declare(strict_types=1);
 
 namespace NeNeConcierge\Scenario;
 
+use NeNeConcierge\Auth\ActorContext;
+
 final readonly class UpdateScenarioUseCase
 {
     public function __construct(
         private ScenarioRepositoryInterface     $scenarios,
         private ScenarioNodeRepositoryInterface $nodes,
         private ScenarioEdgeRepositoryInterface $edges,
+        private ScenarioRevisionRecorder        $revisions,
     ) {
     }
 
-    public function execute(UpdateScenarioInput $input, int $organizationId): void
+    public function execute(UpdateScenarioInput $input, int $organizationId, ActorContext $actor): void
     {
         $scenario = $this->scenarios->findById($input->scenarioId, $organizationId);
 
@@ -22,12 +25,14 @@ final readonly class UpdateScenarioUseCase
         }
 
         $updated = new Scenario(
-            name:           $input->name ?? $scenario->name,
-            status:         $input->status ?? $scenario->status,
-            organizationId: $organizationId,
-            id:             $scenario->id,
-            description:    $input->description ?? $scenario->description,
-            createdAt:      $scenario->createdAt,
+            name:            $input->name ?? $scenario->name,
+            status:          $input->status ?? $scenario->status,
+            organizationId:  $organizationId,
+            id:              $scenario->id,
+            description:     $input->description ?? $scenario->description,
+            createdAt:       $scenario->createdAt,
+            createdByUserId: $scenario->createdByUserId,
+            updatedByUserId: $actor->userId,
         );
 
         $this->scenarios->update($updated);
@@ -46,6 +51,15 @@ final readonly class UpdateScenarioUseCase
                 $input->edges,
             );
             $this->edges->replaceAll($input->scenarioId, $organizationId, $edgeEntities);
+        }
+
+        $operation = $input->status !== null && $input->status !== $scenario->status
+            ? 'status_change'
+            : 'update';
+
+        $reloaded = $this->scenarios->findById($input->scenarioId, $organizationId);
+        if ($reloaded !== null) {
+            $this->revisions->record($reloaded, $operation, $actor);
         }
     }
 

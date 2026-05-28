@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace NeNeConcierge\Tests\Scenario;
 
+use NeNeConcierge\Auth\ActorContext;
 use NeNeConcierge\Scenario\CreateScenarioInput;
 use NeNeConcierge\Scenario\CreateScenarioUseCase;
 use NeNeConcierge\Scenario\DeleteScenarioUseCase;
@@ -12,6 +13,7 @@ use NeNeConcierge\Scenario\ListScenariosUseCase;
 use NeNeConcierge\Scenario\ScenarioNode;
 use NeNeConcierge\Scenario\ScenarioNodeType;
 use NeNeConcierge\Scenario\ScenarioNotFoundException;
+use NeNeConcierge\Scenario\ScenarioRevisionRecorder;
 use NeNeConcierge\Scenario\ScenarioStatus;
 use NeNeConcierge\Scenario\UpdateScenarioInput;
 use NeNeConcierge\Scenario\UpdateScenarioUseCase;
@@ -19,25 +21,46 @@ use PHPUnit\Framework\TestCase;
 
 final class ScenarioUseCaseTest extends TestCase
 {
-    private InMemoryScenarioRepository     $scenarioRepo;
-    private InMemoryScenarioNodeRepository $nodeRepo;
-    private InMemoryScenarioEdgeRepository $edgeRepo;
+    private InMemoryScenarioRepository           $scenarioRepo;
+    private InMemoryScenarioNodeRepository       $nodeRepo;
+    private InMemoryScenarioEdgeRepository       $edgeRepo;
+    private InMemoryScenarioRevisionRepository   $revisionRepo;
+    private ScenarioRevisionRecorder             $recorder;
+    private ActorContext                         $actor;
 
     protected function setUp(): void
     {
         $this->scenarioRepo = new InMemoryScenarioRepository();
         $this->nodeRepo     = new InMemoryScenarioNodeRepository();
         $this->edgeRepo     = new InMemoryScenarioEdgeRepository();
+        $this->revisionRepo = new InMemoryScenarioRevisionRepository();
+        $this->recorder     = new ScenarioRevisionRecorder($this->revisionRepo, $this->nodeRepo, $this->edgeRepo);
+        $this->actor        = new ActorContext(userId: 1, email: 'tester@example.com');
+    }
+
+    private function createUseCase(): CreateScenarioUseCase
+    {
+        return new CreateScenarioUseCase($this->scenarioRepo, $this->nodeRepo, $this->edgeRepo, $this->recorder);
+    }
+
+    private function updateUseCase(): UpdateScenarioUseCase
+    {
+        return new UpdateScenarioUseCase($this->scenarioRepo, $this->nodeRepo, $this->edgeRepo, $this->recorder);
+    }
+
+    private function deleteUseCase(): DeleteScenarioUseCase
+    {
+        return new DeleteScenarioUseCase($this->scenarioRepo, $this->recorder);
     }
 
     public function testCreateAndListScenarios(): void
     {
-        $create = new CreateScenarioUseCase($this->scenarioRepo, $this->nodeRepo, $this->edgeRepo);
+        $create = $this->createUseCase();
         $list   = new ListScenariosUseCase($this->scenarioRepo);
 
-        $id1 = $create->execute(new CreateScenarioInput(name: 'Scenario A'), organizationId: 1);
-        $id2 = $create->execute(new CreateScenarioInput(name: 'Scenario B'), organizationId: 1);
-        $create->execute(new CreateScenarioInput(name: 'Other Org'), organizationId: 2);
+        $id1 = $create->execute(new CreateScenarioInput(name: 'Scenario A'), 1, $this->actor);
+        $id2 = $create->execute(new CreateScenarioInput(name: 'Scenario B'), 1, $this->actor);
+        $create->execute(new CreateScenarioInput(name: 'Other Org'), 2, $this->actor);
 
         self::assertNotSame($id1, $id2);
 
@@ -48,7 +71,7 @@ final class ScenarioUseCaseTest extends TestCase
 
     public function testGetScenarioIncludesNodesAndEdges(): void
     {
-        $create = new CreateScenarioUseCase($this->scenarioRepo, $this->nodeRepo, $this->edgeRepo);
+        $create = $this->createUseCase();
         $get    = new GetScenarioUseCase($this->scenarioRepo, $this->nodeRepo, $this->edgeRepo);
 
         $id = $create->execute(
@@ -62,7 +85,8 @@ final class ScenarioUseCaseTest extends TestCase
                     ['source_node_id' => 'n1', 'target_node_id' => 'n2', 'label' => 'next'],
                 ],
             ),
-            organizationId: 1,
+            1,
+            $this->actor,
         );
 
         $result = $get->execute($id, organizationId: 1);
@@ -85,12 +109,12 @@ final class ScenarioUseCaseTest extends TestCase
 
     public function testUpdateScenarioName(): void
     {
-        $create = new CreateScenarioUseCase($this->scenarioRepo, $this->nodeRepo, $this->edgeRepo);
-        $update = new UpdateScenarioUseCase($this->scenarioRepo, $this->nodeRepo, $this->edgeRepo);
+        $create = $this->createUseCase();
+        $update = $this->updateUseCase();
         $get    = new GetScenarioUseCase($this->scenarioRepo, $this->nodeRepo, $this->edgeRepo);
 
-        $id = $create->execute(new CreateScenarioInput(name: 'Old Name'), organizationId: 1);
-        $update->execute(new UpdateScenarioInput(scenarioId: $id, name: 'New Name'), organizationId: 1);
+        $id = $create->execute(new CreateScenarioInput(name: 'Old Name'), 1, $this->actor);
+        $update->execute(new UpdateScenarioInput(scenarioId: $id, name: 'New Name'), 1, $this->actor);
 
         $result = $get->execute($id, organizationId: 1);
         self::assertSame('New Name', $result->scenario->name);
@@ -98,14 +122,14 @@ final class ScenarioUseCaseTest extends TestCase
 
     public function testUpdateScenarioStatus(): void
     {
-        $create = new CreateScenarioUseCase($this->scenarioRepo, $this->nodeRepo, $this->edgeRepo);
-        $update = new UpdateScenarioUseCase($this->scenarioRepo, $this->nodeRepo, $this->edgeRepo);
+        $create = $this->createUseCase();
+        $update = $this->updateUseCase();
         $get    = new GetScenarioUseCase($this->scenarioRepo, $this->nodeRepo, $this->edgeRepo);
 
-        $id = $create->execute(new CreateScenarioInput(name: 'Draft'), organizationId: 1);
+        $id = $create->execute(new CreateScenarioInput(name: 'Draft'), 1, $this->actor);
 
         $updateInput = new UpdateScenarioInput(scenarioId: $id, status: ScenarioStatus::Published);
-        $update->execute($updateInput, organizationId: 1);
+        $update->execute($updateInput, 1, $this->actor);
 
         $result = $get->execute($id, organizationId: 1);
         self::assertSame(ScenarioStatus::Published, $result->scenario->status);
@@ -113,8 +137,8 @@ final class ScenarioUseCaseTest extends TestCase
 
     public function testUpdateScenarioReplacesNodes(): void
     {
-        $create = new CreateScenarioUseCase($this->scenarioRepo, $this->nodeRepo, $this->edgeRepo);
-        $update = new UpdateScenarioUseCase($this->scenarioRepo, $this->nodeRepo, $this->edgeRepo);
+        $create = $this->createUseCase();
+        $update = $this->updateUseCase();
         $get    = new GetScenarioUseCase($this->scenarioRepo, $this->nodeRepo, $this->edgeRepo);
 
         $id = $create->execute(
@@ -122,7 +146,8 @@ final class ScenarioUseCaseTest extends TestCase
                 name:  'WithNodes',
                 nodes: [['node_id' => 'old', 'type' => 'message', 'label' => 'Old']],
             ),
-            organizationId: 1,
+            1,
+            $this->actor,
         );
 
         $update->execute(
@@ -133,7 +158,8 @@ final class ScenarioUseCaseTest extends TestCase
                     ['node_id' => 'n2', 'type' => 'end', 'label' => 'End'],
                 ],
             ),
-            organizationId: 1,
+            1,
+            $this->actor,
         );
 
         $result = $get->execute($id, organizationId: 1);
@@ -147,12 +173,12 @@ final class ScenarioUseCaseTest extends TestCase
 
     public function testDeleteScenario(): void
     {
-        $create = new CreateScenarioUseCase($this->scenarioRepo, $this->nodeRepo, $this->edgeRepo);
-        $delete = new DeleteScenarioUseCase($this->scenarioRepo);
+        $create = $this->createUseCase();
+        $delete = $this->deleteUseCase();
         $list   = new ListScenariosUseCase($this->scenarioRepo);
 
-        $id = $create->execute(new CreateScenarioInput(name: 'ToDelete'), organizationId: 1);
-        $delete->execute($id, organizationId: 1);
+        $id = $create->execute(new CreateScenarioInput(name: 'ToDelete'), 1, $this->actor);
+        $delete->execute($id, 1, $this->actor);
 
         $result = $list->execute(organizationId: 1, limit: 20, offset: 0);
         self::assertSame(0, $result->total);
@@ -160,18 +186,18 @@ final class ScenarioUseCaseTest extends TestCase
 
     public function testDeleteScenarioThrowsForUnknownId(): void
     {
-        $delete = new DeleteScenarioUseCase($this->scenarioRepo);
+        $delete = $this->deleteUseCase();
 
         $this->expectException(ScenarioNotFoundException::class);
-        $delete->execute(scenarioId: 999, organizationId: 1);
+        $delete->execute(999, 1, $this->actor);
     }
 
     public function testOrganizationIsolation(): void
     {
-        $create = new CreateScenarioUseCase($this->scenarioRepo, $this->nodeRepo, $this->edgeRepo);
+        $create = $this->createUseCase();
         $get    = new GetScenarioUseCase($this->scenarioRepo, $this->nodeRepo, $this->edgeRepo);
 
-        $id = $create->execute(new CreateScenarioInput(name: 'Org1 Only'), organizationId: 1);
+        $id = $create->execute(new CreateScenarioInput(name: 'Org1 Only'), 1, $this->actor);
 
         // Org 2 cannot see org 1's scenario
         $this->expectException(ScenarioNotFoundException::class);
@@ -180,7 +206,7 @@ final class ScenarioUseCaseTest extends TestCase
 
     public function testNodeTypeIsPreservedCorrectly(): void
     {
-        $create = new CreateScenarioUseCase($this->scenarioRepo, $this->nodeRepo, $this->edgeRepo);
+        $create = $this->createUseCase();
         $get    = new GetScenarioUseCase($this->scenarioRepo, $this->nodeRepo, $this->edgeRepo);
 
         $id = $create->execute(
@@ -191,7 +217,8 @@ final class ScenarioUseCaseTest extends TestCase
                     ['node_id' => 'n2', 'type' => 'end', 'label' => 'End'],
                 ],
             ),
-            organizationId: 1,
+            1,
+            $this->actor,
         );
 
         $result  = $get->execute($id, organizationId: 1);
@@ -203,5 +230,22 @@ final class ScenarioUseCaseTest extends TestCase
 
         self::assertSame(ScenarioNodeType::Message, $nodeMap['n1']);
         self::assertSame(ScenarioNodeType::End, $nodeMap['n2']);
+    }
+
+    public function testRevisionsAreRecordedOnCreateAndUpdate(): void
+    {
+        $create = $this->createUseCase();
+        $update = $this->updateUseCase();
+
+        $id = $create->execute(new CreateScenarioInput(name: 'V1'), 1, $this->actor);
+        $update->execute(new UpdateScenarioInput(scenarioId: $id, name: 'V2'), 1, $this->actor);
+        $update->execute(new UpdateScenarioInput(scenarioId: $id, status: ScenarioStatus::Published), 1, $this->actor);
+
+        self::assertCount(3, $this->revisionRepo->store);
+        self::assertSame('create', $this->revisionRepo->store[0]->operation);
+        self::assertSame('update', $this->revisionRepo->store[1]->operation);
+        self::assertSame('status_change', $this->revisionRepo->store[2]->operation);
+        self::assertSame('tester@example.com', $this->revisionRepo->store[0]->userEmail);
+        self::assertSame(1, $this->revisionRepo->store[0]->userId);
     }
 }

@@ -47,13 +47,15 @@ final readonly class PdoScenarioRepository implements ScenarioRepositoryInterfac
     public function save(Scenario $scenario): int
     {
         return $this->query->insert(
-            'INSERT INTO scenarios (organization_id, name, description, status, created_at, updated_at)
-             VALUES (?, ?, ?, ?, NOW(), NOW())',
+            'INSERT INTO scenarios (organization_id, name, description, status, created_by_user_id, updated_by_user_id, created_at, updated_at)
+             VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())',
             [
                 $scenario->organizationId,
                 $scenario->name,
                 $scenario->description,
                 $scenario->status->value,
+                $scenario->createdByUserId,
+                $scenario->updatedByUserId ?? $scenario->createdByUserId,
             ],
         );
     }
@@ -61,12 +63,13 @@ final readonly class PdoScenarioRepository implements ScenarioRepositoryInterfac
     public function update(Scenario $scenario): void
     {
         $affected = $this->query->execute(
-            'UPDATE scenarios SET name = ?, description = ?, status = ?, updated_at = NOW()
+            'UPDATE scenarios SET name = ?, description = ?, status = ?, updated_by_user_id = ?, updated_at = NOW()
              WHERE id = ? AND organization_id = ?',
             [
                 $scenario->name,
                 $scenario->description,
                 $scenario->status->value,
+                $scenario->updatedByUserId,
                 $scenario->id,
                 $scenario->organizationId,
             ],
@@ -75,6 +78,14 @@ final readonly class PdoScenarioRepository implements ScenarioRepositoryInterfac
         if ($affected === 0) {
             throw new ScenarioNotFoundException($scenario->id ?? 0);
         }
+    }
+
+    public function touchUpdatedBy(int $id, int $organizationId, ?int $userId): void
+    {
+        $this->query->execute(
+            'UPDATE scenarios SET updated_by_user_id = ?, updated_at = NOW() WHERE id = ? AND organization_id = ?',
+            [$userId, $id, $organizationId],
+        );
     }
 
     public function delete(int $id, int $organizationId): void
@@ -93,13 +104,15 @@ final readonly class PdoScenarioRepository implements ScenarioRepositoryInterfac
     private function hydrate(array $row): Scenario
     {
         return new Scenario(
-            name:           (string) $row['name'],
-            status:         ScenarioStatus::from((string) $row['status']),
-            organizationId: (int) $row['organization_id'],
-            id:             (int) $row['id'],
-            description:    isset($row['description']) ? (string) $row['description'] : null,
-            createdAt:      isset($row['created_at']) ? (string) $row['created_at'] : null,
-            updatedAt:      isset($row['updated_at']) ? (string) $row['updated_at'] : null,
+            name:            (string) $row['name'],
+            status:          ScenarioStatus::from((string) $row['status']),
+            organizationId:  (int) $row['organization_id'],
+            id:              (int) $row['id'],
+            description:     isset($row['description']) ? (string) $row['description'] : null,
+            createdAt:       isset($row['created_at']) ? (string) $row['created_at'] : null,
+            updatedAt:       isset($row['updated_at']) ? (string) $row['updated_at'] : null,
+            createdByUserId: isset($row['created_by_user_id']) ? (int) $row['created_by_user_id'] : null,
+            updatedByUserId: isset($row['updated_by_user_id']) ? (int) $row['updated_by_user_id'] : null,
         );
     }
 }

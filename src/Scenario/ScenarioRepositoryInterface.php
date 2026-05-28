@@ -20,4 +20,6 @@ interface ScenarioRepositoryInterface
 
     /** @throws ScenarioNotFoundException */
     public function delete(int $id, int $organizationId): void;
+
+    public function touchUpdatedBy(int $id, int $organizationId, ?int $userId): void;
 }
