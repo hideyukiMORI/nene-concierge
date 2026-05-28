@@ -17,15 +17,14 @@ final class CapabilityResolverTest extends TestCase
         self::assertSame(Capability::ManageOrganizations, CapabilityResolver::resolve('/api/v1/organizations/1', 'DELETE'));
     }
 
-    public function testUserMutationsRequireManageUsers(): void
+    public function testUserPathsRequireManageUsers(): void
     {
+        // Issue #116 以降: read も含めて全 method で ManageUsers 必須
+        self::assertSame(Capability::ManageUsers, CapabilityResolver::resolve('/api/v1/users', 'GET'));
+        self::assertSame(Capability::ManageUsers, CapabilityResolver::resolve('/api/v1/users/1', 'GET'));
         self::assertSame(Capability::ManageUsers, CapabilityResolver::resolve('/api/v1/users', 'POST'));
+        self::assertSame(Capability::ManageUsers, CapabilityResolver::resolve('/api/v1/users/1', 'PATCH'));
         self::assertSame(Capability::ManageUsers, CapabilityResolver::resolve('/api/v1/users/1', 'DELETE'));
-    }
-
-    public function testUserGetReturnsNull(): void
-    {
-        self::assertNull(CapabilityResolver::resolve('/api/v1/users', 'GET'));
     }
 
     public function testScenarioMutationsRequireManageScenarios(): void

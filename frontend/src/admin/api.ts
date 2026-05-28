@@ -283,3 +283,57 @@ export function getSessionDetail(sessionId: string): Promise<SessionDetailRespon
 export function getDashboard(): Promise<DashboardResponse> {
     return request('/api/v1/dashboard');
 }
+
+// ── Users (Issue #116 — Admin user management) ────────────────────────────────
+
+export type UserRole   = 'superadmin' | 'owner' | 'editor' | 'viewer';
+export type UserStatus = 'active' | 'disabled';
+
+export interface UserSummary {
+    id:         number;
+    email:      string;
+    role:       UserRole;
+    status:     UserStatus;
+    created_at: number | null;
+    updated_at: number | null;
+}
+
+export interface UserListResponse { data: UserSummary[]; }
+
+export function listUsers(): Promise<UserListResponse> {
+    return request('/api/v1/users');
+}
+
+export function getUser(id: number): Promise<UserSummary> {
+    return request(`/api/v1/users/${id}`);
+}
+
+export interface CreateUserPayload {
+    email:    string;
+    password: string;
+    role:     UserRole;
+}
+
+export function createUser(payload: CreateUserPayload): Promise<UserSummary> {
+    return request('/api/v1/users', {
+        method: 'POST',
+        body:   JSON.stringify(payload),
+    });
+}
+
+export interface UpdateUserPayload {
+    role?:     UserRole;
+    status?:   UserStatus;
+    password?: string;
+}
+
+export function updateUser(id: number, payload: UpdateUserPayload): Promise<UserSummary> {
+    return request(`/api/v1/users/${id}`, {
+        method: 'PATCH',
+        body:   JSON.stringify(payload),
+    });
+}
+
+export function deleteUser(id: number): Promise<void> {
+    return request(`/api/v1/users/${id}`, { method: 'DELETE' });
+}

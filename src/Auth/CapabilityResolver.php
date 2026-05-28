@@ -15,8 +15,8 @@ final class CapabilityResolver
             return Capability::ManageOrganizations;
         }
 
-        // User management: owner + superadmin
-        if (str_starts_with($path, '/api/v1/users') && self::isMutationMethod($method)) {
+        // User management: owner + superadmin — read も含めて ManageUsers 必須
+        if (str_starts_with($path, '/api/v1/users')) {
             return Capability::ManageUsers;
         }
 

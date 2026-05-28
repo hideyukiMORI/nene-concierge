@@ -17,6 +17,8 @@ interface UserRepositoryInterface
 
     public function updateRole(int $id, string $role): void;
 
+    public function updateStatus(int $id, string $status): void;
+
     public function updatePassword(int $id, string $passwordHash): void;
 
     public function delete(int $id): void;

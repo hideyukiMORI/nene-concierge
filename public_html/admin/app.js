@@ -21738,7 +21738,7 @@ var NeNeAdmin = (() => {
               "The result of getSnapshot should be cached to avoid an infinite loop"
             ), didWarnUncachedGetSnapshot = true);
           }
-          cachedValue = useState23({
+          cachedValue = useState24({
             inst: { value, getSnapshot }
           });
           var inst = cachedValue[0].inst, forceUpdate = cachedValue[1];
@@ -21750,7 +21750,7 @@ var NeNeAdmin = (() => {
             },
             [subscribe, value, getSnapshot]
           );
-          useEffect22(
+          useEffect23(
             function() {
               checkIfSnapshotChanged(inst) && forceUpdate({ inst });
               return subscribe(function() {
@@ -21776,7 +21776,7 @@ var NeNeAdmin = (() => {
           return getSnapshot();
         }
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-        var React15 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState23 = React15.useState, useEffect22 = React15.useEffect, useLayoutEffect5 = React15.useLayoutEffect, useDebugValue2 = React15.useDebugValue, didWarnOld18Alpha = false, didWarnUncachedGetSnapshot = false, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
+        var React15 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState24 = React15.useState, useEffect23 = React15.useEffect, useLayoutEffect5 = React15.useLayoutEffect, useDebugValue2 = React15.useDebugValue, didWarnOld18Alpha = false, didWarnUncachedGetSnapshot = false, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
         exports.useSyncExternalStore = void 0 !== React15.useSyncExternalStore ? React15.useSyncExternalStore : shim;
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(Error());
       })();
@@ -21804,7 +21804,7 @@ var NeNeAdmin = (() => {
           return x === y && (0 !== x || 1 / x === 1 / y) || x !== x && y !== y;
         }
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-        var React15 = require_react(), shim = require_shim(), objectIs = "function" === typeof Object.is ? Object.is : is, useSyncExternalStore = shim.useSyncExternalStore, useRef11 = React15.useRef, useEffect22 = React15.useEffect, useMemo8 = React15.useMemo, useDebugValue2 = React15.useDebugValue;
+        var React15 = require_react(), shim = require_shim(), objectIs = "function" === typeof Object.is ? Object.is : is, useSyncExternalStore = shim.useSyncExternalStore, useRef11 = React15.useRef, useEffect23 = React15.useEffect, useMemo8 = React15.useMemo, useDebugValue2 = React15.useDebugValue;
         exports.useSyncExternalStoreWithSelector = function(subscribe, getSnapshot, getServerSnapshot, selector, isEqual) {
           var instRef = useRef11(null);
           if (null === instRef.current) {
@@ -21847,7 +21847,7 @@ var NeNeAdmin = (() => {
             [getSnapshot, getServerSnapshot, selector, isEqual]
           );
           var value = useSyncExternalStore(subscribe, instRef[0], instRef[1]);
-          useEffect22(
+          useEffect23(
             function() {
               inst.hasValue = true;
               inst.value = value;
@@ -21875,7 +21875,7 @@ var NeNeAdmin = (() => {
   });
 
   // src/admin/index.tsx
-  var import_react23 = __toESM(require_react());
+  var import_react24 = __toESM(require_react());
   var import_client = __toESM(require_client());
 
   // node_modules/react-router/dist/development/chunk-4N6VE7H7.mjs
@@ -25182,6 +25182,34 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "sessions.detail.messages": "Messages",
     "sessions.detail.close": "Close",
     "sessions.detail.loadError": "Failed to load session detail.",
+    // ── Users (admin user management — Issue #116) ───────────────────────────
+    "nav.users": "Users",
+    "users.pageTitle": "Users",
+    "users.subtitle": "{{total}} users \xB7 {{active}} active",
+    "users.empty": "No users yet.",
+    "users.loadError": "Failed to load users.",
+    "users.saveError": "Failed to save user.",
+    "users.deleteError": "Failed to delete user.",
+    "users.colEmail": "Email",
+    "users.colRole": "Role",
+    "users.colStatus": "Status",
+    "users.colCreated": "Created",
+    "users.new": "+ New user",
+    "users.create.title": "New user",
+    "users.edit.title": "Edit user",
+    "users.field.email": "Email",
+    "users.field.password": "Password",
+    "users.field.passwordHint": "Min. 8 characters. Leave blank when editing to keep current password.",
+    "users.field.role": "Role",
+    "users.field.status": "Status",
+    "users.role.superadmin": "Superadmin",
+    "users.role.owner": "Owner",
+    "users.role.editor": "Editor",
+    "users.role.viewer": "Viewer",
+    "users.status.active": "Active",
+    "users.status.disabled": "Disabled",
+    "users.confirmDeleteTitle": "Delete user",
+    "users.confirmDelete": 'Delete "{{email}}"? Their access will be revoked immediately.',
     // ── Settings ──────────────────────────────────────────────────────────────
     "settings.pageTitle": "Settings",
     "settings.adminTheme": "Admin Theme",
@@ -25425,6 +25453,34 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "sessions.detail.messages": "\u30E1\u30C3\u30BB\u30FC\u30B8",
     "sessions.detail.close": "\u9589\u3058\u308B",
     "sessions.detail.loadError": "\u30BB\u30C3\u30B7\u30E7\u30F3\u8A73\u7D30\u306E\u8AAD\u307F\u8FBC\u307F\u306B\u5931\u6557\u3057\u307E\u3057\u305F\u3002",
+    // ── Users (Issue #116) ───────────────────────────────────────────────────
+    "nav.users": "\u30E6\u30FC\u30B6\u30FC",
+    "users.pageTitle": "\u30E6\u30FC\u30B6\u30FC\u7BA1\u7406",
+    "users.subtitle": "{{total}} \u540D \xB7 {{active}} \u6709\u52B9",
+    "users.empty": "\u30E6\u30FC\u30B6\u30FC\u304C\u3044\u307E\u305B\u3093\u3002",
+    "users.loadError": "\u30E6\u30FC\u30B6\u30FC\u306E\u8AAD\u307F\u8FBC\u307F\u306B\u5931\u6557\u3057\u307E\u3057\u305F\u3002",
+    "users.saveError": "\u30E6\u30FC\u30B6\u30FC\u306E\u4FDD\u5B58\u306B\u5931\u6557\u3057\u307E\u3057\u305F\u3002",
+    "users.deleteError": "\u30E6\u30FC\u30B6\u30FC\u306E\u524A\u9664\u306B\u5931\u6557\u3057\u307E\u3057\u305F\u3002",
+    "users.colEmail": "\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9",
+    "users.colRole": "\u30ED\u30FC\u30EB",
+    "users.colStatus": "\u30B9\u30C6\u30FC\u30BF\u30B9",
+    "users.colCreated": "\u4F5C\u6210\u65E5",
+    "users.new": "\uFF0B \u65B0\u898F\u30E6\u30FC\u30B6\u30FC",
+    "users.create.title": "\u65B0\u898F\u30E6\u30FC\u30B6\u30FC",
+    "users.edit.title": "\u30E6\u30FC\u30B6\u30FC\u7DE8\u96C6",
+    "users.field.email": "\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9",
+    "users.field.password": "\u30D1\u30B9\u30EF\u30FC\u30C9",
+    "users.field.passwordHint": "8 \u6587\u5B57\u4EE5\u4E0A\u3002\u7DE8\u96C6\u6642\u306B\u7A7A\u6B04\u306A\u3089\u73FE\u5728\u306E\u30D1\u30B9\u30EF\u30FC\u30C9\u3092\u7DAD\u6301\u3057\u307E\u3059\u3002",
+    "users.field.role": "\u30ED\u30FC\u30EB",
+    "users.field.status": "\u30B9\u30C6\u30FC\u30BF\u30B9",
+    "users.role.superadmin": "\u30B9\u30FC\u30D1\u30FC\u7BA1\u7406\u8005",
+    "users.role.owner": "\u30AA\u30FC\u30CA\u30FC",
+    "users.role.editor": "\u7DE8\u96C6\u8005",
+    "users.role.viewer": "\u95B2\u89A7\u8005",
+    "users.status.active": "\u6709\u52B9",
+    "users.status.disabled": "\u7121\u52B9",
+    "users.confirmDeleteTitle": "\u30E6\u30FC\u30B6\u30FC\u3092\u524A\u9664",
+    "users.confirmDelete": "\u300C{{email}}\u300D\u3092\u524A\u9664\u3057\u307E\u3059\u304B\uFF1F\u3053\u306E\u30E6\u30FC\u30B6\u30FC\u306E\u30A2\u30AF\u30BB\u30B9\u306F\u5373\u6642\u5931\u308F\u308C\u307E\u3059\u3002",
     // ── Settings ──────────────────────────────────────────────────────────────
     "settings.pageTitle": "\u8A2D\u5B9A",
     "settings.adminTheme": "\u7BA1\u7406\u753B\u9762\u30C6\u30FC\u30DE",
@@ -26334,7 +26390,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("circle", { cx: "12", cy: "12", r: "4" }),
       /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" })
     ] }),
-    moon: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("svg", { width: "13", height: "13", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.7", strokeLinecap: "round", strokeLinejoin: "round", children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" }) })
+    moon: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("svg", { width: "13", height: "13", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.7", strokeLinecap: "round", strokeLinejoin: "round", children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" }) }),
+    users: /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("svg", { width: "15", height: "15", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.7", strokeLinecap: "round", strokeLinejoin: "round", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" }),
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("circle", { cx: "9", cy: "7", r: "4" }),
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "M23 21v-2a4 4 0 0 0-3-3.87" }),
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "M16 3.13a4 4 0 0 1 0 7.75" })
+    ] })
   };
   var NAV_ITEMS = [
     { to: "/dashboard", icon: I.dashboard, key: "nav.dashboard" },
@@ -26343,6 +26405,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     { to: "/credentials", icon: I.key, key: "nav.credentials" },
     { to: "/action-logs", icon: I.logs, key: "nav.actionLogs" },
     { to: "/sessions", icon: I.sessions, key: "nav.sessions", divider: true },
+    { to: "/users", icon: I.users, key: "nav.users" },
     { to: "/settings", icon: I.settings, key: "nav.settings" }
   ];
   function NavItem({ to, icon, label, open, onClick }) {
@@ -27817,6 +27880,24 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
   function getDashboard() {
     return request("/api/v1/dashboard");
+  }
+  function listUsers() {
+    return request("/api/v1/users");
+  }
+  function createUser(payload) {
+    return request("/api/v1/users", {
+      method: "POST",
+      body: JSON.stringify(payload)
+    });
+  }
+  function updateUser(id2, payload) {
+    return request(`/api/v1/users/${id2}`, {
+      method: "PATCH",
+      body: JSON.stringify(payload)
+    });
+  }
+  function deleteUser(id2) {
+    return request(`/api/v1/users/${id2}`, { method: "DELETE" });
   }
 
   // src/admin/components/LoginPage.tsx
@@ -43963,16 +44044,430 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     ] });
   }
 
-  // src/admin/components/ThemeSwitcher.tsx
+  // src/admin/components/UsersPage.tsx
   var import_react22 = __toESM(require_react());
   var import_jsx_runtime20 = __toESM(require_jsx_runtime());
   var MONO14 = T.fontMono;
+  var TH6 = {
+    padding: "8px 14px",
+    textAlign: "left",
+    fontSize: T.fontXs,
+    fontWeight: 700,
+    color: T.textMuted,
+    fontFamily: MONO14,
+    letterSpacing: "0.05em",
+    textTransform: "uppercase",
+    background: T.surfaceAlt,
+    borderBottom: `1px solid ${T.border}`
+  };
+  var TD5 = {
+    padding: "9px 14px",
+    fontSize: T.fontSm,
+    color: T.text
+  };
+  var ROLE_TO_PILL = {
+    superadmin: "active",
+    owner: "active",
+    editor: "success",
+    viewer: "neutral"
+  };
+  function formatDate(ts) {
+    if (!ts) return "\u2014";
+    const d = new Date(ts * 1e3);
+    return d.toISOString().slice(0, 10);
+  }
+  function UserForm({
+    initial,
+    mode,
+    onSubmit,
+    onCancel,
+    saving,
+    error
+  }) {
+    const { t } = useTranslation();
+    const [form, setForm] = (0, import_react22.useState)({
+      email: initial?.email ?? "",
+      password: "",
+      role: initial?.role ?? "editor",
+      status: initial?.status ?? "active"
+    });
+    const inputBase = {
+      width: "100%",
+      height: T.controlHeight,
+      padding: "0 12px",
+      boxSizing: "border-box",
+      borderRadius: T.radiusMd,
+      border: `1px solid ${T.borderInput}`,
+      fontSize: T.fontSm,
+      outline: "none",
+      background: T.surface,
+      color: T.text
+    };
+    function submit(e) {
+      e.preventDefault();
+      onSubmit(form);
+    }
+    return /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("form", { onSubmit: submit, style: { display: "flex", flexDirection: "column", gap: 12 }, children: [
+      error && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(ErrorMsg, { msg: error }),
+      /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("label", { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("span", { style: FIELD_LABEL_STYLE, children: [
+          t("users.field.email"),
+          " *"
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+          "input",
+          {
+            type: "email",
+            value: form.email,
+            onChange: (e) => setForm({ ...form, email: e.target.value }),
+            disabled: mode === "edit",
+            required: true,
+            style: { ...inputBase, opacity: mode === "edit" ? 0.6 : 1 },
+            onFocus: (e) => applyFocus(e.currentTarget),
+            onBlur: (e) => removeFocus(e.currentTarget)
+          }
+        )
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("label", { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("span", { style: FIELD_LABEL_STYLE, children: [
+          t("users.field.password"),
+          mode === "create" && " *"
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+          "input",
+          {
+            type: "password",
+            value: form.password,
+            onChange: (e) => setForm({ ...form, password: e.target.value }),
+            required: mode === "create",
+            minLength: mode === "create" ? 8 : 0,
+            placeholder: mode === "edit" ? "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022" : "",
+            style: inputBase,
+            onFocus: (e) => applyFocus(e.currentTarget),
+            onBlur: (e) => removeFocus(e.currentTarget)
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("p", { style: { margin: "4px 2px 0", fontSize: T.fontXs, color: T.textFaint, lineHeight: 1.4 }, children: t("users.field.passwordHint") })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("label", { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { style: FIELD_LABEL_STYLE, children: t("users.field.role") }),
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
+          "select",
+          {
+            value: form.role,
+            onChange: (e) => setForm({ ...form, role: e.target.value }),
+            style: { ...inputBase, cursor: "pointer" },
+            onFocus: (e) => applyFocus(e.currentTarget),
+            onBlur: (e) => removeFocus(e.currentTarget),
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("option", { value: "viewer", children: t("users.role.viewer") }),
+              /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("option", { value: "editor", children: t("users.role.editor") }),
+              /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("option", { value: "owner", children: t("users.role.owner") }),
+              /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("option", { value: "superadmin", children: t("users.role.superadmin") })
+            ]
+          }
+        )
+      ] }),
+      mode === "edit" && /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("label", { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { style: FIELD_LABEL_STYLE, children: t("users.field.status") }),
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
+          "select",
+          {
+            value: form.status,
+            onChange: (e) => setForm({ ...form, status: e.target.value }),
+            style: { ...inputBase, cursor: "pointer" },
+            onFocus: (e) => applyFocus(e.currentTarget),
+            onBlur: (e) => removeFocus(e.currentTarget),
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("option", { value: "active", children: t("users.status.active") }),
+              /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("option", { value: "disabled", children: t("users.status.disabled") })
+            ]
+          }
+        )
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { style: { display: "flex", gap: 8, marginTop: 6 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(Btn, { type: "submit", disabled: saving || mode === "create" && (!form.email || !form.password), style: { flex: 1 }, children: saving ? t("common.saving") : mode === "create" ? t("common.create") : t("common.save") }),
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(Btn, { variant: "ghost", onClick: onCancel, style: { flex: 1 }, children: t("common.cancel") })
+      ] })
+    ] });
+  }
+  function UsersPage() {
+    const { t } = useTranslation();
+    const { isMobile } = useLayout();
+    const { confirm, alertDialog } = useModals();
+    const myEmail = getStoredEmail();
+    const [users, setUsers] = (0, import_react22.useState)([]);
+    const [loading, setLoading] = (0, import_react22.useState)(true);
+    const [error, setError] = (0, import_react22.useState)(null);
+    const [saved, setSaved] = (0, import_react22.useState)(null);
+    const [editing, setEditing] = (0, import_react22.useState)(null);
+    const [sheetOpen, setSheetOpen] = (0, import_react22.useState)(false);
+    const [formSaving, setFormSaving] = (0, import_react22.useState)(false);
+    const [formError, setFormError] = (0, import_react22.useState)(null);
+    const [roleFilter, setRoleFilter] = (0, import_react22.useState)("");
+    async function load() {
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await listUsers();
+        setUsers(res.data);
+      } catch (err) {
+        setError(err instanceof ApiError ? err.message : t("users.loadError"));
+      } finally {
+        setLoading(false);
+      }
+    }
+    (0, import_react22.useEffect)(() => {
+      void load();
+    }, []);
+    function openCreate() {
+      setEditing(null);
+      setFormError(null);
+      setSheetOpen(true);
+    }
+    function openEdit(u) {
+      setEditing(u);
+      setFormError(null);
+      setSheetOpen(true);
+    }
+    function closeSheet() {
+      setSheetOpen(false);
+      setFormError(null);
+    }
+    async function handleSubmit(form) {
+      setFormSaving(true);
+      setFormError(null);
+      try {
+        if (editing === null) {
+          const payload = {
+            email: form.email,
+            password: form.password,
+            role: form.role
+          };
+          await createUser(payload);
+        } else {
+          const payload = { role: form.role, status: form.status };
+          if (form.password.length > 0) payload.password = form.password;
+          await updateUser(editing.id, payload);
+        }
+        setSaved("\u2713");
+        setTimeout(() => setSaved(null), 1500);
+        closeSheet();
+        await load();
+      } catch (err) {
+        setFormError(err instanceof ApiError ? err.message : t("users.saveError"));
+      } finally {
+        setFormSaving(false);
+      }
+    }
+    async function handleDelete(u) {
+      const ok = await confirm({
+        title: t("users.confirmDeleteTitle"),
+        description: t("users.confirmDelete", { email: u.email }),
+        tone: "danger",
+        confirmLabel: t("common.delete")
+      });
+      if (!ok) return;
+      try {
+        await deleteUser(u.id);
+        await load();
+      } catch (err) {
+        void alertDialog({
+          title: t("users.deleteError"),
+          description: err instanceof ApiError ? err.message : void 0,
+          tone: "danger"
+        });
+      }
+    }
+    const filtered = roleFilter ? users.filter((u) => u.role === roleFilter) : users;
+    const active = users.filter((u) => u.status === "active").length;
+    const subtitle = loading ? "\u2026" : t("users.subtitle", { total: String(users.length), active: String(active) });
+    if (isMobile) {
+      const countAll = users.length;
+      const countSuperadmin = users.filter((u) => u.role === "superadmin").length;
+      const countOwner = users.filter((u) => u.role === "owner").length;
+      const countEditor = users.filter((u) => u.role === "editor").length;
+      const countViewer = users.filter((u) => u.role === "viewer").length;
+      return /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { style: { minHeight: "100vh", background: T.bg }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+          MobileHeader,
+          {
+            title: t("users.pageTitle"),
+            subtitle
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(FilterChips, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(Chip, { active: roleFilter === "", onClick: () => setRoleFilter(""), children: [
+            "all \xB7 ",
+            countAll
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(Chip, { active: roleFilter === "superadmin", onClick: () => setRoleFilter(roleFilter === "superadmin" ? "" : "superadmin"), children: [
+            "superadmin \xB7 ",
+            countSuperadmin
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(Chip, { active: roleFilter === "owner", onClick: () => setRoleFilter(roleFilter === "owner" ? "" : "owner"), children: [
+            "owner \xB7 ",
+            countOwner
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(Chip, { active: roleFilter === "editor", onClick: () => setRoleFilter(roleFilter === "editor" ? "" : "editor"), children: [
+            "editor \xB7 ",
+            countEditor
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(Chip, { active: roleFilter === "viewer", onClick: () => setRoleFilter(roleFilter === "viewer" ? "" : "viewer"), children: [
+            "viewer \xB7 ",
+            countViewer
+          ] })
+        ] }),
+        error && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { style: { padding: "12px 12px 0" }, children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(ErrorMsg, { msg: error }) }),
+        loading ? /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(CardList, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(SkeletonListItem, {}),
+          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(SkeletonListItem, {}),
+          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(SkeletonListItem, {})
+        ] }) : filtered.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { style: { padding: "40px 24px", textAlign: "center", color: T.textMuted, fontSize: T.fontSm }, children: t("users.empty") }) : /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(CardList, { children: filtered.map((u, i) => /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+          ListItem,
+          {
+            last: i === filtered.length - 1,
+            icon: u.email[0]?.toUpperCase() ?? "?",
+            title: u.email,
+            meta: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(import_jsx_runtime20.Fragment, { children: [
+              /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(Pill, { variant: ROLE_TO_PILL[u.role], label: u.role }),
+              u.status === "disabled" && /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(import_jsx_runtime20.Fragment, { children: [
+                /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(MetaDot, {}),
+                /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { style: { color: T.textFaint }, children: t("users.status.disabled") })
+              ] })
+            ] }),
+            onClick: () => openEdit(u)
+          },
+          u.id
+        )) }),
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { style: { height: "calc(96px + env(safe-area-inset-bottom))" } }),
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(FAB, { ariaLabel: t("users.new"), onClick: openCreate, children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("svg", { width: "22", height: "22", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2.5", strokeLinecap: "round", "aria-hidden": true, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("line", { x1: "5", y1: "12", x2: "19", y2: "12" }),
+          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("line", { x1: "12", y1: "5", x2: "12", y2: "19" })
+        ] }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+          BottomSheet,
+          {
+            open: sheetOpen,
+            onClose: closeSheet,
+            title: editing ? t("users.edit.title") : t("users.create.title"),
+            ...editing ? { subtitle: editing.email } : {},
+            children: sheetOpen && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+              UserForm,
+              {
+                mode: editing === null ? "create" : "edit",
+                ...editing ? { initial: editing } : {},
+                onSubmit: (form) => void handleSubmit(form),
+                onCancel: closeSheet,
+                saving: formSaving,
+                error: formError
+              }
+            )
+          }
+        )
+      ] });
+    }
+    return /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(PageHead, { title: t("users.pageTitle"), subtitle, children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(Btn, { onClick: openCreate, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("svg", { width: "12", height: "12", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2.5", strokeLinecap: "round", "aria-hidden": true, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("line", { x1: "5", y1: "12", x2: "19", y2: "12" }),
+          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("line", { x1: "12", y1: "5", x2: "12", y2: "19" })
+        ] }),
+        t("users.new")
+      ] }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(ErrorMsg, { msg: error }),
+      /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(SuccessMsg, { msg: saved }),
+      /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(Card, { style: { padding: 0, overflow: "hidden" }, children: loading ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("p", { style: { padding: "20px 18px", color: T.textMuted }, children: t("common.loading") }) : users.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("p", { style: { padding: "20px 18px", color: T.textMuted }, children: t("users.empty") }) : /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { style: { overflowX: "auto" }, children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("table", { style: { width: "100%", borderCollapse: "collapse" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("tr", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("th", { style: TH6, children: t("users.colEmail") }),
+          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("th", { style: { ...TH6, width: 120 }, children: t("users.colRole") }),
+          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("th", { style: { ...TH6, width: 100 }, children: t("users.colStatus") }),
+          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("th", { style: { ...TH6, width: 120 }, children: t("users.colCreated") }),
+          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("th", { style: { ...TH6, width: 160, textAlign: "right" } })
+        ] }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("tbody", { children: users.map((u, i) => {
+          const isMe = myEmail !== null && myEmail === u.email;
+          return /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
+            "tr",
+            {
+              style: {
+                borderBottom: i < users.length - 1 ? `1px solid ${T.border}` : "none",
+                background: isMe ? T.primaryTint : "transparent"
+              },
+              children: [
+                /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("td", { style: { ...TD5, fontWeight: 600 }, children: [
+                  u.email,
+                  isMe && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { style: {
+                    marginLeft: 8,
+                    fontFamily: MONO14,
+                    fontSize: T.fontXs,
+                    color: T.primary,
+                    fontWeight: 700
+                  }, children: "(you)" })
+                ] }),
+                /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("td", { style: TD5, children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(Pill, { variant: ROLE_TO_PILL[u.role], label: u.role }) }),
+                /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("td", { style: { ...TD5, fontFamily: MONO14, fontSize: T.fontXs, color: u.status === "active" ? T.successFg : T.textFaint }, children: u.status === "active" ? t("users.status.active") : t("users.status.disabled") }),
+                /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("td", { style: { ...TD5, fontFamily: MONO14, fontSize: T.fontSm, color: T.textMuted }, children: formatDate(u.created_at) }),
+                /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("td", { style: { ...TD5, textAlign: "right" }, children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { style: { display: "flex", gap: 6, justifyContent: "flex-end" }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                    Btn,
+                    {
+                      variant: "ghost",
+                      onClick: () => openEdit(u),
+                      style: { height: T.controlHeightSm, padding: "0 10px", fontSize: T.fontXs },
+                      children: t("common.edit")
+                    }
+                  ),
+                  /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                    Btn,
+                    {
+                      variant: "danger",
+                      onClick: () => void handleDelete(u),
+                      disabled: isMe,
+                      style: { height: T.controlHeightSm, padding: "0 10px", fontSize: T.fontXs },
+                      children: t("common.delete")
+                    }
+                  )
+                ] }) })
+              ]
+            },
+            u.id
+          );
+        }) })
+      ] }) }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+        BottomSheet,
+        {
+          open: sheetOpen,
+          onClose: closeSheet,
+          title: editing ? t("users.edit.title") : t("users.create.title"),
+          ...editing ? { subtitle: editing.email } : {},
+          children: sheetOpen && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+            UserForm,
+            {
+              mode: editing === null ? "create" : "edit",
+              ...editing ? { initial: editing } : {},
+              onSubmit: (form) => void handleSubmit(form),
+              onCancel: closeSheet,
+              saving: formSaving,
+              error: formError
+            }
+          )
+        }
+      )
+    ] });
+  }
+
+  // src/admin/components/ThemeSwitcher.tsx
+  var import_react23 = __toESM(require_react());
+  var import_jsx_runtime21 = __toESM(require_jsx_runtime());
+  var MONO15 = T.fontMono;
   function ThemeSwitcher() {
     const { adminThemeId, themeVariant: themeVariant2, setAdminTheme, toggleVariant } = useTheme();
     const bp = useBreakpoint();
-    const [open, setOpen] = (0, import_react22.useState)(false);
-    const containerRef = (0, import_react22.useRef)(null);
-    (0, import_react22.useEffect)(() => {
+    const [open, setOpen] = (0, import_react23.useState)(false);
+    const containerRef = (0, import_react23.useRef)(null);
+    (0, import_react23.useEffect)(() => {
       if (!open) return;
       function handleClick(e) {
         if (containerRef.current && !containerRef.current.contains(e.target)) {
@@ -43986,13 +44481,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const currentPreview = currentDef.preview[themeVariant2] ?? currentDef.preview[currentDef.variants[0]];
     const dotColor = currentPreview?.accent ?? T.primary;
     if (bp === "mobile") return null;
-    return /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
+    return /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)(
       "div",
       {
         ref: containerRef,
         style: { position: "fixed", right: 16, bottom: 16, zIndex: 200 },
         children: [
-          open && /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { style: {
+          open && /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { style: {
             position: "absolute",
             bottom: "calc(100% + 8px)",
             right: 0,
@@ -44003,8 +44498,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             boxShadow: T.shadowElevated,
             padding: 6
           }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { style: {
-              fontFamily: MONO14,
+            /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("div", { style: {
+              fontFamily: MONO15,
               fontSize: 9.5,
               fontWeight: 700,
               letterSpacing: "0.08em",
@@ -44018,7 +44513,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               const displayVariant = isCurrent ? themeVariant2 : def.variants[0];
               const swatchPreview = def.preview[displayVariant] ?? def.preview[def.variants[0]];
               if (!swatchPreview) return null;
-              return /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
+              return /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)(
                 "div",
                 {
                   style: {
@@ -44043,7 +44538,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                     }
                   },
                   children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("span", { style: {
+                    /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("span", { style: {
                       width: 28,
                       height: 18,
                       borderRadius: 3,
@@ -44053,12 +44548,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                       gridTemplateColumns: "8px 1fr",
                       overflow: "hidden"
                     }, children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { style: { height: "100%", background: swatchPreview.sidebar } }),
-                      /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { style: {
+                      /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("span", { style: { height: "100%", background: swatchPreview.sidebar } }),
+                      /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("span", { style: {
                         height: "100%",
                         background: swatchPreview.surface,
                         position: "relative"
-                      }, children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { style: {
+                      }, children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("span", { style: {
                         position: "absolute",
                         left: 3,
                         top: 4,
@@ -44069,21 +44564,21 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                         opacity: 0.7
                       } }) })
                     ] }),
-                    /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("span", { style: {
+                    /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("span", { style: {
                       flex: 1,
                       fontSize: 12.5,
                       fontWeight: isCurrent ? 700 : 500,
                       color: isCurrent ? T.textStrong : T.text
                     }, children: [
                       def.name,
-                      darkOnly && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { style: {
-                        fontFamily: MONO14,
+                      darkOnly && /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("span", { style: {
+                        fontFamily: MONO15,
                         fontSize: 9.5,
                         color: T.textFaint,
                         marginLeft: 5
                       }, children: "dark only" })
                     ] }),
-                    /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
+                    /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)(
                       "div",
                       {
                         style: {
@@ -44097,7 +44592,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                         },
                         onClick: (e) => e.stopPropagation(),
                         children: [
-                          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
                             "span",
                             {
                               title: "Light",
@@ -44127,7 +44622,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                               children: "\u2600"
                             }
                           ),
-                          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
                             "span",
                             {
                               title: "Dark",
@@ -44163,17 +44658,17 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 def.id
               );
             }),
-            /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { style: {
+            /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("div", { style: {
               marginTop: 4,
               padding: "8px 10px 4px",
-              fontFamily: MONO14,
+              fontFamily: MONO15,
               fontSize: 9.5,
               color: T.textFaint,
               letterSpacing: "0.04em",
               borderTop: `1px solid ${T.borderLight}`
             }, children: "Persists to localStorage \xB7 live preview only" })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
+          /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)(
             "button",
             {
               onClick: (e) => {
@@ -44202,7 +44697,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 e.currentTarget.style.background = T.surface;
               },
               children: [
-                /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { style: {
+                /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("span", { style: {
                   width: 9,
                   height: 9,
                   borderRadius: 99,
@@ -44211,14 +44706,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                   boxShadow: `0 0 0 1px ${T.border}`,
                   flexShrink: 0
                 } }),
-                /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { style: {
-                  fontFamily: MONO14,
+                /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("span", { style: {
+                  fontFamily: MONO15,
                   fontSize: 11,
                   fontWeight: 600,
                   letterSpacing: "0.04em",
                   color: T.textMuted
                 }, children: "theme:" }),
-                /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("span", { style: {
+                /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("span", { style: {
                   color: T.text,
                   fontWeight: 700,
                   fontSize: 12
@@ -44227,7 +44722,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                   " \xB7 ",
                   themeVariant2
                 ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { style: {
+                /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("span", { style: {
                   color: T.textFaint,
                   fontSize: 10,
                   transform: open ? "rotate(180deg)" : "none",
@@ -44242,38 +44737,39 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/App.tsx
-  var import_jsx_runtime21 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime22 = __toESM(require_jsx_runtime());
   function RequireAuth() {
-    if (!isAuthenticated()) return /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(Navigate, { to: "/", replace: true });
-    return /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(Outlet, {});
+    if (!isAuthenticated()) return /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Navigate, { to: "/", replace: true });
+    return /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Outlet, {});
   }
   function App() {
-    return /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(ThemeProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)(ModalProvider, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(BrowserRouter, { basename: "/admin", children: /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)(Routes, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(Route, { index: true, element: isAuthenticated() ? /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(Navigate, { to: "/dashboard", replace: true }) : /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(LoginPage, {}) }),
-        /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)(Route, { element: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(RequireAuth, {}), children: [
-          /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)(Route, { element: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(Layout, {}), children: [
-            /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(Route, { path: "dashboard", element: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(DashboardPage, {}) }),
-            /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(Route, { path: "scenarios", element: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(ScenariosPage, {}) }),
-            /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(Route, { path: "appearance", element: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(AppearancePage, {}) }),
-            /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(Route, { path: "credentials", element: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(CredentialsPage, {}) }),
-            /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(Route, { path: "action-logs", element: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(ActionLogsPage, {}) }),
-            /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(Route, { path: "sessions", element: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(SessionsPage, {}) }),
-            /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(Route, { path: "settings", element: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(SettingsPage, {}) })
+    return /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(ThemeProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)(ModalProvider, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(BrowserRouter, { basename: "/admin", children: /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)(Routes, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Route, { index: true, element: isAuthenticated() ? /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Navigate, { to: "/dashboard", replace: true }) : /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(LoginPage, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)(Route, { element: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(RequireAuth, {}), children: [
+          /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)(Route, { element: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Layout, {}), children: [
+            /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Route, { path: "dashboard", element: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(DashboardPage, {}) }),
+            /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Route, { path: "scenarios", element: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(ScenariosPage, {}) }),
+            /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Route, { path: "appearance", element: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(AppearancePage, {}) }),
+            /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Route, { path: "credentials", element: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(CredentialsPage, {}) }),
+            /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Route, { path: "action-logs", element: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(ActionLogsPage, {}) }),
+            /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Route, { path: "sessions", element: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(SessionsPage, {}) }),
+            /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Route, { path: "users", element: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(UsersPage, {}) }),
+            /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Route, { path: "settings", element: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(SettingsPage, {}) })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)(Route, { element: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(Layout, { variant: "editor" }), children: [
-            /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(Route, { path: "scenarios/new", element: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(ScenarioFormPage, {}) }),
-            /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(Route, { path: "scenarios/:id", element: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(ScenarioFormPage, {}) })
+          /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)(Route, { element: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Layout, { variant: "editor" }), children: [
+            /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Route, { path: "scenarios/new", element: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(ScenarioFormPage, {}) }),
+            /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Route, { path: "scenarios/:id", element: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(ScenarioFormPage, {}) })
           ] })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(Route, { path: "*", element: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(Navigate, { to: "/", replace: true }) })
+        /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Route, { path: "*", element: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Navigate, { to: "/", replace: true }) })
       ] }) }),
-      isAuthenticated() && /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(ThemeSwitcher, {})
+      isAuthenticated() && /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(ThemeSwitcher, {})
     ] }) });
   }
 
   // src/admin/index.tsx
-  var import_jsx_runtime22 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime23 = __toESM(require_jsx_runtime());
   var storedLocale = (() => {
     try {
       return localStorage.getItem("nca-locale") ?? navigator.language;
@@ -44289,7 +44785,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var container = document.getElementById("root");
   if (!container) throw new Error("Root element #root not found");
   (0, import_client.createRoot)(container).render(
-    /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(import_react23.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(I18nProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(App, {}) }) })
+    /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(import_react24.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(I18nProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(App, {}) }) })
   );
 })();
 /*! Bundled license information:
