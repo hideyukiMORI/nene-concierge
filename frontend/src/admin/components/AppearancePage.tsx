@@ -3,7 +3,7 @@ import { getAppearance, upsertAppearance, ApiError } from '../api.js';
 import type { AppearanceData } from '../api.js';
 import {
     PageHead, Card, Btn, SectionHead,
-    ErrorMsg, SuccessMsg, FIELD_LABEL_STYLE, applyFocus, removeFocus, useLayout,
+    ErrorMsg, SuccessMsg, FIELD_LABEL_STYLE, applyFocus, removeFocus, useLayout, isWideBp,
 } from './Layout.js';
 import { MobileHeader, MobileSectionHead } from './mobile/index.js';
 import { T } from '../theme.js';
@@ -35,7 +35,15 @@ const TRIGGER_OPTS = [
 
 export default function AppearancePage() {
     const { t } = useTranslation();
-    const { isMobile } = useLayout();
+    const { isMobile, bp, setFullWidth } = useLayout();
+    const wide = isWideBp(bp);
+
+    // wide+ で main を full-width 化 (preview を sticky させたい)
+    useEffect(() => {
+        if (!wide) return;
+        setFullWidth(true);
+        return () => { setFullWidth(false); };
+    }, [wide, setFullWidth]);
     const [form, setForm]       = useState<AppearanceData | null>(null);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving]   = useState(false);
@@ -291,8 +299,12 @@ export default function AppearancePage() {
         );
     }
 
+    // wide+: full-width container with 36/48px padding; preview sticky
+    const wideWrap: React.CSSProperties | undefined = wide
+        ? { padding: '36px 48px 64px' }
+        : undefined;
     return (
-        <div>
+        <div style={wideWrap}>
             <PageHead title="Appearance" subtitle="widget · public-facing">
                 <Btn variant="ghost" onClick={() => {
                     void getAppearance().then(data => setForm(data)).catch(() => {});
@@ -311,7 +323,7 @@ export default function AppearancePage() {
             <SuccessMsg msg={saved ? t('appearance.saved') : null} />
 
             <form onSubmit={e => { void handleSubmit(e); }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: wide ? 32 : 14 }}>
 
                     {/* LEFT: settings */}
                     <div>
@@ -494,8 +506,8 @@ export default function AppearancePage() {
                         </Card>
                     </div>
 
-                    {/* RIGHT: Live preview */}
-                    <div>
+                    {/* RIGHT: Live preview (sticky at wide+) */}
+                    <div style={wide ? { position: 'sticky', top: 24, alignSelf: 'start' } : undefined}>
                         <SectionHead label="live preview">
                             <button
                                 type="button"

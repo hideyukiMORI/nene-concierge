@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { listActionLogs, ApiError } from '../api.js';
 import type { ActionLogEntry } from '../api.js';
-import { PageHead, Card, StatusPill, AdapterTag, ErrorMsg, useLayout } from './Layout.js';
+import { PageHead, Card, CardSub, StatusPill, AdapterTag, ErrorMsg, useLayout, isWideBp } from './Layout.js';
 import {
     MobileHeader, MobileIconBtn, FilterChips, Chip, CardList, ListItem,
     Pill, SkeletonListItem,
@@ -39,14 +39,188 @@ const PAG_BTN: React.CSSProperties = {
     transition: 'filter 150ms ease',
 };
 
+// ── ActionLog Detail View (shared by overlay drawer & wide right pane) ────────
+
+function ActionLogDetailView({
+    log, onClose, mode,
+}: {
+    log:     ActionLogEntry;
+    onClose: () => void;
+    mode:    'overlay' | 'pane';
+}) {
+    const fail = log.status === 'failure';
+    const headerColor = fail ? T.dangerFg : T.successFg;
+    const headerBg    = fail ? T.dangerBg : T.successBg;
+    const headerBorder= fail ? T.dangerBorder : T.successBorder;
+
+    const inner = (
+        <>
+            <div style={{ height: 3, background: fail ? T.dangerFg : T.successFg, flexShrink: 0 }}/>
+            <div style={{
+                padding: '14px 18px',
+                display: 'flex', alignItems: 'center', gap: 10,
+                borderBottom: `1px solid ${T.border}`, flexShrink: 0,
+            }}>
+                <div style={{
+                    width: 28, height: 28, borderRadius: 5,
+                    background: headerBg, color: headerColor,
+                    border: `1px solid ${headerBorder}`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    flexShrink: 0, fontFamily: T.fontMono, fontWeight: 700, fontSize: 14,
+                }}>{fail ? '!' : '✓'}</div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                    <h3 style={{ fontSize: T.fontMd, fontWeight: 700, margin: 0, color: T.textStrong,
+                        overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {fail ? (log.error_message?.split(':')[0] ?? 'failure') : `${log.adapter} action`}
+                    </h3>
+                    <div style={{ fontFamily: T.fontMono, fontSize: T.fontXs, color: T.textMuted, marginTop: 1,
+                        overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {log.adapter} · session {log.session_id.slice(0, 8)} · {log.executed_at?.slice(11, 19)}
+                    </div>
+                </div>
+                <button onClick={onClose} aria-label="Close"
+                    style={{
+                        width: 26, height: 26, borderRadius: T.radiusSm,
+                        background: 'transparent', border: `1px solid ${T.border}`,
+                        color: T.textMuted, cursor: 'pointer',
+                        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                    }}>
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden>
+                        <line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div style={{ flex: 1, overflowY: 'auto', padding: '16px 18px 20px' }}>
+                {/* Meta grid */}
+                <div style={{
+                    display: 'grid', gridTemplateColumns: '110px 1fr',
+                    gap: '6px 14px', fontSize: T.fontSm, marginBottom: 18,
+                }}>
+                    {([
+                        ['status',   <StatusPill key="s" variant={log.status} />],
+                        ['adapter',  <AdapterTag key="a" adapter={log.adapter} />],
+                        ['executed', <span key="e" style={{ fontFamily: T.fontMono, color: T.text }}>{log.executed_at}</span>],
+                        ['scenario', <span key="sc">#{log.scenario_id}</span>],
+                        ['session',  <span key="se" style={{ fontFamily: T.fontMono, fontSize: 11, wordBreak: 'break-all' }}>{log.session_id}</span>],
+                        ['node',     <span key="n" style={{ fontFamily: T.fontMono, color: T.text }}>{log.node_id}</span>],
+                    ] as [string, React.ReactNode][]).map(([key, val]) => (
+                        <span key={key} style={{ display: 'contents' }}>
+                            <span style={{
+                                fontFamily: T.fontMono, fontSize: 10,
+                                letterSpacing: '0.06em', textTransform: 'uppercase',
+                                color: T.textMuted, alignSelf: 'center',
+                            }}>{key}</span>
+                            <span style={{ color: T.textStrong }}>{val}</span>
+                        </span>
+                    ))}
+                </div>
+
+                {/* Error / detail block */}
+                {fail && log.error_message && (
+                    <>
+                        <CardSub>error</CardSub>
+                        <div style={{
+                            background: T.surfaceAlt,
+                            border: `1px solid ${T.border}`,
+                            borderRadius: T.radiusMd,
+                            padding: '12px 14px', marginTop: 6, marginBottom: 18,
+                            fontFamily: T.fontMono, fontSize: 11.5,
+                            lineHeight: 1.6, color: T.dangerFg,
+                            whiteSpace: 'pre-wrap', wordBreak: 'break-word',
+                            overflowX: 'auto',
+                        }}>
+                            {log.error_message}
+                        </div>
+                    </>
+                )}
+
+                {/* Request payload (TODO — backend が完了次第) */}
+                <CardSub>request</CardSub>
+                <div style={{
+                    background: T.surfaceAlt, border: `1px solid ${T.border}`,
+                    borderRadius: T.radiusMd,
+                    padding: '12px 14px', marginTop: 6, marginBottom: 18,
+                    fontFamily: T.fontMono, fontSize: 11.5,
+                    lineHeight: 1.6, color: T.textMuted,
+                }}>
+                    <span style={{ color: T.textMuted }}>adapter:</span> {log.adapter}{'\n'}
+                    <span style={{ color: T.textMuted }}>node_id:</span> {log.node_id}{'\n'}
+                    <span style={{ color: T.textFaint, fontStyle: 'italic' }}>
+                        — full payload not yet exposed by backend —
+                    </span>
+                </div>
+
+                {/* Retry policy (TODO) */}
+                {fail && (
+                    <>
+                        <CardSub>retry policy</CardSub>
+                        <div style={{ fontSize: T.fontSm, color: T.textMuted, lineHeight: 1.5, marginTop: 6 }}>
+                            <span style={{ fontFamily: T.fontMono, background: T.surfaceAlt, padding: '2px 6px', borderRadius: 3 }}>
+                                attempt 1 / 1
+                            </span>
+                            <span style={{ marginLeft: 8 }}>· retries not configured</span>
+                        </div>
+                    </>
+                )}
+            </div>
+        </>
+    );
+
+    if (mode === 'pane') {
+        return (
+            <aside style={{
+                width: 480, flexShrink: 0,
+                borderLeft: `1px solid ${T.border}`,
+                background: T.surface,
+                height: '100vh', position: 'sticky', top: 0,
+                display: 'flex', flexDirection: 'column',
+                overflow: 'hidden',
+            }}>
+                {inner}
+            </aside>
+        );
+    }
+    // overlay
+    return (
+        <div
+            style={{
+                position: 'fixed', inset: 0, zIndex: 100,
+                background: 'oklch(0% 0 0 / 0.35)', backdropFilter: 'blur(2px)',
+                display: 'flex', justifyContent: 'flex-end',
+            }}
+            onClick={e => { if (e.target === e.currentTarget) onClose(); }}
+        >
+            <div style={{
+                width: 480, maxWidth: '95vw', height: '100vh',
+                background: T.surface, boxShadow: '-10px 0 40px -10px rgba(15,23,42,.25)',
+                display: 'flex', flexDirection: 'column',
+                borderLeft: `1px solid ${T.border}`,
+            }}>
+                {inner}
+            </div>
+        </div>
+    );
+}
+
 export default function ActionLogsPage() {
     const { t } = useTranslation();
-    const { isMobile } = useLayout();
+    const { isMobile, bp, setFullWidth } = useLayout();
+    const wide = isWideBp(bp);
 
     const [logs, setLogs]       = useState<ActionLogEntry[]>([]);
     const [total, setTotal]     = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError]     = useState<string | null>(null);
+    const [selectedId, setSelectedId] = useState<number | null>(null);
+
+    // wide+ で main full-width
+    useEffect(() => {
+        if (!wide) return;
+        setFullWidth(true);
+        return () => { setFullWidth(false); };
+    }, [wide, setFullWidth]);
+
+    const selectedLog = selectedId !== null ? logs.find(l => l.id === selectedId) ?? null : null;
 
     // filters
     const [adapter, setAdapter] = useState('');
@@ -195,9 +369,9 @@ export default function ActionLogsPage() {
         );
     }
 
-    // ─────────── Desktop / Tablet layout ───────────
-    return (
-        <div>
+    // ─────────── Desktop / Tablet / Wide layout ───────────
+    const listAndFilters = (
+        <div style={wide ? { padding: '28px 36px 48px', flex: 1, minWidth: 0 } : undefined}>
             <PageHead title="Action Logs" subtitle={subtitle}>
                 <button
                     style={{
@@ -289,45 +463,54 @@ export default function ActionLogsPage() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {logs.map((log, i) => (
-                                    <tr
-                                        key={log.id ?? i}
-                                        style={{
-                                            borderBottom: i < logs.length - 1 ? `1px solid ${T.border}` : 'none',
-                                        }}
-                                    >
-                                        {/* status */}
-                                        <td style={TD}>
-                                            <StatusPill variant={log.status} />
-                                        </td>
-                                        {/* adapter */}
-                                        <td style={TD}>
-                                            <AdapterTag adapter={log.adapter} />
-                                        </td>
-                                        {/* session */}
-                                        <td style={{ ...TD, fontFamily: MONO, fontSize: T.fontXs, color: T.textFaint }}>
-                                            {log.session_id.slice(0, 8)}…
-                                        </td>
-                                        {/* scenario */}
-                                        <td style={{ ...TD, fontFamily: MONO, fontSize: T.fontSm, color: T.text }}>
-                                            #{log.scenario_id}
-                                        </td>
-                                        {/* executed */}
-                                        <td style={{ ...TD, fontFamily: MONO, fontSize: T.fontSm, color: T.textMuted, whiteSpace: 'nowrap' }}>
-                                            {log.executed_at}
-                                        </td>
-                                        {/* error */}
-                                        <td style={{
-                                            ...TD,
-                                            fontFamily: MONO, fontSize: T.fontXs,
-                                            color: log.status === 'failure' ? T.dangerFg : T.textMuted,
-                                            maxWidth: 280,
-                                            overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-                                        }}>
-                                            {log.error_message ?? '—'}
-                                        </td>
-                                    </tr>
-                                ))}
+                                {logs.map((log, i) => {
+                                    const isSel = log.id !== null && log.id === selectedId;
+                                    const fail  = log.status === 'failure';
+                                    return (
+                                        <tr
+                                            key={log.id ?? i}
+                                            onClick={() => log.id !== null && setSelectedId(log.id)}
+                                            style={{
+                                                borderBottom: i < logs.length - 1 ? `1px solid ${T.border}` : 'none',
+                                                background: isSel ? (fail ? T.dangerBg : T.primaryTint) : 'transparent',
+                                                cursor: 'pointer',
+                                            }}
+                                            onMouseEnter={e => { if (!isSel) e.currentTarget.style.background = T.surfaceHover; }}
+                                            onMouseLeave={e => { e.currentTarget.style.background = isSel ? (fail ? T.dangerBg : T.primaryTint) : 'transparent'; }}
+                                        >
+                                            {/* status */}
+                                            <td style={{ ...TD, boxShadow: isSel ? `inset 2px 0 0 ${fail ? T.dangerFg : T.primary}` : 'none' }}>
+                                                <StatusPill variant={log.status} />
+                                            </td>
+                                            {/* adapter */}
+                                            <td style={TD}>
+                                                <AdapterTag adapter={log.adapter} />
+                                            </td>
+                                            {/* session */}
+                                            <td style={{ ...TD, fontFamily: MONO, fontSize: T.fontXs, color: T.textFaint }}>
+                                                {log.session_id.slice(0, 8)}…
+                                            </td>
+                                            {/* scenario */}
+                                            <td style={{ ...TD, fontFamily: MONO, fontSize: T.fontSm, color: T.text }}>
+                                                #{log.scenario_id}
+                                            </td>
+                                            {/* executed */}
+                                            <td style={{ ...TD, fontFamily: MONO, fontSize: T.fontSm, color: T.textMuted, whiteSpace: 'nowrap' }}>
+                                                {log.executed_at}
+                                            </td>
+                                            {/* error */}
+                                            <td style={{
+                                                ...TD,
+                                                fontFamily: MONO, fontSize: T.fontXs,
+                                                color: fail ? T.dangerFg : T.textMuted,
+                                                maxWidth: 280,
+                                                overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                                            }}>
+                                                {log.error_message ?? '—'}
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
                             </tbody>
                         </table>
                     </div>
@@ -371,5 +554,53 @@ export default function ActionLogsPage() {
                 </div>
             )}
         </div>
+    );
+
+    if (wide) {
+        return (
+            <div style={{ display: 'flex', alignItems: 'stretch', minHeight: '100vh' }}>
+                {listAndFilters}
+                {selectedLog ? (
+                    <ActionLogDetailView
+                        key={selectedLog.id ?? '__sel__'}
+                        log={selectedLog}
+                        onClose={() => setSelectedId(null)}
+                        mode="pane"
+                    />
+                ) : (
+                    <aside style={{
+                        width: 480, flexShrink: 0,
+                        borderLeft: `1px solid ${T.border}`,
+                        background: T.surface,
+                        height: '100vh', position: 'sticky', top: 0,
+                        display: 'flex', flexDirection: 'column',
+                        alignItems: 'center', justifyContent: 'center',
+                        color: T.textFaint, fontSize: T.fontSm,
+                        textAlign: 'center', padding: 24,
+                    }}>
+                        <div style={{
+                            fontFamily: MONO, fontSize: 10, fontWeight: 700,
+                            letterSpacing: '0.10em', textTransform: 'uppercase',
+                            marginBottom: 6,
+                        }}>no log selected</div>
+                        <div>左の一覧から行をクリックして詳細を表示</div>
+                    </aside>
+                )}
+            </div>
+        );
+    }
+
+    // desktop/tablet: overlay drawer when selected
+    return (
+        <>
+            {listAndFilters}
+            {selectedLog && (
+                <ActionLogDetailView
+                    log={selectedLog}
+                    onClose={() => setSelectedId(null)}
+                    mode="overlay"
+                />
+            )}
+        </>
     );
 }

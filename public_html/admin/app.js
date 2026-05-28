@@ -26240,7 +26240,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   function useBreakpoint() {
     const getbp = () => {
       const w = typeof window !== "undefined" ? window.innerWidth : 1200;
-      return w < 640 ? "mobile" : w < 1024 ? "tablet" : "desktop";
+      if (w < 640) return "mobile";
+      if (w < 1024) return "tablet";
+      if (w < 1441) return "desktop";
+      if (w < 1600) return "wide";
+      return "ultraWide";
     };
     const [bp, setBp] = (0, import_react3.useState)(getbp);
     (0, import_react3.useEffect)(() => {
@@ -26256,6 +26260,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       };
     }, []);
     return bp;
+  }
+  function isWideBp(bp) {
+    return bp === "wide" || bp === "ultraWide";
+  }
+  function isUltraWideBp(bp) {
+    return bp === "ultraWide";
   }
   function applyFocus(el) {
     el.style.borderColor = T.primary;
@@ -26428,16 +26438,20 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     );
     const [mobileOpen, setMobileOpen] = (0, import_react3.useState)(false);
     const [providesHeader, setProvidesHeader] = (0, import_react3.useState)(false);
+    const [fullWidth, setFullWidth] = (0, import_react3.useState)(false);
     const isTablet = bp === "tablet";
     const isMobile = bp === "mobile";
+    const wide = isWideBp(bp);
     (0, import_react3.useEffect)(() => {
       if (!isMobile) setMobileOpen(false);
     }, [isMobile]);
     const layoutCtx = (0, import_react3.useMemo)(() => ({
       isMobile,
+      bp,
       openMobileMenu: () => setMobileOpen(true),
-      setProvidesHeader
-    }), [isMobile]);
+      setProvidesHeader,
+      setFullWidth
+    }), [isMobile, bp]);
     function toggleSidebar() {
       if (isMobile) {
         setMobileOpen((v) => !v);
@@ -26665,7 +26679,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const showLabels = isMobile ? true : isTablet ? false : open;
     const sidebarW = isMobile ? 240 : isTablet ? 56 : open ? 240 : 52;
     const sidebarPos = isMobile ? { position: "fixed", top: 0, left: mobileOpen ? 0 : -240, zIndex: 145, height: "100vh", transition: "left 220ms ease" } : { position: "sticky", top: 0, height: "100vh" };
-    const mainPadding = isMobile ? providesHeader ? "0" : "60px 16px 40px" : isTablet ? "24px 24px 48px" : "28px 36px 48px";
+    const mainPadding = isMobile ? providesHeader ? "0" : "60px 16px 40px" : isTablet ? "24px 24px 48px" : wide && fullWidth ? "0" : "28px 36px 48px";
     const sidebarIconBtn = {
       flexShrink: 0,
       display: "inline-flex",
@@ -26881,9 +26895,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         // mobile: sidebar is fixed so main takes full width
         width: isMobile ? "100%" : void 0
       }, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { style: {
-        maxWidth: isMobile && providesHeader ? "none" : 1100,
+        maxWidth: isMobile && providesHeader || wide && fullWidth ? "none" : 1100,
         margin: "0 auto",
-        width: isMobile && providesHeader ? "100%" : void 0
+        width: isMobile && providesHeader || wide && fullWidth ? "100%" : void 0
       }, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(Outlet, {}) }) })
     ] }) });
   }
@@ -39416,7 +39430,15 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   ];
   function AppearancePage() {
     const { t } = useTranslation();
-    const { isMobile } = useLayout();
+    const { isMobile, bp, setFullWidth } = useLayout();
+    const wide = isWideBp(bp);
+    (0, import_react14.useEffect)(() => {
+      if (!wide) return;
+      setFullWidth(true);
+      return () => {
+        setFullWidth(false);
+      };
+    }, [wide, setFullWidth]);
     const [form, setForm] = (0, import_react14.useState)(null);
     const [loading, setLoading] = (0, import_react14.useState)(true);
     const [saving, setSaving] = (0, import_react14.useState)(false);
@@ -39744,7 +39766,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         ] })
       ] });
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { children: [
+    const wideWrap = wide ? { padding: "36px 48px 64px" } : void 0;
+    return /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: wideWrap, children: [
       /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)(PageHead, { title: "Appearance", subtitle: "widget \xB7 public-facing", children: [
         /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(Btn, { variant: "ghost", onClick: () => {
           void getAppearance().then((data2) => setForm(data2)).catch(() => {
@@ -39760,7 +39783,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(SuccessMsg, { msg: saved ? t("appearance.saved") : null }),
       /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("form", { onSubmit: (e) => {
         void handleSubmit(e);
-      }, children: /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }, children: [
+      }, children: /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: wide ? 32 : 14 }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { children: [
           /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)(Card, { style: { marginBottom: 12 }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(SectionHead, { label: "colors" }),
@@ -39959,7 +39982,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             ] })
           ] })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: wide ? { position: "sticky", top: 24, alignSelf: "start" } : void 0, children: [
           /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(SectionHead, { label: "live preview", children: /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
             "button",
             {
@@ -40781,13 +40804,227 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     cursor: "pointer",
     transition: "filter 150ms ease"
   };
+  function ActionLogDetailView({
+    log,
+    onClose,
+    mode
+  }) {
+    const fail = log.status === "failure";
+    const headerColor = fail ? T.dangerFg : T.successFg;
+    const headerBg = fail ? T.dangerBg : T.successBg;
+    const headerBorder = fail ? T.dangerBorder : T.successBorder;
+    const inner = /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(import_jsx_runtime15.Fragment, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { style: { height: 3, background: fail ? T.dangerFg : T.successFg, flexShrink: 0 } }),
+      /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { style: {
+        padding: "14px 18px",
+        display: "flex",
+        alignItems: "center",
+        gap: 10,
+        borderBottom: `1px solid ${T.border}`,
+        flexShrink: 0
+      }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { style: {
+          width: 28,
+          height: 28,
+          borderRadius: 5,
+          background: headerBg,
+          color: headerColor,
+          border: `1px solid ${headerBorder}`,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexShrink: 0,
+          fontFamily: T.fontMono,
+          fontWeight: 700,
+          fontSize: 14
+        }, children: fail ? "!" : "\u2713" }),
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { style: { flex: 1, minWidth: 0 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("h3", { style: {
+            fontSize: T.fontMd,
+            fontWeight: 700,
+            margin: 0,
+            color: T.textStrong,
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap"
+          }, children: fail ? log.error_message?.split(":")[0] ?? "failure" : `${log.adapter} action` }),
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { style: {
+            fontFamily: T.fontMono,
+            fontSize: T.fontXs,
+            color: T.textMuted,
+            marginTop: 1,
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap"
+          }, children: [
+            log.adapter,
+            " \xB7 session ",
+            log.session_id.slice(0, 8),
+            " \xB7 ",
+            log.executed_at?.slice(11, 19)
+          ] })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
+          "button",
+          {
+            onClick: onClose,
+            "aria-label": "Close",
+            style: {
+              width: 26,
+              height: 26,
+              borderRadius: T.radiusSm,
+              background: "transparent",
+              border: `1px solid ${T.border}`,
+              color: T.textMuted,
+              cursor: "pointer",
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center"
+            },
+            children: /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("svg", { width: "11", height: "11", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round", "aria-hidden": true, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("line", { x1: "6", y1: "6", x2: "18", y2: "18" }),
+              /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("line", { x1: "18", y1: "6", x2: "6", y2: "18" })
+            ] })
+          }
+        )
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { style: { flex: 1, overflowY: "auto", padding: "16px 18px 20px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { style: {
+          display: "grid",
+          gridTemplateColumns: "110px 1fr",
+          gap: "6px 14px",
+          fontSize: T.fontSm,
+          marginBottom: 18
+        }, children: [
+          ["status", /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(StatusPill, { variant: log.status }, "s")],
+          ["adapter", /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(AdapterTag, { adapter: log.adapter }, "a")],
+          ["executed", /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("span", { style: { fontFamily: T.fontMono, color: T.text }, children: log.executed_at }, "e")],
+          ["scenario", /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("span", { children: [
+            "#",
+            log.scenario_id
+          ] }, "sc")],
+          ["session", /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("span", { style: { fontFamily: T.fontMono, fontSize: 11, wordBreak: "break-all" }, children: log.session_id }, "se")],
+          ["node", /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("span", { style: { fontFamily: T.fontMono, color: T.text }, children: log.node_id }, "n")]
+        ].map(([key, val]) => /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("span", { style: { display: "contents" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("span", { style: {
+            fontFamily: T.fontMono,
+            fontSize: 10,
+            letterSpacing: "0.06em",
+            textTransform: "uppercase",
+            color: T.textMuted,
+            alignSelf: "center"
+          }, children: key }),
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("span", { style: { color: T.textStrong }, children: val })
+        ] }, key)) }),
+        fail && log.error_message && /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(import_jsx_runtime15.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(CardSub, { children: "error" }),
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { style: {
+            background: T.surfaceAlt,
+            border: `1px solid ${T.border}`,
+            borderRadius: T.radiusMd,
+            padding: "12px 14px",
+            marginTop: 6,
+            marginBottom: 18,
+            fontFamily: T.fontMono,
+            fontSize: 11.5,
+            lineHeight: 1.6,
+            color: T.dangerFg,
+            whiteSpace: "pre-wrap",
+            wordBreak: "break-word",
+            overflowX: "auto"
+          }, children: log.error_message })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(CardSub, { children: "request" }),
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { style: {
+          background: T.surfaceAlt,
+          border: `1px solid ${T.border}`,
+          borderRadius: T.radiusMd,
+          padding: "12px 14px",
+          marginTop: 6,
+          marginBottom: 18,
+          fontFamily: T.fontMono,
+          fontSize: 11.5,
+          lineHeight: 1.6,
+          color: T.textMuted
+        }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("span", { style: { color: T.textMuted }, children: "adapter:" }),
+          " ",
+          log.adapter,
+          "\n",
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("span", { style: { color: T.textMuted }, children: "node_id:" }),
+          " ",
+          log.node_id,
+          "\n",
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("span", { style: { color: T.textFaint, fontStyle: "italic" }, children: "\u2014 full payload not yet exposed by backend \u2014" })
+        ] }),
+        fail && /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(import_jsx_runtime15.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(CardSub, { children: "retry policy" }),
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { style: { fontSize: T.fontSm, color: T.textMuted, lineHeight: 1.5, marginTop: 6 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("span", { style: { fontFamily: T.fontMono, background: T.surfaceAlt, padding: "2px 6px", borderRadius: 3 }, children: "attempt 1 / 1" }),
+            /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("span", { style: { marginLeft: 8 }, children: "\xB7 retries not configured" })
+          ] })
+        ] })
+      ] })
+    ] });
+    if (mode === "pane") {
+      return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("aside", { style: {
+        width: 480,
+        flexShrink: 0,
+        borderLeft: `1px solid ${T.border}`,
+        background: T.surface,
+        height: "100vh",
+        position: "sticky",
+        top: 0,
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden"
+      }, children: inner });
+    }
+    return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
+      "div",
+      {
+        style: {
+          position: "fixed",
+          inset: 0,
+          zIndex: 100,
+          background: "oklch(0% 0 0 / 0.35)",
+          backdropFilter: "blur(2px)",
+          display: "flex",
+          justifyContent: "flex-end"
+        },
+        onClick: (e) => {
+          if (e.target === e.currentTarget) onClose();
+        },
+        children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { style: {
+          width: 480,
+          maxWidth: "95vw",
+          height: "100vh",
+          background: T.surface,
+          boxShadow: "-10px 0 40px -10px rgba(15,23,42,.25)",
+          display: "flex",
+          flexDirection: "column",
+          borderLeft: `1px solid ${T.border}`
+        }, children: inner })
+      }
+    );
+  }
   function ActionLogsPage() {
     const { t } = useTranslation();
-    const { isMobile } = useLayout();
+    const { isMobile, bp, setFullWidth } = useLayout();
+    const wide = isWideBp(bp);
     const [logs, setLogs] = (0, import_react17.useState)([]);
     const [total, setTotal] = (0, import_react17.useState)(0);
     const [loading, setLoading] = (0, import_react17.useState)(true);
     const [error, setError] = (0, import_react17.useState)(null);
+    const [selectedId, setSelectedId] = (0, import_react17.useState)(null);
+    (0, import_react17.useEffect)(() => {
+      if (!wide) return;
+      setFullWidth(true);
+      return () => {
+        setFullWidth(false);
+      };
+    }, [wide, setFullWidth]);
+    const selectedLog = selectedId !== null ? logs.find((l) => l.id === selectedId) ?? null : null;
     const [adapter, setAdapter] = (0, import_react17.useState)("");
     const [status, setStatus] = (0, import_react17.useState)("");
     const [range, setRange] = (0, import_react17.useState)("last 24h");
@@ -40956,7 +41193,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { style: { height: "calc(24px + env(safe-area-inset-bottom))" } })
       ] });
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { children: [
+    const listAndFilters = /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { style: wide ? { padding: "28px 36px 48px", flex: 1, minWidth: 0 } : void 0, children: [
       /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(PageHead, { title: "Action Logs", subtitle, children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
         "button",
         {
@@ -41079,38 +41316,51 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("th", { style: { ...TH3, width: 150 }, children: "executed" }),
           /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("th", { style: TH3, children: "error / detail" })
         ] }) }),
-        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("tbody", { children: logs.map((log, i) => /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(
-          "tr",
-          {
-            style: {
-              borderBottom: i < logs.length - 1 ? `1px solid ${T.border}` : "none"
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("tbody", { children: logs.map((log, i) => {
+          const isSel = log.id !== null && log.id === selectedId;
+          const fail = log.status === "failure";
+          return /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(
+            "tr",
+            {
+              onClick: () => log.id !== null && setSelectedId(log.id),
+              style: {
+                borderBottom: i < logs.length - 1 ? `1px solid ${T.border}` : "none",
+                background: isSel ? fail ? T.dangerBg : T.primaryTint : "transparent",
+                cursor: "pointer"
+              },
+              onMouseEnter: (e) => {
+                if (!isSel) e.currentTarget.style.background = T.surfaceHover;
+              },
+              onMouseLeave: (e) => {
+                e.currentTarget.style.background = isSel ? fail ? T.dangerBg : T.primaryTint : "transparent";
+              },
+              children: [
+                /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("td", { style: { ...TD2, boxShadow: isSel ? `inset 2px 0 0 ${fail ? T.dangerFg : T.primary}` : "none" }, children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(StatusPill, { variant: log.status }) }),
+                /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("td", { style: TD2, children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(AdapterTag, { adapter: log.adapter }) }),
+                /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("td", { style: { ...TD2, fontFamily: MONO9, fontSize: T.fontXs, color: T.textFaint }, children: [
+                  log.session_id.slice(0, 8),
+                  "\u2026"
+                ] }),
+                /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("td", { style: { ...TD2, fontFamily: MONO9, fontSize: T.fontSm, color: T.text }, children: [
+                  "#",
+                  log.scenario_id
+                ] }),
+                /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("td", { style: { ...TD2, fontFamily: MONO9, fontSize: T.fontSm, color: T.textMuted, whiteSpace: "nowrap" }, children: log.executed_at }),
+                /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("td", { style: {
+                  ...TD2,
+                  fontFamily: MONO9,
+                  fontSize: T.fontXs,
+                  color: fail ? T.dangerFg : T.textMuted,
+                  maxWidth: 280,
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap"
+                }, children: log.error_message ?? "\u2014" })
+              ]
             },
-            children: [
-              /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("td", { style: TD2, children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(StatusPill, { variant: log.status }) }),
-              /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("td", { style: TD2, children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(AdapterTag, { adapter: log.adapter }) }),
-              /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("td", { style: { ...TD2, fontFamily: MONO9, fontSize: T.fontXs, color: T.textFaint }, children: [
-                log.session_id.slice(0, 8),
-                "\u2026"
-              ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("td", { style: { ...TD2, fontFamily: MONO9, fontSize: T.fontSm, color: T.text }, children: [
-                "#",
-                log.scenario_id
-              ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("td", { style: { ...TD2, fontFamily: MONO9, fontSize: T.fontSm, color: T.textMuted, whiteSpace: "nowrap" }, children: log.executed_at }),
-              /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("td", { style: {
-                ...TD2,
-                fontFamily: MONO9,
-                fontSize: T.fontXs,
-                color: log.status === "failure" ? T.dangerFg : T.textMuted,
-                maxWidth: 280,
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap"
-              }, children: log.error_message ?? "\u2014" })
-            ]
-          },
-          log.id ?? i
-        )) })
+            log.id ?? i
+          );
+        }) })
       ] }) }) }),
       totalPages > 1 && /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { style: {
         display: "flex",
@@ -41167,6 +41417,57 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           }
         )
       ] })
+    ] });
+    if (wide) {
+      return /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { style: { display: "flex", alignItems: "stretch", minHeight: "100vh" }, children: [
+        listAndFilters,
+        selectedLog ? /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
+          ActionLogDetailView,
+          {
+            log: selectedLog,
+            onClose: () => setSelectedId(null),
+            mode: "pane"
+          },
+          selectedLog.id ?? "__sel__"
+        ) : /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("aside", { style: {
+          width: 480,
+          flexShrink: 0,
+          borderLeft: `1px solid ${T.border}`,
+          background: T.surface,
+          height: "100vh",
+          position: "sticky",
+          top: 0,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          color: T.textFaint,
+          fontSize: T.fontSm,
+          textAlign: "center",
+          padding: 24
+        }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { style: {
+            fontFamily: MONO9,
+            fontSize: 10,
+            fontWeight: 700,
+            letterSpacing: "0.10em",
+            textTransform: "uppercase",
+            marginBottom: 6
+          }, children: "no log selected" }),
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { children: "\u5DE6\u306E\u4E00\u89A7\u304B\u3089\u884C\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u3066\u8A73\u7D30\u3092\u8868\u793A" })
+        ] })
+      ] });
+    }
+    return /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(import_jsx_runtime15.Fragment, { children: [
+      listAndFilters,
+      selectedLog && /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
+        ActionLogDetailView,
+        {
+          log: selectedLog,
+          onClose: () => setSelectedId(null),
+          mode: "overlay"
+        }
+      )
     ] });
   }
 
@@ -41298,7 +41599,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   function DashboardPage() {
     const { t } = useTranslation();
     const nav = useNavigate();
-    const { isMobile } = useLayout();
+    const { isMobile, bp, setFullWidth } = useLayout();
+    const wide = isWideBp(bp);
+    const ultraWide = isUltraWideBp(bp);
+    (0, import_react18.useEffect)(() => {
+      if (!wide) return;
+      setFullWidth(true);
+      return () => {
+        setFullWidth(false);
+      };
+    }, [wide, setFullWidth]);
     const [stats, setStats] = (0, import_react18.useState)(null);
     const [scenarios, setScenarios] = (0, import_react18.useState)([]);
     const [failures, setFailures] = (0, import_react18.useState)([]);
@@ -41482,7 +41792,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         ] }) : null
       ] });
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { children: [
+    const wideMaxWidth = ultraWide ? 1720 : wide ? 1480 : void 0;
+    const wideWrap = wide ? { maxWidth: wideMaxWidth, margin: "0 auto", padding: "28px 36px 48px" } : void 0;
+    return /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { style: wideWrap, children: [
       /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(PageHead, { title: "Dashboard", subtitle: "overview \xB7 7 days", children: [
         /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("select", { style: {
           height: T.controlHeight,
@@ -41628,7 +41940,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           )
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(SparklineCard, { data: stats.daily_sessions }),
-        /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { style: {
+          display: "grid",
+          gridTemplateColumns: ultraWide ? "repeat(3, 1fr)" : "1fr 1fr",
+          gap: 14
+        }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(Card, { style: { padding: 0, overflow: "hidden" }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { style: { padding: "14px 18px", borderBottom: `1px solid ${T.border}` }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(CardSub, { children: "top scenarios" }),
@@ -41720,9 +42036,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     fontSize: T.fontSm,
     color: T.text
   };
-  function SessionDetailDrawer({
+  function SessionDetailView({
     sessionId,
-    onClose
+    onClose,
+    mode
   }) {
     const { t } = useTranslation();
     const [detail, setDetail] = (0, import_react19.useState)(null);
@@ -41744,6 +42061,196 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("line", { x1: "18", y1: "6", x2: "6", y2: "18" })
     ] });
     const shortId = sessionId.slice(0, 8);
+    const isPane = mode === "pane";
+    const inner = /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(import_jsx_runtime17.Fragment, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { style: { height: 3, background: T.primary, flexShrink: 0 } }),
+      /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { style: {
+        padding: "14px 18px",
+        display: "flex",
+        alignItems: "center",
+        gap: 10,
+        borderBottom: `1px solid ${T.border}`,
+        flexShrink: 0
+      }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { style: {
+          width: 28,
+          height: 28,
+          borderRadius: 5,
+          background: T.primaryTint,
+          color: T.primary,
+          border: `1px solid ${T.primaryBorder}`,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexShrink: 0
+        }, children: SessionIcon }),
+        /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { style: { flex: 1, minWidth: 0 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { style: { fontWeight: 700, fontSize: T.fontMd, color: T.textStrong }, children: [
+            "Session #",
+            shortId
+          ] }),
+          detail && /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { style: { fontFamily: MONO11, fontSize: T.fontXs, color: T.textMuted }, children: [
+            "scenario #",
+            detail.scenario_id
+          ] })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
+          "button",
+          {
+            onClick: onClose,
+            "aria-label": t("sessions.detail.close"),
+            style: {
+              width: 26,
+              height: 26,
+              borderRadius: T.radiusSm,
+              background: "transparent",
+              border: `1px solid ${T.border}`,
+              color: T.textMuted,
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center"
+            },
+            children: CloseIcon2
+          }
+        )
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { style: { flex: 1, overflowY: "auto", padding: "16px 18px 20px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(ErrorMsg, { msg: error }),
+        loading && /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("p", { style: { color: T.textMuted }, children: t("common.loading") }),
+        detail && /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(import_jsx_runtime17.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { style: {
+            display: "grid",
+            gridTemplateColumns: "100px 1fr",
+            gap: "8px 16px",
+            marginBottom: 18,
+            fontSize: T.fontSm,
+            alignItems: "baseline"
+          }, children: [
+            ["outcome", /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(StatusPill, { variant: detail.outcome === "dropped" ? "abandoned" : detail.outcome }, "o")],
+            ["conversion", /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { style: { color: detail.has_conversion ? T.successFg : T.textMuted }, children: detail.has_conversion ? "\u2713 yes" : "\u2014 no" }, "cv")],
+            ["started", /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { style: { fontFamily: MONO11, color: T.text }, children: detail.started_at }, "s")],
+            ["ended", /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { style: { fontFamily: MONO11, color: T.text }, children: detail.ended_at ?? "\u2014" }, "e")],
+            ["duration", /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { style: { fontFamily: MONO11, color: T.text }, children: calcDuration(detail.started_at, detail.ended_at) }, "d")]
+          ].map(([key, val]) => /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(import_jsx_runtime17.Fragment, { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { style: {
+              fontFamily: MONO11,
+              fontSize: T.fontXs,
+              color: T.textMuted,
+              letterSpacing: "0.06em",
+              textTransform: "uppercase"
+            }, children: key }, `k-${key}`),
+            /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { children: val }, `v-${key}`)
+          ] })) }),
+          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(CardSub, { children: "session id" }),
+          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { style: {
+            background: T.surfaceAlt,
+            fontFamily: MONO11,
+            fontSize: T.fontXs,
+            wordBreak: "break-all",
+            padding: 10,
+            borderRadius: T.radiusMd,
+            marginBottom: 20,
+            color: T.textMuted
+          }, children: detail.id }),
+          Object.keys(detail.variables).length > 0 && /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("section", { style: { marginBottom: 20 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(CardSub, { children: "collected variables" }),
+            /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { style: {
+              borderRadius: T.radiusMd,
+              border: `1px solid ${T.border}`,
+              overflow: "hidden",
+              marginTop: 8
+            }, children: Object.entries(detail.variables).map(([key, val], i, arr) => /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(
+              "div",
+              {
+                style: {
+                  display: "grid",
+                  gridTemplateColumns: "120px 1fr",
+                  gap: 12,
+                  padding: "7px 12px",
+                  fontSize: T.fontSm,
+                  borderBottom: i < arr.length - 1 ? `1px solid ${T.borderLight}` : "none",
+                  background: i % 2 === 1 ? T.surfaceAlt : "transparent",
+                  alignItems: "baseline"
+                },
+                children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { style: { fontFamily: MONO11, color: T.textMuted, fontSize: T.fontXs }, children: key }),
+                  /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { style: { color: T.text, wordBreak: "break-all" }, children: val })
+                ]
+              },
+              key
+            )) })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("section", { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(CardSub, { children: [
+              "messages \xB7 ",
+              detail.messages.length
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: 10, marginTop: 10 }, children: [
+              detail.messages.map((msg, i) => {
+                const isBot = msg.role === "bot";
+                return /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { style: {
+                    display: "flex",
+                    flexDirection: isBot ? "row" : "row-reverse",
+                    gap: 8,
+                    alignItems: "flex-end"
+                  }, children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { style: {
+                      width: 22,
+                      height: 22,
+                      borderRadius: 5,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: 11,
+                      flexShrink: 0,
+                      background: isBot ? T.primaryTint : T.adapterHttpBg,
+                      color: isBot ? T.primary : T.adapterHttp,
+                      border: `1px solid ${isBot ? T.primaryBorder : "rgba(79,118,166,.35)"}`
+                    }, children: isBot ? "N" : "U" }),
+                    /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { style: {
+                      maxWidth: "78%",
+                      padding: "8px 12px",
+                      borderRadius: T.radiusMd,
+                      fontSize: T.fontSm,
+                      lineHeight: 1.5,
+                      color: T.text,
+                      background: isBot ? T.surfaceAlt : T.adapterHttpBg,
+                      border: `1px solid ${isBot ? T.borderLight : "rgba(79,118,166,.20)"}`,
+                      borderBottomLeftRadius: isBot ? 0 : T.radiusMd,
+                      borderBottomRightRadius: isBot ? T.radiusMd : 0
+                    }, children: msg.content })
+                  ] }),
+                  /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { style: {
+                    fontFamily: MONO11,
+                    fontSize: 10,
+                    color: T.textFaint,
+                    textAlign: "center",
+                    margin: "2px 0"
+                  }, children: msg.created_at?.slice(11, 19) ?? "" })
+                ] }, msg.id ?? i);
+              }),
+              detail.messages.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("p", { style: { color: T.textMuted, fontSize: T.fontSm }, children: "\u2014" })
+            ] })
+          ] })
+        ] })
+      ] })
+    ] });
+    if (isPane) {
+      return /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("aside", { style: {
+        width: 480,
+        flexShrink: 0,
+        borderLeft: `1px solid ${T.border}`,
+        background: T.surface,
+        height: "100vh",
+        position: "sticky",
+        top: 0,
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden"
+      }, children: inner });
+    }
     return /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
       "div",
       {
@@ -41759,7 +42266,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         onClick: (e) => {
           if (e.target === e.currentTarget) onClose();
         },
-        children: /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { style: {
+        children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { style: {
           width: 480,
           maxWidth: "95vw",
           height: "100vh",
@@ -41768,181 +42275,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           display: "flex",
           flexDirection: "column",
           borderLeft: `1px solid ${T.border}`
-        }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { style: { height: 3, background: T.primary, flexShrink: 0 } }),
-          /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { style: {
-            padding: "14px 18px",
-            display: "flex",
-            alignItems: "center",
-            gap: 10,
-            borderBottom: `1px solid ${T.border}`,
-            flexShrink: 0
-          }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { style: {
-              width: 28,
-              height: 28,
-              borderRadius: 5,
-              background: T.primaryTint,
-              color: T.primary,
-              border: `1px solid ${T.primaryBorder}`,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexShrink: 0
-            }, children: SessionIcon }),
-            /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { style: { flex: 1, minWidth: 0 }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { style: { fontWeight: 700, fontSize: T.fontMd, color: T.textStrong }, children: [
-                "Session #",
-                shortId
-              ] }),
-              detail && /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { style: { fontFamily: MONO11, fontSize: T.fontXs, color: T.textMuted }, children: [
-                "scenario #",
-                detail.scenario_id
-              ] })
-            ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
-              "button",
-              {
-                onClick: onClose,
-                "aria-label": t("sessions.detail.close"),
-                style: {
-                  width: 26,
-                  height: 26,
-                  borderRadius: T.radiusSm,
-                  background: "transparent",
-                  border: `1px solid ${T.border}`,
-                  color: T.textMuted,
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center"
-                },
-                children: CloseIcon2
-              }
-            )
-          ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { style: { flex: 1, overflowY: "auto", padding: "16px 18px 20px" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(ErrorMsg, { msg: error }),
-            loading && /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("p", { style: { color: T.textMuted }, children: t("common.loading") }),
-            detail && /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(import_jsx_runtime17.Fragment, { children: [
-              /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { style: {
-                display: "grid",
-                gridTemplateColumns: "100px 1fr",
-                gap: "8px 16px",
-                marginBottom: 18,
-                fontSize: T.fontSm,
-                alignItems: "baseline"
-              }, children: [
-                ["outcome", /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(StatusPill, { variant: detail.outcome === "dropped" ? "abandoned" : detail.outcome }, "o")],
-                ["conversion", /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { style: { color: detail.has_conversion ? T.successFg : T.textMuted }, children: detail.has_conversion ? "\u2713 yes" : "\u2014 no" }, "cv")],
-                ["started", /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { style: { fontFamily: MONO11, color: T.text }, children: detail.started_at }, "s")],
-                ["ended", /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { style: { fontFamily: MONO11, color: T.text }, children: detail.ended_at ?? "\u2014" }, "e")],
-                ["duration", /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { style: { fontFamily: MONO11, color: T.text }, children: calcDuration(detail.started_at, detail.ended_at) }, "d")]
-              ].map(([key, val]) => /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(import_jsx_runtime17.Fragment, { children: [
-                /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { style: {
-                  fontFamily: MONO11,
-                  fontSize: T.fontXs,
-                  color: T.textMuted,
-                  letterSpacing: "0.06em",
-                  textTransform: "uppercase"
-                }, children: key }, `k-${key}`),
-                /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { children: val }, `v-${key}`)
-              ] })) }),
-              /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(CardSub, { children: "session id" }),
-              /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { style: {
-                background: T.surfaceAlt,
-                fontFamily: MONO11,
-                fontSize: T.fontXs,
-                wordBreak: "break-all",
-                padding: 10,
-                borderRadius: T.radiusMd,
-                marginBottom: 20,
-                color: T.textMuted
-              }, children: detail.id }),
-              Object.keys(detail.variables).length > 0 && /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("section", { style: { marginBottom: 20 }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(CardSub, { children: "collected variables" }),
-                /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { style: {
-                  borderRadius: T.radiusMd,
-                  border: `1px solid ${T.border}`,
-                  overflow: "hidden",
-                  marginTop: 8
-                }, children: Object.entries(detail.variables).map(([key, val], i, arr) => /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(
-                  "div",
-                  {
-                    style: {
-                      display: "grid",
-                      gridTemplateColumns: "120px 1fr",
-                      gap: 12,
-                      padding: "7px 12px",
-                      fontSize: T.fontSm,
-                      borderBottom: i < arr.length - 1 ? `1px solid ${T.borderLight}` : "none",
-                      background: i % 2 === 1 ? T.surfaceAlt : "transparent",
-                      alignItems: "baseline"
-                    },
-                    children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { style: { fontFamily: MONO11, color: T.textMuted, fontSize: T.fontXs }, children: key }),
-                      /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { style: { color: T.text, wordBreak: "break-all" }, children: val })
-                    ]
-                  },
-                  key
-                )) })
-              ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("section", { children: [
-                /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(CardSub, { children: [
-                  "messages \xB7 ",
-                  detail.messages.length
-                ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: 10, marginTop: 10 }, children: [
-                  detail.messages.map((msg, i) => {
-                    const isBot = msg.role === "bot";
-                    return /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { style: {
-                        display: "flex",
-                        flexDirection: isBot ? "row" : "row-reverse",
-                        gap: 8,
-                        alignItems: "flex-end"
-                      }, children: [
-                        /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { style: {
-                          width: 22,
-                          height: 22,
-                          borderRadius: 5,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          fontSize: 11,
-                          flexShrink: 0,
-                          background: isBot ? T.primaryTint : T.adapterHttpBg,
-                          color: isBot ? T.primary : T.adapterHttp,
-                          border: `1px solid ${isBot ? T.primaryBorder : "rgba(79,118,166,.35)"}`
-                        }, children: isBot ? "N" : "U" }),
-                        /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { style: {
-                          maxWidth: "78%",
-                          padding: "8px 12px",
-                          borderRadius: T.radiusMd,
-                          fontSize: T.fontSm,
-                          lineHeight: 1.5,
-                          color: T.text,
-                          background: isBot ? T.surfaceAlt : T.adapterHttpBg,
-                          border: `1px solid ${isBot ? T.borderLight : "rgba(79,118,166,.20)"}`,
-                          borderBottomLeftRadius: isBot ? 0 : T.radiusMd,
-                          borderBottomRightRadius: isBot ? T.radiusMd : 0
-                        }, children: msg.content })
-                      ] }),
-                      /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { style: {
-                        fontFamily: MONO11,
-                        fontSize: 10,
-                        color: T.textFaint,
-                        textAlign: "center",
-                        margin: "2px 0"
-                      }, children: msg.created_at?.slice(11, 19) ?? "" })
-                    ] }, msg.id ?? i);
-                  }),
-                  detail.messages.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("p", { style: { color: T.textMuted, fontSize: T.fontSm }, children: "\u2014" })
-                ] })
-              ] })
-            ] })
-          ] })
-        ] })
+        }, children: inner })
       }
     );
   }
@@ -42076,7 +42409,15 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
   function SessionsPage() {
     const { t } = useTranslation();
-    const { isMobile } = useLayout();
+    const { isMobile, bp, setFullWidth } = useLayout();
+    const wide = isWideBp(bp);
+    (0, import_react19.useEffect)(() => {
+      if (!wide) return;
+      setFullWidth(true);
+      return () => {
+        setFullWidth(false);
+      };
+    }, [wide, setFullWidth]);
     const [sessions, setSessions] = (0, import_react19.useState)([]);
     const [total, setTotal] = (0, import_react19.useState)(0);
     const [loading, setLoading] = (0, import_react19.useState)(true);
@@ -42260,7 +42601,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         )
       ] });
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { children: [
+    const listAndFilters = /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { style: wide ? { padding: "28px 36px 48px", flex: 1, minWidth: 0 } : void 0, children: [
       /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(PageHead, { title: "Sessions", subtitle, children: [
         /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
           "button",
@@ -42430,7 +42771,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 e.currentTarget.style.background = isSelected ? T.primaryTint : "transparent";
               },
               children: [
-                /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("td", { style: TD4, children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(StatusPill, { variant: pillVariant }) }),
+                /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("td", { style: { ...TD4, boxShadow: isSelected ? `inset 2px 0 0 ${T.primary}` : "none" }, children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(StatusPill, { variant: pillVariant }) }),
                 /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("td", { style: { ...TD4, fontFamily: MONO11, fontSize: T.fontSm, color: T.text }, children: [
                   "#",
                   s.scenario_id
@@ -42500,12 +42841,56 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             children: "next \u2192"
           }
         )
-      ] }),
+      ] })
+    ] });
+    if (wide) {
+      return /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { style: { display: "flex", alignItems: "stretch", minHeight: "100vh" }, children: [
+        listAndFilters,
+        selectedId !== null ? /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
+          SessionDetailView,
+          {
+            sessionId: selectedId,
+            onClose: () => setSelectedId(null),
+            mode: "pane"
+          },
+          selectedId
+        ) : /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("aside", { style: {
+          width: 480,
+          flexShrink: 0,
+          borderLeft: `1px solid ${T.border}`,
+          background: T.surface,
+          height: "100vh",
+          position: "sticky",
+          top: 0,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          color: T.textFaint,
+          fontSize: T.fontSm,
+          textAlign: "center",
+          padding: 24
+        }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { style: {
+            fontFamily: MONO11,
+            fontSize: 10,
+            fontWeight: 700,
+            letterSpacing: "0.10em",
+            textTransform: "uppercase",
+            marginBottom: 6
+          }, children: "no session selected" }),
+          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { children: "\u5DE6\u306E\u4E00\u89A7\u304B\u3089\u884C\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u3066\u8A73\u7D30\u3092\u8868\u793A" })
+        ] })
+      ] });
+    }
+    return /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(import_jsx_runtime17.Fragment, { children: [
+      listAndFilters,
       selectedId !== null && /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
-        SessionDetailDrawer,
+        SessionDetailView,
         {
           sessionId: selectedId,
-          onClose: () => setSelectedId(null)
+          onClose: () => setSelectedId(null),
+          mode: "overlay"
         }
       )
     ] });

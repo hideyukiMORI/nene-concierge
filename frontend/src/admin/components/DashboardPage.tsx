@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { getDashboard, listScenarios, listActionLogs, ApiError } from '../api.js';
 import type { DashboardStats, ScenarioSummary, ActionLogEntry } from '../api.js';
-import { PageHead, Card, CardSub, SectionHead, AdapterTag, ErrorMsg, useLayout } from './Layout.js';
+import { PageHead, Card, CardSub, SectionHead, AdapterTag, ErrorMsg, useLayout, isWideBp, isUltraWideBp } from './Layout.js';
 import {
     MobileHeader, MobileIconBtn, MobileSectionHead, KpiGrid, KpiCard as MKpiCard,
     AlertCard, CardList, ListItem, MetaDot, PullToRefreshHint,
@@ -154,7 +154,16 @@ function SparklineCard({ data }: { data: { date: string; count: number }[] }) {
 export default function DashboardPage() {
     const { t } = useTranslation();
     const nav   = useNavigate();
-    const { isMobile } = useLayout();
+    const { isMobile, bp, setFullWidth } = useLayout();
+    const wide      = isWideBp(bp);
+    const ultraWide = isUltraWideBp(bp);
+
+    // wide+ で main の maxWidth は Dashboard 側で管理する (1480 / 1720)
+    useEffect(() => {
+        if (!wide) return;
+        setFullWidth(true);
+        return () => { setFullWidth(false); };
+    }, [wide, setFullWidth]);
 
     const [stats, setStats]         = useState<DashboardStats | null>(null);
     const [scenarios, setScenarios] = useState<ScenarioSummary[]>([]);
@@ -359,9 +368,14 @@ export default function DashboardPage() {
         );
     }
 
-    // ─────────── Desktop / Tablet layout ───────────
+    // ─────────── Desktop / Tablet / Wide layout ───────────
+    // wide / ultraWide: Layout の maxWidth ラッパーを抑止して、ここで 1480 / 1720 にする
+    const wideMaxWidth = ultraWide ? 1720 : wide ? 1480 : undefined;
+    const wideWrap: React.CSSProperties | undefined = wide
+        ? { maxWidth: wideMaxWidth, margin: '0 auto', padding: '28px 36px 48px' }
+        : undefined;
     return (
-        <div>
+        <div style={wideWrap}>
             <PageHead title="Dashboard" subtitle="overview · 7 days">
                 <select style={{
                     height: T.controlHeight, padding: '0 10px',
@@ -472,8 +486,12 @@ export default function DashboardPage() {
                     {/* Sparkline */}
                     <SparklineCard data={stats.daily_sessions} />
 
-                    {/* Two-column: Top scenarios + Recent failures */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+                    {/* Two-column (≥1600: three-column): Top scenarios + Recent failures */}
+                    <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: ultraWide ? 'repeat(3, 1fr)' : '1fr 1fr',
+                        gap: 14,
+                    }}>
 
                         {/* Top scenarios */}
                         <Card style={{ padding: 0, overflow: 'hidden' }}>

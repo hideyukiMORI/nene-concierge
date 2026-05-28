@@ -5,7 +5,7 @@ import {
     ApiError,
 } from '../api.js';
 import type { SessionSummary, SessionDetail, SessionOutcome } from '../api.js';
-import { PageHead, Card, CardSub, StatusPill, ErrorMsg, useLayout } from './Layout.js';
+import { PageHead, Card, CardSub, StatusPill, ErrorMsg, useLayout, isWideBp } from './Layout.js';
 import {
     MobileHeader, MobileIconBtn, FilterChips, Chip, CardList, ListItem,
     Pill, MetaDot, SkeletonListItem, BottomSheet, MetaGrid,
@@ -43,14 +43,16 @@ const TD: React.CSSProperties = {
     padding: '9px 14px', fontSize: T.fontSm, color: T.text,
 };
 
-// ── Session Detail Drawer ─────────────────────────────────────────────────────
+// ── Session Detail View (shared between overlay drawer & wide right pane) ────
 
-function SessionDetailDrawer({
-    sessionId,
-    onClose,
+type DetailMode = 'overlay' | 'pane';
+
+function SessionDetailView({
+    sessionId, onClose, mode,
 }: {
     sessionId: string;
     onClose:   () => void;
+    mode:      DetailMode;  // overlay = <1441px, pane = ≥1441px
 }) {
     const { t } = useTranslation();
     const [detail, setDetail]   = useState<SessionDetail | null>(null);
@@ -84,24 +86,11 @@ function SessionDetailDrawer({
     );
 
     const shortId = sessionId.slice(0, 8);
+    const isPane  = mode === 'pane';
 
-    return (
-        <div
-            style={{
-                position: 'fixed', inset: 0, zIndex: 100,
-                background: 'oklch(0% 0 0 / 0.35)',
-                backdropFilter: 'blur(2px)',
-                display: 'flex', justifyContent: 'flex-end',
-            }}
-            onClick={e => { if (e.target === e.currentTarget) onClose(); }}
-        >
-            <div style={{
-                width: 480, maxWidth: '95vw', height: '100vh',
-                background: T.surface,
-                boxShadow: '-10px 0 40px -10px rgba(15,23,42,.25)',
-                display: 'flex', flexDirection: 'column',
-                borderLeft: `1px solid ${T.border}`,
-            }}>
+    // Inner content — head + body
+    const inner = (
+        <>
                 {/* Top stripe */}
                 <div style={{ height: 3, background: T.primary, flexShrink: 0 }} />
 
@@ -281,6 +270,43 @@ function SessionDetailDrawer({
                         </>
                     )}
                 </div>
+        </>
+    );
+
+    if (isPane) {
+        // Sticky right pane (≥1441px) — no backdrop, full viewport height
+        return (
+            <aside style={{
+                width: 480, flexShrink: 0,
+                borderLeft: `1px solid ${T.border}`,
+                background: T.surface,
+                height: '100vh', position: 'sticky', top: 0,
+                display: 'flex', flexDirection: 'column',
+                overflow: 'hidden',
+            }}>
+                {inner}
+            </aside>
+        );
+    }
+    // Overlay drawer (<1441px)
+    return (
+        <div
+            style={{
+                position: 'fixed', inset: 0, zIndex: 100,
+                background: 'oklch(0% 0 0 / 0.35)',
+                backdropFilter: 'blur(2px)',
+                display: 'flex', justifyContent: 'flex-end',
+            }}
+            onClick={e => { if (e.target === e.currentTarget) onClose(); }}
+        >
+            <div style={{
+                width: 480, maxWidth: '95vw', height: '100vh',
+                background: T.surface,
+                boxShadow: '-10px 0 40px -10px rgba(15,23,42,.25)',
+                display: 'flex', flexDirection: 'column',
+                borderLeft: `1px solid ${T.border}`,
+            }}>
+                {inner}
             </div>
         </div>
     );
@@ -422,7 +448,15 @@ function MobileSessionDetailSheet({ sessionId, onClose }: { sessionId: string | 
 
 export default function SessionsPage() {
     const { t } = useTranslation();
-    const { isMobile } = useLayout();
+    const { isMobile, bp, setFullWidth } = useLayout();
+    const wide = isWideBp(bp);
+
+    // ≥1441px は 2-pane なので main を full-width 化する
+    useEffect(() => {
+        if (!wide) return;
+        setFullWidth(true);
+        return () => { setFullWidth(false); };
+    }, [wide, setFullWidth]);
 
     const [sessions, setSessions]     = useState<SessionSummary[]>([]);
     const [total, setTotal]           = useState(0);
@@ -586,9 +620,11 @@ export default function SessionsPage() {
         );
     }
 
-    // ─────────── Desktop / Tablet layout ───────────
-    return (
-        <div>
+    // ─────────── Desktop / Tablet / Wide layout ───────────
+    // wide (≥1441) は 2-pane (list + sticky right pane)
+    // desktop/tablet は通常レイアウト + overlay drawer
+    const listAndFilters = (
+        <div style={wide ? { padding: '28px 36px 48px', flex: 1, minWidth: 0 } : undefined}>
             <PageHead title="Sessions" subtitle={subtitle}>
                 <button
                     onClick={() => { void load(); }}
@@ -714,7 +750,7 @@ export default function SessionsPage() {
                                                 e.currentTarget.style.background = isSelected ? T.primaryTint : 'transparent';
                                             }}
                                         >
-                                            <td style={TD}>
+                                            <td style={{ ...TD, boxShadow: isSelected ? `inset 2px 0 0 ${T.primary}` : 'none' }}>
                                                 <StatusPill variant={pillVariant} />
                                             </td>
                                             <td style={{ ...TD, fontFamily: MONO, fontSize: T.fontSm, color: T.text }}>
@@ -781,13 +817,55 @@ export default function SessionsPage() {
                 </div>
             )}
 
-            {/* Detail drawer */}
+        </div>
+    );
+
+    if (wide) {
+        // 2-pane: list + sticky right pane
+        return (
+            <div style={{ display: 'flex', alignItems: 'stretch', minHeight: '100vh' }}>
+                {listAndFilters}
+                {selectedId !== null ? (
+                    <SessionDetailView
+                        key={selectedId}
+                        sessionId={selectedId}
+                        onClose={() => setSelectedId(null)}
+                        mode="pane"
+                    />
+                ) : (
+                    <aside style={{
+                        width: 480, flexShrink: 0,
+                        borderLeft: `1px solid ${T.border}`,
+                        background: T.surface,
+                        height: '100vh', position: 'sticky', top: 0,
+                        display: 'flex', flexDirection: 'column',
+                        alignItems: 'center', justifyContent: 'center',
+                        color: T.textFaint, fontSize: T.fontSm,
+                        textAlign: 'center', padding: 24,
+                    }}>
+                        <div style={{
+                            fontFamily: MONO, fontSize: 10, fontWeight: 700,
+                            letterSpacing: '0.10em', textTransform: 'uppercase',
+                            marginBottom: 6,
+                        }}>no session selected</div>
+                        <div>左の一覧から行をクリックして詳細を表示</div>
+                    </aside>
+                )}
+            </div>
+        );
+    }
+
+    // desktop / tablet: overlay drawer
+    return (
+        <>
+            {listAndFilters}
             {selectedId !== null && (
-                <SessionDetailDrawer
+                <SessionDetailView
                     sessionId={selectedId}
                     onClose={() => setSelectedId(null)}
+                    mode="overlay"
                 />
             )}
-        </div>
+        </>
     );
 }

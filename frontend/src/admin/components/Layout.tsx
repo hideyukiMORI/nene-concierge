@@ -14,8 +14,12 @@ import { useTheme } from '../theme/index.js';
 
 export interface LayoutCtx {
     isMobile:         boolean;
+    bp:               Breakpoint;
     openMobileMenu:   () => void;
     setProvidesHeader:(v: boolean) => void;
+    /** Wide+ (≥1441px) で page を full-width / padding 0 にする。
+     *  Sessions / ActionLogs の 2-pane や Appearance の full-width で使う。 */
+    setFullWidth:     (v: boolean) => void;
 }
 const LayoutContext = createContext<LayoutCtx | null>(null);
 export function useLayout(): LayoutCtx {
@@ -26,13 +30,22 @@ export function useLayout(): LayoutCtx {
 
 const SIDEBAR_OPEN_KEY = 'nene_admin_sidebar_open';
 
-// ── Breakpoint hook — desktop > 1024 / tablet 640-1024 / mobile < 640 ─────────
-export type Breakpoint = 'desktop' | 'tablet' | 'mobile';
+// ── Breakpoint hook ───────────────────────────────────────────────────────────
+//   mobile     <640
+//   tablet     640-1023
+//   desktop    1024-1440
+//   wide       1441-1599   (Sessions / ActionLogs 2-pane / Appearance full-width / Dashboard max 1480)
+//   ultraWide  1600+       (Dashboard 下段 3-col; max-width up to 1720 at 1800+)
+export type Breakpoint = 'mobile' | 'tablet' | 'desktop' | 'wide' | 'ultraWide';
 
 export function useBreakpoint(): Breakpoint {
     const getbp = (): Breakpoint => {
         const w = typeof window !== 'undefined' ? window.innerWidth : 1200;
-        return w < 640 ? 'mobile' : w < 1024 ? 'tablet' : 'desktop';
+        if (w < 640)  return 'mobile';
+        if (w < 1024) return 'tablet';
+        if (w < 1441) return 'desktop';
+        if (w < 1600) return 'wide';
+        return 'ultraWide';
     };
     const [bp, setBp] = useState<Breakpoint>(getbp);
     useEffect(() => {
@@ -42,6 +55,15 @@ export function useBreakpoint(): Breakpoint {
         return () => { window.removeEventListener('resize', handler); cancelAnimationFrame(raf); };
     }, []);
     return bp;
+}
+
+/** ≥1441px? (wide or ultraWide) */
+export function isWideBp(bp: Breakpoint): boolean {
+    return bp === 'wide' || bp === 'ultraWide';
+}
+/** ≥1600px? */
+export function isUltraWideBp(bp: Breakpoint): boolean {
+    return bp === 'ultraWide';
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -166,10 +188,12 @@ export default function Layout({ variant = 'default' }: { variant?: 'default' | 
     );
     const [mobileOpen, setMobileOpen] = useState(false);
     const [providesHeader, setProvidesHeader] = useState(false);
+    const [fullWidth, setFullWidth] = useState(false);
 
     // タブレット時はサイドバーを強制 slim / モバイル時は開閉状態を管理
     const isTablet = bp === 'tablet';
     const isMobile = bp === 'mobile';
+    const wide     = isWideBp(bp);
 
     // モバイルメニューを閉じるとき body class も除去
     useEffect(() => {
@@ -178,9 +202,11 @@ export default function Layout({ variant = 'default' }: { variant?: 'default' | 
 
     const layoutCtx = useMemo<LayoutCtx>(() => ({
         isMobile,
+        bp,
         openMobileMenu: () => setMobileOpen(true),
         setProvidesHeader,
-    }), [isMobile]);
+        setFullWidth,
+    }), [isMobile, bp]);
 
     function toggleSidebar() {
         if (isMobile) { setMobileOpen(v => !v); return; }
@@ -381,7 +407,9 @@ export default function Layout({ variant = 'default' }: { variant?: 'default' | 
 
     const mainPadding = isMobile
         ? (providesHeader ? '0' : '60px 16px 40px')
-        : isTablet ? '24px 24px 48px' : '28px 36px 48px';
+        : isTablet ? '24px 24px 48px'
+        : (wide && fullWidth) ? '0'
+        : '28px 36px 48px';
 
     const sidebarIconBtn: React.CSSProperties = {
         flexShrink: 0,
@@ -571,13 +599,13 @@ export default function Layout({ variant = 'default' }: { variant?: 'default' | 
                 width: isMobile ? '100%' : undefined,
             }}>
                 {/* ラッパー <div> は常に描画する。
-                    providesHeader 切替で wrapper を出し入れすると React が Outlet を
+                    providesHeader / fullWidth 切替で wrapper を出し入れすると React が Outlet を
                     unmount/remount し、ページ state が毎回リセットされる → useEffect の
                     再発火による無限フェッチループの原因になる。 */}
                 <div style={{
-                    maxWidth: (isMobile && providesHeader) ? 'none' : 1100,
+                    maxWidth: (isMobile && providesHeader) || (wide && fullWidth) ? 'none' : 1100,
                     margin:   '0 auto',
-                    width:    (isMobile && providesHeader) ? '100%' : undefined,
+                    width:    (isMobile && providesHeader) || (wide && fullWidth) ? '100%' : undefined,
                 }}>
                     <Outlet />
                 </div>
