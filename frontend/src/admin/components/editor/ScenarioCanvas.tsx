@@ -1,11 +1,13 @@
 import {
     ReactFlow,
     Background,
-    Controls,
+    BackgroundVariant,
     MiniMap,
+    Panel,
     addEdge,
     useNodesState,
     useEdgesState,
+    useReactFlow,
     type Node,
     type Edge,
     type Connection,
@@ -21,8 +23,10 @@ import type {
 import { getScenarioAnalytics } from '../../api.js';
 import { NODE_COLORS, MessageNode, ConditionNode, ActionNode, EndNode } from './NodeTypes.js';
 import NodeConfigPanel from './NodeConfigPanel.js';
-import { T } from '../../theme.js';
+import { T, NODE_TOKENS } from '../../theme.js';
 import { useTranslation } from '../../i18n/index.js';
+import { useLayout } from '../Layout.js';
+import { BottomSheet, FAB } from '../mobile/index.js';
 
 // ── React Flow ノードタイプ登録 ───────────────────────────────────────────────
 
@@ -32,6 +36,8 @@ const nodeTypes: NodeTypes = {
     action:    ActionNode,
     end:       EndNode,
 };
+
+const MONO = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
 
 // ── ヘルパー: API 型 ↔ ReactFlow 型 ─────────────────────────────────────────
 
@@ -143,7 +149,7 @@ function AnalyticsSummaryPanel({
                             return (
                                 <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', padding: '8px 0', borderBottom: `1px solid ${T.border}` }}>
                                     <span style={{ fontSize: T.fontSm, color: T.textMuted }}>{label}</span>
-                                    <span style={{ fontSize: T.fontMd, fontWeight: 700, color: T.textStrong }}>
+                                    <span style={{ fontSize: T.fontSm, fontWeight: 700, color: T.textStrong, fontFamily: MONO }}>
                                         {value.toLocaleString()}
                                         {sub && <span style={{ fontSize: T.fontXs, fontWeight: 400, color: T.textMuted, marginLeft: 4 }}>{sub}</span>}
                                     </span>
@@ -156,7 +162,7 @@ function AnalyticsSummaryPanel({
                                 <StatRow label={t('canvas.analytics.sessions')}  value={report.total_sessions} />
                                 <StatRow label={t('canvas.analytics.completed')} value={report.completed_sessions} sub={`${dRate}%`} />
                                 <StatRow label={t('canvas.analytics.converted')} value={report.converted_sessions} sub={`${cRate}%`} />
-                                <div style={{ marginTop: 8, fontSize: T.fontXs, color: T.textMuted }}>
+                                <div style={{ marginTop: 8, fontSize: T.fontXs, color: T.textMuted, fontFamily: MONO }}>
                                     {report.period_from} – {report.period_to}
                                 </div>
                             </>
@@ -164,6 +170,87 @@ function AnalyticsSummaryPanel({
                     })()}
                 </div>
             )}
+        </div>
+    );
+}
+
+// ── BottomDock ────────────────────────────────────────────────────────────────
+// ReactFlow の Panel として canvas 内部に配置 → useReactFlow が使える
+
+const ZoomInIcon = () => (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        strokeWidth="2.2" strokeLinecap="round" aria-hidden>
+        <circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        <line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>
+    </svg>
+);
+const ZoomOutIcon = () => (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        strokeWidth="2.2" strokeLinecap="round" aria-hidden>
+        <circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        <line x1="8" y1="11" x2="14" y2="11"/>
+    </svg>
+);
+const FitViewIcon = () => (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+        <path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/>
+    </svg>
+);
+
+function DockBtn({ onClick, title, children }: {
+    onClick: () => void; title: string; children: React.ReactNode;
+}) {
+    return (
+        <button onClick={onClick} title={title}
+            style={{
+                width: 28, height: 28, borderRadius: T.radiusSm,
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                background: 'transparent', border: 'none', cursor: 'pointer',
+                color: T.textMuted,
+                transition: `background ${T.transitionFast}, color ${T.transitionFast}`,
+            }}
+            onMouseEnter={e => {
+                e.currentTarget.style.background = T.surfaceHover;
+                e.currentTarget.style.color = T.text;
+            }}
+            onMouseLeave={e => {
+                e.currentTarget.style.background = 'transparent';
+                e.currentTarget.style.color = T.textMuted;
+            }}>
+            {children}
+        </button>
+    );
+}
+
+function BottomDock({ nodeCount }: { nodeCount: number }) {
+    const { zoomIn, zoomOut, fitView } = useReactFlow();
+    return (
+        <div style={{
+            display: 'flex', alignItems: 'center', gap: 2,
+            background: T.glassDockBg,
+            border: `1px solid ${T.border}`,
+            borderRadius: T.radiusLg,
+            padding: '3px 6px',
+            boxShadow: T.shadowElevated,
+        }}>
+            <DockBtn onClick={() => zoomOut({ duration: 150 })} title="Zoom out">
+                <ZoomOutIcon/>
+            </DockBtn>
+            <DockBtn onClick={() => fitView({ padding: 0.6, maxZoom: 0.85, duration: 200 })} title="Fit view">
+                <FitViewIcon/>
+            </DockBtn>
+            <DockBtn onClick={() => zoomIn({ duration: 150 })} title="Zoom in">
+                <ZoomInIcon/>
+            </DockBtn>
+            <div style={{ width: 1, height: 14, background: T.border, margin: '0 4px' }}/>
+            <span style={{
+                fontSize: 10.5, fontFamily: MONO,
+                color: T.textFaint, padding: '0 4px',
+                whiteSpace: 'nowrap', userSelect: 'none',
+            }}>
+                {nodeCount} nodes
+            </span>
         </div>
     );
 }
@@ -193,9 +280,11 @@ const ScenarioCanvas = forwardRef<ScenarioCanvasRef, Props>(function ScenarioCan
     ref,
 ) {
     const { t } = useTranslation();
+    const { isMobile } = useLayout();
     const [nodes, setNodes, onNodesChange] = useNodesState<Node>(initialNodes.map(apiNodeToRF));
     const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>(initialEdges.map(apiEdgeToRF));
     const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
+    const [addPickerOpen, setAddPickerOpen]   = useState(false);
     const reactFlowWrapper = useRef<HTMLDivElement>(null);
 
     // ── Analytics 状態（期間は内部管理、モードは親から制御）──────────────────────
@@ -306,7 +395,8 @@ const ScenarioCanvas = forwardRef<ScenarioCanvasRef, Props>(function ScenarioCan
 
     return (
         <div style={{ position: 'relative', height: '100%' }}>
-            <div ref={reactFlowWrapper} style={{ position: 'absolute', inset: 0 }}>
+            <div ref={reactFlowWrapper}
+                style={{ position: 'absolute', inset: 0, background: T.canvasBg }}>
                 <ReactFlow
                     nodes={nodes}
                     edges={edges}
@@ -322,30 +412,95 @@ const ScenarioCanvas = forwardRef<ScenarioCanvasRef, Props>(function ScenarioCan
                     nodesDraggable={!analyticsMode}
                     nodesConnectable={!analyticsMode}
                     elementsSelectable={!analyticsMode}
+                    defaultEdgeOptions={{
+                        style: { stroke: T.edgeStroke, strokeWidth: 1.5 },
+                    }}
                 >
-                    <Background gap={20} color={T.border} />
-                    <Controls />
+                    {/* ドットグリッド背景 */}
+                    <Background variant={BackgroundVariant.Dots} gap={24} size={1.5} color={T.canvasDot} />
+
+                    {/* ミニマップ — NODE_COLORS.header でテーマ追従 */}
                     <MiniMap
                         nodeColor={n => NODE_COLORS[n.type as ChatNodeType]?.header ?? T.sidebarMuted}
-                        style={{ background: T.tableHeader, border: `1px solid ${T.border}` }}
+                        style={{
+                            background: T.minimapBg,
+                            border: `1px solid ${T.border}`,
+                            borderRadius: T.radiusMd,
+                        }}
+                        maskColor="oklch(0% 0 0 / 0.08)"
                     />
+
+                    {/* ボトムドック: Zoom + ノード数 */}
+                    <Panel position="bottom-center" style={{ marginBottom: 14 }}>
+                        <BottomDock nodeCount={nodes.length} />
+                    </Panel>
                 </ReactFlow>
             </div>
 
-            {/* 右ドロワー: ノード設定 or Analytics サマリー（にゅっとスライドイン/アウト） */}
-            <div style={{
-                position: 'absolute', top: 0, right: 0, bottom: 0, width: 264,
-                zIndex: 10,
-                background: T.surface,
-                borderLeft: `1px solid ${T.border}`,
-                boxShadow: '-6px 0 20px rgba(0,0,0,.07)',
-                display: 'flex', flexDirection: 'column', overflow: 'hidden',
-                // スライドアニメーション
-                transform: showRightPanel ? 'translateX(0)' : 'translateX(100%)',
-                transition: 'transform 0.20s cubic-bezier(0.4, 0, 0.2, 1)',
-                pointerEvents: showRightPanel ? 'auto' : 'none',
-            }}>
-                {analyticsMode ? (
+            {/* 右ドロワー (desktop / tablet) — モバイルは BottomSheet 経由 */}
+            {!isMobile && (
+                <div style={{
+                    position: 'absolute', top: 0, right: 0, bottom: 0,
+                    width: T.editorDrawerW,
+                    zIndex: 10,
+                    display: 'flex', flexDirection: 'column', overflow: 'hidden',
+                    transform: showRightPanel ? 'translateX(0)' : 'translateX(100%)',
+                    transition: 'transform 0.20s cubic-bezier(0.4, 0, 0.2, 1)',
+                    pointerEvents: showRightPanel ? 'auto' : 'none',
+                }}>
+                    {analyticsMode ? (
+                        <div style={{
+                            height: '100%',
+                            background: T.surfaceAlt,
+                            borderLeft: `1px solid ${T.border}`,
+                            boxShadow: '-6px 0 20px rgba(0,0,0,.07)',
+                            display: 'flex', flexDirection: 'column',
+                        }}>
+                            <AnalyticsSummaryPanel
+                                report={analyticsReport}
+                                loading={analyticsLoading}
+                                noData={analyticsNoData}
+                                period={period}
+                                onPeriodChange={setPeriod}
+                            />
+                        </div>
+                    ) : selectedNode ? (
+                        <NodeConfigPanel
+                            node={selectedNode}
+                            credentials={credentials}
+                            onChange={handleNodeChange}
+                            onDelete={handleNodeDelete}
+                            onClose={() => setSelectedNodeId(null)}
+                        />
+                    ) : null}
+                </div>
+            )}
+
+            {/* モバイル: NodeConfigPanel を BottomSheet 内に描画 */}
+            {isMobile && (
+                <BottomSheet
+                    open={selectedNode !== null && !analyticsMode}
+                    onClose={() => setSelectedNodeId(null)}
+                    height="78vh">
+                    {selectedNode && (
+                        <NodeConfigPanel
+                            node={selectedNode}
+                            credentials={credentials}
+                            onChange={handleNodeChange}
+                            onDelete={handleNodeDelete}
+                            onClose={() => setSelectedNodeId(null)}
+                        />
+                    )}
+                </BottomSheet>
+            )}
+
+            {/* モバイル: Analytics サマリーも BottomSheet */}
+            {isMobile && (
+                <BottomSheet
+                    open={analyticsMode}
+                    onClose={() => { /* parent toggles analyticsMode */ }}
+                    title="Analytics"
+                    height="60vh">
                     <AnalyticsSummaryPanel
                         report={analyticsReport}
                         loading={analyticsLoading}
@@ -353,42 +508,61 @@ const ScenarioCanvas = forwardRef<ScenarioCanvasRef, Props>(function ScenarioCan
                         period={period}
                         onPeriodChange={setPeriod}
                     />
-                ) : selectedNode ? (
-                    <>
-                        {/* ドロワーヘッダー */}
-                        <div style={{
-                            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                            padding: '6px 10px', flexShrink: 0,
-                            borderBottom: `1px solid ${T.border}`,
-                            background: T.tableHeader,
-                        }}>
-                            <span style={{ fontSize: T.fontXs, fontWeight: 600, color: T.textMuted }}>
-                                {t('scenarioForm.detailsToggle')}
-                            </span>
-                            <button
-                                onClick={() => setSelectedNodeId(null)}
-                                title={t('common.close')}
-                                style={{
-                                    background: 'none', border: 'none', cursor: 'pointer',
-                                    color: T.textMuted, fontSize: 14, lineHeight: 1,
-                                    padding: '1px 4px', borderRadius: T.radiusSm,
-                                    display: 'flex', alignItems: 'center',
-                                }}
-                                onMouseEnter={e => { e.currentTarget.style.background = T.border; }}
-                                onMouseLeave={e => { e.currentTarget.style.background = 'none'; }}
-                            >×</button>
+                </BottomSheet>
+            )}
+
+            {/* モバイル: ノード追加 FAB + Picker BottomSheet */}
+            {isMobile && !analyticsMode && (
+                <>
+                    <FAB ariaLabel={t('node.addToCanvas', { type: '' })} onClick={() => setAddPickerOpen(true)}>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                        </svg>
+                    </FAB>
+                    <BottomSheet
+                        open={addPickerOpen}
+                        onClose={() => setAddPickerOpen(false)}
+                        title="Add node">
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                            {(['message','condition','action','end'] as ChatNodeType[]).map(type => {
+                                const tok = NODE_TOKENS[type];
+                                return (
+                                    <button key={type}
+                                        onClick={() => { addNode(type); setAddPickerOpen(false); }}
+                                        style={{
+                                            display: 'flex', alignItems: 'center', gap: 10,
+                                            padding: '12px 14px',
+                                            background: T.surface,
+                                            border: `1px solid ${T.border}`,
+                                            borderLeft: `3px solid ${tok.stripe}`,
+                                            borderRadius: T.radiusMd,
+                                            cursor: 'pointer',
+                                            textAlign: 'left',
+                                            WebkitTapHighlightColor: 'transparent',
+                                        }}>
+                                        <span style={{
+                                            width: 28, height: 28, borderRadius: T.radiusSm,
+                                            background: tok.chip, border: `1px solid ${tok.chipEdge}`,
+                                            color: tok.stripe,
+                                            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                                            fontWeight: 700, fontSize: 14, flexShrink: 0,
+                                        }}>{type[0]?.toUpperCase()}</span>
+                                        <span style={{
+                                            flex: 1, fontSize: 15, fontWeight: 600,
+                                            color: T.textStrong,
+                                        }}>{t(`node.type.${type}` as Parameters<typeof t>[0])}</span>
+                                        <span style={{
+                                            fontFamily: 'ui-monospace, "JetBrains Mono", monospace',
+                                            fontSize: 11, color: T.textFaint,
+                                        }}>{type}</span>
+                                    </button>
+                                );
+                            })}
                         </div>
-                        <div style={{ flex: 1, overflowY: 'auto' }}>
-                            <NodeConfigPanel
-                                node={selectedNode}
-                                credentials={credentials}
-                                onChange={handleNodeChange}
-                                onDelete={handleNodeDelete}
-                            />
-                        </div>
-                    </>
-                ) : null}
-            </div>
+                    </BottomSheet>
+                </>
+            )}
         </div>
     );
 });

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router';
 import { clearToken, getStoredEmail } from '../auth.js';
 import { T } from '../theme.js';
@@ -6,7 +6,65 @@ import { useTranslation, LOCALES, SUPPORTED_LOCALE_IDS } from '../i18n/index.js'
 import type { SupportedLocale } from '../i18n/index.js';
 import { useTheme } from '../theme/index.js';
 
+// ── LayoutContext ─────────────────────────────────────────────────────────────
+// モバイル対応のページが Layout 側のヘッダー/パディングを抑止し、自前で MobileHeader
+// を描画するためのコンテキスト。Mobile.tsx の <MobileHeader> がマウント時に
+// providesHeader=true を立てる → Layout の fixed hamburger を隠し、main の上下左右
+// padding と maxWidth ラッパーを外す。
+
+export interface LayoutCtx {
+    isMobile:         boolean;
+    bp:               Breakpoint;
+    openMobileMenu:   () => void;
+    setProvidesHeader:(v: boolean) => void;
+    /** Wide+ (≥1441px) で page を full-width / padding 0 にする。
+     *  Sessions / ActionLogs の 2-pane や Appearance の full-width で使う。 */
+    setFullWidth:     (v: boolean) => void;
+}
+const LayoutContext = createContext<LayoutCtx | null>(null);
+export function useLayout(): LayoutCtx {
+    const ctx = useContext(LayoutContext);
+    if (!ctx) throw new Error('useLayout must be used within Layout');
+    return ctx;
+}
+
 const SIDEBAR_OPEN_KEY = 'nene_admin_sidebar_open';
+
+// ── Breakpoint hook ───────────────────────────────────────────────────────────
+//   mobile     <640
+//   tablet     640-1023
+//   desktop    1024-1440
+//   wide       1441-1599   (Sessions / ActionLogs 2-pane / Appearance full-width / Dashboard max 1480)
+//   ultraWide  1600+       (Dashboard 下段 3-col; max-width up to 1720 at 1800+)
+export type Breakpoint = 'mobile' | 'tablet' | 'desktop' | 'wide' | 'ultraWide';
+
+export function useBreakpoint(): Breakpoint {
+    const getbp = (): Breakpoint => {
+        const w = typeof window !== 'undefined' ? window.innerWidth : 1200;
+        if (w < 640)  return 'mobile';
+        if (w < 1024) return 'tablet';
+        if (w < 1441) return 'desktop';
+        if (w < 1600) return 'wide';
+        return 'ultraWide';
+    };
+    const [bp, setBp] = useState<Breakpoint>(getbp);
+    useEffect(() => {
+        let raf = 0;
+        const handler = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => setBp(getbp())); };
+        window.addEventListener('resize', handler);
+        return () => { window.removeEventListener('resize', handler); cancelAnimationFrame(raf); };
+    }, []);
+    return bp;
+}
+
+/** ≥1441px? (wide or ultraWide) */
+export function isWideBp(bp: Breakpoint): boolean {
+    return bp === 'wide' || bp === 'ultraWide';
+}
+/** ≥1600px? */
+export function isUltraWideBp(bp: Breakpoint): boolean {
+    return bp === 'ultraWide';
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // v2 (2026-05-28) — エディタ画面 (variant="editor") は slim 54px サイドバー固定。
@@ -48,11 +106,11 @@ const NAV_ITEMS = [
 ] as const;
 
 // ── NavItem (default sidebar) ────────────────────────────────────────────────
-function NavItem({ to, icon, label, open }: { to: string; icon: React.ReactNode; label: string; open: boolean }) {
+function NavItem({ to, icon, label, open, onClick }: { to: string; icon: React.ReactNode; label: string; open: boolean; onClick?: () => void }) {
     const loc    = useLocation();
     const active = loc.pathname.startsWith(to);
     return (
-        <Link to={to} title={open ? undefined : label}
+        <Link to={to} title={open ? undefined : label} onClick={onClick}
             style={{
                 display: 'flex', alignItems: 'center',
                 justifyContent: open ? 'flex-start' : 'center',
@@ -123,11 +181,35 @@ export default function Layout({ variant = 'default' }: { variant?: 'default' | 
     const { t, locale, setLocale } = useTranslation();
     const { themeVariant, toggleVariant, canToggleVariant } = useTheme();
     const email = getStoredEmail();
+    const bp    = useBreakpoint();
 
     const [open, setOpen] = useState(() =>
         localStorage.getItem(SIDEBAR_OPEN_KEY) !== 'false',
     );
+    const [mobileOpen, setMobileOpen] = useState(false);
+    const [providesHeader, setProvidesHeader] = useState(false);
+    const [fullWidth, setFullWidth] = useState(false);
+
+    // タブレット時はサイドバーを強制 slim / モバイル時は開閉状態を管理
+    const isTablet = bp === 'tablet';
+    const isMobile = bp === 'mobile';
+    const wide     = isWideBp(bp);
+
+    // モバイルメニューを閉じるとき body class も除去
+    useEffect(() => {
+        if (!isMobile) setMobileOpen(false);
+    }, [isMobile]);
+
+    const layoutCtx = useMemo<LayoutCtx>(() => ({
+        isMobile,
+        bp,
+        openMobileMenu: () => setMobileOpen(true),
+        setProvidesHeader,
+        setFullWidth,
+    }), [isMobile, bp]);
+
     function toggleSidebar() {
+        if (isMobile) { setMobileOpen(v => !v); return; }
         const next = !open;
         setOpen(next);
         localStorage.setItem(SIDEBAR_OPEN_KEY, String(next));
@@ -174,8 +256,68 @@ export default function Layout({ variant = 'default' }: { variant?: 'default' | 
     // ── Slim editor sidebar ──────────────────────────────────────────────────
     if (variant === 'editor') {
         return (
+            <LayoutContext.Provider value={layoutCtx}>
             <div style={{ display: 'flex', minHeight: '100vh' }}>
-                <aside style={{
+
+                {/* Mobile drawer backdrop + drawer (reuse the default Layout の lookup) */}
+                {isMobile && mobileOpen && (
+                    <div
+                        onClick={() => setMobileOpen(false)}
+                        style={{
+                            position: 'fixed', inset: 0, zIndex: 140,
+                            background: 'rgba(15,23,42,.40)',
+                            backdropFilter: 'blur(2px)',
+                        }}
+                    />
+                )}
+                {/* Mobile slide-in drawer (240px) */}
+                {isMobile && (
+                    <aside style={{
+                        position: 'fixed', top: 0,
+                        left: mobileOpen ? 0 : -240,
+                        width: 240, height: '100vh', zIndex: 145,
+                        background: T.sidebar, color: T.sidebarText,
+                        borderRight: `1px solid ${T.sidebarBorder}`,
+                        transition: 'left 220ms ease',
+                        display: 'flex', flexDirection: 'column',
+                        paddingTop: 'env(safe-area-inset-top)',
+                    }}>
+                        <div style={{
+                            display: 'flex', alignItems: 'center',
+                            height: 56, flexShrink: 0, padding: '0 8px 0 16px',
+                            borderBottom: `1px solid ${T.sidebarBorder}`,
+                            gap: 8,
+                        }}>
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                                <BrandMark open={true}/>
+                            </div>
+                            <button onClick={() => setMobileOpen(false)} aria-label="Close menu"
+                                style={{
+                                    width: T.controlHeightXs, height: T.controlHeightXs,
+                                    display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                                    background: 'transparent', border: 'none',
+                                    color: T.sidebarText, fontSize: 16, cursor: 'pointer',
+                                    borderRadius: T.radiusMd,
+                                }}>✕</button>
+                        </div>
+                        <nav style={{ flex: 1, padding: '12px 0', overflowY: 'auto', overflowX: 'hidden' }} aria-label="Main">
+                            {NAV_ITEMS.map((n, i) => (
+                                <span key={i} style={{ display: 'contents' }}>
+                                    <NavItem to={n.to} icon={n.icon}
+                                        label={t(n.key as Parameters<typeof t>[0])}
+                                        open={true}
+                                        onClick={() => setMobileOpen(false)}/>
+                                    {'divider' in n && n.divider && (
+                                        <div style={{ margin: '10px 0', borderTop: `1px solid ${T.sidebarBorder}`, opacity: 0.5 }}/>
+                                    )}
+                                </span>
+                            ))}
+                        </nav>
+                    </aside>
+                )}
+
+                {/* Slim editor sidebar (desktop / tablet のみ — モバイルは非表示) */}
+                {!isMobile && <aside style={{
                     width: T.sidebarWidthSlim, flexShrink: 0,
                     background: T.sidebar, color: T.sidebarText,
                     display: 'flex', flexDirection: 'column', alignItems: 'center',
@@ -239,7 +381,7 @@ export default function Layout({ variant = 'default' }: { variant?: 'default' | 
                             marginTop: 4,
                         }}>{email[0]?.toUpperCase() ?? '?'}</div>
                     )}
-                </aside>
+                </aside>}
 
                 <main style={{
                     flex: 1, minWidth: 0,
@@ -249,10 +391,26 @@ export default function Layout({ variant = 'default' }: { variant?: 'default' | 
                     <Outlet />
                 </main>
             </div>
+            </LayoutContext.Provider>
         );
     }
 
-    // ── Default sidebar (従来通り) ────────────────────────────────────────────
+    // ── Responsive sidebar state ─────────────────────────────────────────────
+    // desktop: open/closed toggle (240px / 52px)
+    // tablet:  always slim icon-only (56px)
+    // mobile:  fixed, off-screen; hamburger slides it in (240px)
+    const showLabels  = isMobile ? true  : isTablet ? false : open;
+    const sidebarW    = isMobile ? 240   : isTablet ? 56    : open ? 240 : 52;
+    const sidebarPos  = isMobile
+        ? { position: 'fixed' as const, top: 0, left: mobileOpen ? 0 : -240, zIndex: 145, height: '100vh', transition: 'left 220ms ease' }
+        : { position: 'sticky' as const, top: 0, height: '100vh' };
+
+    const mainPadding = isMobile
+        ? (providesHeader ? '0' : '60px 16px 40px')
+        : isTablet ? '24px 24px 48px'
+        : (wide && fullWidth) ? '0'
+        : '28px 36px 48px';
+
     const sidebarIconBtn: React.CSSProperties = {
         flexShrink: 0,
         display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
@@ -263,27 +421,62 @@ export default function Layout({ variant = 'default' }: { variant?: 'default' | 
         transition: `background ${T.transitionFast}, color ${T.transitionFast}, border-color ${T.transitionFast}`,
     };
 
+    // SVG hamburger icon
+    const HamburgerIcon = () => (
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+            <line x1="3" y1="6"  x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+    );
+
     return (
+        <LayoutContext.Provider value={layoutCtx}>
         <div style={{ display: 'flex', minHeight: '100vh' }}>
+
+            {/* Mobile overlay */}
+            {isMobile && mobileOpen && (
+                <div
+                    onClick={() => setMobileOpen(false)}
+                    style={{
+                        position: 'fixed', inset: 0, zIndex: 140,
+                        background: 'rgba(15,23,42,.40)',
+                        backdropFilter: 'blur(2px)',
+                    }}
+                />
+            )}
+
+            {/* Mobile hamburger button — ページが自前で MobileHeader を出している時は隠す */}
+            {isMobile && !providesHeader && (
+                <button
+                    onClick={() => setMobileOpen(v => !v)}
+                    aria-label="Open menu"
+                    className="nca-mobile-menu visible"
+                    style={{}}
+                >
+                    <HamburgerIcon />
+                </button>
+            )}
+
             <aside style={{
-                width: open ? T.sidebarWidth : '52px',
+                width: sidebarW,
                 flexShrink: 0,
                 background: T.sidebar, color: T.sidebarText,
                 display: 'flex', flexDirection: 'column',
                 borderRight: `1px solid ${T.sidebarBorder}`,
-                position: 'sticky', top: 0, height: '100vh',
                 overflow: 'hidden',
                 transition: 'width 200ms ease',
+                ...sidebarPos,
             }}>
                 <div style={{
                     display: 'flex', alignItems: 'center',
                     height: 56, flexShrink: 0,
-                    padding: open ? '0 8px 0 16px' : '0',
-                    justifyContent: open ? 'flex-start' : 'center',
+                    padding: showLabels ? '0 8px 0 16px' : '0',
+                    justifyContent: showLabels ? 'flex-start' : 'center',
                     borderBottom: `1px solid ${T.sidebarBorder}`,
                     gap: 8,
                 }}>
-                    {open ? (
+                    {showLabels ? (
                         <>
                             <div style={{ flex: 1, minWidth: 0 }}>
                                 <BrandMark open={true}/>
@@ -302,24 +495,41 @@ export default function Layout({ variant = 'default' }: { variant?: 'default' | 
                     ) : (
                         <BrandMark open={false}/>
                     )}
-                    <button onClick={toggleSidebar}
-                        title={open ? t('nav.collapseSidebar') : t('nav.expandSidebar')}
-                        aria-label={open ? t('nav.collapseSidebar') : t('nav.expandSidebar')}
-                        style={{ ...sidebarIconBtn, background: 'transparent', border: 'none', fontSize: 16 }}
-                        onMouseEnter={e => { e.currentTarget.style.background = T.sidebarHover; e.currentTarget.style.color = T.sidebarTitle; }}
-                        onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = T.sidebarText; }}>
-                        {open ? '‹' : '›'}
-                    </button>
+                    {/* Toggle button — desktop only */}
+                    {!isTablet && !isMobile && (
+                        <button onClick={toggleSidebar}
+                            title={open ? t('nav.collapseSidebar') : t('nav.expandSidebar')}
+                            aria-label={open ? t('nav.collapseSidebar') : t('nav.expandSidebar')}
+                            style={{ ...sidebarIconBtn, background: 'transparent', border: 'none', fontSize: 16 }}
+                            onMouseEnter={e => { e.currentTarget.style.background = T.sidebarHover; e.currentTarget.style.color = T.sidebarTitle; }}
+                            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = T.sidebarText; }}>
+                            {open ? '‹' : '›'}
+                        </button>
+                    )}
+                    {/* Mobile close button */}
+                    {isMobile && (
+                        <button onClick={() => setMobileOpen(false)}
+                            aria-label="Close menu"
+                            style={{ ...sidebarIconBtn, background: 'transparent', border: 'none', fontSize: 16 }}>
+                            ✕
+                        </button>
+                    )}
                 </div>
 
                 <nav style={{
                     flex: 1,
-                    padding: open ? '12px 0' : '12px 4px',
+                    padding: showLabels ? '12px 0' : '12px 4px',
                     overflowY: 'auto', overflowX: 'hidden',
                 }} aria-label="Main">
                     {NAV_ITEMS.map((n, i) => (
                         <span key={i} style={{ display: 'contents' }}>
-                            <NavItem to={n.to} icon={n.icon} label={t(n.key as Parameters<typeof t>[0])} open={open}/>
+                            <NavItem
+                                to={n.to}
+                                icon={n.icon}
+                                label={t(n.key as Parameters<typeof t>[0])}
+                                open={showLabels}
+                                {...(isMobile ? { onClick: () => setMobileOpen(false) } : {})}
+                            />
                             {'divider' in n && n.divider && (
                                 <div style={{ margin: '10px 0', borderTop: `1px solid ${T.sidebarBorder}`, opacity: 0.5 }}/>
                             )}
@@ -329,12 +539,12 @@ export default function Layout({ variant = 'default' }: { variant?: 'default' | 
 
                 <div style={{
                     flexShrink: 0,
-                    padding: open ? '10px 12px 12px' : '8px 4px',
+                    padding: showLabels ? '10px 12px 12px' : '8px 4px',
                     borderTop: `1px solid ${T.sidebarBorder}`,
                     display: 'flex', flexDirection: 'column',
-                    alignItems: open ? 'stretch' : 'center', gap: open ? 0 : 6,
+                    alignItems: showLabels ? 'stretch' : 'center', gap: showLabels ? 0 : 6,
                 }}>
-                    {open && (
+                    {showLabels && (
                         <>
                             {email && (
                                 <div title={email} style={{
@@ -373,7 +583,7 @@ export default function Layout({ variant = 'default' }: { variant?: 'default' | 
                             </div>
                         </>
                     )}
-                    {!open && (
+                    {!showLabels && (
                         <button onClick={logout} title={t('nav.logout')} aria-label={t('nav.logout')}
                             style={sidebarIconBtn}>
                             {I.logout}
@@ -384,13 +594,24 @@ export default function Layout({ variant = 'default' }: { variant?: 'default' | 
 
             <main style={{
                 flex: 1, minWidth: 0, overflowY: 'auto',
-                background: T.bg, padding: '32px 40px',
+                background: T.bg, padding: mainPadding,
+                // mobile: sidebar is fixed so main takes full width
+                width: isMobile ? '100%' : undefined,
             }}>
-                <div style={{ maxWidth: 960, margin: '0 auto' }}>
+                {/* ラッパー <div> は常に描画する。
+                    providesHeader / fullWidth 切替で wrapper を出し入れすると React が Outlet を
+                    unmount/remount し、ページ state が毎回リセットされる → useEffect の
+                    再発火による無限フェッチループの原因になる。 */}
+                <div style={{
+                    maxWidth: (isMobile && providesHeader) || (wide && fullWidth) ? 'none' : 1100,
+                    margin:   '0 auto',
+                    width:    (isMobile && providesHeader) || (wide && fullWidth) ? '100%' : undefined,
+                }}>
                     <Outlet />
                 </div>
             </main>
         </div>
+        </LayoutContext.Provider>
     );
 }
 
@@ -410,11 +631,125 @@ export function PageTitle({ children, style }: { children: React.ReactNode; styl
     );
 }
 
+// ── PageHead — title + subtitle (mono) + actions ──────────────────────────────
+export function PageHead({ title, subtitle, children }: {
+    title:     string;
+    subtitle?: string;
+    children?: React.ReactNode;
+}) {
+    return (
+        <div style={{
+            display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between',
+            gap: 12, marginBottom: 18,
+        }}>
+            <div>
+                <h1 style={{
+                    fontSize: T.font2xl, fontWeight: 700, marginBottom: 2,
+                    color: T.textStrong, letterSpacing: '-0.02em', lineHeight: 1.2,
+                }}>{title}</h1>
+                {subtitle && (
+                    <div style={{
+                        fontSize: T.fontSm, color: T.textMuted,
+                        fontFamily: T.fontMono, letterSpacing: '0.02em',
+                    }}>{subtitle}</div>
+                )}
+            </div>
+            {children && (
+                <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexShrink: 0 }}>
+                    {children}
+                </div>
+            )}
+        </div>
+    );
+}
+
+// ── StatusPill — dot + uppercase mono label ───────────────────────────────────
+type PillVariant = 'published' | 'draft' | 'archived' | 'success' | 'failure' | 'active' | 'completed' | 'converted' | 'abandoned' | 'dropped';
+const PILL_STYLES: Record<PillVariant, React.CSSProperties> = {
+    published:  { background: T.badgePubBg,    color: T.badgePubColor },
+    completed:  { background: T.badgePubBg,    color: T.badgePubColor },
+    converted:  { background: T.successPillBg, color: T.successFg },
+    success:    { background: T.successPillBg, color: T.successFg },
+    draft:      { background: T.badgeDraftBg,  color: T.badgeDraftColor },
+    archived:   { background: T.badgeArchBg,   color: T.badgeArchColor },
+    abandoned:  { background: T.badgeArchBg,   color: T.badgeArchColor },
+    dropped:    { background: T.badgeArchBg,   color: T.badgeArchColor },
+    failure:    { background: T.dangerBg, color: T.dangerFg, border: `1px solid ${T.dangerBorder}` },
+    active:     { background: T.primaryTint, color: T.primary },
+};
+export function StatusPill({ variant, label }: { variant: PillVariant; label?: string }) {
+    const s = PILL_STYLES[variant] ?? PILL_STYLES.draft;
+    const text = label ?? variant;
+    return (
+        <span style={{
+            display: 'inline-flex', alignItems: 'center', gap: 5,
+            height: 22, padding: '0 9px', borderRadius: T.radiusXl,
+            fontSize: T.fontXs, fontWeight: 700, fontFamily: T.fontMono,
+            letterSpacing: '0.04em', textTransform: 'uppercase',
+            ...s,
+        }}>
+            <span style={{ width: 5, height: 5, borderRadius: 99, background: 'currentColor', flexShrink: 0 }} />
+            {text}
+        </span>
+    );
+}
+
+// ── AdapterTag — muted brand color ────────────────────────────────────────────
+const ADAPTER_STYLES: Record<string, React.CSSProperties> = {
+    http:     { color: T.adapterHttp,     background: T.adapterHttpBg },
+    email:    { color: T.adapterEmail,    background: T.adapterEmailBg },
+    slack:    { color: T.adapterSlack,    background: T.adapterSlackBg },
+    chatwork: { color: T.adapterChatwork, background: T.adapterChatworkBg },
+};
+export function AdapterTag({ adapter }: { adapter: string }) {
+    const s = ADAPTER_STYLES[adapter] ?? { color: T.textMuted, background: T.surfaceAlt };
+    return (
+        <span style={{
+            display: 'inline-flex', alignItems: 'center', gap: 5,
+            fontFamily: T.fontMono, fontSize: T.fontXs, fontWeight: 700,
+            letterSpacing: '0.02em', padding: '2px 8px', borderRadius: T.radiusXl,
+            ...s,
+        }}>
+            <span style={{ width: 5, height: 5, borderRadius: 99, background: 'currentColor', flexShrink: 0 }} />
+            {adapter}
+        </span>
+    );
+}
+
+// ── SectionHead — mono uppercase label + horizontal rule ─────────────────────
+export function SectionHead({ label, children }: { label: string; children?: React.ReactNode }) {
+    return (
+        <div style={{
+            display: 'flex', alignItems: 'center', gap: 10,
+            marginBottom: 14,
+        }}>
+            <span style={{
+                fontSize: T.fontXs, fontWeight: 700, color: T.textMuted,
+                fontFamily: T.fontMono, letterSpacing: '0.06em', textTransform: 'uppercase',
+                flexShrink: 0,
+            }}>{label}</span>
+            <div style={{ flex: 1, height: 1, background: T.border }} />
+            {children}
+        </div>
+    );
+}
+
+// ── CardSub — mono label above card title ─────────────────────────────────────
+export function CardSub({ children }: { children: React.ReactNode }) {
+    return (
+        <div style={{
+            fontSize: T.fontXs, fontWeight: 600, color: T.textMuted,
+            fontFamily: T.fontMono, letterSpacing: '0.06em', textTransform: 'uppercase',
+            marginBottom: 4,
+        }}>{children}</div>
+    );
+}
+
 export function Card({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
     return (
         <div style={{
             background: T.surface, border: `1px solid ${T.border}`,
-            borderRadius: T.radiusLg, padding: '24px',
+            borderRadius: T.radiusLg, padding: '16px 18px',
             boxShadow: T.shadowCard, ...style,
         }}>{children}</div>
     );
@@ -442,15 +777,30 @@ export function Btn({
         textDecoration: 'none',
     };
     const variants: Record<string, React.CSSProperties> = {
-        primary: { background: T.primary,     color: T.primaryFg, borderColor: T.primary },
-        danger:  { background: T.danger,      color: '#fff',      borderColor: T.danger },
-        ghost:   { background: 'transparent', color: T.primary,   borderColor: T.primary },
+        primary: { background: T.primary,      color: T.primaryFg, borderColor: T.primary },
+        danger:  { background: 'transparent',  color: T.dangerFg,  borderColor: T.border },
+        ghost:   { background: 'transparent',  color: T.text,      borderColor: T.border },
+    };
+    const hoverStyles: Record<string, { bg: string; border?: string }> = {
+        primary: { bg: T.primary },
+        danger:  { bg: T.dangerBg, border: T.dangerBorder },
+        ghost:   { bg: T.surfaceHover },
     };
     return (
         <button type={type} onClick={onClick} disabled={disabled}
             style={{ ...base, ...variants[variant], ...style }}
-            onMouseEnter={e => { if (!disabled) e.currentTarget.style.filter = 'brightness(0.90)'; }}
-            onMouseLeave={e => { e.currentTarget.style.filter = ''; }}>
+            onMouseEnter={e => {
+                if (disabled) return;
+                const h = hoverStyles[variant];
+                e.currentTarget.style.background = h.bg;
+                if (h.border) e.currentTarget.style.borderColor = h.border;
+                if (variant === 'primary') e.currentTarget.style.filter = 'brightness(0.92)';
+            }}
+            onMouseLeave={e => {
+                e.currentTarget.style.background = variants[variant].background as string;
+                e.currentTarget.style.borderColor = variants[variant].borderColor as string;
+                e.currentTarget.style.filter = '';
+            }}>
             {children}
         </button>
     );

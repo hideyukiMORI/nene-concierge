@@ -94,6 +94,22 @@
       --nca-font-lg:    16px;
       --nca-font-xl:    18px;
       --nca-font-2xl:   22px;
+      --nca-font-mono:  ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+
+      /* ── Control heights ──────────────────────────────────────────────── */
+      --nca-control-height:    28px;  /* 主要フォームコントロール */
+      --nca-control-height-sm: 24px;  /* フィルター・ページネーション */
+      --nca-control-height-xs: 20px;  /* サイドバーユーティリティ */
+
+      /* ── Adapter tag accents ──────────────────────────────────────────── */
+      --nca-adapter-http:         #4F76A6;
+      --nca-adapter-http-bg:      #EFF2F6;
+      --nca-adapter-email:        #95713B;
+      --nca-adapter-email-bg:     #F4EED9;
+      --nca-adapter-slack:        #3F8350;
+      --nca-adapter-slack-bg:     #E8F1EB;
+      --nca-adapter-chatwork:     #7361A2;
+      --nca-adapter-chatwork-bg:  #F0ECF5;
 
       /* ── Sidebar width (slim = editor variant) ────────────────────────── */
       --nca-sidebar-width:         240px;
@@ -147,6 +163,74 @@
       /* ── Motion ───────────────────────────────────────────────────────── */
       --nca-transition-fast:   150ms ease;
       --nca-transition-normal: 200ms ease;
+    }
+
+    /* ══════════════════════════════════════════════════════════════════════
+       Responsive — breakpoints:
+         desktop    > 1024px (default)
+         tablet    640-1024px : sidebar collapses to icon-only, tighter padding
+         mobile     < 640px   : sidebar hidden (hamburger), tables scroll-x
+    ══════════════════════════════════════════════════════════════════════ */
+
+    /* Hamburger button — hidden by default, shown on mobile via React */
+    .nca-mobile-menu {
+      display: none;
+      position: fixed; top: 12px; left: 12px;
+      z-index: 150;
+      width: 36px; height: 36px; padding: 0;
+      border-radius: var(--nca-radius-md);
+      background: var(--nca-color-surface);
+      border: 1px solid var(--nca-color-border);
+      color: var(--nca-color-text);
+      cursor: pointer;
+      align-items: center; justify-content: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,.07);
+    }
+    .nca-mobile-menu.visible { display: inline-flex; }
+
+    /* Tables always scroll-x (safe fallback) */
+    .nca-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .nca-table-wrap table { min-width: 520px; }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    button, input, select, textarea { font-family: inherit; }
+
+    /* ══════════════════════════════════════════════════════════════════════
+       Mobile UI primitives (Issue #81) — class-based helpers
+       Most styling is inline in React; these are for keyframes / scrollbar
+       hiding / body scroll-lock that cannot be expressed inline.
+    ══════════════════════════════════════════════════════════════════════ */
+
+    /* Body scroll lock when a BottomSheet / mobile drawer is open */
+    body.nca-no-scroll { overflow: hidden; touch-action: none; }
+
+    /* Hide scrollbars on horizontal filter chip strips */
+    .nca-h-scroll { -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+    .nca-h-scroll::-webkit-scrollbar { display: none; }
+
+    /* Skeleton shimmer */
+    @keyframes nca-shimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    .nca-skeleton {
+      background: linear-gradient(90deg,
+        var(--nca-color-surface-alt) 0%,
+        var(--nca-color-border-light) 50%,
+        var(--nca-color-surface-alt) 100%);
+      background-size: 200% 100%;
+      animation: nca-shimmer 1.4s linear infinite;
+      border-radius: var(--nca-radius-sm);
+    }
+
+    /* Pull-to-Refresh spinner */
+    @keyframes nca-spin { to { transform: rotate(360deg); } }
+    .nca-ptr-spinner {
+      width: 13px; height: 13px;
+      border: 1.5px solid var(--nca-color-border);
+      border-top-color: var(--nca-color-primary);
+      border-radius: 99px;
+      animation: nca-spin 0.9s linear infinite;
     }
 
     /* ═══════════════════════════════════════════════════════════════════════
