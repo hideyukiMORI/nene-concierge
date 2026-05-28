@@ -39972,6 +39972,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   // src/admin/components/ActionLogsPage.tsx
   var import_react17 = __toESM(require_react());
   var import_jsx_runtime15 = __toESM(require_jsx_runtime());
+  var ADAPTER_ICON = {
+    http: "\u2192",
+    email: "\u2709",
+    slack: "#",
+    chatwork: "\u270E"
+  };
   var MONO9 = T.fontMono;
   var TH3 = {
     padding: "8px 14px",
@@ -40005,6 +40011,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   };
   function ActionLogsPage() {
     const { t } = useTranslation();
+    const { isMobile } = useLayout();
     const [logs, setLogs] = (0, import_react17.useState)([]);
     const [total, setTotal] = (0, import_react17.useState)(0);
     const [loading, setLoading] = (0, import_react17.useState)(true);
@@ -40048,6 +40055,135 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       cursor: "pointer",
       outline: "none"
     };
+    if (isMobile) {
+      return /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { style: { minHeight: "100vh", background: T.bg }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
+          MobileHeader,
+          {
+            title: "Action Logs",
+            subtitle: loading ? "\u2026" : `${total} records \xB7 ${failures} failed`,
+            trailing: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(MobileIconBtn, { ariaLabel: "Export CSV", children: /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("svg", { width: "20", height: "20", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round", "aria-hidden": true, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" }),
+              /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("polyline", { points: "7 10 12 15 17 10" }),
+              /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("line", { x1: "12", y1: "15", x2: "12", y2: "3" })
+            ] }) })
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(FilterChips, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(Chip, { active: status === "" && adapter === "", onClick: () => {
+            setStatus("");
+            setAdapter("");
+            handleFilterChange();
+          }, children: [
+            "all \xB7 ",
+            total
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Chip, { danger: status === "failure", active: status === "failure", onClick: () => {
+            setStatus(status === "failure" ? "" : "failure");
+            handleFilterChange();
+          }, children: "failure" }),
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Chip, { active: status === "success", onClick: () => {
+            setStatus(status === "success" ? "" : "success");
+            handleFilterChange();
+          }, children: "success" }),
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Chip, { active: adapter === "http", onClick: () => {
+            setAdapter(adapter === "http" ? "" : "http");
+            handleFilterChange();
+          }, children: "http" }),
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Chip, { active: adapter === "email", onClick: () => {
+            setAdapter(adapter === "email" ? "" : "email");
+            handleFilterChange();
+          }, children: "email" }),
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Chip, { active: adapter === "slack", onClick: () => {
+            setAdapter(adapter === "slack" ? "" : "slack");
+            handleFilterChange();
+          }, children: "slack" }),
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Chip, { active: adapter === "chatwork", onClick: () => {
+            setAdapter(adapter === "chatwork" ? "" : "chatwork");
+            handleFilterChange();
+          }, children: "chatwork" })
+        ] }),
+        error && /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { style: { padding: "12px 12px 0" }, children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(ErrorMsg, { msg: error }) }),
+        loading ? /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(CardList, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(SkeletonListItem, {}),
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(SkeletonListItem, {}),
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(SkeletonListItem, {})
+        ] }) : logs.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { style: { padding: "40px 24px", textAlign: "center", color: T.textMuted, fontSize: T.fontSm }, children: t("actionLogs.empty") }) : /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(CardList, { children: logs.map((log, i) => {
+          const fail = log.status === "failure";
+          return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
+            ListItem,
+            {
+              last: i === logs.length - 1,
+              failure: fail,
+              icon: ADAPTER_ICON[log.adapter] ?? "\xB7",
+              title: /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("span", { style: { display: "flex", alignItems: "center", gap: 6 }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Pill, { variant: fail ? "failure" : "success", label: log.status }),
+                /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("span", { style: {
+                  fontSize: 12,
+                  color: T.textMuted,
+                  fontFamily: MONO9,
+                  fontWeight: 400
+                }, children: [
+                  log.adapter,
+                  " \xB7 ",
+                  log.executed_at?.slice(11, 16) ?? "\u2014"
+                ] })
+              ] }),
+              meta: fail ? /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("span", { style: {
+                color: T.dangerFg,
+                fontFamily: MONO9,
+                fontSize: 11.5,
+                lineHeight: 1.4,
+                whiteSpace: "normal",
+                wordBreak: "break-word"
+              }, children: log.error_message ?? "\u2014" }) : /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("span", { children: [
+                "#",
+                log.scenario_id,
+                " \xB7 ",
+                log.session_id.slice(0, 8),
+                "\u2026"
+              ] })
+            },
+            log.id ?? i
+          );
+        }) }),
+        totalPages > 1 && /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { style: {
+          display: "flex",
+          justifyContent: "center",
+          gap: 8,
+          margin: "12px 0",
+          alignItems: "center",
+          fontFamily: MONO9,
+          fontSize: T.fontXs,
+          color: T.textMuted
+        }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
+            "button",
+            {
+              disabled: currentPage <= 1,
+              onClick: () => setOffset(Math.max(0, offset - limit)),
+              style: { ...PAG_BTN, opacity: currentPage <= 1 ? 0.45 : 1, cursor: currentPage <= 1 ? "not-allowed" : "pointer" },
+              children: "\u2190 prev"
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("span", { children: [
+            currentPage,
+            " / ",
+            totalPages
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
+            "button",
+            {
+              disabled: currentPage >= totalPages,
+              onClick: () => setOffset(offset + limit),
+              style: { ...PAG_BTN, opacity: currentPage >= totalPages ? 0.45 : 1, cursor: currentPage >= totalPages ? "not-allowed" : "pointer" },
+              children: "next \u2192"
+            }
+          )
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { style: { height: "calc(24px + env(safe-area-inset-bottom))" } })
+      ] });
+    }
     return /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { children: [
       /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(PageHead, { title: "Action Logs", subtitle, children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
         "button",

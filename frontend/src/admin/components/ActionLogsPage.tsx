@@ -1,9 +1,20 @@
 import { useEffect, useState } from 'react';
 import { listActionLogs, ApiError } from '../api.js';
 import type { ActionLogEntry } from '../api.js';
-import { PageHead, Card, StatusPill, AdapterTag, ErrorMsg } from './Layout.js';
+import { PageHead, Card, StatusPill, AdapterTag, ErrorMsg, useLayout } from './Layout.js';
+import {
+    MobileHeader, MobileIconBtn, FilterChips, Chip, CardList, ListItem,
+    Pill, SkeletonListItem,
+} from './mobile/index.js';
 import { T } from '../theme.js';
 import { useTranslation } from '../i18n/index.js';
+
+const ADAPTER_ICON: Record<string, string> = {
+    http:     '→',
+    email:    '✉',
+    slack:    '#',
+    chatwork: '✎',
+};
 
 const MONO = T.fontMono;
 
@@ -30,6 +41,7 @@ const PAG_BTN: React.CSSProperties = {
 
 export default function ActionLogsPage() {
     const { t } = useTranslation();
+    const { isMobile } = useLayout();
 
     const [logs, setLogs]       = useState<ActionLogEntry[]>([]);
     const [total, setTotal]     = useState(0);
@@ -77,6 +89,113 @@ export default function ActionLogsPage() {
         cursor: 'pointer', outline: 'none',
     };
 
+    // ─────────── Mobile layout ───────────
+    if (isMobile) {
+        return (
+            <div style={{ minHeight: '100vh', background: T.bg }}>
+                <MobileHeader
+                    title="Action Logs"
+                    subtitle={loading ? '…' : `${total} records · ${failures} failed`}
+                    trailing={
+                        <MobileIconBtn ariaLabel="Export CSV">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7 10 12 15 17 10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                        </MobileIconBtn>
+                    }
+                />
+
+                <FilterChips>
+                    <Chip active={status === '' && adapter === ''} onClick={() => { setStatus(''); setAdapter(''); handleFilterChange(); }}>all · {total}</Chip>
+                    <Chip danger={status === 'failure'} active={status === 'failure'} onClick={() => { setStatus(status === 'failure' ? '' : 'failure'); handleFilterChange(); }}>failure</Chip>
+                    <Chip active={status === 'success'} onClick={() => { setStatus(status === 'success' ? '' : 'success'); handleFilterChange(); }}>success</Chip>
+                    <Chip active={adapter === 'http'}     onClick={() => { setAdapter(adapter === 'http' ? '' : 'http'); handleFilterChange(); }}>http</Chip>
+                    <Chip active={adapter === 'email'}    onClick={() => { setAdapter(adapter === 'email' ? '' : 'email'); handleFilterChange(); }}>email</Chip>
+                    <Chip active={adapter === 'slack'}    onClick={() => { setAdapter(adapter === 'slack' ? '' : 'slack'); handleFilterChange(); }}>slack</Chip>
+                    <Chip active={adapter === 'chatwork'} onClick={() => { setAdapter(adapter === 'chatwork' ? '' : 'chatwork'); handleFilterChange(); }}>chatwork</Chip>
+                </FilterChips>
+
+                {error && (
+                    <div style={{ padding: '12px 12px 0' }}>
+                        <ErrorMsg msg={error} />
+                    </div>
+                )}
+
+                {loading ? (
+                    <CardList>
+                        <SkeletonListItem />
+                        <SkeletonListItem />
+                        <SkeletonListItem />
+                    </CardList>
+                ) : logs.length === 0 ? (
+                    <div style={{ padding: '40px 24px', textAlign: 'center', color: T.textMuted, fontSize: T.fontSm }}>
+                        {t('actionLogs.empty')}
+                    </div>
+                ) : (
+                    <CardList>
+                        {logs.map((log, i) => {
+                            const fail = log.status === 'failure';
+                            return (
+                                <ListItem
+                                    key={log.id ?? i}
+                                    last={i === logs.length - 1}
+                                    failure={fail}
+                                    icon={ADAPTER_ICON[log.adapter] ?? '·'}
+                                    title={
+                                        <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                                            <Pill variant={fail ? 'failure' : 'success'} label={log.status} />
+                                            <span style={{
+                                                fontSize: 12, color: T.textMuted, fontFamily: MONO,
+                                                fontWeight: 400,
+                                            }}>
+                                                {log.adapter} · {log.executed_at?.slice(11, 16) ?? '—'}
+                                            </span>
+                                        </span>
+                                    }
+                                    meta={
+                                        fail ? (
+                                            <span style={{
+                                                color: T.dangerFg, fontFamily: MONO,
+                                                fontSize: 11.5, lineHeight: 1.4,
+                                                whiteSpace: 'normal', wordBreak: 'break-word',
+                                            }}>
+                                                {log.error_message ?? '—'}
+                                            </span>
+                                        ) : (
+                                            <span>#{log.scenario_id} · {log.session_id.slice(0, 8)}…</span>
+                                        )
+                                    }
+                                />
+                            );
+                        })}
+                    </CardList>
+                )}
+
+                {/* Pagination */}
+                {totalPages > 1 && (
+                    <div style={{
+                        display: 'flex', justifyContent: 'center', gap: 8,
+                        margin: '12px 0', alignItems: 'center',
+                        fontFamily: MONO, fontSize: T.fontXs, color: T.textMuted,
+                    }}>
+                        <button disabled={currentPage <= 1}
+                            onClick={() => setOffset(Math.max(0, offset - limit))}
+                            style={{ ...PAG_BTN, opacity: currentPage <= 1 ? 0.45 : 1, cursor: currentPage <= 1 ? 'not-allowed' : 'pointer' }}>← prev</button>
+                        <span>{currentPage} / {totalPages}</span>
+                        <button disabled={currentPage >= totalPages}
+                            onClick={() => setOffset(offset + limit)}
+                            style={{ ...PAG_BTN, opacity: currentPage >= totalPages ? 0.45 : 1, cursor: currentPage >= totalPages ? 'not-allowed' : 'pointer' }}>next →</button>
+                    </div>
+                )}
+
+                <div style={{ height: 'calc(24px + env(safe-area-inset-bottom))' }}/>
+            </div>
+        );
+    }
+
+    // ─────────── Desktop / Tablet layout ───────────
     return (
         <div>
             <PageHead title="Action Logs" subtitle={subtitle}>
