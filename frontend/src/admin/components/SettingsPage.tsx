@@ -85,8 +85,10 @@ function ThemeCard({ def, isSelected, currentVariant, onSelect, onToggle }: {
                         aria-label={currentVariant === 'dark' ? t('theme.toggleLight') : t('theme.toggleDark')}
                         title={currentVariant === 'dark' ? t('theme.toggleLight') : t('theme.toggleDark')}
                         style={{
+                            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                            width: T.controlHeightXs, height: T.controlHeightXs,
                             background: 'none', border: 'none', cursor: 'pointer',
-                            color: T.textMuted, padding: '2px 4px', borderRadius: T.radiusSm,
+                            color: T.textMuted, padding: 0, borderRadius: T.radiusSm,
                             fontSize: 14, lineHeight: 1, transition: 'color 0.12s',
                         }}
                     >
