@@ -152,6 +152,27 @@ export default function NodeConfigPanel({ node, credentials, onChange, onDelete,
                         {typeLabel} · {node.id}
                     </div>
                 </div>
+                {/* 削除ボタン (ヘッダーへ移動 — 右下テーマスイッチャーとの衝突回避) */}
+                <button onClick={() => onDelete(node.id)}
+                    title={t('node.delete')} aria-label={t('node.delete')}
+                    style={{
+                        width: 28, height: 28, borderRadius: 5,
+                        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                        background: 'transparent', border: `1px solid ${T.border}`,
+                        color: T.dangerFg, cursor: 'pointer', flexShrink: 0,
+                        marginRight: 2,
+                        transition: `background ${T.transitionFast}, border-color ${T.transitionFast}`,
+                    }}
+                    onMouseEnter={e => {
+                        e.currentTarget.style.background = T.dangerBg;
+                        e.currentTarget.style.borderColor = T.dangerBorder;
+                    }}
+                    onMouseLeave={e => {
+                        e.currentTarget.style.background = 'transparent';
+                        e.currentTarget.style.borderColor = T.border;
+                    }}>
+                    <TrashIcon/>
+                </button>
                 {onClose && (
                     <button onClick={onClose} aria-label={t('common.close')} title={t('common.close')}
                         style={{
@@ -207,28 +228,15 @@ export default function NodeConfigPanel({ node, credentials, onChange, onDelete,
                 {tab === 'connections' && <ConnectionsTab nodeId={node.id} type={type}/>}
             </div>
 
-            {/* フッター */}
+            {/* フッター (削除ボタンはヘッダーに移動した — 右下テーマスイッチャーとの衝突回避) */}
             <div style={{
                 padding: '10px 14px', borderTop: `1px solid ${T.border}`,
-                display: 'flex', gap: 8, alignItems: 'center', flexShrink: 0,
+                display: 'flex', alignItems: 'center', flexShrink: 0,
                 background: T.surface,
             }}>
                 <span style={{ flex: 1, fontSize: T.fontXs, color: T.textFaint, fontFamily: MONO }}>
                     {t('node.edited')}
                 </span>
-                <button onClick={() => onDelete(node.id)} title={t('node.delete')}
-                    style={{
-                        height: T.controlHeight, padding: '0 10px',
-                        display: 'inline-flex', alignItems: 'center', gap: 5,
-                        borderRadius: T.radiusMd,
-                        background: 'transparent',
-                        border: `1px solid ${T.border}`,
-                        color: T.dangerFg, cursor: 'pointer',
-                        fontSize: T.fontSm, fontWeight: 600,
-                    }}>
-                    <TrashIcon/>
-                    <span>{t('node.delete')}</span>
-                </button>
             </div>
         </div>
     );
