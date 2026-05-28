@@ -6,10 +6,24 @@ import {
 import type { CredentialSummary } from '../api.js';
 import {
     PageHead, Card, Btn, SectionHead, AdapterTag,
-    ErrorMsg, FIELD_LABEL_STYLE, applyFocus, removeFocus, trHover,
+    ErrorMsg, FIELD_LABEL_STYLE, applyFocus, removeFocus, trHover, useLayout,
 } from './Layout.js';
+import {
+    MobileHeader, FilterChips, Chip, CardList, ListItem, FAB,
+    BottomSheet, SkeletonListItem, MetaDot,
+} from './mobile/index.js';
 import { T } from '../theme.js';
 import { useTranslation } from '../i18n/index.js';
+
+const ADAPTER_ICON: Record<string, string> = {
+    http:     '→',
+    email:    '✉',
+    slack:    '#',
+    chatwork: '✎',
+};
+const ADAPTER_COLOR_KEY: Record<string, 'http' | 'email' | 'slack' | 'chatwork'> = {
+    http: 'http', email: 'email', slack: 'slack', chatwork: 'chatwork',
+};
 
 const MONO = T.fontMono;
 
@@ -27,6 +41,7 @@ const TD: React.CSSProperties = {
 
 export default function CredentialsPage() {
     const { t } = useTranslation();
+    const { isMobile } = useLayout();
     const [creds, setCreds]       = useState<CredentialSummary[]>([]);
     const [loading, setLoading]   = useState(true);
     const [error, setError]       = useState<string | null>(null);
@@ -34,6 +49,7 @@ export default function CredentialsPage() {
     const [name, setName]         = useState('');
     const [adapter, setAdapter]   = useState('http');
     const [saving, setSaving]     = useState(false);
+    const [adapterFilter, setAdapterFilter] = useState<string>('');
 
     const adapterOptions = [
         { value: 'http',     label: 'HTTP — generic external API'   },
@@ -92,6 +108,120 @@ export default function CredentialsPage() {
         background: T.surface, color: T.text,
         transition: `border-color ${T.transitionFast}, box-shadow ${T.transitionFast}`,
     };
+
+    const filteredMobile = adapterFilter ? creds.filter(c => c.adapter === adapterFilter) : creds;
+
+    // ─────────── Mobile layout ───────────
+    if (isMobile) {
+        const counts: Record<string, number> = {
+            http: 0, email: 0, slack: 0, chatwork: 0,
+        };
+        creds.forEach(c => { if (counts[c.adapter] !== undefined) counts[c.adapter]++; });
+
+        return (
+            <div style={{ minHeight: '100vh', background: T.bg }}>
+                <MobileHeader
+                    title="Credentials"
+                    subtitle={loading ? '…' : `${creds.length} active`}
+                />
+
+                <FilterChips>
+                    <Chip active={adapterFilter === ''}      onClick={() => setAdapterFilter('')}>all · {creds.length}</Chip>
+                    <Chip active={adapterFilter === 'http'}     onClick={() => setAdapterFilter(adapterFilter === 'http' ? '' : 'http')}>http · {counts.http}</Chip>
+                    <Chip active={adapterFilter === 'email'}    onClick={() => setAdapterFilter(adapterFilter === 'email' ? '' : 'email')}>email · {counts.email}</Chip>
+                    <Chip active={adapterFilter === 'slack'}    onClick={() => setAdapterFilter(adapterFilter === 'slack' ? '' : 'slack')}>slack · {counts.slack}</Chip>
+                    <Chip active={adapterFilter === 'chatwork'} onClick={() => setAdapterFilter(adapterFilter === 'chatwork' ? '' : 'chatwork')}>chatwork · {counts.chatwork}</Chip>
+                </FilterChips>
+
+                {error && (
+                    <div style={{ padding: '12px 12px 0' }}>
+                        <ErrorMsg msg={error} />
+                    </div>
+                )}
+
+                {loading ? (
+                    <CardList>
+                        <SkeletonListItem />
+                        <SkeletonListItem />
+                        <SkeletonListItem />
+                    </CardList>
+                ) : filteredMobile.length === 0 ? (
+                    <div style={{ padding: '40px 24px', textAlign: 'center', color: T.textMuted }}>
+                        <div style={{ fontSize: T.fontSm }}>{t('credentials.empty')}</div>
+                    </div>
+                ) : (
+                    <CardList>
+                        {filteredMobile.map((c, i) => {
+                            const colorKey = ADAPTER_COLOR_KEY[c.adapter] ?? 'http';
+                            const bg =  T[`adapter${colorKey[0]!.toUpperCase() + colorKey.slice(1)}Bg` as keyof typeof T];
+                            const fg =  T[`adapter${colorKey[0]!.toUpperCase() + colorKey.slice(1)}` as keyof typeof T];
+                            return (
+                                <ListItem
+                                    key={c.id}
+                                    last={i === filteredMobile.length - 1}
+                                    icon={
+                                        <div style={{
+                                            width: 36, height: 36, borderRadius: T.radiusMd,
+                                            background: bg, color: fg,
+                                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                            fontWeight: 700, fontSize: 14,
+                                        }}>{ADAPTER_ICON[c.adapter] ?? '·'}</div>
+                                    }
+                                    title={c.name}
+                                    meta={
+                                        <>
+                                            <span style={{ color: fg, fontWeight: 600 }}>{c.adapter}</span>
+                                            <MetaDot />
+                                            <span>#{c.id}</span>
+                                        </>
+                                    }
+                                    onClick={() => void handleDelete(c.id, c.name)}
+                                />
+                            );
+                        })}
+                    </CardList>
+                )}
+
+                <div style={{ height: 'calc(96px + env(safe-area-inset-bottom))' }}/>
+
+                <FAB ariaLabel={t('common.add' as Parameters<typeof t>[0])} onClick={() => setShowForm(true)}>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden>
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                        <line x1="12" y1="5" x2="12" y2="19"/>
+                    </svg>
+                </FAB>
+
+                <BottomSheet
+                    open={showForm}
+                    onClose={() => setShowForm(false)}
+                    title={t('credentials.newCredential' as Parameters<typeof t>[0]) || 'New credential'}>
+                    <form onSubmit={e => { void handleCreate(e); }} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                        <label style={FIELD_LABEL_STYLE}>name *</label>
+                        <input type="text" value={name} onChange={e => setName(e.target.value)}
+                            required placeholder={t('credentials.namePlaceholder')}
+                            style={inputBase}
+                            onFocus={e => applyFocus(e.currentTarget)}
+                            onBlur={e  => removeFocus(e.currentTarget)}/>
+                        <label style={FIELD_LABEL_STYLE}>adapter</label>
+                        <select value={adapter} onChange={e => setAdapter(e.target.value)}
+                            style={{ ...inputBase, cursor: 'pointer' }}>
+                            {adapterOptions.map(o => (
+                                <option key={o.value} value={o.value}>{o.label}</option>
+                            ))}
+                        </select>
+                        <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+                            <Btn type="submit" disabled={saving || !name.trim()} style={{ flex: 1 }}>
+                                {saving ? t('common.saving') : t('common.create')}
+                            </Btn>
+                            <Btn variant="ghost" onClick={() => setShowForm(false)} style={{ flex: 1 }}>
+                                {t('common.cancel')}
+                            </Btn>
+                        </div>
+                    </form>
+                </BottomSheet>
+            </div>
+        );
+    }
 
     return (
         <div>

@@ -39791,6 +39791,18 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   // src/admin/components/CredentialsPage.tsx
   var import_react15 = __toESM(require_react());
   var import_jsx_runtime13 = __toESM(require_jsx_runtime());
+  var ADAPTER_ICON = {
+    http: "\u2192",
+    email: "\u2709",
+    slack: "#",
+    chatwork: "\u270E"
+  };
+  var ADAPTER_COLOR_KEY = {
+    http: "http",
+    email: "email",
+    slack: "slack",
+    chatwork: "chatwork"
+  };
   var MONO7 = T.fontMono;
   var TH2 = {
     padding: "8px 14px",
@@ -39811,6 +39823,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   };
   function CredentialsPage() {
     const { t } = useTranslation();
+    const { isMobile } = useLayout();
     const [creds, setCreds] = (0, import_react15.useState)([]);
     const [loading, setLoading] = (0, import_react15.useState)(true);
     const [error, setError] = (0, import_react15.useState)(null);
@@ -39818,6 +39831,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const [name, setName] = (0, import_react15.useState)("");
     const [adapter, setAdapter] = (0, import_react15.useState)("http");
     const [saving, setSaving] = (0, import_react15.useState)(false);
+    const [adapterFilter, setAdapterFilter] = (0, import_react15.useState)("");
     const adapterOptions = [
       { value: "http", label: "HTTP \u2014 generic external API" },
       { value: "email", label: "Email \u2014 SMTP" },
@@ -39877,6 +39891,133 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       color: T.text,
       transition: `border-color ${T.transitionFast}, box-shadow ${T.transitionFast}`
     };
+    const filteredMobile = adapterFilter ? creds.filter((c) => c.adapter === adapterFilter) : creds;
+    if (isMobile) {
+      const counts = {
+        http: 0,
+        email: 0,
+        slack: 0,
+        chatwork: 0
+      };
+      creds.forEach((c) => {
+        if (counts[c.adapter] !== void 0) counts[c.adapter]++;
+      });
+      return /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { minHeight: "100vh", background: T.bg }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+          MobileHeader,
+          {
+            title: "Credentials",
+            subtitle: loading ? "\u2026" : `${creds.length} active`
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(FilterChips, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(Chip, { active: adapterFilter === "", onClick: () => setAdapterFilter(""), children: [
+            "all \xB7 ",
+            creds.length
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(Chip, { active: adapterFilter === "http", onClick: () => setAdapterFilter(adapterFilter === "http" ? "" : "http"), children: [
+            "http \xB7 ",
+            counts.http
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(Chip, { active: adapterFilter === "email", onClick: () => setAdapterFilter(adapterFilter === "email" ? "" : "email"), children: [
+            "email \xB7 ",
+            counts.email
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(Chip, { active: adapterFilter === "slack", onClick: () => setAdapterFilter(adapterFilter === "slack" ? "" : "slack"), children: [
+            "slack \xB7 ",
+            counts.slack
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(Chip, { active: adapterFilter === "chatwork", onClick: () => setAdapterFilter(adapterFilter === "chatwork" ? "" : "chatwork"), children: [
+            "chatwork \xB7 ",
+            counts.chatwork
+          ] })
+        ] }),
+        error && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { padding: "12px 12px 0" }, children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(ErrorMsg, { msg: error }) }),
+        loading ? /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(CardList, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(SkeletonListItem, {}),
+          /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(SkeletonListItem, {}),
+          /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(SkeletonListItem, {})
+        ] }) : filteredMobile.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { padding: "40px 24px", textAlign: "center", color: T.textMuted }, children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { fontSize: T.fontSm }, children: t("credentials.empty") }) }) : /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(CardList, { children: filteredMobile.map((c, i) => {
+          const colorKey = ADAPTER_COLOR_KEY[c.adapter] ?? "http";
+          const bg = T[`adapter${colorKey[0].toUpperCase() + colorKey.slice(1)}Bg`];
+          const fg = T[`adapter${colorKey[0].toUpperCase() + colorKey.slice(1)}`];
+          return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+            ListItem,
+            {
+              last: i === filteredMobile.length - 1,
+              icon: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: {
+                width: 36,
+                height: 36,
+                borderRadius: T.radiusMd,
+                background: bg,
+                color: fg,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontWeight: 700,
+                fontSize: 14
+              }, children: ADAPTER_ICON[c.adapter] ?? "\xB7" }),
+              title: c.name,
+              meta: /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(import_jsx_runtime13.Fragment, { children: [
+                /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { style: { color: fg, fontWeight: 600 }, children: c.adapter }),
+                /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(MetaDot, {}),
+                /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("span", { children: [
+                  "#",
+                  c.id
+                ] })
+              ] }),
+              onClick: () => void handleDelete(c.id, c.name)
+            },
+            c.id
+          );
+        }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { height: "calc(96px + env(safe-area-inset-bottom))" } }),
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(FAB, { ariaLabel: t("common.add"), onClick: () => setShowForm(true), children: /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("svg", { width: "22", height: "22", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2.5", strokeLinecap: "round", "aria-hidden": true, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("line", { x1: "5", y1: "12", x2: "19", y2: "12" }),
+          /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("line", { x1: "12", y1: "5", x2: "12", y2: "19" })
+        ] }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+          BottomSheet,
+          {
+            open: showForm,
+            onClose: () => setShowForm(false),
+            title: t("credentials.newCredential") || "New credential",
+            children: /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("form", { onSubmit: (e) => {
+              void handleCreate(e);
+            }, style: { display: "flex", flexDirection: "column", gap: 12 }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("label", { style: FIELD_LABEL_STYLE, children: "name *" }),
+              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+                "input",
+                {
+                  type: "text",
+                  value: name,
+                  onChange: (e) => setName(e.target.value),
+                  required: true,
+                  placeholder: t("credentials.namePlaceholder"),
+                  style: inputBase,
+                  onFocus: (e) => applyFocus(e.currentTarget),
+                  onBlur: (e) => removeFocus(e.currentTarget)
+                }
+              ),
+              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("label", { style: FIELD_LABEL_STYLE, children: "adapter" }),
+              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+                "select",
+                {
+                  value: adapter,
+                  onChange: (e) => setAdapter(e.target.value),
+                  style: { ...inputBase, cursor: "pointer" },
+                  children: adapterOptions.map((o) => /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("option", { value: o.value, children: o.label }, o.value))
+                }
+              ),
+              /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", gap: 8, marginTop: 8 }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Btn, { type: "submit", disabled: saving || !name.trim(), style: { flex: 1 }, children: saving ? t("common.saving") : t("common.create") }),
+                /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Btn, { variant: "ghost", onClick: () => setShowForm(false), style: { flex: 1 }, children: t("common.cancel") })
+              ] })
+            ] })
+          }
+        )
+      ] });
+    }
     return /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { children: [
       /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
         PageHead,
@@ -40291,7 +40432,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   // src/admin/components/ActionLogsPage.tsx
   var import_react17 = __toESM(require_react());
   var import_jsx_runtime15 = __toESM(require_jsx_runtime());
-  var ADAPTER_ICON = {
+  var ADAPTER_ICON2 = {
     http: "\u2192",
     email: "\u2709",
     slack: "#",
@@ -40434,7 +40575,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             {
               last: i === logs.length - 1,
               failure: fail,
-              icon: ADAPTER_ICON[log.adapter] ?? "\xB7",
+              icon: ADAPTER_ICON2[log.adapter] ?? "\xB7",
               title: /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("span", { style: { display: "flex", alignItems: "center", gap: 6 }, children: [
                 /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Pill, { variant: fail ? "failure" : "success", label: log.status }),
                 /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("span", { style: {
