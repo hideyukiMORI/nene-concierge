@@ -25402,7 +25402,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "diff.meta.operation": "operation",
     "diff.meta.by": "by",
     "diff.meta.when": "when",
-    "diff.meta.comparedTo": "compared to"
+    "diff.meta.comparedTo": "compared to",
+    "diff.noSelection.title": "No revision selected",
+    "diff.noSelection.hint": "Click a row to see what changed."
   };
 
   // src/admin/i18n/messages/ja.ts
@@ -25715,7 +25717,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "diff.meta.operation": "\u64CD\u4F5C",
     "diff.meta.by": "\u5B9F\u884C\u8005",
     "diff.meta.when": "\u65E5\u6642",
-    "diff.meta.comparedTo": "\u6BD4\u8F03\u5BFE\u8C61"
+    "diff.meta.comparedTo": "\u6BD4\u8F03\u5BFE\u8C61",
+    "diff.noSelection.title": "\u30EA\u30D3\u30B8\u30E7\u30F3\u672A\u9078\u629E",
+    "diff.noSelection.hint": "\u884C\u3092\u30AF\u30EA\u30C3\u30AF\u3059\u308B\u3068\u5909\u66F4\u5185\u5BB9\u304C\u8868\u793A\u3055\u308C\u307E\u3059\u3002"
   };
 
   // src/admin/i18n/messages/fr.ts
@@ -39665,7 +39669,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   // src/admin/components/ScenarioHistoryPanel.tsx
   var import_react16 = __toESM(require_react());
 
-  // src/admin/components/RevisionDiffModal.tsx
+  // src/admin/components/RevisionDiffPanel.tsx
   var import_react15 = __toESM(require_react());
   var import_jsx_runtime13 = __toESM(require_jsx_runtime());
   var MONO8 = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
@@ -39719,7 +39723,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     }
     return changes;
   }
-  function RevisionDiffModal({ revisionId, onClose }) {
+  function RevisionDiffPanel({ revisionId, onClose, mode = "overlay" }) {
     const { t } = useTranslation();
     const [revision, setRevision] = (0, import_react15.useState)(null);
     const [previous, setPrevious] = (0, import_react15.useState)(null);
@@ -39767,149 +39771,187 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       if (!revision?.snapshot) return null;
       return diffEdges(previous?.snapshot?.edges ?? [], revision.snapshot.edges);
     }, [previous, revision]);
-    if (revisionId === null) return null;
-    return /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(import_jsx_runtime13.Fragment, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { onClick: onClose, style: {
-        position: "fixed",
-        inset: 0,
-        zIndex: 900,
-        background: "rgba(0,0,0,0.5)"
-      } }),
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(
-        "div",
-        {
-          role: "dialog",
-          "aria-modal": "true",
-          style: {
-            position: "fixed",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: "min(720px, calc(100vw - 32px))",
-            maxHeight: "calc(100vh - 48px)",
-            background: T.surface,
-            color: T.text,
-            borderRadius: T.radiusLg,
-            boxShadow: T.shadowElevated,
-            border: `1px solid ${T.border}`,
-            display: "flex",
-            flexDirection: "column",
-            zIndex: 901
-          },
-          children: [
-            /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("header", { style: {
+    if (revisionId === null && mode !== "pane") return null;
+    const inner = /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(import_jsx_runtime13.Fragment, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { height: 3, background: T.primary, flexShrink: 0 } }),
+      /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("header", { style: {
+        display: "flex",
+        alignItems: "center",
+        gap: 8,
+        padding: "14px 18px",
+        borderBottom: `1px solid ${T.border}`,
+        flexShrink: 0
+      }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("h2", { style: { margin: 0, fontSize: T.fontMd, fontWeight: 700, color: T.textStrong, flex: 1 }, children: revision ? t("diff.title", { rev: String(revision.revision_no) }) : revisionId === null ? "" : t("diff.loading") }),
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+          "button",
+          {
+            onClick: onClose,
+            "aria-label": t("common.close"),
+            style: {
+              width: 26,
+              height: 26,
+              borderRadius: T.radiusSm,
+              background: "transparent",
+              border: `1px solid ${T.border}`,
+              color: T.textMuted,
+              cursor: "pointer",
               display: "flex",
               alignItems: "center",
-              gap: 8,
-              padding: "14px 18px",
-              borderBottom: `1px solid ${T.borderLight}`,
-              flexShrink: 0
-            }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("h2", { style: { margin: 0, fontSize: T.fontMd, fontWeight: 700, color: T.textStrong, flex: 1 }, children: revision ? t("diff.title", { rev: String(revision.revision_no) }) : t("diff.loading") }),
-              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
-                "button",
-                {
-                  onClick: onClose,
-                  "aria-label": t("common.close"),
-                  style: {
-                    background: "transparent",
-                    border: "none",
-                    cursor: "pointer",
-                    color: T.textMuted,
-                    padding: 4
-                  },
-                  children: /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(
-                    "svg",
-                    {
-                      width: "20",
-                      height: "20",
-                      viewBox: "0 0 24 24",
-                      fill: "none",
-                      stroke: "currentColor",
-                      strokeWidth: "2",
-                      strokeLinecap: "round",
-                      strokeLinejoin: "round",
-                      "aria-hidden": true,
-                      children: [
-                        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("line", { x1: "18", y1: "6", x2: "6", y2: "18" }),
-                        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("line", { x1: "6", y1: "6", x2: "18", y2: "18" })
-                      ]
-                    }
-                  )
-                }
-              )
-            ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { flex: 1, overflowY: "auto", padding: "16px 18px" }, children: [
-              loading && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("p", { style: { color: T.textMuted, fontSize: T.fontSm }, children: t("common.loading") }),
-              error && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("p", { style: { color: T.dangerFg, fontSize: T.fontSm }, children: error }),
-              !loading && revision && /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(import_jsx_runtime13.Fragment, { children: [
-                /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(DiffMeta, { revision, previous, t }),
-                !revision.snapshot && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("p", { style: { color: T.textMuted, fontSize: T.fontSm, marginTop: 16 }, children: t("diff.noSnapshot") }),
-                revision.snapshot && fields.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Section, { title: t("diff.fields"), children: fields.map((f) => /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
-                  FieldChangeRow,
-                  {
-                    field: f.field,
-                    before: f.before,
-                    after: f.after
-                  },
-                  f.field
-                )) }),
-                revision.snapshot && nodeDiff && nodeDiff.added.length + nodeDiff.removed.length + nodeDiff.modified.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(Section, { title: t("diff.nodes"), children: [
-                  nodeDiff.added.map((n) => /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
-                    DiffRow,
-                    {
-                      kind: "add",
-                      label: `${n.label || n.node_id}`,
-                      meta: `${n.type} \xB7 ${n.node_id}`
-                    },
-                    "a-" + n.node_id
-                  )),
-                  nodeDiff.modified.map((m) => /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
-                    DiffRow,
-                    {
-                      kind: "mod",
-                      label: m.after.label || m.after.node_id,
-                      meta: `${m.after.type} \xB7 ${m.after.node_id} \xB7 ${t("diff.changed")}: ${m.changes.join(", ")}`
-                    },
-                    "m-" + m.after.node_id
-                  )),
-                  nodeDiff.removed.map((n) => /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
-                    DiffRow,
-                    {
-                      kind: "del",
-                      label: n.label || n.node_id,
-                      meta: `${n.type} \xB7 ${n.node_id}`
-                    },
-                    "r-" + n.node_id
-                  ))
-                ] }),
-                revision.snapshot && edgeDiff && edgeDiff.added.length + edgeDiff.removed.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(Section, { title: t("diff.edges"), children: [
-                  edgeDiff.added.map((e, i) => /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
-                    DiffRow,
-                    {
-                      kind: "add",
-                      label: `${e.source_node_id} \u2192 ${e.target_node_id}`,
-                      meta: e.label ?? ""
-                    },
-                    "ea-" + i
-                  )),
-                  edgeDiff.removed.map((e, i) => /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
-                    DiffRow,
-                    {
-                      kind: "del",
-                      label: `${e.source_node_id} \u2192 ${e.target_node_id}`,
-                      meta: e.label ?? ""
-                    },
-                    "er-" + i
-                  ))
-                ] }),
-                revision.snapshot && nodeDiff && edgeDiff && nodeDiff.added.length + nodeDiff.removed.length + nodeDiff.modified.length === 0 && edgeDiff.added.length + edgeDiff.removed.length === 0 && fields.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("p", { style: { color: T.textMuted, fontSize: T.fontSm, marginTop: 16 }, children: t("diff.noChanges") })
-              ] })
-            ] })
-          ]
-        }
-      )
+              justifyContent: "center"
+            },
+            children: /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(
+              "svg",
+              {
+                width: "11",
+                height: "11",
+                viewBox: "0 0 24 24",
+                fill: "none",
+                stroke: "currentColor",
+                strokeWidth: "2.2",
+                strokeLinecap: "round",
+                "aria-hidden": true,
+                children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("line", { x1: "6", y1: "6", x2: "18", y2: "18" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("line", { x1: "18", y1: "6", x2: "6", y2: "18" })
+                ]
+              }
+            )
+          }
+        )
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { flex: 1, overflowY: "auto", padding: "16px 18px" }, children: [
+        revisionId === null && /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: {
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          textAlign: "center",
+          color: T.textFaint,
+          fontSize: T.fontSm,
+          height: "100%",
+          padding: 24
+        }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: {
+            fontFamily: MONO8,
+            fontSize: 10,
+            fontWeight: 700,
+            letterSpacing: "0.10em",
+            textTransform: "uppercase",
+            marginBottom: 6
+          }, children: t("diff.noSelection.title") }),
+          /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { children: t("diff.noSelection.hint") })
+        ] }),
+        loading && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("p", { style: { color: T.textMuted, fontSize: T.fontSm }, children: t("common.loading") }),
+        error && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("p", { style: { color: T.dangerFg, fontSize: T.fontSm }, children: error }),
+        !loading && revision && /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(import_jsx_runtime13.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(DiffMeta, { revision, previous, t }),
+          !revision.snapshot && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("p", { style: { color: T.textMuted, fontSize: T.fontSm, marginTop: 16 }, children: t("diff.noSnapshot") }),
+          revision.snapshot && fields.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Section, { title: t("diff.fields"), children: fields.map((f) => /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+            FieldChangeRow,
+            {
+              field: f.field,
+              before: f.before,
+              after: f.after
+            },
+            f.field
+          )) }),
+          revision.snapshot && nodeDiff && nodeDiff.added.length + nodeDiff.removed.length + nodeDiff.modified.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(Section, { title: t("diff.nodes"), children: [
+            nodeDiff.added.map((n) => /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+              DiffRow,
+              {
+                kind: "add",
+                label: `${n.label || n.node_id}`,
+                meta: `${n.type} \xB7 ${n.node_id}`
+              },
+              "a-" + n.node_id
+            )),
+            nodeDiff.modified.map((m) => /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+              DiffRow,
+              {
+                kind: "mod",
+                label: m.after.label || m.after.node_id,
+                meta: `${m.after.type} \xB7 ${m.after.node_id} \xB7 ${t("diff.changed")}: ${m.changes.join(", ")}`
+              },
+              "m-" + m.after.node_id
+            )),
+            nodeDiff.removed.map((n) => /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+              DiffRow,
+              {
+                kind: "del",
+                label: n.label || n.node_id,
+                meta: `${n.type} \xB7 ${n.node_id}`
+              },
+              "r-" + n.node_id
+            ))
+          ] }),
+          revision.snapshot && edgeDiff && edgeDiff.added.length + edgeDiff.removed.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(Section, { title: t("diff.edges"), children: [
+            edgeDiff.added.map((e, i) => /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+              DiffRow,
+              {
+                kind: "add",
+                label: `${e.source_node_id} \u2192 ${e.target_node_id}`,
+                meta: e.label ?? ""
+              },
+              "ea-" + i
+            )),
+            edgeDiff.removed.map((e, i) => /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+              DiffRow,
+              {
+                kind: "del",
+                label: `${e.source_node_id} \u2192 ${e.target_node_id}`,
+                meta: e.label ?? ""
+              },
+              "er-" + i
+            ))
+          ] }),
+          revision.snapshot && nodeDiff && edgeDiff && nodeDiff.added.length + nodeDiff.removed.length + nodeDiff.modified.length === 0 && edgeDiff.added.length + edgeDiff.removed.length === 0 && fields.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("p", { style: { color: T.textMuted, fontSize: T.fontSm, marginTop: 16 }, children: t("diff.noChanges") })
+        ] })
+      ] })
     ] });
+    if (mode === "pane") {
+      return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("aside", { style: {
+        width: 480,
+        flexShrink: 0,
+        borderLeft: `1px solid ${T.border}`,
+        background: T.surface,
+        height: "100vh",
+        position: "sticky",
+        top: 0,
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden"
+      }, children: inner });
+    }
+    return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+      "div",
+      {
+        role: "dialog",
+        "aria-modal": "true",
+        style: {
+          position: "fixed",
+          inset: 0,
+          zIndex: 900,
+          background: "oklch(0% 0 0 / 0.35)",
+          backdropFilter: "blur(2px)",
+          display: "flex",
+          justifyContent: "flex-end"
+        },
+        onClick: (e) => {
+          if (e.target === e.currentTarget) onClose();
+        },
+        children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: {
+          width: 480,
+          maxWidth: "95vw",
+          height: "100vh",
+          background: T.surface,
+          boxShadow: "-10px 0 40px -10px rgba(15,23,42,.25)",
+          display: "flex",
+          flexDirection: "column",
+          borderLeft: `1px solid ${T.border}`
+        }, children: inner })
+      }
+    );
   }
   function DiffMeta({ revision, previous, t }) {
     return /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: {
@@ -40175,7 +40217,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           })
         ] })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(RevisionDiffModal, { revisionId: diffId, onClose: () => setDiffId(null) })
+      diffId !== null && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(RevisionDiffPanel, { revisionId: diffId, onClose: () => setDiffId(null), mode: "overlay" })
     ] });
   }
 
@@ -45294,7 +45336,15 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   };
   function HistoryPage() {
     const { t } = useTranslation();
-    const { isMobile } = useLayout();
+    const { isMobile, bp, setFullWidth } = useLayout();
+    const wide = isWideBp(bp);
+    (0, import_react25.useEffect)(() => {
+      if (!wide) return;
+      setFullWidth(true);
+      return () => {
+        setFullWidth(false);
+      };
+    }, [wide, setFullWidth]);
     const [items, setItems] = (0, import_react25.useState)([]);
     const [total, setTotal] = (0, import_react25.useState)(0);
     const [loading, setLoading] = (0, import_react25.useState)(true);
@@ -45472,10 +45522,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         )) }),
         /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Pager, {}),
         /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("div", { style: { height: "calc(24px + env(safe-area-inset-bottom))" } }),
-        /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(RevisionDiffModal, { revisionId: diffId, onClose: () => setDiffId(null) })
+        /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(RevisionDiffPanel, { revisionId: diffId, onClose: () => setDiffId(null) })
       ] });
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("div", { children: [
+    const listAndFilters = /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("div", { style: wide ? { padding: "28px 36px 48px", flex: 1, minWidth: 0 } : void 0, children: [
       /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(PageHead, { title: t("history.pageTitle"), subtitle }),
       /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(ErrorMsg, { msg: error }),
       /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("div", { style: { display: "flex", gap: 8, marginBottom: 12, flexWrap: "wrap", alignItems: "center" }, children: [
@@ -45653,8 +45703,32 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           r.id
         )) })
       ] }) }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Pager, {}),
-      /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(RevisionDiffModal, { revisionId: diffId, onClose: () => setDiffId(null) })
+      /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Pager, {})
+    ] });
+    if (wide) {
+      return /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("div", { style: { display: "flex", alignItems: "stretch", minHeight: "100vh" }, children: [
+        listAndFilters,
+        /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
+          RevisionDiffPanel,
+          {
+            revisionId: diffId,
+            onClose: () => setDiffId(null),
+            mode: "pane"
+          },
+          diffId ?? "empty"
+        )
+      ] });
+    }
+    return /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)(import_jsx_runtime23.Fragment, { children: [
+      listAndFilters,
+      diffId !== null && /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
+        RevisionDiffPanel,
+        {
+          revisionId: diffId,
+          onClose: () => setDiffId(null),
+          mode: "overlay"
+        }
+      )
     ] });
   }
 

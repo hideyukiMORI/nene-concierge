@@ -6,10 +6,10 @@ import {
     type ScenarioRevisionListItem, type ScenarioRevisionOperation,
     type ScenarioSummary,
 } from '../api.js';
-import { PageHead, Card, ErrorMsg, useLayout } from './Layout.js';
+import { PageHead, Card, ErrorMsg, useLayout, isWideBp } from './Layout.js';
 import { MobileHeader, MobileIconBtn, CardList, ListItem, MetaDot, Pill, FilterChips, Chip } from './mobile/index.js';
 import type { PillVariant } from './mobile/index.js';
-import RevisionDiffModal from './RevisionDiffModal.js';
+import RevisionDiffPanel from './RevisionDiffPanel.js';
 import { T } from '../theme.js';
 import { useTranslation } from '../i18n/index.js';
 
@@ -69,7 +69,15 @@ const filterInputStyle: React.CSSProperties = {
 
 export default function HistoryPage() {
     const { t } = useTranslation();
-    const { isMobile } = useLayout();
+    const { isMobile, bp, setFullWidth } = useLayout();
+    const wide = isWideBp(bp);
+
+    // ≥1441px は 2-pane なので main を full-width 化する (Sessions と同じ)
+    useEffect(() => {
+        if (!wide) return;
+        setFullWidth(true);
+        return () => { setFullWidth(false); };
+    }, [wide, setFullWidth]);
 
     const [items, setItems]   = useState<ScenarioRevisionListItem[]>([]);
     const [total, setTotal]   = useState(0);
@@ -229,14 +237,14 @@ export default function HistoryPage() {
                 <Pager />
                 <div style={{ height: 'calc(24px + env(safe-area-inset-bottom))' }}/>
 
-                <RevisionDiffModal revisionId={diffId} onClose={() => setDiffId(null)} />
+                <RevisionDiffPanel revisionId={diffId} onClose={() => setDiffId(null)} />
             </div>
         );
     }
 
-    // ─────────── Desktop ───────────
-    return (
-        <div>
+    // ─────────── Desktop / Tablet / Wide ───────────
+    const listAndFilters = (
+        <div style={wide ? { padding: '28px 36px 48px', flex: 1, minWidth: 0 } : undefined}>
             <PageHead title={t('history.pageTitle')} subtitle={subtitle} />
 
             <ErrorMsg msg={error} />
@@ -351,8 +359,35 @@ export default function HistoryPage() {
             </Card>
 
             <Pager />
-
-            <RevisionDiffModal revisionId={diffId} onClose={() => setDiffId(null)} />
         </div>
+    );
+
+    if (wide) {
+        // 2-pane: list + sticky right pane (always-on, shows hint when no selection)
+        return (
+            <div style={{ display: 'flex', alignItems: 'stretch', minHeight: '100vh' }}>
+                {listAndFilters}
+                <RevisionDiffPanel
+                    key={diffId ?? 'empty'}
+                    revisionId={diffId}
+                    onClose={() => setDiffId(null)}
+                    mode="pane"
+                />
+            </div>
+        );
+    }
+
+    // desktop / tablet: list + overlay drawer on demand
+    return (
+        <>
+            {listAndFilters}
+            {diffId !== null && (
+                <RevisionDiffPanel
+                    revisionId={diffId}
+                    onClose={() => setDiffId(null)}
+                    mode="overlay"
+                />
+            )}
+        </>
     );
 }

@@ -350,6 +350,8 @@ export const en = {
     'diff.meta.by':         'by',
     'diff.meta.when':       'when',
     'diff.meta.comparedTo': 'compared to',
+    'diff.noSelection.title': 'No revision selected',
+    'diff.noSelection.hint':  'Click a row to see what changed.',
 } as const
 
 /** Complete message catalog type — keys from the English source of truth, values are strings. */
