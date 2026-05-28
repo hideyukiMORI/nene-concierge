@@ -19,6 +19,7 @@
 
 import { useEffect, useRef } from 'react';
 import { T } from '../../theme.js';
+import { useLayout } from '../Layout.js';
 
 const MONO = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
 
@@ -26,14 +27,24 @@ const MONO = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
 // sticky 上部ヘッダー (戻る / タイトル + sub / 末尾アクション)
 
 export function MobileHeader({
-    title, subtitle, onBack, trailing, leading,
+    title, subtitle, onBack, trailing, leading, showMenu = true,
 }: {
     title:     string;
     subtitle?: string;
     onBack?:   () => void;
     leading?:  React.ReactNode;
     trailing?: React.ReactNode;
+    showMenu?: boolean;  // false で先頭ハンバーガー非表示 (戻るボタン優先時など)
 }) {
+    const { isMobile, openMobileMenu, setProvidesHeader } = useLayout();
+
+    // マウント中は Layout の fixed hamburger を抑止し、main の padding/maxWidth を外す
+    useEffect(() => {
+        if (!isMobile) return;
+        setProvidesHeader(true);
+        return () => { setProvidesHeader(false); };
+    }, [isMobile, setProvidesHeader]);
+
     return (
         <header style={{
             display: 'flex', alignItems: 'center', gap: 8,
@@ -43,7 +54,7 @@ export function MobileHeader({
             borderBottom: `1px solid ${T.borderLight}`,
             position: 'sticky', top: 0, zIndex: 30,
         }}>
-            {onBack && (
+            {onBack ? (
                 <button onClick={onBack}
                     aria-label="Back"
                     style={mIconBtnStyle}>
@@ -51,7 +62,17 @@ export function MobileHeader({
                         <polyline points="15 18 9 12 15 6"/>
                     </svg>
                 </button>
-            )}
+            ) : showMenu && isMobile ? (
+                <button onClick={openMobileMenu}
+                    aria-label="Open menu"
+                    style={mIconBtnStyle}>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
+                        <line x1="3" y1="6"  x2="21" y2="6"/>
+                        <line x1="3" y1="12" x2="21" y2="12"/>
+                        <line x1="3" y1="18" x2="21" y2="18"/>
+                    </svg>
+                </button>
+            ) : null}
             {leading}
             <div style={{
                 flex: 1, minWidth: 0,

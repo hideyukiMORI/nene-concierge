@@ -1,8 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { getDashboard, listScenarios, listActionLogs, ApiError } from '../api.js';
 import type { DashboardStats, ScenarioSummary, ActionLogEntry } from '../api.js';
-import { PageHead, Card, CardSub, SectionHead, AdapterTag, ErrorMsg } from './Layout.js';
+import { PageHead, Card, CardSub, SectionHead, AdapterTag, ErrorMsg, useLayout } from './Layout.js';
+import {
+    MobileHeader, MobileIconBtn, MobileSectionHead, KpiGrid, KpiCard as MKpiCard,
+    AlertCard, CardList, ListItem, MetaDot, PullToRefreshHint,
+} from './mobile/index.js';
 import { T } from '../theme.js';
 import { useTranslation } from '../i18n/index.js';
 
@@ -149,6 +153,8 @@ function SparklineCard({ data }: { data: { date: string; count: number }[] }) {
 
 export default function DashboardPage() {
     const { t } = useTranslation();
+    const nav   = useNavigate();
+    const { isMobile } = useLayout();
 
     const [stats, setStats]         = useState<DashboardStats | null>(null);
     const [scenarios, setScenarios] = useState<ScenarioSummary[]>([]);
@@ -185,7 +191,175 @@ export default function DashboardPage() {
 
     const cvRate = stats?.conversion_rate_7d ?? 0;
     const cvColor = cvRate >= 10 ? T.successFg : cvRate >= 3 ? T.text : T.dangerFg;
+    const cvVariant: 'success' | 'default' | 'danger' = cvRate >= 10 ? 'success' : cvRate >= 3 ? 'default' : 'danger';
 
+    // ─────────── Mobile layout ───────────
+    if (isMobile) {
+        return (
+            <div style={{ minHeight: '100vh', background: T.bg }}>
+                <MobileHeader
+                    title="Dashboard"
+                    subtitle="overview · 7d"
+                    trailing={
+                        <MobileIconBtn ariaLabel={t('common.refresh')} onClick={() => { void load(); }}>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                                <polyline points="23 4 23 10 17 10"/>
+                                <polyline points="1 20 1 14 7 14"/>
+                                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                            </svg>
+                        </MobileIconBtn>
+                    }
+                />
+
+                <PullToRefreshHint refreshing={loading && stats !== null} label="refreshing" />
+
+                {error && (
+                    <div style={{ padding: '0 12px 12px' }}>
+                        <ErrorMsg msg={error} />
+                    </div>
+                )}
+
+                {/* Alert card — failures > 0 */}
+                {stats !== null && stats.action_failures_24h > 0 && (
+                    <AlertCard
+                        title={`${stats.action_failures_24h} 件のアクション失敗`}
+                        desc="直近 24h"
+                        onClick={() => nav('/action-logs')}
+                    />
+                )}
+
+                {loading && stats === null ? (
+                    <div style={{ padding: 20, color: T.textMuted, fontSize: T.fontSm, textAlign: 'center' }}>
+                        {t('common.loading')}
+                    </div>
+                ) : stats !== null ? (
+                    <>
+                        <MobileSectionHead label="key metrics · 7d" />
+                        <KpiGrid>
+                            <MKpiCard
+                                label="sessions"
+                                value={stats.sessions_7d.toLocaleString()}
+                                meta="last 7 days"
+                            />
+                            <MKpiCard
+                                label="conversions"
+                                value={stats.converted_7d.toLocaleString()}
+                                meta="last 7 days"
+                            />
+                            <MKpiCard
+                                label="cv rate"
+                                value={stats.conversion_rate_7d.toFixed(1)}
+                                unit="%"
+                                valueColor={cvVariant === 'default' ? 'default' : cvVariant}
+                                meta="target 10%"
+                            />
+                            <MKpiCard
+                                label="active now"
+                                value={stats.active_sessions.toLocaleString()}
+                                valueColor="accent"
+                                meta="live"
+                            />
+                            <MKpiCard
+                                label="published"
+                                value={stats.published_scenarios.toLocaleString()}
+                                meta="scenarios"
+                            />
+                            <MKpiCard
+                                label="failures · 24h"
+                                value={stats.action_failures_24h.toLocaleString()}
+                                valueColor={stats.action_failures_24h > 0 ? 'danger' : 'default'}
+                                alert={stats.action_failures_24h > 0}
+                                meta={stats.action_failures_24h > 0 ? 'see logs' : 'all good'}
+                            />
+                        </KpiGrid>
+
+                        {/* Sparkline */}
+                        {stats.daily_sessions.length > 0 && (
+                            <div style={{ margin: '4px 12px 14px' }}>
+                                <SparklineCard data={stats.daily_sessions} />
+                            </div>
+                        )}
+
+                        {/* Top scenarios */}
+                        <MobileSectionHead
+                            label="top scenarios"
+                            action={
+                                <Link to="/scenarios" style={{
+                                    fontFamily: T.fontMono, fontSize: 10, fontWeight: 700,
+                                    letterSpacing: '0.06em', textTransform: 'uppercase',
+                                    color: T.primary, textDecoration: 'none',
+                                }}>all →</Link>
+                            }
+                        />
+                        {scenarios.length > 0 ? (
+                            <CardList>
+                                {scenarios.map((s, i) => (
+                                    <ListItem
+                                        key={s.id}
+                                        last={i === scenarios.length - 1}
+                                        icon={String(i + 1).padStart(2, '0')}
+                                        title={s.name}
+                                        meta={
+                                            <>
+                                                <span>{s.status}</span>
+                                                {s.updated_at && <>
+                                                    <MetaDot />
+                                                    <span>{s.updated_at.slice(0, 10)}</span>
+                                                </>}
+                                            </>
+                                        }
+                                        onClick={() => nav(`/scenarios/${s.id}`)}
+                                    />
+                                ))}
+                            </CardList>
+                        ) : (
+                            <div style={{ padding: '12px 24px', color: T.textMuted, fontSize: T.fontSm }}>
+                                —
+                            </div>
+                        )}
+
+                        {/* Recent failures — モバイルは alert card で総数を出しているので、
+                            詳細を一覧表示。failures が空でも明示しない */}
+                        {failures.length > 0 && (
+                            <>
+                                <MobileSectionHead
+                                    label="recent failures"
+                                    action={
+                                        <Link to="/action-logs" style={{
+                                            fontFamily: T.fontMono, fontSize: 10, fontWeight: 700,
+                                            letterSpacing: '0.06em', textTransform: 'uppercase',
+                                            color: T.primary, textDecoration: 'none',
+                                        }}>all →</Link>
+                                    }
+                                />
+                                <CardList>
+                                    {failures.map((log, i) => (
+                                        <ListItem
+                                            key={log.id ?? i}
+                                            last={i === failures.length - 1}
+                                            failure
+                                            icon={<AdapterTag adapter={log.adapter} />}
+                                            title={log.error_message ?? '—'}
+                                            meta={
+                                                <>
+                                                    <span>{log.executed_at?.slice(11, 16) ?? '—'}</span>
+                                                </>
+                                            }
+                                            onClick={() => nav('/action-logs')}
+                                        />
+                                    ))}
+                                </CardList>
+                            </>
+                        )}
+
+                        <div style={{ height: 'calc(24px + env(safe-area-inset-bottom))' }}/>
+                    </>
+                ) : null}
+            </div>
+        );
+    }
+
+    // ─────────── Desktop / Tablet layout ───────────
     return (
         <div>
             <PageHead title="Dashboard" subtitle="overview · 7 days">

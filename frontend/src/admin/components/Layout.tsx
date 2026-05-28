@@ -1,10 +1,28 @@
-import { useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router';
 import { clearToken, getStoredEmail } from '../auth.js';
 import { T } from '../theme.js';
 import { useTranslation, LOCALES, SUPPORTED_LOCALE_IDS } from '../i18n/index.js';
 import type { SupportedLocale } from '../i18n/index.js';
 import { useTheme } from '../theme/index.js';
+
+// ── LayoutContext ─────────────────────────────────────────────────────────────
+// モバイル対応のページが Layout 側のヘッダー/パディングを抑止し、自前で MobileHeader
+// を描画するためのコンテキスト。Mobile.tsx の <MobileHeader> がマウント時に
+// providesHeader=true を立てる → Layout の fixed hamburger を隠し、main の上下左右
+// padding と maxWidth ラッパーを外す。
+
+export interface LayoutCtx {
+    isMobile:         boolean;
+    openMobileMenu:   () => void;
+    setProvidesHeader:(v: boolean) => void;
+}
+const LayoutContext = createContext<LayoutCtx | null>(null);
+export function useLayout(): LayoutCtx {
+    const ctx = useContext(LayoutContext);
+    if (!ctx) throw new Error('useLayout must be used within Layout');
+    return ctx;
+}
 
 const SIDEBAR_OPEN_KEY = 'nene_admin_sidebar_open';
 
@@ -147,6 +165,7 @@ export default function Layout({ variant = 'default' }: { variant?: 'default' | 
         localStorage.getItem(SIDEBAR_OPEN_KEY) !== 'false',
     );
     const [mobileOpen, setMobileOpen] = useState(false);
+    const [providesHeader, setProvidesHeader] = useState(false);
 
     // タブレット時はサイドバーを強制 slim / モバイル時は開閉状態を管理
     const isTablet = bp === 'tablet';
@@ -156,6 +175,12 @@ export default function Layout({ variant = 'default' }: { variant?: 'default' | 
     useEffect(() => {
         if (!isMobile) setMobileOpen(false);
     }, [isMobile]);
+
+    const layoutCtx = useMemo<LayoutCtx>(() => ({
+        isMobile,
+        openMobileMenu: () => setMobileOpen(true),
+        setProvidesHeader,
+    }), [isMobile]);
 
     function toggleSidebar() {
         if (isMobile) { setMobileOpen(v => !v); return; }
@@ -205,6 +230,7 @@ export default function Layout({ variant = 'default' }: { variant?: 'default' | 
     // ── Slim editor sidebar ──────────────────────────────────────────────────
     if (variant === 'editor') {
         return (
+            <LayoutContext.Provider value={layoutCtx}>
             <div style={{ display: 'flex', minHeight: '100vh' }}>
                 <aside style={{
                     width: T.sidebarWidthSlim, flexShrink: 0,
@@ -280,6 +306,7 @@ export default function Layout({ variant = 'default' }: { variant?: 'default' | 
                     <Outlet />
                 </main>
             </div>
+            </LayoutContext.Provider>
         );
     }
 
@@ -293,7 +320,9 @@ export default function Layout({ variant = 'default' }: { variant?: 'default' | 
         ? { position: 'fixed' as const, top: 0, left: mobileOpen ? 0 : -240, zIndex: 145, height: '100vh', transition: 'left 220ms ease' }
         : { position: 'sticky' as const, top: 0, height: '100vh' };
 
-    const mainPadding = isMobile ? '60px 16px 40px' : isTablet ? '24px 24px 48px' : '28px 36px 48px';
+    const mainPadding = isMobile
+        ? (providesHeader ? '0' : '60px 16px 40px')
+        : isTablet ? '24px 24px 48px' : '28px 36px 48px';
 
     const sidebarIconBtn: React.CSSProperties = {
         flexShrink: 0,
@@ -315,6 +344,7 @@ export default function Layout({ variant = 'default' }: { variant?: 'default' | 
     );
 
     return (
+        <LayoutContext.Provider value={layoutCtx}>
         <div style={{ display: 'flex', minHeight: '100vh' }}>
 
             {/* Mobile overlay */}
@@ -329,8 +359,8 @@ export default function Layout({ variant = 'default' }: { variant?: 'default' | 
                 />
             )}
 
-            {/* Mobile hamburger button */}
-            {isMobile && (
+            {/* Mobile hamburger button — ページが自前で MobileHeader を出している時は隠す */}
+            {isMobile && !providesHeader && (
                 <button
                     onClick={() => setMobileOpen(v => !v)}
                     aria-label="Open menu"
@@ -481,11 +511,16 @@ export default function Layout({ variant = 'default' }: { variant?: 'default' | 
                 // mobile: sidebar is fixed so main takes full width
                 width: isMobile ? '100%' : undefined,
             }}>
-                <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+                {isMobile && providesHeader ? (
                     <Outlet />
-                </div>
+                ) : (
+                    <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+                        <Outlet />
+                    </div>
+                )}
             </main>
         </div>
+        </LayoutContext.Provider>
     );
 }
 
