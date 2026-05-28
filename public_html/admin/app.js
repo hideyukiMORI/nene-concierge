@@ -39193,8 +39193,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                       borderRadius: T.radiusMd,
                       // ThemeSwitcher: bottom: 16, height: 32 → top edge at 48.
                       // map の bottom = 48 + 16(gap) = 64。right は ThemeSwitcher と同じ 16。
+                      // NOTE: React Flow の .react-flow__minimap は デフォルト margin: 15px を持つので
+                      //       margin: 0 で打ち消す (打ち消さないと実距離が +15 ずれる)
                       bottom: 64,
-                      right: 16
+                      right: 16,
+                      margin: 0
                     },
                     maskColor: "oklch(0% 0 0 / 0.08)",
                     pannable: true,
