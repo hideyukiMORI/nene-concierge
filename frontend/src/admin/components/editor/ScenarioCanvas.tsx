@@ -541,7 +541,9 @@ const ScenarioCanvas = forwardRef<ScenarioCanvasRef, Props>(function ScenarioCan
                     {/* ドットグリッド背景 */}
                     <Background variant={BackgroundVariant.Dots} gap={24} size={1.5} color={T.canvasDot} />
 
-                    {/* ミニマップ (desktop のみ — モバイルは自前 .minimap を canvas 外に描画) */}
+                    {/* ミニマップ (desktop のみ — モバイルは自前 .minimap を canvas 外に描画)
+                        bottom: 64 でテーマスイッチャー (右下 fixed) との衝突を回避。
+                        参考: docs/designs/footer_2026-05-29_01 variant-c.jsx L310-313 */}
                     {!isMobile && (
                         <MiniMap
                             nodeColor={n => NODE_COLORS[n.type as ChatNodeType]?.header ?? T.sidebarMuted}
@@ -549,8 +551,12 @@ const ScenarioCanvas = forwardRef<ScenarioCanvasRef, Props>(function ScenarioCan
                                 background: T.minimapBg,
                                 border: `1px solid ${T.border}`,
                                 borderRadius: T.radiusMd,
+                                bottom: 64,
+                                right: 16,
                             }}
                             maskColor="oklch(0% 0 0 / 0.08)"
+                            pannable
+                            zoomable
                         />
                     )}
 
