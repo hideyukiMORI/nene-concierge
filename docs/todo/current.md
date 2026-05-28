@@ -1,6 +1,6 @@
 # Current Work
 
-Last updated: 2026-05-28 (post-merge cleanup — PR #100 integrated)
+Last updated: 2026-05-29 (User Management + Edit History 完了)
 
 ## 状態サマリー
 
@@ -296,6 +296,34 @@ Last updated: 2026-05-28 (post-merge cleanup — PR #100 integrated)
 | ScenarioFormPage コンポーネントテスト | 🔲 | #58 |
 | DashboardPage コンポーネントテスト | 🔲 | #58 |
 | CI に `npm run test` ステップ追加 | 🔲 | #57 #58 |
+
+---
+
+**ユーザー管理 — 完了 ✅** (PR #117)
+
+| 項目 | 状態 | Issue |
+| --- | --- | --- |
+| /api/v1/users CRUD (list/create/update/delete) | ✅ | #116 |
+| 最後の superadmin 降格 / 削除ガード | ✅ | #116 |
+| CapabilityResolver: GET /users も ManageUsers 必須化 | ✅ | #116 |
+| UsersPage (desktop table + mobile cards + BottomSheet form) | ✅ | #116 |
+| nav.users + サイドバー icon | ✅ | #116 |
+| en/ja に users.* キー追加 | ✅ | #116 |
+
+---
+
+**シナリオ編集履歴 (created_by / updated_by + scenario_revisions) — 完了 ✅** (PR #119)
+
+| 項目 | 状態 | Issue |
+| --- | --- | --- |
+| JWT claim に user_id 追加 (副次効果: DeleteUserHandler self-delete バグ修正) | ✅ | #118 |
+| ActorContext::fromRequest() | ✅ | #118 |
+| scenarios に created_by_user_id / updated_by_user_id 列追加 | ✅ | #118 |
+| scenario_revisions テーブル新設 + ScenarioRevisionRecorder | ✅ | #118 |
+| Create / Update / Delete / SaveGraph で履歴追記 | ✅ | #118 |
+| GET /api/v1/scenarios/{id}/history | ✅ | #118 |
+| ScenarioHistoryPanel (PC ヘッダー + モバイル kebab) | ✅ | #118 |
+| en/ja に history.* キー追加 | ✅ | #118 |
 
 ---
 
