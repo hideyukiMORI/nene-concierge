@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router';
 import { clearToken, getStoredEmail } from '../auth.js';
+import { getMe, type MeResponse } from '../api.js';
 import { T } from '../theme.js';
 import { useTranslation, LOCALES, SUPPORTED_LOCALE_IDS } from '../i18n/index.js';
 import type { SupportedLocale } from '../i18n/index.js';
@@ -177,6 +178,63 @@ function SlimNavItem({ to, icon, label }: { to: string; icon: React.ReactNode; l
     );
 }
 
+// ── OrgIndicator ─────────────────────────────────────────────────────────────
+// 現在の組織名 + 所属組織数を表示する read-only バッジ。サイドバー上部に配置。
+const MONO = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
+
+type TFn = ReturnType<typeof useTranslation>['t'];
+
+function OrgIndicator({
+    me, showLabels, t,
+}: { me: MeResponse | null; showLabels: boolean; t: TFn }) {
+    if (!me) return null;
+    const current = me.current_organization;
+    const others  = current ? me.organizations.filter(o => o.id !== current.id) : me.organizations;
+
+    if (!showLabels) {
+        // Slim 表示: 円形イニシャル
+        const initial = (current?.name ?? '?').trim().slice(0, 1).toUpperCase();
+        return (
+            <div title={current?.name ?? ''}
+                style={{
+                    margin: '8px auto', width: 24, height: 24, borderRadius: 99,
+                    background: T.primaryTint, color: T.primary,
+                    display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                    fontFamily: MONO, fontSize: 11, fontWeight: 700,
+                    flexShrink: 0,
+                }}>{initial}</div>
+        );
+    }
+
+    return (
+        <div style={{
+            margin: '8px 10px',
+            padding: '8px 10px',
+            borderRadius: T.radiusMd,
+            background: T.surfaceAlt,
+            border: `1px solid ${T.sidebarBorder}`,
+            display: 'flex', flexDirection: 'column', gap: 4,
+        }}>
+            <div style={{
+                fontFamily: MONO, fontSize: 9, color: T.sidebarMuted,
+                letterSpacing: '0.06em', textTransform: 'uppercase',
+            }}>{t('me.currentOrg')}</div>
+            <div style={{
+                fontSize: T.fontSm, fontWeight: 600, color: T.sidebarTitle,
+                overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+            }}>{current?.name ?? t('me.noOrg')}</div>
+            {others.length > 0 && (
+                <div style={{
+                    fontFamily: MONO, fontSize: 10, color: T.sidebarMuted,
+                    marginTop: 2,
+                }}>
+                    + {others.length} {t('me.moreOrgs')}
+                </div>
+            )}
+        </div>
+    );
+}
+
 // ── Layout ────────────────────────────────────────────────────────────────────
 export default function Layout({ variant = 'default' }: { variant?: 'default' | 'editor' }) {
     const nav = useNavigate();
@@ -191,6 +249,15 @@ export default function Layout({ variant = 'default' }: { variant?: 'default' | 
     const [mobileOpen, setMobileOpen] = useState(false);
     const [providesHeader, setProvidesHeader] = useState(false);
     const [fullWidth, setFullWidth] = useState(false);
+    const [me, setMe] = useState<MeResponse | null>(null);
+
+    useEffect(() => {
+        let cancelled = false;
+        getMe()
+            .then(res => { if (!cancelled) setMe(res); })
+            .catch(() => { /* ignore — sidebar gracefully degrades */ });
+        return () => { cancelled = true; };
+    }, []);
 
     // タブレット時はサイドバーを強制 slim / モバイル時は開閉状態を管理
     const isTablet = bp === 'tablet';
@@ -302,6 +369,7 @@ export default function Layout({ variant = 'default' }: { variant?: 'default' | 
                                     borderRadius: T.radiusMd,
                                 }}>✕</button>
                         </div>
+                        <OrgIndicator me={me} showLabels={true} t={t}/>
                         <nav style={{ flex: 1, padding: '12px 0', overflowY: 'auto', overflowX: 'hidden' }} aria-label="Main">
                             {NAV_ITEMS.map((n, i) => (
                                 <span key={i} style={{ display: 'contents' }}>
@@ -517,6 +585,8 @@ export default function Layout({ variant = 'default' }: { variant?: 'default' | 
                         </button>
                     )}
                 </div>
+
+                <OrgIndicator me={me} showLabels={showLabels} t={t}/>
 
                 <nav style={{
                     flex: 1,

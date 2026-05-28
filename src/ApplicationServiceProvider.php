@@ -24,6 +24,8 @@ use NeNeConcierge\Dashboard\DashboardServiceProvider;
 use NeNeConcierge\Engine\EngineExceptionHandler;
 use NeNeConcierge\Engine\EngineRouteRegistrar;
 use NeNeConcierge\Engine\EngineServiceProvider;
+use NeNeConcierge\Me\MeRouteRegistrar;
+use NeNeConcierge\Me\MeServiceProvider;
 use NeNeConcierge\Organization\OrganizationNotFoundExceptionHandler;
 use NeNeConcierge\Organization\OrganizationRouteRegistrar;
 use NeNeConcierge\Organization\OrganizationServiceProvider;
@@ -51,6 +53,7 @@ final readonly class ApplicationServiceProvider implements ServiceProviderInterf
         $builder->addProvider(new AuthServiceProvider());
         $builder->addProvider(new DashboardServiceProvider());
         $builder->addProvider(new EngineServiceProvider());
+        $builder->addProvider(new MeServiceProvider());
         $builder->addProvider(new OrganizationServiceProvider());
         $builder->addProvider(new ScenarioServiceProvider());
 
@@ -129,6 +132,7 @@ final readonly class ApplicationServiceProvider implements ServiceProviderInterf
                     $auth       = $c->get('nene-concierge.route_registrar.auth');
                     $dashboard  = $c->get(DashboardRouteRegistrar::class);
                     $engine     = $c->get(EngineRouteRegistrar::class);
+                    $me         = $c->get(MeRouteRegistrar::class);
                     $org        = $c->get(OrganizationRouteRegistrar::class);
                     $scenario   = $c->get(ScenarioRouteRegistrar::class);
 
@@ -152,6 +156,10 @@ final readonly class ApplicationServiceProvider implements ServiceProviderInterf
                         throw new LogicException('EngineRouteRegistrar service is invalid.');
                     }
 
+                    if (!$me instanceof MeRouteRegistrar) {
+                        throw new LogicException('MeRouteRegistrar service is invalid.');
+                    }
+
                     if (!$org instanceof OrganizationRouteRegistrar) {
                         throw new LogicException('OrganizationRouteRegistrar service is invalid.');
                     }
@@ -160,7 +168,7 @@ final readonly class ApplicationServiceProvider implements ServiceProviderInterf
                         throw new LogicException('ScenarioRouteRegistrar service is invalid.');
                     }
 
-                    return [$action, $appearance, $auth, $dashboard, $engine, $org, $scenario];
+                    return [$action, $appearance, $auth, $dashboard, $engine, $me, $org, $scenario];
                 },
             );
     }
