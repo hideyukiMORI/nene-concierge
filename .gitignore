@@ -35,3 +35,6 @@ Thumbs.db
 
 # Claude Code — local overrides (user-specific, not committed)
 .claude/settings.local.json
+
+# Design handoff files (local only — not part of the codebase)
+docs/designs/
