@@ -10,11 +10,14 @@ use Phinx\Seed\AbstractSeed;
  * Idempotent: truncates target tables and re-inserts.
  *
  * Populates:
+ *   - users               (extends — adds editor / viewer users for varied audit trail)
+ *   - organization_users  (binds new users to default org)
  *   - action_credentials  (8 records, all 4 adapters)
  *   - scenarios           (extends existing — keeps current rows, adds realistic ones)
  *   - sessions            (~40, mixed outcomes spread over 7 days)
  *   - messages            (3-6 per session, realistic Japanese chat flows)
  *   - action_logs         (~60, mixed adapters, ~15% failures with varied error msgs)
+ *   - scenario_revisions  (~150-220, varied operations / users / timestamps over 30 days)
  *
  * Run:
  *   docker compose exec app vendor/bin/phinx seed:run -s DummyDataSeeder
@@ -28,10 +31,76 @@ final class DummyDataSeeder extends AbstractSeed
 
     public function run(): void
     {
+        $userIds     = $this->seedUsers();
         $this->seedCredentials();
         $scenarioIds = $this->seedScenarios();
         $sessions    = $this->seedSessionsAndMessages($scenarioIds);
         $this->seedActionLogs($scenarioIds, $sessions);
+        $this->seedScenarioRevisions($scenarioIds, $userIds);
+    }
+
+    // ── users (extend) + organization_users ───────────────────────────────────
+
+    /**
+     * Ensure realistic operator users exist so audit trail / history shows variety.
+     *
+     * @return array<int, array{id: int, email: string}>
+     */
+    private function seedUsers(): array
+    {
+        $passwordHash = password_hash('nene1234', PASSWORD_DEFAULT);
+        $candidates   = [
+            ['email' => 'editor.alice@nene-concierge.local', 'role' => 'editor'],
+            ['email' => 'editor.bob@nene-concierge.local',   'role' => 'editor'],
+            ['email' => 'viewer.carol@nene-concierge.local', 'role' => 'viewer'],
+            ['email' => 'editor.dave@nene-concierge.local',  'role' => 'editor'],
+        ];
+        $existingEmails = array_column(
+            $this->fetchAll('SELECT email FROM users'),
+            'email',
+        );
+        $rows = [];
+        foreach ($candidates as $c) {
+            if (!in_array($c['email'], $existingEmails, true)) {
+                $rows[] = [
+                    'email'         => $c['email'],
+                    'password_hash' => $passwordHash,
+                    'role'          => $c['role'],
+                    'status'        => 'active',
+                    'created_at'    => self::NOW,
+                    'updated_at'    => self::NOW,
+                ];
+            }
+        }
+        if ($rows !== []) {
+            $this->insert('users', $rows);
+        }
+
+        $all = $this->fetchAll('SELECT id, email FROM users ORDER BY id');
+        $userIds = array_map(static fn ($r) => ['id' => (int) $r['id'], 'email' => (string) $r['email']], $all);
+
+        // Bind users to org if not already
+        $existingMembers = array_column(
+            $this->fetchAll('SELECT user_id FROM organization_users WHERE organization_id = ' . self::ORG_ID),
+            'user_id',
+        );
+        $existingMembers = array_map('intval', $existingMembers);
+        $memberRows = [];
+        foreach ($userIds as $u) {
+            if (!in_array($u['id'], $existingMembers, true)) {
+                $memberRows[] = [
+                    'organization_id' => self::ORG_ID,
+                    'user_id'         => $u['id'],
+                    'role'            => 'owner',
+                    'created_at'      => self::NOW,
+                ];
+            }
+        }
+        if ($memberRows !== []) {
+            $this->insert('organization_users', $memberRows);
+        }
+
+        return $userIds;
     }
 
     // ── action_credentials ────────────────────────────────────────────────────
@@ -253,6 +322,143 @@ final class DummyDataSeeder extends AbstractSeed
             ];
         }
         $this->insert('action_logs', $rows);
+    }
+
+    // ── scenario_revisions ────────────────────────────────────────────────────
+
+    /**
+     * @param int[]                                        $scenarioIds
+     * @param array<int, array{id: int, email: string}>   $userIds
+     */
+    private function seedScenarioRevisions(array $scenarioIds, array $userIds): void
+    {
+        $this->table('scenario_revisions')->truncate();
+
+        if ($scenarioIds === [] || $userIds === []) {
+            return;
+        }
+
+        $operations       = ['update', 'graph_save', 'graph_save', 'status_change', 'update'];
+        $anchor           = new DateTimeImmutable(self::NOW);
+        $rows             = [];
+        $scenarioMeta     = $this->fetchAll('SELECT id, name, description, status FROM scenarios');
+        $scenarioByIdMap  = [];
+        foreach ($scenarioMeta as $m) {
+            $scenarioByIdMap[(int) $m['id']] = $m;
+        }
+
+        foreach ($scenarioIds as $scenarioId) {
+            $meta = $scenarioByIdMap[$scenarioId] ?? null;
+            if ($meta === null) {
+                continue;
+            }
+
+            $name        = (string) $meta['name'];
+            $description = isset($meta['description']) ? (string) $meta['description'] : null;
+            $status      = (string) $meta['status'];
+
+            // Each scenario gets between 15 and 35 revisions
+            $count    = 15 + mt_rand(0, 20);
+            $createdAt = $anchor->modify('-' . (25 + mt_rand(0, 10)) . ' days');
+            $rev      = 1;
+
+            // First revision: create
+            $creator  = $userIds[array_rand($userIds)];
+            $nodeBase = 3 + mt_rand(0, 8);
+            $edgeBase = max(0, $nodeBase - 1);
+            $rows[] = $this->revisionRow(
+                $scenarioId,
+                $rev++,
+                $creator,
+                'create',
+                $name,
+                $description,
+                $status,
+                $nodeBase,
+                $edgeBase,
+                $createdAt,
+            );
+
+            // Followup revisions
+            for ($i = 1; $i < $count; $i++) {
+                $createdAt = $createdAt->modify('+' . (60 + mt_rand(20, 4800)) . ' minutes');
+                if ($createdAt > $anchor) {
+                    break;
+                }
+                $user      = $userIds[array_rand($userIds)];
+                $op        = $operations[array_rand($operations)];
+                $nodeBase += mt_rand(-1, 2);
+                if ($nodeBase < 2) {
+                    $nodeBase = 2;
+                }
+                $edgeBase  = max(0, $nodeBase - 1 + mt_rand(-1, 1));
+
+                $rowStatus = $status;
+                $rowName   = $name;
+                if ($op === 'status_change') {
+                    $rowStatus = $status === 'published' ? 'draft' : 'published';
+                    $status    = $rowStatus; // future revisions retain the change
+                }
+                if ($op === 'update' && mt_rand(1, 100) <= 25) {
+                    // Occasional rename
+                    $rowName = $name . ' v' . (1 + mt_rand(1, 3));
+                }
+
+                $rows[] = $this->revisionRow(
+                    $scenarioId,
+                    $rev++,
+                    $user,
+                    $op,
+                    $rowName,
+                    $description,
+                    $rowStatus,
+                    $nodeBase,
+                    $edgeBase,
+                    $createdAt,
+                );
+            }
+        }
+
+        if ($rows === []) {
+            return;
+        }
+
+        foreach (array_chunk($rows, 100) as $chunk) {
+            $this->insert('scenario_revisions', $chunk);
+        }
+    }
+
+    /**
+     * @param array{id: int, email: string} $user
+     * @return array<string, mixed>
+     */
+    private function revisionRow(
+        int $scenarioId,
+        int $revisionNo,
+        array $user,
+        string $operation,
+        string $name,
+        ?string $description,
+        string $status,
+        int $nodeCount,
+        int $edgeCount,
+        DateTimeImmutable $createdAt,
+    ): array {
+        return [
+            'organization_id' => self::ORG_ID,
+            'scenario_id'     => $scenarioId,
+            'revision_no'     => $revisionNo,
+            'user_id'         => $user['id'],
+            'user_email'      => $user['email'],
+            'operation'       => $operation,
+            'name'            => $name,
+            'description'     => $description,
+            'status'          => $status,
+            'node_count'      => $nodeCount,
+            'edge_count'      => $edgeCount,
+            'snapshot_json'   => null,
+            'created_at'      => $createdAt->format('Y-m-d H:i:s'),
+        ];
     }
 
     // ── helpers ───────────────────────────────────────────────────────────────
