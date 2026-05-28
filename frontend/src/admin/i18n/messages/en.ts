@@ -26,6 +26,9 @@ export const en = {
     'common.edit':          'Edit',
     'common.cancel':        'Cancel',
     'common.close':         'Close',
+    'common.remove':        'Remove',
+    'common.search':        'Search nodes / actions…',
+    'common.history':       'History',
     'common.backToList':    'Back to list',
     'common.new':           '+ New',
     'common.add':           '+ Add',
@@ -149,6 +152,12 @@ export const en = {
     'node.addChoicePrompt':    'Enter choice text',
     'node.variableName':       'Variable name (to collect input)',
     'node.variablePlaceholder': 'e.g. user_name',
+    'node.variableHint':       'Variable name to reference in subsequent nodes',
+
+    'node.tab.config':       'Config',
+    'node.tab.analytics':    'Analytics',
+    'node.tab.connections':  'Connections',
+    'node.edited':           'Edited',
 
     'node.conditionVar':         'Variable',
     'node.conditionVarPlaceholder': 'e.g. user_answer',

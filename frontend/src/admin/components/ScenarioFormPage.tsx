@@ -7,60 +7,78 @@ import {
     type ScenarioNode, type ScenarioEdge, type CredentialSummary, type ChatNodeType,
 } from '../api.js';
 import { Btn, Badge, ErrorMsg } from './Layout.js';
-import { T } from '../theme.js';
+import { T, NODE_TOKENS } from '../theme.js';
 import { useTranslation } from '../i18n/index.js';
 import ScenarioCanvas, { type ScenarioCanvasRef } from './editor/ScenarioCanvas.js';
-import { NODE_COLORS, NODE_ICONS } from './editor/NodeTypes.js';
 
-// React Flow の CSS を読み込む（esbuild がバンドル時に app.css へ出力する）
+// React Flow CSS は esbuild がバンドル
 import '@xyflow/react/dist/style.css';
 
-// ── アイコン ────────────────────────────────────────────────────────────────
-const PencilIcon = () => (
-    <svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
-        <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z"/>
-    </svg>
+// ─────────────────────────────────────────────────────────────────────────────
+// v2 (2026-05-28) — ピルグループ式の固定ヘッダー
+//   [<] [Title ✎ · Status] | [⌘K Search] | [add: M C A E] | [⋯ 📊 💾 Save] [🗑]
+//   3px ピル、46px ヘッダー高さ。CSS 変数経由でテーマ自動追従。
+// ─────────────────────────────────────────────────────────────────────────────
+
+const MONO = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
+
+// ── Icons ────────────────────────────────────────────────────────────────────
+const IconBack = () => (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+);
+const IconPencil = () => (
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4z"/></svg>
+);
+const IconChevDown = () => (
+    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+);
+const IconDesc = () => (
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h10M8 17h6"/></svg>
+);
+const IconSearch = () => (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+);
+const IconHistory = () => (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><polyline points="3 3 3 8 8 8"/><polyline points="12 7 12 12 15 14"/></svg>
+);
+const IconAnalytics = () => (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+);
+const IconSave = () => (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+);
+const IconTrash = () => (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
 );
 
-const ChevronDownIcon = () => (
-    <svg width="9" height="9" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
-        <path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-    </svg>
-);
-
-/** 説明フィールドを開く鉛筆+ドキュメントアイコン */
-const DescEditIcon = () => (
-    <svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
-        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12z"/>
-        <path d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
-    </svg>
-);
-
-/** Analytics — 棒グラフ単色ベクター */
-const AnalyticsIcon = () => (
-    <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
-        <path d="M1 11a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm5-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1z"/>
-    </svg>
-);
-
-/** 保存 — ダウンロード矢印単色ベクター */
-const SaveIcon = () => (
-    <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
-        <path d="M8 0a.5.5 0 0 1 .5.5v9.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 .708-.708L7.5 10.293V.5A.5.5 0 0 1 8 0"/>
-        <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.1a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.1a.5.5 0 0 1 1 0v2.1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V10.4a.5.5 0 0 1 .5-.5"/>
-    </svg>
-);
-
-/** 削除 — ゴミ箱単色ベクター */
-const TrashIcon = () => (
-    <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
-        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0"/>
-        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3v1h11V2h-11z"/>
-    </svg>
-);
-
-// ── ノードタイプ定義（ヘッダーに表示する順） ─────────────────────────────────
 const NODE_TYPES: ChatNodeType[] = ['message', 'condition', 'action', 'end'];
+
+// ── ヘッダー内部スタイル (memo: 高さ・寸法は T.editorHeaderH 経由) ─────────
+const pill = (extra?: React.CSSProperties): React.CSSProperties => ({
+    display: 'flex', alignItems: 'center',
+    height: 30, padding: '0 4px', gap: 2,
+    background: T.surface, border: `1px solid ${T.border}`,
+    borderRadius: T.radiusLg,
+    flexShrink: 0,
+    ...extra,
+});
+
+const iconBtn = (active?: boolean): React.CSSProperties => ({
+    display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+    width: 24, height: 24, borderRadius: T.radiusSm,
+    color: active ? T.primary : T.textMuted,
+    background: active ? T.primaryTint : 'transparent',
+    border: 'none', cursor: 'pointer', flexShrink: 0,
+});
 
 export default function ScenarioFormPage() {
     const { id }  = useParams<{ id?: string }>();
@@ -94,10 +112,10 @@ export default function ScenarioFormPage() {
     const [showStatusDrop, setShowStatusDrop] = useState(false);
     const statusDropRef                       = useRef<HTMLDivElement>(null);
 
-    // ── Details ドロワー（説明フィールド）──────────────────────────────────
+    // ── Details ドロワー (説明) ─────────────────────────────────────────────
     const [showDetails, setShowDetails] = useState(isNew);
 
-    // ── Analytics モード（ヘッダーから制御 → Canvas に prop で渡す）──────────
+    // ── Analytics モード ────────────────────────────────────────────────────
     const [analyticsMode, setAnalyticsMode] = useState(false);
 
     // ── ロード ──────────────────────────────────────────────────────────────
@@ -135,7 +153,6 @@ export default function ScenarioFormPage() {
         return () => document.removeEventListener('mousedown', onClickOutside);
     }, [showStatusDrop]);
 
-    // ── インライン名前編集 ───────────────────────────────────────────────────
     function startEditName() {
         setDraftName(name);
         setEditingName(true);
@@ -153,14 +170,12 @@ export default function ScenarioFormPage() {
 
     function cancelEditName() { setEditingName(false); setDraftName(name); }
 
-    // ── ステータス変更（即時保存）──────────────────────────────────────────
     async function changeStatus(s: typeof status) {
         setStatus(s);
         setShowStatusDrop(false);
         if (!isNew) await saveMeta({ statusOverride: s });
     }
 
-    // ── メタ情報保存 ─────────────────────────────────────────────────────────
     async function saveMeta(overrides?: { nameOverride?: string; statusOverride?: typeof status }) {
         if (isNew) return;
         setSaving(true); setError(null);
@@ -176,7 +191,6 @@ export default function ScenarioFormPage() {
         } finally { setSaving(false); }
     }
 
-    // ── 新規シナリオ作成 ─────────────────────────────────────────────────────
     async function handleCreate() {
         const trimmed = draftName.trim() || name.trim();
         if (!trimmed) return;
@@ -189,7 +203,6 @@ export default function ScenarioFormPage() {
         } finally { setSaving(false); }
     }
 
-    // ── グラフ保存 ───────────────────────────────────────────────────────────
     async function handleGraphSave(newNodes: ScenarioNode[], newEdges: ScenarioEdge[]) {
         setSaving(true); setError(null);
         try {
@@ -201,7 +214,6 @@ export default function ScenarioFormPage() {
         } finally { setSaving(false); }
     }
 
-    // ── 削除 ────────────────────────────────────────────────────────────────
     async function handleDelete() {
         if (!confirm(t('scenarios.confirmDelete', { name }))) return;
         try { await deleteScenario(Number(id)); nav('/scenarios'); }
@@ -220,300 +232,278 @@ export default function ScenarioFormPage() {
         <p style={{ color: T.textMuted, marginTop: 40, padding: '0 24px' }}>{t('common.loading')}</p>
     );
 
-    // ── 共通スタイル ─────────────────────────────────────────────────────────
-    const divider: React.CSSProperties = { width: 1, height: 14, background: T.border, flexShrink: 0 };
-
-    // コンパクトボタン共通スタイル
-    const cBtn = (opts: { active?: boolean; fill?: boolean } = {}): React.CSSProperties => ({
-        display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 3,
-        height: 22, padding: '0 7px', borderRadius: T.radiusMd,
-        background: opts.fill ? T.primary : opts.active ? T.primaryLight : 'transparent',
-        border: `1px solid ${opts.fill ? T.primary : opts.active ? T.primaryBorder : T.border}`,
-        color: opts.fill ? '#fff' : opts.active ? T.primaryText : T.textMuted,
-        fontSize: '10px', fontWeight: 600,
-        cursor: 'pointer', flexShrink: 0, letterSpacing: '0.01em',
-    });
+    // ── Node palette chip (右ピル内) ────────────────────────────────────────
+    function NodeChip({ type }: { type: ChatNodeType }) {
+        const tok = NODE_TOKENS[type];
+        const label = t(`node.type.${type}` as Parameters<typeof t>[0]);
+        return (
+            <button onClick={() => canvasRef.current?.addNode(type)}
+                title={t('node.addToCanvas', { type: label })}
+                style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 5,
+                    height: 22, padding: '0 9px', borderRadius: T.radiusSm,
+                    background: 'transparent', color: T.text,
+                    border: 'none', cursor: 'pointer',
+                    fontSize: T.fontXs, fontWeight: 600, whiteSpace: 'nowrap',
+                }}>
+                <span style={{ width: 6, height: 6, borderRadius: 99, background: tok.stripe }}/>
+                <span>{label}</span>
+            </button>
+        );
+    }
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
 
-            {/* ══ ヘッダーバー (36px) ══════════════════════════════════════════
-                左: [← Back] | [名前] [Status▾] [✏desc]
-                右: [savedMsg] [Msg][Cond][Action][End] / [← Edit] | [📊] [↓save] [○delete]
-            ════════════════════════════════════════════════════════════════════ */}
+            {/* ══ ヘッダーバー (46px) ══════════════════════════════════════════ */}
             <div style={{
-                display: 'flex', alignItems: 'center', gap: 4,
-                padding: '0 8px', height: 36, flexShrink: 0,
+                display: 'flex', alignItems: 'center', gap: 8,
+                padding: '0 12px',
+                height: T.editorHeaderH, flexShrink: 0,
                 borderBottom: `1px solid ${T.border}`,
-                background: T.surface,
+                background: T.surfaceAlt,
             }}>
-
-                {/* ── 左ブロック ──────────────────────────────────────────── */}
-
-                {/* 戻る */}
-                <button
-                    onClick={() => nav('/scenarios')}
-                    style={cBtn()}
-                    onMouseEnter={e => { e.currentTarget.style.background = T.surfaceHover; }}
-                    onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; }}
-                >
-                    ← {t('common.backToList')}
-                </button>
-
-                <div style={divider} />
-
-                {/* インライン名前編集 */}
-                {editingName ? (
-                    <input
-                        ref={nameInputRef}
-                        value={draftName}
-                        onChange={e => setDraftName(e.target.value)}
-                        onBlur={() => { void commitName(); }}
-                        onKeyDown={e => {
-                            if (e.key === 'Enter')  { e.preventDefault(); void commitName(); }
-                            if (e.key === 'Escape') { e.preventDefault(); cancelEditName(); }
-                        }}
-                        placeholder={t('scenarioForm.namePlaceholder')}
-                        style={{
-                            fontSize: T.fontBase, fontWeight: 600, color: T.textStrong,
-                            border: `1.5px solid ${T.primary}`, borderRadius: T.radiusSm,
-                            padding: '2px 7px', background: T.surface,
-                            minWidth: 130, maxWidth: 240, outline: 'none',
-                        }}
-                    />
-                ) : (
-                    <button
-                        onClick={startEditName}
-                        title={t('scenarioForm.nameLabel')}
-                        style={{
-                            display: 'flex', alignItems: 'center', gap: 4,
-                            fontSize: T.fontBase, fontWeight: 600, color: T.textStrong,
-                            background: 'transparent', border: 'none', cursor: 'text',
-                            padding: '2px 5px', borderRadius: T.radiusSm,
-                            maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-                        }}
-                        onMouseEnter={e => { e.currentTarget.style.background = T.surfaceHover; }}
-                        onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; }}
-                    >
-                        <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                            {name || <span style={{ color: T.textMuted, fontWeight: 400 }}>{t('scenarioForm.namePlaceholder')}</span>}
-                        </span>
-                        <span style={{ color: T.textMuted, flexShrink: 0 }}><PencilIcon /></span>
+                {/* 左ピル: Back + Title + Status + Desc */}
+                <div style={pill()}>
+                    <button onClick={() => nav('/scenarios')}
+                        title={t('common.backToList')} aria-label={t('common.backToList')}
+                        style={iconBtn()}>
+                        <IconBack/>
                     </button>
+                    <div style={{ width: 1, height: 14, background: T.border, margin: '0 4px' }}/>
+
+                    {/* インライン名前編集 */}
+                    {editingName ? (
+                        <input ref={nameInputRef} value={draftName}
+                            onChange={e => setDraftName(e.target.value)}
+                            onBlur={() => { void commitName(); }}
+                            onKeyDown={e => {
+                                if (e.key === 'Enter')  { e.preventDefault(); void commitName(); }
+                                if (e.key === 'Escape') { e.preventDefault(); cancelEditName(); }
+                            }}
+                            placeholder={t('scenarioForm.namePlaceholder')}
+                            style={{
+                                fontSize: T.fontBase, fontWeight: 600, color: T.textStrong,
+                                border: `1px solid ${T.primary}`, borderRadius: T.radiusSm,
+                                padding: '2px 7px', background: T.surface,
+                                minWidth: 130, maxWidth: 240, outline: 'none',
+                            }}/>
+                    ) : (
+                        <button onClick={startEditName} title={t('scenarioForm.nameLabel')}
+                            style={{
+                                display: 'flex', alignItems: 'center', gap: 5,
+                                padding: '0 6px',
+                                fontSize: T.fontBase, fontWeight: 600, color: T.text,
+                                background: 'transparent', border: 'none', cursor: 'text',
+                                maxWidth: 220, minWidth: 0,
+                                overflow: 'hidden', whiteSpace: 'nowrap',
+                            }}>
+                            <span style={{
+                                overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                                minWidth: 0,
+                            }}>
+                                {name || <span style={{ color: T.textMuted, fontWeight: 400 }}>
+                                    {t('scenarioForm.namePlaceholder')}
+                                </span>}
+                            </span>
+                            <span style={{ color: T.textFaint, flexShrink: 0, display: 'inline-flex' }}><IconPencil/></span>
+                        </button>
+                    )}
+
+                    {/* ステータス */}
+                    {!isNew && (
+                        <>
+                            <div style={{ width: 1, height: 14, background: T.border, margin: '0 4px' }}/>
+                            <div ref={statusDropRef} style={{ position: 'relative', flexShrink: 0 }}>
+                                <button onClick={() => setShowStatusDrop(v => !v)}
+                                    title={t('scenarioForm.statusLabel')}
+                                    style={{
+                                        display: 'inline-flex', alignItems: 'center', gap: 4,
+                                        height: 22, padding: '0 8px', marginRight: 2,
+                                        background: status === 'published'
+                                            ? T.successPillBg
+                                            : status === 'draft' ? T.badgeDraftBg : T.badgeArchBg,
+                                        color: status === 'published'
+                                            ? T.successFg
+                                            : status === 'draft' ? T.badgeDraftColor : T.badgeArchColor,
+                                        borderRadius: 99, border: 'none', cursor: 'pointer',
+                                        fontSize: T.fontXs, fontWeight: 700, whiteSpace: 'nowrap',
+                                    }}>
+                                    {status === 'published' && (
+                                        <span style={{ width: 5, height: 5, borderRadius: 99, background: 'currentColor' }}/>
+                                    )}
+                                    <Badge status={status}/>
+                                    <span style={{ display: 'inline-flex', opacity: 0.7 }}><IconChevDown/></span>
+                                </button>
+                                {showStatusDrop && (
+                                    <div style={{
+                                        position: 'absolute', top: 'calc(100% + 4px)', left: 0,
+                                        background: T.surface, border: `1px solid ${T.border}`,
+                                        borderRadius: T.radiusMd, boxShadow: T.shadowElevated,
+                                        zIndex: 200, overflow: 'hidden', minWidth: 120,
+                                    }}>
+                                        {statusOptions.map(o => (
+                                            <button key={o.value}
+                                                onClick={() => { void changeStatus(o.value); }}
+                                                style={{
+                                                    display: 'flex', alignItems: 'center',
+                                                    width: '100%', padding: '6px 12px',
+                                                    background: o.value === status ? T.primaryLight : 'transparent',
+                                                    border: 'none', cursor: 'pointer',
+                                                    fontSize: T.fontSm, color: T.text, textAlign: 'left',
+                                                }}>
+                                                <Badge status={o.value}/>
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                            <button onClick={() => setShowDetails(v => !v)}
+                                title={t('scenarioForm.descLabel')}
+                                style={{ ...iconBtn(showDetails), color: showDetails ? T.primary : T.textMuted }}>
+                                <IconDesc/>
+                            </button>
+                        </>
+                    )}
+                </div>
+
+                <div style={{ flex: 1, minWidth: 0 }}/>
+
+                {/* 中央ピル: Search */}
+                <div style={pill({ padding: '0 10px', gap: 7, minWidth: 220 })}>
+                    <span style={{ color: T.textFaint, display: 'inline-flex' }}><IconSearch/></span>
+                    <span style={{ padding: '0 4px', fontSize: T.fontSm, color: T.textMuted, flex: 1 }}>
+                        {t('common.search')}
+                    </span>
+                    <span style={{
+                        padding: '1px 6px', borderRadius: T.radiusSm,
+                        background: T.surfaceAlt, border: `1px solid ${T.border}`,
+                        fontFamily: MONO, fontSize: 9.5, color: T.textFaint,
+                    }}>⌘K</span>
+                </div>
+
+                <div style={{ flex: 1, minWidth: 0 }}/>
+
+                {/* 右1: ノードパレット */}
+                {!isNew && !analyticsMode && (
+                    <div style={pill()}>
+                        <span style={{
+                            padding: '0 6px',
+                            fontSize: 9.5, fontWeight: 700, letterSpacing: '0.08em',
+                            color: T.textFaint, textTransform: 'uppercase', fontFamily: MONO,
+                            borderRight: `1px solid ${T.border}`, marginRight: 2,
+                        }}>add</span>
+                        {NODE_TYPES.map(type => <NodeChip key={type} type={type}/>)}
+                    </div>
                 )}
 
-                {/* ステータスドロップダウン */}
+                {/* 右2: アクション群 */}
                 {!isNew && (
-                    <div ref={statusDropRef} style={{ position: 'relative', flexShrink: 0 }}>
-                        <button
-                            onClick={() => setShowStatusDrop(v => !v)}
-                            style={{
-                                display: 'flex', alignItems: 'center', gap: 3,
-                                background: 'transparent', border: 'none', cursor: 'pointer',
-                                padding: '2px 4px', borderRadius: T.radiusSm,
-                            }}
-                            title={t('scenarioForm.statusLabel')}
-                        >
-                            <Badge status={status} />
-                            <span style={{ color: T.textMuted }}><ChevronDownIcon /></span>
+                    <div style={pill()}>
+                        <button title={t('canvas.analyticsMode')}
+                            onClick={() => setAnalyticsMode(v => !v)}
+                            style={iconBtn(analyticsMode)}>
+                            <IconAnalytics/>
                         </button>
-                        {showStatusDrop && (
-                            <div style={{
-                                position: 'absolute', top: 'calc(100% + 4px)', left: 0,
-                                background: T.surface, border: `1px solid ${T.border}`,
-                                borderRadius: T.radiusMd, boxShadow: '0 4px 12px rgba(0,0,0,.12)',
-                                zIndex: 200, overflow: 'hidden', minWidth: 100,
-                            }}>
-                                {statusOptions.map(o => (
-                                    <button
-                                        key={o.value}
-                                        onClick={() => { void changeStatus(o.value); }}
-                                        style={{
-                                            display: 'flex', alignItems: 'center',
-                                            width: '100%', padding: '6px 12px',
-                                            background: o.value === status ? T.primaryLight : 'transparent',
-                                            border: 'none', cursor: 'pointer',
-                                            fontSize: T.fontSm, color: T.text, textAlign: 'left',
-                                        }}
-                                        onMouseEnter={e => { if (o.value !== status) e.currentTarget.style.background = T.surfaceHover; }}
-                                        onMouseLeave={e => { if (o.value !== status) e.currentTarget.style.background = 'transparent'; }}
-                                    >
-                                        <Badge status={o.value} />
-                                    </button>
-                                ))}
-                            </div>
+                        <button title={t('common.history')} style={iconBtn()}>
+                            <IconHistory/>
+                        </button>
+                        {!analyticsMode && (
+                            <>
+                                <div style={{ width: 1, height: 14, background: T.border, margin: '0 2px' }}/>
+                                <button disabled={saving}
+                                    onClick={() => canvasRef.current?.triggerSave()}
+                                    style={{
+                                        height: 22, padding: '0 10px',
+                                        display: 'inline-flex', alignItems: 'center', gap: 5,
+                                        background: T.primary, color: T.primaryFg,
+                                        border: 'none', borderRadius: T.radiusSm,
+                                        cursor: saving ? 'wait' : 'pointer',
+                                        opacity: saving ? 0.6 : 1,
+                                        fontSize: T.fontXs, fontWeight: 700,
+                                        whiteSpace: 'nowrap',
+                                    }}>
+                                    <IconSave/>
+                                    {saving ? t('common.saving') : t('common.save')}
+                                </button>
+                            </>
                         )}
                     </div>
                 )}
 
-                {/* 説明編集アイコン（ステータス横 → showDetails ドロワーを開閉） */}
-                {!isNew && (
-                    <button
-                        onClick={() => setShowDetails(v => !v)}
-                        title={t('scenarioForm.descLabel')}
-                        style={{
-                            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                            width: 20, height: 20, padding: 0, borderRadius: T.radiusSm,
-                            background: showDetails ? T.primaryLight : 'transparent',
-                            border: `1px solid ${showDetails ? T.primaryBorder : 'transparent'}`,
-                            color: showDetails ? T.primaryText : T.textMuted,
-                            cursor: 'pointer', flexShrink: 0,
-                        }}
-                        onMouseEnter={e => { if (!showDetails) { e.currentTarget.style.background = T.surfaceHover; e.currentTarget.style.borderColor = T.border; } }}
-                        onMouseLeave={e => { if (!showDetails) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'transparent'; } }}
-                    >
-                        <DescEditIcon />
-                    </button>
-                )}
-
-                {/* スペーサー */}
-                <div style={{ flex: 1 }} />
-
-                {/* ── 右ブロック ──────────────────────────────────────────── */}
-
-                {/* 保存フラッシュ */}
-                {savedMsg && (
-                    <span style={{ fontSize: '10px', color: T.successText, fontWeight: 600, whiteSpace: 'nowrap', flexShrink: 0, marginRight: 4 }}>
-                        ✓ {savedMsg}
-                    </span>
-                )}
-
-                {/* ノードパレット / Analytics 退出ボタン */}
-                {!isNew && (
-                    <>
-                        {analyticsMode ? (
-                            /* Analytics モード中: 編集に戻る */
-                            <button
-                                onClick={() => setAnalyticsMode(false)}
-                                style={{ ...cBtn({ fill: true }), fontWeight: 700 }}
-                                onMouseEnter={e => { e.currentTarget.style.filter = 'brightness(1.1)'; }}
-                                onMouseLeave={e => { e.currentTarget.style.filter = 'none'; }}
-                            >
-                                ← {t('canvas.editMode')}
-                            </button>
-                        ) : (
-                            /* 編集モード: ノードパレット */
-                            NODE_TYPES.map(type => {
-                                const c = NODE_COLORS[type];
-                                const label = t(`node.type.${type}` as Parameters<typeof t>[0]);
-                                return (
-                                    <button
-                                        key={type}
-                                        onClick={() => canvasRef.current?.addNode(type)}
-                                        title={t('node.addToCanvas', { type: label })}
-                                        style={{
-                                            display: 'flex', alignItems: 'center', gap: 3,
-                                            padding: '1px 6px', height: 22, borderRadius: T.radiusMd,
-                                            background: c.header, border: 'none',
-                                            color: '#fff', fontWeight: 600, fontSize: '10px',
-                                            cursor: 'pointer', flexShrink: 0, letterSpacing: '0.01em',
-                                        }}
-                                        onMouseEnter={e => { e.currentTarget.style.filter = 'brightness(1.08)'; }}
-                                        onMouseLeave={e => { e.currentTarget.style.filter = 'none'; }}
-                                    >
-                                        <span style={{ display: 'inline-flex', transform: 'scale(0.8)', transformOrigin: 'center', lineHeight: 0 }}>
-                                            {NODE_ICONS[type]}
-                                        </span>
-                                        <span>{label}</span>
-                                    </button>
-                                );
-                            })
-                        )}
-
-                        <div style={divider} />
-                    </>
-                )}
-
-                {/* Analytics トグル */}
-                {!isNew && (
-                    <button
-                        onClick={() => setAnalyticsMode(v => !v)}
-                        title={t('canvas.analyticsMode')}
-                        style={cBtn({ active: analyticsMode })}
-                        onMouseEnter={e => { if (!analyticsMode) e.currentTarget.style.background = T.surfaceHover; }}
-                        onMouseLeave={e => { if (!analyticsMode) e.currentTarget.style.background = 'transparent'; }}
-                    >
-                        <AnalyticsIcon />
-                        {t('canvas.analyticsMode')}
-                    </button>
-                )}
-
-                {/* 保存 */}
-                {!isNew && !analyticsMode && (
-                    <button
-                        disabled={saving}
-                        onClick={() => canvasRef.current?.triggerSave()}
-                        style={{ ...cBtn({ fill: true }), opacity: saving ? 0.6 : 1 }}
-                        onMouseEnter={e => { if (!saving) e.currentTarget.style.filter = 'brightness(0.9)'; }}
-                        onMouseLeave={e => { e.currentTarget.style.filter = 'none'; }}
-                    >
-                        <SaveIcon />
-                        {saving ? t('common.saving') : t('common.save')}
-                    </button>
-                )}
-
-                {/* 新規: Create ボタン */}
+                {/* 新規作成: Create ボタン */}
                 {isNew && (
-                    <Btn
-                        disabled={saving || !(draftName.trim() || name.trim())}
-                        onClick={() => { void handleCreate(); }}
-                    >
+                    <Btn disabled={saving || !(draftName.trim() || name.trim())}
+                        onClick={() => { void handleCreate(); }}>
                         {saving ? t('common.creating') : t('common.create')}
                     </Btn>
                 )}
 
-                {/* 削除: 丸アイコンボタン */}
+                {/* 削除: 円ボタン */}
                 {!isNew && (
-                    <button
-                        onClick={() => { void handleDelete(); }}
+                    <button onClick={() => { void handleDelete(); }}
                         title={t('common.delete')}
                         style={{
+                            width: 28, height: 28, borderRadius: 99,
                             display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                            width: 22, height: 22, padding: 0, borderRadius: '50%',
-                            background: 'transparent', border: `1px solid ${T.border}`,
+                            background: T.surface, border: `1px solid ${T.border}`,
                             color: T.textMuted, cursor: 'pointer', flexShrink: 0,
                         }}
                         onMouseEnter={e => {
-                            e.currentTarget.style.background   = T.dangerBg;
-                            e.currentTarget.style.borderColor  = T.dangerBorder;
-                            e.currentTarget.style.color        = T.dangerText;
+                            e.currentTarget.style.background  = T.dangerBg;
+                            e.currentTarget.style.borderColor = T.dangerBorder;
+                            e.currentTarget.style.color       = T.dangerFg;
                         }}
                         onMouseLeave={e => {
-                            e.currentTarget.style.background   = 'transparent';
-                            e.currentTarget.style.borderColor  = T.border;
-                            e.currentTarget.style.color        = T.textMuted;
-                        }}
-                    >
-                        <TrashIcon />
+                            e.currentTarget.style.background  = T.surface;
+                            e.currentTarget.style.borderColor = T.border;
+                            e.currentTarget.style.color       = T.textMuted;
+                        }}>
+                        <IconTrash/>
                     </button>
+                )}
+
+                {/* 保存フラッシュ (一時表示) */}
+                {savedMsg && (
+                    <span style={{
+                        position: 'absolute', top: 52, right: 16,
+                        fontSize: T.fontXs, color: T.successFg, fontWeight: 600,
+                        background: T.successBg, padding: '4px 10px',
+                        borderRadius: T.radiusXl,
+                    }}>
+                        ✓ {savedMsg}
+                    </span>
                 )}
             </div>
 
-            {/* ══ Details ドロワー（説明・折りたたみ）════════════════════════════ */}
+            {/* ══ Details ドロワー (説明) ═══════════════════════════════════════ */}
             {showDetails && (
                 <div style={{
                     display: 'flex', gap: 10, alignItems: 'flex-end',
                     padding: '8px 12px', flexShrink: 0,
-                    background: T.bg, borderBottom: `1px solid ${T.border}`,
+                    background: T.surfaceAlt, borderBottom: `1px solid ${T.border}`,
                 }}>
                     <div style={{ flex: 1 }}>
-                        <label style={{ display: 'block', fontSize: T.fontXs, fontWeight: 600, color: T.textMuted, marginBottom: 3 }}>
-                            {t('scenarioForm.descLabel')}
-                        </label>
-                        <input
-                            value={description}
+                        <label style={{
+                            display: 'block',
+                            fontSize: T.fontXs, fontWeight: 600,
+                            color: T.textMuted, fontFamily: MONO,
+                            letterSpacing: '0.06em', textTransform: 'uppercase',
+                            marginBottom: 4,
+                        }}>{t('scenarioForm.descLabel')}</label>
+                        <input value={description}
                             onChange={e => setDescription(e.target.value)}
                             placeholder={t('scenarioForm.descPlaceholder')}
                             style={{
                                 width: '100%', padding: '5px 9px',
-                                borderRadius: T.radiusSm, border: `1.5px solid ${T.borderInput}`,
+                                borderRadius: T.radiusMd, border: `1px solid ${T.borderInput}`,
                                 fontSize: T.fontBase, boxSizing: 'border-box',
                                 background: T.surface, color: T.text,
-                            }}
-                        />
+                            }}/>
                     </div>
                     {isNew && (
-                        <Btn disabled={saving || !(draftName.trim() || name.trim())} onClick={() => { void handleCreate(); }}>
+                        <Btn disabled={saving || !(draftName.trim() || name.trim())}
+                            onClick={() => { void handleCreate(); }}>
                             {saving ? t('common.creating') : t('common.create')}
                         </Btn>
                     )}

@@ -7,12 +7,11 @@
   <link rel="stylesheet" href="/admin/app.css" />
   <style>
     /* ── NeNe Concierge Admin — Design Tokens ──────────────────────────────
-       このブロックを差し替えるだけで全テーマが変わります。
-       nene-records default.css の OKLCH カラーシステムに準拠。
-       アクセントカラー: teal  oklch(62% 0.14 192)
+       Default Light = :root。テーマは [data-nca-theme='*'] でオーバーライド。
+       v2 (2026-05-28): エディタ用に node / glass / minimap トークンを追加
     ──────────────────────────────────────────────────────────────────────── */
     :root {
-      /* ── Accent / Primary (teal) ──────────────────────────────────────── */
+      /* ── Accent / Primary (teal — Default Light) ──────────────────────── */
       --nca-color-primary:        oklch(62% 0.14 192);
       --nca-color-primary-hover:  oklch(56% 0.14 192);
       --nca-color-primary-light:  oklch(97% 0.03 192);
@@ -20,30 +19,35 @@
       --nca-color-primary-muted:  oklch(80% 0.08 192);
       --nca-color-primary-text:   oklch(36% 0.14 192);
       --nca-color-primary-bg:     oklch(94% 0.05 192);
-      /* primary ボタンの前景色 — 明るいテーマで暗い文字に上書きする */
       --nca-color-primary-fg:     #fff;
+      --nca-color-primary-tint:   oklch(62% 0.14 192 / 0.10);
+      --nca-color-primary-ring:   oklch(62% 0.14 192 / 0.35);
 
       /* ── Danger ───────────────────────────────────────────────────────── */
       --nca-color-danger:         oklch(52% 0.20 25);
       --nca-color-danger-bg:      oklch(97% 0.02 25);
       --nca-color-danger-border:  oklch(78% 0.09 25);
       --nca-color-danger-text:    oklch(37% 0.18 25);
+      --nca-color-danger-fg:      oklch(45% 0.20 25);
 
       /* ── Success ──────────────────────────────────────────────────────── */
       --nca-color-success-bg:     oklch(97% 0.03 145);
       --nca-color-success-border: oklch(78% 0.10 145);
       --nca-color-success-text:   oklch(38% 0.15 145);
+      --nca-color-success-fg:     oklch(50% 0.18 145);
+      --nca-color-success-pill-bg: oklch(95% 0.07 145 / 0.6);
 
       /* ── Surface & Background ─────────────────────────────────────────── */
       --nca-color-bg:             oklch(97% 0.006 75);
       --nca-color-surface:        oklch(100% 0 0);
+      --nca-color-surface-alt:    oklch(98% 0.005 75);
 
-      /* ── Sidebar (dark — nene-records WordPress style) ────────────────── */
+      /* ── Sidebar (dark — エディタ slim variant でも同色) ───────────────── */
       --nca-color-sidebar:        oklch(19% 0.015 265);
       --nca-color-sidebar-hover:  oklch(24% 0.015 265);
-      --nca-color-sidebar-active: oklch(28% 0.020 265);
+      --nca-color-sidebar-active: oklch(62% 0.14 192 / 0.14);
       --nca-color-sidebar-border: oklch(27% 0.015 265);
-      --nca-color-sidebar-text:   oklch(80% 0.010 265);
+      --nca-color-sidebar-text:   oklch(72% 0.010 265);
       --nca-color-sidebar-muted:  oklch(55% 0.010 265);
       --nca-color-sidebar-title:  oklch(94% 0.005 75);
 
@@ -51,6 +55,7 @@
       --nca-color-text:           oklch(18% 0.02 75);
       --nca-color-text-strong:    oklch(24% 0.02 75);
       --nca-color-text-muted:     oklch(50% 0.02 75);
+      --nca-color-text-faint:     oklch(66% 0.015 75);
 
       /* ── Border ───────────────────────────────────────────────────────── */
       --nca-color-border:         oklch(88% 0.010 75);
@@ -59,8 +64,8 @@
 
       /* ── Table ────────────────────────────────────────────────────────── */
       --nca-color-table-header:   oklch(97% 0.006 75);
-      --nca-color-table-row:       oklch(99% 0.003 75);
-      --nca-color-surface-hover:   oklch(97% 0.005 75);
+      --nca-color-table-row:      oklch(99% 0.003 75);
+      --nca-color-surface-hover:  oklch(97% 0.005 75);
 
       /* ── Badge ────────────────────────────────────────────────────────── */
       --nca-badge-draft-bg:       oklch(93% 0.010 265);
@@ -75,6 +80,7 @@
       --nca-radius-md:  3px;
       --nca-radius-lg:  4px;
       --nca-radius-xl:  9999px;
+      --nca-radius-node: 2px;          /* v2: ノードカード用 */
 
       /* ── Font size ────────────────────────────────────────────────────── */
       --nca-font-xs:    11px;
@@ -85,17 +91,54 @@
       --nca-font-xl:    18px;
       --nca-font-2xl:   22px;
 
-      /* ── Sidebar width ────────────────────────────────────────────────── */
-      --nca-sidebar-width: 240px;
+      /* ── Sidebar width (slim = editor variant) ────────────────────────── */
+      --nca-sidebar-width:         240px;
+      --nca-sidebar-width-slim:    54px;
+      --nca-editor-header-height:  46px;
+      --nca-editor-drawer-width:   320px;
 
       /* ── Shadow ───────────────────────────────────────────────────────── */
-      --nca-shadow-card:  0 1px 3px oklch(0% 0 0 / 0.07), 0 1px 2px oklch(0% 0 0 / 0.04);
-      --nca-shadow-focus: 0 0 0 3px oklch(62% 0.14 192 / 0.30);
+      --nca-shadow-card:     0 1px 3px oklch(0% 0 0 / 0.07), 0 1px 2px oklch(0% 0 0 / 0.04);
+      --nca-shadow-elevated: 0 10px 30px -10px oklch(0% 0 0 / 0.18), 0 2px 6px oklch(0% 0 0 / 0.06);
+      --nca-shadow-focus:    0 0 0 3px oklch(62% 0.14 192 / 0.30);
 
-      /* ── Control heights — 変えればサイト全体のコントロール高さが変わる ── */
-      --nca-control-height:    28px;  /* 主要フォームコントロール（入力・選択・ボタン） */
-      --nca-control-height-sm: 24px;  /* コンパクトコントロール（フィルター・ページネーション） */
-      --nca-control-height-xs: 20px;  /* サイドバーユーティリティ */
+      /* ── Glass / Dock / Minimap (v2 editor) ───────────────────────────── */
+      --nca-glass-bg:        oklch(100% 0 0 / 0.78);
+      --nca-glass-dock-bg:   oklch(100% 0 0 / 0.95);
+      --nca-minimap-bg:      oklch(88% 0.030 80 / 0.72); /* warm beige */
+
+      /* ── Canvas dot grid (v2 editor) ──────────────────────────────────── */
+      --nca-canvas-bg:       oklch(97% 0.008 75);
+      --nca-canvas-dot:      oklch(36% 0.020 250 / 0.08);
+
+      /* ── Edge stroke (React Flow connector) ───────────────────────────── */
+      --nca-edge-stroke:     oklch(56% 0.020 250 / 0.45);
+
+      /* ── Node tokens (v2 editor) ──────────────────────────────────────── */
+      /* Default Light — muted designerly (slate-blue / dijon / dusty violet / warm slate) */
+      --nca-node-message-stripe:     #5B7CB8;
+      --nca-node-message-body:       #F5F7FB;
+      --nca-node-message-edge:       #DDE3EE;
+      --nca-node-message-chip:       #EBF0F8;
+      --nca-node-message-chip-edge:  #C6D2E5;
+
+      --nca-node-condition-stripe:   #B07432;
+      --nca-node-condition-body:     #FBF7EF;
+      --nca-node-condition-edge:     #EADDC4;
+      --nca-node-condition-chip:     #F4EAD3;
+      --nca-node-condition-chip-edge:#DEC79B;
+
+      --nca-node-action-stripe:      #7867AC;
+      --nca-node-action-body:        #F7F4FB;
+      --nca-node-action-edge:        #E2DCEE;
+      --nca-node-action-chip:        #EDE7F6;
+      --nca-node-action-chip-edge:   #CFC4E4;
+
+      --nca-node-end-stripe:         #5E6776;
+      --nca-node-end-body:           #F5F6F8;
+      --nca-node-end-edge:           #DCE0E5;
+      --nca-node-end-chip:           #EAECF0;
+      --nca-node-end-chip-edge:      #C9CED6;
 
       /* ── Motion ───────────────────────────────────────────────────────── */
       --nca-transition-fast:   150ms ease;
@@ -103,45 +146,49 @@
     }
 
     /* ═══════════════════════════════════════════════════════════════════════
-       テーマオーバーライド — data-nca-theme 属性で切り替え
-       セレクター: [data-nca-theme='{id}-{variant}']
-       Default Light は :root の値をそのまま使用（上書き不要）
+       Default Dark
     ═══════════════════════════════════════════════════════════════════════ */
-
-    /* ── Default Dark ─────────────────────────────────────────────────── */
     [data-nca-theme='default-dark'] {
-      --nca-color-primary:        oklch(70% 0.14 192);
-      --nca-color-primary-hover:  oklch(76% 0.14 192);
+      --nca-color-primary:        oklch(80% 0.13 192);
+      --nca-color-primary-hover:  oklch(86% 0.13 192);
       --nca-color-primary-light:  oklch(20% 0.08 192);
       --nca-color-primary-border: oklch(35% 0.10 192);
       --nca-color-primary-muted:  oklch(40% 0.10 192);
-      --nca-color-primary-text:   oklch(75% 0.12 192);
+      --nca-color-primary-text:   oklch(80% 0.12 192);
       --nca-color-primary-bg:     oklch(18% 0.08 192);
+      --nca-color-primary-fg:     oklch(13% 0.010 265);
+      --nca-color-primary-tint:   oklch(80% 0.13 192 / 0.14);
+      --nca-color-primary-ring:   oklch(80% 0.13 192 / 0.35);
       --nca-color-danger:         oklch(62% 0.20 25);
       --nca-color-danger-bg:      oklch(15% 0.06 25);
       --nca-color-danger-border:  oklch(28% 0.10 25);
       --nca-color-danger-text:    oklch(68% 0.16 25);
+      --nca-color-danger-fg:      oklch(72% 0.18 25);
       --nca-color-success-bg:     oklch(15% 0.06 145);
       --nca-color-success-border: oklch(28% 0.10 145);
       --nca-color-success-text:   oklch(68% 0.14 145);
+      --nca-color-success-fg:     oklch(80% 0.18 145);
+      --nca-color-success-pill-bg: oklch(40% 0.18 145 / 0.20);
       --nca-color-bg:             oklch(13% 0.010 265);
       --nca-color-surface:        oklch(17% 0.012 265);
+      --nca-color-surface-alt:    oklch(15% 0.012 265);
       --nca-color-sidebar:        oklch(10% 0.010 265);
       --nca-color-sidebar-hover:  oklch(17% 0.015 265);
-      --nca-color-sidebar-active: oklch(22% 0.020 265);
+      --nca-color-sidebar-active: oklch(80% 0.13 192 / 0.16);
       --nca-color-sidebar-border: oklch(22% 0.010 265);
-      --nca-color-sidebar-text:   oklch(78% 0.010 265);
+      --nca-color-sidebar-text:   oklch(70% 0.012 265);
       --nca-color-sidebar-muted:  oklch(50% 0.010 265);
       --nca-color-sidebar-title:  oklch(96% 0.005 75);
       --nca-color-text:           oklch(93% 0.008 75);
       --nca-color-text-strong:    oklch(97% 0.005 75);
-      --nca-color-text-muted:     oklch(60% 0.010 265);
+      --nca-color-text-muted:     oklch(70% 0.012 265);
+      --nca-color-text-faint:     oklch(55% 0.012 265);
       --nca-color-border:         oklch(28% 0.010 265);
       --nca-color-border-input:   oklch(32% 0.010 265);
       --nca-color-border-light:   oklch(22% 0.010 265);
       --nca-color-table-header:   oklch(13% 0.010 265);
-      --nca-color-table-row:       oklch(16% 0.008 265);
-      --nca-color-surface-hover:   oklch(18% 0.012 265);
+      --nca-color-table-row:      oklch(16% 0.008 265);
+      --nca-color-surface-hover:  oklch(18% 0.012 265);
       --nca-badge-draft-bg:       oklch(22% 0.010 265);
       --nca-badge-draft-color:    oklch(70% 0.010 265);
       --nca-badge-pub-bg:         oklch(16% 0.08 145);
@@ -149,260 +196,508 @@
       --nca-badge-arch-bg:        oklch(16% 0.08 25);
       --nca-badge-arch-color:     oklch(66% 0.15 25);
       --nca-shadow-card:          0 1px 3px oklch(0% 0 0 / 0.30);
-      --nca-shadow-focus:         0 0 0 3px oklch(70% 0.14 192 / 0.35);
+      --nca-shadow-elevated:      0 12px 32px -10px oklch(0% 0 0 / 0.55), 0 2px 6px oklch(0% 0 0 / 0.40);
+      --nca-shadow-focus:         0 0 0 3px oklch(80% 0.13 192 / 0.35);
+      --nca-glass-bg:             oklch(17% 0.012 265 / 0.72);
+      --nca-glass-dock-bg:        oklch(17% 0.012 265 / 0.85);
+      --nca-minimap-bg:           oklch(17% 0.012 265 / 0.55);
+      --nca-canvas-bg:            oklch(13% 0.010 265);
+      --nca-canvas-dot:           oklch(65% 0.020 250 / 0.10);
+      --nca-edge-stroke:          oklch(65% 0.020 250 / 0.45);
+
+      --nca-node-message-stripe:     #60A5FA;
+      --nca-node-message-body:       #0F1722;
+      --nca-node-message-edge:       #1E2D44;
+      --nca-node-message-chip:       rgba(96,165,250,.16);
+      --nca-node-message-chip-edge:  rgba(96,165,250,.45);
+      --nca-node-condition-stripe:   #FB923C;
+      --nca-node-condition-body:     #1A140D;
+      --nca-node-condition-edge:     #3A2812;
+      --nca-node-condition-chip:     rgba(251,146,60,.16);
+      --nca-node-condition-chip-edge:rgba(251,146,60,.45);
+      --nca-node-action-stripe:      #A78BFA;
+      --nca-node-action-body:        #161227;
+      --nca-node-action-edge:        #2D2547;
+      --nca-node-action-chip:        rgba(167,139,250,.16);
+      --nca-node-action-chip-edge:   rgba(167,139,250,.45);
+      --nca-node-end-stripe:         #94A3B8;
+      --nca-node-end-body:           #11151B;
+      --nca-node-end-edge:           #272E38;
+      --nca-node-end-chip:           rgba(148,163,184,.16);
+      --nca-node-end-chip-edge:      rgba(148,163,184,.40);
     }
 
-    /* ── GitHub Light ─────────────────────────────────────────────────── */
+    /* ═══════════════════════════════════════════════════════════════════════
+       GitHub Light — muted GH palette
+    ═══════════════════════════════════════════════════════════════════════ */
     [data-nca-theme='github-light'] {
-      --nca-color-primary:        oklch(46% 0.21 248);
-      --nca-color-primary-hover:  oklch(40% 0.21 248);
-      --nca-color-primary-light:  oklch(97% 0.04 248);
-      --nca-color-primary-border: oklch(72% 0.14 248);
-      --nca-color-primary-muted:  oklch(80% 0.10 248);
-      --nca-color-primary-text:   oklch(34% 0.18 248);
-      --nca-color-primary-bg:     oklch(94% 0.05 248);
-      --nca-color-bg:             oklch(97% 0.005 240);
-      --nca-color-surface:        oklch(100% 0 0);
-      --nca-color-sidebar:        oklch(20% 0.015 250);
-      --nca-color-sidebar-hover:  oklch(26% 0.015 250);
-      --nca-color-sidebar-active: oklch(30% 0.015 250);
-      --nca-color-sidebar-border: oklch(26% 0.015 250);
-      --nca-color-sidebar-text:   oklch(90% 0.010 240);
-      --nca-color-sidebar-muted:  oklch(60% 0.015 240);
-      --nca-color-sidebar-title:  oklch(97% 0.007 240);
-      --nca-color-text:           oklch(18% 0.010 265);
-      --nca-color-text-strong:    oklch(12% 0.010 265);
-      --nca-color-text-muted:     oklch(46% 0.015 250);
-      --nca-color-border:         oklch(86% 0.010 230);
-      --nca-color-border-input:   oklch(80% 0.010 230);
-      --nca-color-border-light:   oklch(92% 0.006 230);
-      --nca-color-table-header:   oklch(97% 0.005 240);
-      --nca-color-table-row:       oklch(99% 0.003 240);
-      --nca-color-surface-hover:   oklch(97% 0.005 240);
-      --nca-badge-draft-bg:       oklch(93% 0.010 250);
-      --nca-badge-draft-color:    oklch(30% 0.015 250);
-      --nca-shadow-focus:         0 0 0 3px oklch(46% 0.21 248 / 0.30);
+      --nca-color-primary:        #1f883d;
+      --nca-color-primary-hover:  #1a7f37;
+      --nca-color-primary-light:  oklch(96% 0.05 145);
+      --nca-color-primary-border: oklch(74% 0.13 145);
+      --nca-color-primary-muted:  oklch(80% 0.10 145);
+      --nca-color-primary-text:   #1a7f37;
+      --nca-color-primary-bg:     oklch(94% 0.07 145);
+      --nca-color-primary-fg:     #fff;
+      --nca-color-primary-tint:   oklch(56% 0.18 145 / 0.10);
+      --nca-color-primary-ring:   oklch(56% 0.18 145 / 0.35);
+      --nca-color-danger:         #cf222e;
+      --nca-color-danger-bg:      oklch(97% 0.03 25);
+      --nca-color-danger-border:  oklch(78% 0.12 25);
+      --nca-color-danger-text:    #cf222e;
+      --nca-color-danger-fg:      #cf222e;
+      --nca-color-success-bg:     oklch(95% 0.05 145);
+      --nca-color-success-border: oklch(76% 0.12 145);
+      --nca-color-success-text:   #1a7f37;
+      --nca-color-success-fg:     #1a7f37;
+      --nca-color-success-pill-bg: oklch(56% 0.18 145 / 0.12);
+      --nca-color-bg:             #f6f8fa;
+      --nca-color-surface:        #ffffff;
+      --nca-color-surface-alt:    #f6f8fa;
+      --nca-color-sidebar:        #ffffff;
+      --nca-color-sidebar-hover:  #f6f8fa;
+      --nca-color-sidebar-active: oklch(56% 0.18 145 / 0.10);
+      --nca-color-sidebar-border: #d1d9e0;
+      --nca-color-sidebar-text:   #656d76;
+      --nca-color-sidebar-muted:  #8c959f;
+      --nca-color-sidebar-title:  #1f2328;
+      --nca-color-text:           #1f2328;
+      --nca-color-text-strong:    #1f2328;
+      --nca-color-text-muted:     #656d76;
+      --nca-color-text-faint:     #8c959f;
+      --nca-color-border:         #d1d9e0;
+      --nca-color-border-input:   #afb8c1;
+      --nca-color-border-light:   #eaeef2;
+      --nca-color-table-header:   #f6f8fa;
+      --nca-color-table-row:      #ffffff;
+      --nca-color-surface-hover:  #f6f8fa;
+      --nca-badge-draft-bg:       #eaeef2;
+      --nca-badge-draft-color:    #57606a;
+      --nca-shadow-card:          0 1px 0 oklch(0% 0 0 / 0.04), 0 1px 3px oklch(0% 0 0 / 0.06);
+      --nca-shadow-elevated:      0 8px 24px oklch(0% 0 0 / 0.12), 0 2px 6px oklch(0% 0 0 / 0.06);
+      --nca-shadow-focus:         0 0 0 3px oklch(56% 0.18 145 / 0.30);
+      --nca-glass-bg:             oklch(100% 0 0 / 0.86);
+      --nca-glass-dock-bg:        oklch(100% 0 0 / 0.96);
+      --nca-minimap-bg:           oklch(96% 0.005 240 / 0.78);
+      --nca-canvas-bg:            #f6f8fa;
+      --nca-canvas-dot:           oklch(20% 0.015 250 / 0.10);
+      --nca-edge-stroke:          oklch(46% 0.015 250 / 0.45);
+
+      --nca-node-message-stripe:     #4F76A6;
+      --nca-node-message-body:       #EFF2F6;
+      --nca-node-message-edge:       #C7D2DF;
+      --nca-node-message-chip:       #DDE4ED;
+      --nca-node-message-chip-edge:  #9AB0C8;
+      --nca-node-condition-stripe:   #95713B;
+      --nca-node-condition-body:     #F4EED9;
+      --nca-node-condition-edge:     #D6C291;
+      --nca-node-condition-chip:     #E6D7A9;
+      --nca-node-condition-chip-edge:#BCA268;
+      --nca-node-action-stripe:      #7361A2;
+      --nca-node-action-body:        #F0ECF5;
+      --nca-node-action-edge:        #C9C0DB;
+      --nca-node-action-chip:        #DED4EA;
+      --nca-node-action-chip-edge:   #A99AC4;
+      --nca-node-end-stripe:         #5C636B;
+      --nca-node-end-body:           #EFF1F3;
+      --nca-node-end-edge:           #CED3D8;
+      --nca-node-end-chip:           #DFE2E8;
+      --nca-node-end-chip-edge:      #ABB1B9;
     }
 
-    /* ── GitHub Dark ──────────────────────────────────────────────────── */
+    /* ═══════════════════════════════════════════════════════════════════════
+       GitHub Dark
+    ═══════════════════════════════════════════════════════════════════════ */
     [data-nca-theme='github-dark'] {
-      --nca-color-primary:        oklch(66% 0.17 250);
-      --nca-color-primary-hover:  oklch(72% 0.17 250);
-      --nca-color-primary-light:  oklch(18% 0.08 250);
-      --nca-color-primary-border: oklch(30% 0.12 250);
-      --nca-color-primary-muted:  oklch(35% 0.10 250);
-      --nca-color-primary-text:   oklch(70% 0.15 250);
-      --nca-color-primary-bg:     oklch(15% 0.08 250);
-      --nca-color-danger:         oklch(58% 0.22 25);
-      --nca-color-danger-bg:      oklch(14% 0.06 25);
-      --nca-color-danger-border:  oklch(26% 0.10 25);
-      --nca-color-danger-text:    oklch(64% 0.16 25);
-      --nca-color-success-bg:     oklch(14% 0.06 145);
-      --nca-color-success-border: oklch(26% 0.10 145);
-      --nca-color-success-text:   oklch(64% 0.14 145);
-      --nca-color-bg:             oklch(9%  0.010 265);
-      --nca-color-surface:        oklch(13% 0.015 265);
-      --nca-color-sidebar:        oklch(5%  0.010 265);
-      --nca-color-sidebar-hover:  oklch(13% 0.015 265);
-      --nca-color-sidebar-active: oklch(18% 0.015 265);
-      --nca-color-sidebar-border: oklch(18% 0.015 265);
-      --nca-color-sidebar-text:   oklch(62% 0.015 240);
-      --nca-color-sidebar-muted:  oklch(42% 0.015 250);
-      --nca-color-sidebar-title:  oklch(96% 0.007 240);
-      --nca-color-text:           oklch(92% 0.010 240);
-      --nca-color-text-strong:    oklch(97% 0.007 240);
-      --nca-color-text-muted:     oklch(62% 0.015 240);
-      --nca-color-border:         oklch(26% 0.015 250);
-      --nca-color-border-input:   oklch(30% 0.015 250);
-      --nca-color-border-light:   oklch(18% 0.015 250);
-      --nca-color-table-header:   oklch(9%  0.010 265);
-      --nca-color-table-row:       oklch(11% 0.008 265);
-      --nca-color-surface-hover:   oklch(14% 0.012 265);
-      --nca-badge-draft-bg:       oklch(18% 0.010 265);
-      --nca-badge-draft-color:    oklch(66% 0.010 265);
-      --nca-badge-pub-bg:         oklch(14% 0.08 145);
-      --nca-badge-pub-color:      oklch(62% 0.14 145);
-      --nca-badge-arch-bg:        oklch(14% 0.08 25);
-      --nca-badge-arch-color:     oklch(62% 0.15 25);
+      --nca-color-primary:        #3fb950;
+      --nca-color-primary-hover:  #56d364;
+      --nca-color-primary-light:  oklch(20% 0.08 145);
+      --nca-color-primary-border: oklch(36% 0.13 145);
+      --nca-color-primary-muted:  oklch(42% 0.12 145);
+      --nca-color-primary-text:   #3fb950;
+      --nca-color-primary-bg:     oklch(18% 0.08 145);
+      --nca-color-primary-fg:     #0d1117;
+      --nca-color-primary-tint:   oklch(72% 0.20 145 / 0.16);
+      --nca-color-primary-ring:   oklch(72% 0.20 145 / 0.35);
+      --nca-color-danger:         #f85149;
+      --nca-color-danger-bg:      oklch(15% 0.06 25);
+      --nca-color-danger-border:  oklch(28% 0.10 25);
+      --nca-color-danger-text:    #f85149;
+      --nca-color-danger-fg:      #f85149;
+      --nca-color-success-bg:     oklch(16% 0.08 145);
+      --nca-color-success-border: oklch(30% 0.12 145);
+      --nca-color-success-text:   #3fb950;
+      --nca-color-success-fg:     #3fb950;
+      --nca-color-success-pill-bg: oklch(72% 0.20 145 / 0.16);
+      --nca-color-bg:             #0d1117;
+      --nca-color-surface:        #0d1117;
+      --nca-color-surface-alt:    #161b22;
+      --nca-color-sidebar:        #010409;
+      --nca-color-sidebar-hover:  #161b22;
+      --nca-color-sidebar-active: oklch(72% 0.20 145 / 0.15);
+      --nca-color-sidebar-border: #30363d;
+      --nca-color-sidebar-text:   #7d8590;
+      --nca-color-sidebar-muted:  #6e7681;
+      --nca-color-sidebar-title:  #f0f6fc;
+      --nca-color-text:           #f0f6fc;
+      --nca-color-text-strong:    #f0f6fc;
+      --nca-color-text-muted:     #7d8590;
+      --nca-color-text-faint:     #6e7681;
+      --nca-color-border:         #30363d;
+      --nca-color-border-input:   #484f58;
+      --nca-color-border-light:   #21262d;
+      --nca-color-table-header:   #0d1117;
+      --nca-color-table-row:      #161b22;
+      --nca-color-surface-hover:  #161b22;
+      --nca-badge-draft-bg:       #21262d;
+      --nca-badge-draft-color:    #c9d1d9;
       --nca-shadow-card:          0 1px 3px oklch(0% 0 0 / 0.40);
-      --nca-shadow-focus:         0 0 0 3px oklch(66% 0.17 250 / 0.35);
+      --nca-shadow-elevated:      0 12px 32px -10px oklch(0% 0 0 / 0.55), 0 2px 6px oklch(0% 0 0 / 0.40);
+      --nca-shadow-focus:         0 0 0 3px oklch(72% 0.20 145 / 0.35);
+      --nca-glass-bg:             oklch(15% 0.015 250 / 0.78);
+      --nca-glass-dock-bg:        oklch(15% 0.015 250 / 0.92);
+      --nca-minimap-bg:           oklch(17% 0.015 250 / 0.65);
+      --nca-canvas-bg:            #0d1117;
+      --nca-canvas-dot:           oklch(65% 0.015 250 / 0.12);
+      --nca-edge-stroke:          oklch(65% 0.015 250 / 0.45);
+
+      --nca-node-message-stripe:     #7A9DC8;
+      --nca-node-message-body:       #161E2A;
+      --nca-node-message-edge:       #28354A;
+      --nca-node-message-chip:       rgba(122,157,200,.18);
+      --nca-node-message-chip-edge:  rgba(122,157,200,.45);
+      --nca-node-condition-stripe:   #B58A4D;
+      --nca-node-condition-body:     #221C13;
+      --nca-node-condition-edge:     #3D3220;
+      --nca-node-condition-chip:     rgba(181,138,77,.18);
+      --nca-node-condition-chip-edge:rgba(181,138,77,.45);
+      --nca-node-action-stripe:      #9181C2;
+      --nca-node-action-body:        #1B1828;
+      --nca-node-action-edge:        #322E48;
+      --nca-node-action-chip:        rgba(145,129,194,.18);
+      --nca-node-action-chip-edge:   rgba(145,129,194,.45);
+      --nca-node-end-stripe:         #8b949e;
+      --nca-node-end-body:           #161b22;
+      --nca-node-end-edge:           #2a313a;
+      --nca-node-end-chip:           rgba(139,148,158,.16);
+      --nca-node-end-chip-edge:      rgba(139,148,158,.40);
     }
 
-    /* ── Solarized Light ──────────────────────────────────────────────── */
+    /* ═══════════════════════════════════════════════════════════════════════
+       Solarized Light — paper + dark teal sidebar
+    ═══════════════════════════════════════════════════════════════════════ */
     [data-nca-theme='solarized-light'] {
-      --nca-color-primary:        oklch(62% 0.11 185);
-      --nca-color-primary-hover:  oklch(56% 0.11 185);
-      --nca-color-primary-light:  oklch(96% 0.04 185);
-      --nca-color-primary-border: oklch(74% 0.08 185);
-      --nca-color-primary-muted:  oklch(78% 0.07 185);
-      --nca-color-primary-text:   oklch(38% 0.11 185);
-      --nca-color-primary-bg:     oklch(93% 0.04 185);
-      --nca-color-bg:             oklch(97% 0.030 88);
-      --nca-color-surface:        oklch(93% 0.025 88);
-      --nca-color-sidebar:        oklch(22% 0.050 215);
-      --nca-color-sidebar-hover:  oklch(28% 0.050 215);
-      --nca-color-sidebar-active: oklch(32% 0.050 215);
-      --nca-color-sidebar-border: oklch(30% 0.050 215);
-      --nca-color-sidebar-text:   oklch(60% 0.030 200);
-      --nca-color-sidebar-muted:  oklch(46% 0.040 210);
-      --nca-color-sidebar-title:  oklch(66% 0.025 200);
-      --nca-color-text:           oklch(46% 0.040 210);
-      --nca-color-text-strong:    oklch(36% 0.040 210);
-      --nca-color-text-muted:     oklch(62% 0.025 200);
-      --nca-color-border:         oklch(83% 0.040 88);
-      --nca-color-border-input:   oklch(78% 0.035 88);
-      --nca-color-border-light:   oklch(90% 0.025 88);
-      --nca-color-table-header:   oklch(93% 0.025 88);
-      --nca-color-table-row:       oklch(97% 0.012 88);
-      --nca-color-surface-hover:   oklch(95% 0.015 88);
-      --nca-badge-draft-bg:       oklch(89% 0.025 88);
-      --nca-badge-draft-color:    oklch(46% 0.040 210);
-      --nca-badge-pub-bg:         oklch(93% 0.04 145);
-      --nca-badge-pub-color:      oklch(38% 0.12 145);
-      --nca-badge-arch-bg:        oklch(93% 0.04 25);
-      --nca-badge-arch-color:     oklch(38% 0.16 25);
-      --nca-shadow-focus:         0 0 0 3px oklch(62% 0.11 185 / 0.30);
+      --nca-color-primary:        #268bd2;
+      --nca-color-primary-hover:  #1f6fa5;
+      --nca-color-primary-light:  oklch(96% 0.04 240);
+      --nca-color-primary-border: oklch(74% 0.10 240);
+      --nca-color-primary-muted:  oklch(80% 0.08 240);
+      --nca-color-primary-text:   #1f6fa5;
+      --nca-color-primary-bg:     oklch(94% 0.05 240);
+      --nca-color-primary-fg:     #fdf6e3;
+      --nca-color-primary-tint:   oklch(58% 0.15 240 / 0.10);
+      --nca-color-primary-ring:   oklch(58% 0.15 240 / 0.35);
+      --nca-color-danger:         #dc322f;
+      --nca-color-danger-bg:      oklch(96% 0.03 25);
+      --nca-color-danger-border:  oklch(78% 0.12 25);
+      --nca-color-danger-text:    #dc322f;
+      --nca-color-danger-fg:      #dc322f;
+      --nca-color-success-bg:     oklch(94% 0.05 110);
+      --nca-color-success-border: oklch(76% 0.12 110);
+      --nca-color-success-text:   #859900;
+      --nca-color-success-fg:     #859900;
+      --nca-color-success-pill-bg: oklch(70% 0.18 110 / 0.14);
+      --nca-color-bg:             #fdf6e3;
+      --nca-color-surface:        #eee8d5;
+      --nca-color-surface-alt:    #fdf6e3;
+      --nca-color-sidebar:        #002b36;
+      --nca-color-sidebar-hover:  #073642;
+      --nca-color-sidebar-active: oklch(70% 0.10 195 / 0.20);
+      --nca-color-sidebar-border: #073642;
+      --nca-color-sidebar-text:   #93a1a1;
+      --nca-color-sidebar-muted:  #657b83;
+      --nca-color-sidebar-title:  #eee8d5;
+      --nca-color-text:           #586e75;
+      --nca-color-text-strong:    #073642;
+      --nca-color-text-muted:     #657b83;
+      --nca-color-text-faint:     #93a1a1;
+      --nca-color-border:         #d9d2bb;
+      --nca-color-border-input:   #b8b09a;
+      --nca-color-border-light:   #e8e2cd;
+      --nca-color-table-header:   #eee8d5;
+      --nca-color-table-row:      #fdf6e3;
+      --nca-color-surface-hover:  #f5efd9;
+      --nca-badge-draft-bg:       #e8e2cd;
+      --nca-badge-draft-color:    #657b83;
+      --nca-shadow-focus:         0 0 0 3px oklch(58% 0.15 240 / 0.30);
+      --nca-glass-bg:             oklch(95% 0.03 80 / 0.78);
+      --nca-glass-dock-bg:        oklch(91% 0.04 80 / 0.92);
+      --nca-minimap-bg:           oklch(91% 0.04 80 / 0.78);
+      --nca-canvas-bg:            #fdf6e3;
+      --nca-canvas-dot:           oklch(40% 0.030 210 / 0.16);
+      --nca-edge-stroke:          oklch(50% 0.030 210 / 0.45);
+
+      --nca-node-message-stripe:     #268bd2;
+      --nca-node-message-body:       #EBEBD7;
+      --nca-node-message-edge:       #C8CEBB;
+      --nca-node-message-chip:       #DDE9F2;
+      --nca-node-message-chip-edge:  #8FB5CD;
+      --nca-node-condition-stripe:   #cb4b16;
+      --nca-node-condition-body:     #EDE4C6;
+      --nca-node-condition-edge:     #CFB78F;
+      --nca-node-condition-chip:     #ECD2BD;
+      --nca-node-condition-chip-edge:#CF915F;
+      --nca-node-action-stripe:      #6c71c4;
+      --nca-node-action-body:        #EAE6D2;
+      --nca-node-action-edge:        #C4C2B9;
+      --nca-node-action-chip:        #DCDBE5;
+      --nca-node-action-chip-edge:   #9C9FC4;
+      --nca-node-end-stripe:         #586e75;
+      --nca-node-end-body:           #EBE8D0;
+      --nca-node-end-edge:           #C0BBA2;
+      --nca-node-end-chip:           #D8D5B6;
+      --nca-node-end-chip-edge:      #9A9A86;
     }
 
-    /* ── Solarized Dark ───────────────────────────────────────────────── */
+    /* ═══════════════════════════════════════════════════════════════════════
+       Solarized Dark
+    ═══════════════════════════════════════════════════════════════════════ */
     [data-nca-theme='solarized-dark'] {
-      --nca-color-primary:        oklch(62% 0.11 185);
-      --nca-color-primary-hover:  oklch(68% 0.11 185);
-      --nca-color-primary-light:  oklch(18% 0.08 185);
-      --nca-color-primary-border: oklch(30% 0.09 185);
-      --nca-color-primary-muted:  oklch(34% 0.08 185);
-      --nca-color-primary-text:   oklch(68% 0.10 185);
-      --nca-color-primary-bg:     oklch(16% 0.07 185);
-      --nca-color-danger:         oklch(58% 0.20 25);
+      --nca-color-primary:        #2aa198;
+      --nca-color-primary-hover:  #5cbfb7;
+      --nca-color-primary-light:  oklch(20% 0.08 185);
+      --nca-color-primary-border: oklch(36% 0.10 185);
+      --nca-color-primary-muted:  oklch(42% 0.10 185);
+      --nca-color-primary-text:   #2aa198;
+      --nca-color-primary-bg:     oklch(18% 0.07 185);
+      --nca-color-primary-fg:     #002b36;
+      --nca-color-primary-tint:   oklch(62% 0.13 185 / 0.18);
+      --nca-color-primary-ring:   oklch(62% 0.13 185 / 0.40);
+      --nca-color-danger:         #dc322f;
       --nca-color-danger-bg:      oklch(16% 0.06 25);
       --nca-color-danger-border:  oklch(28% 0.10 25);
-      --nca-color-danger-text:    oklch(64% 0.16 25);
-      --nca-color-success-bg:     oklch(16% 0.06 145);
-      --nca-color-success-border: oklch(28% 0.10 145);
-      --nca-color-success-text:   oklch(64% 0.13 145);
-      --nca-color-bg:             oklch(15% 0.050 215);
-      --nca-color-surface:        oklch(22% 0.050 215);
-      --nca-color-sidebar:        oklch(12% 0.050 215);
-      --nca-color-sidebar-hover:  oklch(18% 0.050 215);
-      --nca-color-sidebar-active: oklch(22% 0.050 215);
-      --nca-color-sidebar-border: oklch(22% 0.050 215);
-      --nca-color-sidebar-text:   oklch(60% 0.030 200);
-      --nca-color-sidebar-muted:  oklch(46% 0.040 210);
-      --nca-color-sidebar-title:  oklch(66% 0.025 200);
-      --nca-color-text:           oklch(60% 0.030 200);
-      --nca-color-text-strong:    oklch(68% 0.025 200);
-      --nca-color-text-muted:     oklch(46% 0.040 210);
-      --nca-color-border:         oklch(26% 0.050 215);
-      --nca-color-border-input:   oklch(30% 0.050 215);
-      --nca-color-border-light:   oklch(22% 0.050 215);
-      --nca-color-table-header:   oklch(15% 0.050 215);
-      --nca-color-table-row:       oklch(18% 0.040 215);
-      --nca-color-surface-hover:   oklch(21% 0.040 215);
-      --nca-badge-draft-bg:       oklch(22% 0.050 215);
-      --nca-badge-draft-color:    oklch(60% 0.030 200);
-      --nca-badge-pub-bg:         oklch(16% 0.07 145);
-      --nca-badge-pub-color:      oklch(60% 0.11 145);
-      --nca-badge-arch-bg:        oklch(16% 0.07 25);
-      --nca-badge-arch-color:     oklch(60% 0.14 25);
+      --nca-color-danger-text:    #dc322f;
+      --nca-color-danger-fg:      #dc322f;
+      --nca-color-success-bg:     oklch(16% 0.08 110);
+      --nca-color-success-border: oklch(30% 0.12 110);
+      --nca-color-success-text:   #859900;
+      --nca-color-success-fg:     #859900;
+      --nca-color-success-pill-bg: oklch(60% 0.18 110 / 0.20);
+      --nca-color-bg:             #002b36;
+      --nca-color-surface:        #073642;
+      --nca-color-surface-alt:    #002b36;
+      --nca-color-sidebar:        #00212b;
+      --nca-color-sidebar-hover:  #073642;
+      --nca-color-sidebar-active: oklch(70% 0.13 185 / 0.22);
+      --nca-color-sidebar-border: #073642;
+      --nca-color-sidebar-text:   #839496;
+      --nca-color-sidebar-muted:  #657b83;
+      --nca-color-sidebar-title:  #eee8d5;
+      --nca-color-text:           #93a1a1;
+      --nca-color-text-strong:    #eee8d5;
+      --nca-color-text-muted:     #839496;
+      --nca-color-text-faint:     #657b83;
+      --nca-color-border:         #0f4453;
+      --nca-color-border-input:   #1a5466;
+      --nca-color-border-light:   #073642;
+      --nca-color-table-header:   #002b36;
+      --nca-color-table-row:      #073642;
+      --nca-color-surface-hover:  #0a4250;
+      --nca-badge-draft-bg:       #073642;
+      --nca-badge-draft-color:    #839496;
       --nca-shadow-card:          0 1px 3px oklch(0% 0 0 / 0.30);
-      --nca-shadow-focus:         0 0 0 3px oklch(62% 0.11 185 / 0.35);
+      --nca-shadow-elevated:      0 12px 32px -10px oklch(0% 0 0 / 0.55), 0 2px 6px oklch(0% 0 0 / 0.40);
+      --nca-shadow-focus:         0 0 0 3px oklch(62% 0.13 185 / 0.40);
+      --nca-glass-bg:             oklch(22% 0.040 215 / 0.78);
+      --nca-glass-dock-bg:        oklch(22% 0.040 215 / 0.92);
+      --nca-minimap-bg:           oklch(22% 0.040 215 / 0.65);
+      --nca-canvas-bg:            #002b36;
+      --nca-canvas-dot:           oklch(70% 0.025 200 / 0.14);
+      --nca-edge-stroke:          oklch(70% 0.025 200 / 0.45);
+
+      --nca-node-message-stripe:     #268bd2;
+      --nca-node-message-body:       #0A3E4F;
+      --nca-node-message-edge:       #1C5A72;
+      --nca-node-message-chip:       rgba(38,139,210,.18);
+      --nca-node-message-chip-edge:  rgba(38,139,210,.45);
+      --nca-node-condition-stripe:   #cb4b16;
+      --nca-node-condition-body:     #3E2418;
+      --nca-node-condition-edge:     #5C351F;
+      --nca-node-condition-chip:     rgba(203,75,22,.18);
+      --nca-node-condition-chip-edge:rgba(203,75,22,.45);
+      --nca-node-action-stripe:      #6c71c4;
+      --nca-node-action-body:        #1F2B48;
+      --nca-node-action-edge:        #33396C;
+      --nca-node-action-chip:        rgba(108,113,196,.18);
+      --nca-node-action-chip-edge:   rgba(108,113,196,.45);
+      --nca-node-end-stripe:         #93a1a1;
+      --nca-node-end-body:           #073642;
+      --nca-node-end-edge:           #1a5466;
+      --nca-node-end-chip:           rgba(147,161,161,.16);
+      --nca-node-end-chip-edge:      rgba(147,161,161,.40);
     }
 
-    /* ── Dracula Dark ─────────────────────────────────────────────────── */
+    /* ═══════════════════════════════════════════════════════════════════════
+       Dracula (dark only)
+    ═══════════════════════════════════════════════════════════════════════ */
     [data-nca-theme='dracula-dark'] {
-      --nca-color-primary:        oklch(72% 0.18 295);
-      --nca-color-primary-hover:  oklch(78% 0.18 295);
-      --nca-color-primary-light:  oklch(18% 0.08 295);
-      --nca-color-primary-border: oklch(32% 0.12 295);
-      --nca-color-primary-muted:  oklch(38% 0.12 295);
-      --nca-color-primary-text:   oklch(76% 0.16 295);
-      --nca-color-primary-bg:     oklch(16% 0.08 295);
-      --nca-color-danger:         oklch(65% 0.22 25);
+      --nca-color-primary:        #bd93f9;
+      --nca-color-primary-hover:  #caa8fa;
+      --nca-color-primary-light:  oklch(20% 0.08 295);
+      --nca-color-primary-border: oklch(36% 0.12 295);
+      --nca-color-primary-muted:  oklch(42% 0.12 295);
+      --nca-color-primary-text:   #bd93f9;
+      --nca-color-primary-bg:     oklch(18% 0.08 295);
+      --nca-color-primary-fg:     #282a36;
+      --nca-color-primary-tint:   oklch(75% 0.18 295 / 0.18);
+      --nca-color-primary-ring:   oklch(75% 0.18 295 / 0.40);
+      --nca-color-danger:         #ff5555;
       --nca-color-danger-bg:      oklch(16% 0.06 25);
       --nca-color-danger-border:  oklch(28% 0.10 25);
-      --nca-color-danger-text:    oklch(72% 0.18 25);
+      --nca-color-danger-text:    #ff5555;
+      --nca-color-danger-fg:      #ff5555;
       --nca-color-success-bg:     oklch(16% 0.08 145);
       --nca-color-success-border: oklch(28% 0.12 145);
-      --nca-color-success-text:   oklch(72% 0.18 145);
-      --nca-color-bg:             oklch(20% 0.030 280);
-      --nca-color-surface:        oklch(24% 0.030 278);
-      --nca-color-sidebar:        oklch(16% 0.025 275);
-      --nca-color-sidebar-hover:  oklch(27% 0.035 278);
-      --nca-color-sidebar-active: oklch(32% 0.040 275);
-      --nca-color-sidebar-border: oklch(32% 0.040 275);
-      --nca-color-sidebar-text:   oklch(97% 0.005 60);
-      --nca-color-sidebar-muted:  oklch(55% 0.060 280);
-      --nca-color-sidebar-title:  oklch(97% 0.005 60);
-      --nca-color-text:           oklch(97% 0.005 60);
-      --nca-color-text-strong:    oklch(99% 0.002 60);
-      --nca-color-text-muted:     oklch(55% 0.060 280);
-      --nca-color-border:         oklch(32% 0.040 275);
-      --nca-color-border-input:   oklch(36% 0.040 275);
-      --nca-color-border-light:   oklch(24% 0.030 278);
-      --nca-color-table-header:   oklch(20% 0.030 280);
-      --nca-color-table-row:       oklch(23% 0.024 280);
-      --nca-color-surface-hover:   oklch(26% 0.024 280);
-      --nca-badge-draft-bg:       oklch(28% 0.030 278);
-      --nca-badge-draft-color:    oklch(80% 0.015 280);
-      --nca-badge-pub-bg:         oklch(16% 0.10 145);
-      --nca-badge-pub-color:      oklch(78% 0.20 145);
-      --nca-badge-arch-bg:        oklch(16% 0.08 25);
-      --nca-badge-arch-color:     oklch(70% 0.18 25);
+      --nca-color-success-text:   #50fa7b;
+      --nca-color-success-fg:     #50fa7b;
+      --nca-color-success-pill-bg: oklch(78% 0.22 145 / 0.16);
+      --nca-color-bg:             #282a36;
+      --nca-color-surface:        #343746;
+      --nca-color-surface-alt:    #2b2d3a;
+      --nca-color-sidebar:        #21222c;
+      --nca-color-sidebar-hover:  #2e3041;
+      --nca-color-sidebar-active: oklch(75% 0.18 295 / 0.20);
+      --nca-color-sidebar-border: #44475a;
+      --nca-color-sidebar-text:   #6272a4;
+      --nca-color-sidebar-muted:  #565870;
+      --nca-color-sidebar-title:  #f8f8f2;
+      --nca-color-text:           #f8f8f2;
+      --nca-color-text-strong:    #f8f8f2;
+      --nca-color-text-muted:     #6272a4;
+      --nca-color-text-faint:     #565870;
+      --nca-color-border:         #44475a;
+      --nca-color-border-input:   #565970;
+      --nca-color-border-light:   #343746;
+      --nca-color-table-header:   #282a36;
+      --nca-color-table-row:      #2b2d3a;
+      --nca-color-surface-hover:  #2e3041;
+      --nca-badge-draft-bg:       #343746;
+      --nca-badge-draft-color:    #6272a4;
       --nca-shadow-card:          0 1px 3px oklch(0% 0 0 / 0.40);
-      --nca-shadow-focus:         0 0 0 3px oklch(72% 0.18 295 / 0.40);
+      --nca-shadow-elevated:      0 12px 32px -10px oklch(0% 0 0 / 0.55), 0 2px 6px oklch(0% 0 0 / 0.40);
+      --nca-shadow-focus:         0 0 0 3px oklch(75% 0.18 295 / 0.40);
+      --nca-glass-bg:             oklch(24% 0.030 278 / 0.78);
+      --nca-glass-dock-bg:        oklch(28% 0.030 278 / 0.92);
+      --nca-minimap-bg:           oklch(28% 0.030 278 / 0.65);
+      --nca-canvas-bg:            #282a36;
+      --nca-canvas-dot:           oklch(50% 0.060 280 / 0.22);
+      --nca-edge-stroke:          oklch(60% 0.060 280 / 0.45);
+
+      --nca-node-message-stripe:     #8be9fd;
+      --nca-node-message-body:       #1F3640;
+      --nca-node-message-edge:       #34525F;
+      --nca-node-message-chip:       rgba(139,233,253,.18);
+      --nca-node-message-chip-edge:  rgba(139,233,253,.45);
+      --nca-node-condition-stripe:   #ffb86c;
+      --nca-node-condition-body:     #3A2E21;
+      --nca-node-condition-edge:     #574734;
+      --nca-node-condition-chip:     rgba(255,184,108,.18);
+      --nca-node-condition-chip-edge:rgba(255,184,108,.45);
+      /* action は primary purple と被るので pink #ff79c6 を使用 */
+      --nca-node-action-stripe:      #ff79c6;
+      --nca-node-action-body:        #3A2435;
+      --nca-node-action-edge:        #573951;
+      --nca-node-action-chip:        rgba(255,121,198,.18);
+      --nca-node-action-chip-edge:   rgba(255,121,198,.45);
+      --nca-node-end-stripe:         #6272a4;
+      --nca-node-end-body:           #2E3041;
+      --nca-node-end-edge:           #44475a;
+      --nca-node-end-chip:           rgba(98,114,164,.18);
+      --nca-node-end-chip-edge:      rgba(98,114,164,.45);
     }
 
-    /* ── Monokai Dark ─────────────────────────────────────────────────── */
+    /* ═══════════════════════════════════════════════════════════════════════
+       Monokai (dark only)
+    ═══════════════════════════════════════════════════════════════════════ */
     [data-nca-theme='monokai-dark'] {
-      --nca-color-primary:        oklch(84% 0.20 127);
-      --nca-color-primary-hover:  oklch(78% 0.20 127);
-      --nca-color-primary-light:  oklch(18% 0.08 127);
-      --nca-color-primary-border: oklch(36% 0.14 127);
-      --nca-color-primary-muted:  oklch(42% 0.12 127);
-      --nca-color-primary-text:   oklch(84% 0.18 127);
-      --nca-color-primary-bg:     oklch(16% 0.08 127);
-      /* lime green L=84% → 暗い文字でコントラスト確保 */
-      --nca-color-primary-fg:     oklch(14% 0.010 120);
-      --nca-color-danger:         oklch(60% 0.25 355);
-      --nca-color-danger-bg:      oklch(15% 0.08 355);
-      --nca-color-danger-border:  oklch(28% 0.12 355);
-      --nca-color-danger-text:    oklch(66% 0.22 355);
+      --nca-color-primary:        #a6e22e;
+      --nca-color-primary-hover:  #b8e84e;
+      --nca-color-primary-light:  oklch(20% 0.08 130);
+      --nca-color-primary-border: oklch(38% 0.14 130);
+      --nca-color-primary-muted:  oklch(44% 0.13 130);
+      --nca-color-primary-text:   #a6e22e;
+      --nca-color-primary-bg:     oklch(18% 0.08 130);
+      --nca-color-primary-fg:     #272822;
+      --nca-color-primary-tint:   oklch(85% 0.20 127 / 0.16);
+      --nca-color-primary-ring:   oklch(85% 0.20 127 / 0.40);
+      --nca-color-danger:         #f92672;
+      --nca-color-danger-bg:      oklch(16% 0.08 355);
+      --nca-color-danger-border:  oklch(30% 0.13 355);
+      --nca-color-danger-text:    #f92672;
+      --nca-color-danger-fg:      #f92672;
       --nca-color-success-bg:     oklch(16% 0.10 127);
       --nca-color-success-border: oklch(30% 0.14 127);
-      --nca-color-success-text:   oklch(76% 0.18 127);
-      --nca-color-bg:             oklch(19% 0.015 120);
-      --nca-color-surface:        oklch(28% 0.015 95);
-      --nca-color-sidebar:        oklch(14% 0.010 95);
-      --nca-color-sidebar-hover:  oklch(28% 0.015 95);
-      --nca-color-sidebar-active: oklch(32% 0.015 95);
-      --nca-color-sidebar-border: oklch(32% 0.015 95);
-      --nca-color-sidebar-text:   oklch(97% 0.005 60);
-      --nca-color-sidebar-muted:  oklch(50% 0.030 85);
-      --nca-color-sidebar-title:  oklch(84% 0.20 127);
-      --nca-color-text:           oklch(97% 0.005 60);
-      --nca-color-text-strong:    oklch(99% 0.002 60);
-      --nca-color-text-muted:     oklch(50% 0.030 85);
-      --nca-color-border:         oklch(32% 0.015 95);
-      --nca-color-border-input:   oklch(36% 0.015 95);
-      --nca-color-border-light:   oklch(24% 0.012 95);
-      --nca-color-table-header:   oklch(19% 0.015 120);
-      --nca-color-table-row:       oklch(22% 0.012 120);
-      --nca-color-surface-hover:   oklch(25% 0.012 120);
-      --nca-badge-draft-bg:       oklch(28% 0.015 95);
-      --nca-badge-draft-color:    oklch(75% 0.015 85);
-      --nca-badge-pub-bg:         oklch(16% 0.10 127);
-      --nca-badge-pub-color:      oklch(76% 0.18 127);
-      --nca-badge-arch-bg:        oklch(15% 0.08 355);
-      --nca-badge-arch-color:     oklch(66% 0.22 355);
+      --nca-color-success-text:   #a6e22e;
+      --nca-color-success-fg:     #a6e22e;
+      --nca-color-success-pill-bg: oklch(85% 0.20 127 / 0.16);
+      --nca-color-bg:             #272822;
+      --nca-color-surface:        #34352e;
+      --nca-color-surface-alt:    #2e2f28;
+      --nca-color-sidebar:        #1e1f1a;
+      --nca-color-sidebar-hover:  #2d2e26;
+      --nca-color-sidebar-active: oklch(85% 0.20 127 / 0.16);
+      --nca-color-sidebar-border: #3e3d32;
+      --nca-color-sidebar-text:   #75715e;
+      --nca-color-sidebar-muted:  #5d5b51;
+      --nca-color-sidebar-title:  #f8f8f2;
+      --nca-color-text:           #f8f8f2;
+      --nca-color-text-strong:    #f8f8f2;
+      --nca-color-text-muted:     #a59f85;
+      --nca-color-text-faint:     #75715e;
+      --nca-color-border:         #49483e;
+      --nca-color-border-input:   #5d5b51;
+      --nca-color-border-light:   #3a3a32;
+      --nca-color-table-header:   #272822;
+      --nca-color-table-row:      #2e2f28;
+      --nca-color-surface-hover:  #3a3b34;
+      --nca-badge-draft-bg:       #34352e;
+      --nca-badge-draft-color:    #a59f85;
       --nca-shadow-card:          0 1px 3px oklch(0% 0 0 / 0.40);
-      --nca-shadow-focus:         0 0 0 3px oklch(84% 0.20 127 / 0.35);
+      --nca-shadow-elevated:      0 12px 32px -10px oklch(0% 0 0 / 0.55), 0 2px 6px oklch(0% 0 0 / 0.40);
+      --nca-shadow-focus:         0 0 0 3px oklch(85% 0.20 127 / 0.35);
+      --nca-glass-bg:             oklch(28% 0.015 95 / 0.78);
+      --nca-glass-dock-bg:        oklch(30% 0.015 95 / 0.92);
+      --nca-minimap-bg:           oklch(30% 0.015 95 / 0.65);
+      --nca-canvas-bg:            #272822;
+      --nca-canvas-dot:           oklch(48% 0.030 90 / 0.25);
+      --nca-edge-stroke:          oklch(60% 0.030 90 / 0.50);
+
+      --nca-node-message-stripe:     #66d9ef;
+      --nca-node-message-body:       #1F3038;
+      --nca-node-message-edge:       #2E4651;
+      --nca-node-message-chip:       rgba(102,217,239,.18);
+      --nca-node-message-chip-edge:  rgba(102,217,239,.45);
+      --nca-node-condition-stripe:   #fd971f;
+      --nca-node-condition-body:     #38291A;
+      --nca-node-condition-edge:     #5A3D1F;
+      --nca-node-condition-chip:     rgba(253,151,31,.18);
+      --nca-node-condition-chip-edge:rgba(253,151,31,.45);
+      /* action は primary green と被るので purple #ae81ff を使用 */
+      --nca-node-action-stripe:      #ae81ff;
+      --nca-node-action-body:        #2C1F3D;
+      --nca-node-action-edge:        #412E5E;
+      --nca-node-action-chip:        rgba(174,129,255,.18);
+      --nca-node-action-chip-edge:   rgba(174,129,255,.45);
+      --nca-node-end-stripe:         #75715e;
+      --nca-node-end-body:           #2E2D24;
+      --nca-node-end-edge:           #49483e;
+      --nca-node-end-chip:           rgba(117,113,94,.18);
+      --nca-node-end-chip-edge:      rgba(117,113,94,.40);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    /* ブラウザ UA stylesheet が button/input 等のフォントをリセットするのを防ぐ */
     button, input, select, textarea { font-family: inherit; font-size: inherit; }
     body {
-      /* --nca-font-body は JS (applyLocaleFontFamily) でロケール別に上書きされる */
       font-family: var(--nca-font-body, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif);
       font-size: var(--nca-font-md);
       line-height: 1.6;
@@ -411,7 +706,6 @@
     }
     #root { min-height: 100vh; }
 
-    /* ── Focus ring (アクセシビリティ) ──────────────────────────────────── */
     :focus-visible { outline: none; box-shadow: var(--nca-shadow-focus); }
   </style>
 </head>

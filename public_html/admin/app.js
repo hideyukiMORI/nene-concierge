@@ -21738,7 +21738,7 @@ var NeNeAdmin = (() => {
               "The result of getSnapshot should be cached to avoid an infinite loop"
             ), didWarnUncachedGetSnapshot = true);
           }
-          cachedValue = useState18({
+          cachedValue = useState19({
             inst: { value, getSnapshot }
           });
           var inst = cachedValue[0].inst, forceUpdate = cachedValue[1];
@@ -21776,7 +21776,7 @@ var NeNeAdmin = (() => {
           return getSnapshot();
         }
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-        var React15 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState18 = React15.useState, useEffect17 = React15.useEffect, useLayoutEffect5 = React15.useLayoutEffect, useDebugValue2 = React15.useDebugValue, didWarnOld18Alpha = false, didWarnUncachedGetSnapshot = false, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
+        var React15 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState19 = React15.useState, useEffect17 = React15.useEffect, useLayoutEffect5 = React15.useLayoutEffect, useDebugValue2 = React15.useDebugValue, didWarnOld18Alpha = false, didWarnUncachedGetSnapshot = false, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
         exports.useSyncExternalStore = void 0 !== React15.useSyncExternalStore ? React15.useSyncExternalStore : shim;
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(Error());
       })();
@@ -21875,7 +21875,7 @@ var NeNeAdmin = (() => {
   });
 
   // src/admin/index.tsx
-  var import_react17 = __toESM(require_react());
+  var import_react18 = __toESM(require_react());
   var import_client = __toESM(require_client());
 
   // node_modules/react-router/dist/development/chunk-4N6VE7H7.mjs
@@ -24765,20 +24765,25 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     primaryMuted: "var(--nca-color-primary-muted)",
     primaryText: "var(--nca-color-primary-text)",
     primaryBg: "var(--nca-color-primary-bg)",
-    /** primary ボタン/バッジの前景色 — 明るいテーマでは暗色に上書きされる */
     primaryFg: "var(--nca-color-primary-fg)",
+    primaryTint: "var(--nca-color-primary-tint)",
+    primaryRing: "var(--nca-color-primary-ring)",
     // ── Danger ───────────────────────────────────────────────────────────────
     danger: "var(--nca-color-danger)",
     dangerBg: "var(--nca-color-danger-bg)",
     dangerBorder: "var(--nca-color-danger-border)",
     dangerText: "var(--nca-color-danger-text)",
+    dangerFg: "var(--nca-color-danger-fg)",
     // ── Success ──────────────────────────────────────────────────────────────
     successBg: "var(--nca-color-success-bg)",
     successBorder: "var(--nca-color-success-border)",
     successText: "var(--nca-color-success-text)",
+    successFg: "var(--nca-color-success-fg)",
+    successPillBg: "var(--nca-color-success-pill-bg)",
     // ── Surface & Background ─────────────────────────────────────────────────
     bg: "var(--nca-color-bg)",
     surface: "var(--nca-color-surface)",
+    surfaceAlt: "var(--nca-color-surface-alt)",
     // ── Sidebar ──────────────────────────────────────────────────────────────
     sidebar: "var(--nca-color-sidebar)",
     sidebarHover: "var(--nca-color-sidebar-hover)",
@@ -24791,6 +24796,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     text: "var(--nca-color-text)",
     textStrong: "var(--nca-color-text-strong)",
     textMuted: "var(--nca-color-text-muted)",
+    textFaint: "var(--nca-color-text-faint)",
     // ── Border ───────────────────────────────────────────────────────────────
     border: "var(--nca-color-border)",
     borderInput: "var(--nca-color-border-input)",
@@ -24811,6 +24817,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     radiusMd: "var(--nca-radius-md)",
     radiusLg: "var(--nca-radius-lg)",
     radiusXl: "var(--nca-radius-xl)",
+    radiusNode: "var(--nca-radius-node)",
     // ── Font size ────────────────────────────────────────────────────────────
     fontXs: "var(--nca-font-xs)",
     fontSm: "var(--nca-font-sm)",
@@ -24821,17 +24828,58 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     font2xl: "var(--nca-font-2xl)",
     // ── Sidebar width ────────────────────────────────────────────────────────
     sidebarWidth: "var(--nca-sidebar-width)",
+    sidebarWidthSlim: "var(--nca-sidebar-width-slim)",
+    editorHeaderH: "var(--nca-editor-header-height)",
+    editorDrawerW: "var(--nca-editor-drawer-width)",
     // ── Shadow ───────────────────────────────────────────────────────────────
     shadowCard: "var(--nca-shadow-card)",
+    shadowElevated: "var(--nca-shadow-elevated)",
     shadowFocus: "var(--nca-shadow-focus)",
+    // ── Glass / Dock / Minimap (v2 editor) ───────────────────────────────────
+    glassBg: "var(--nca-glass-bg)",
+    glassDockBg: "var(--nca-glass-dock-bg)",
+    minimapBg: "var(--nca-minimap-bg)",
+    // ── Canvas (v2 editor) ───────────────────────────────────────────────────
+    canvasBg: "var(--nca-canvas-bg)",
+    canvasDot: "var(--nca-canvas-dot)",
+    edgeStroke: "var(--nca-edge-stroke)",
     // ── Control heights ──────────────────────────────────────────────────────
-    // :root の --nca-control-height* を変えるだけでサイト全体に反映される
     controlHeight: "var(--nca-control-height)",
     controlHeightSm: "var(--nca-control-height-sm)",
     controlHeightXs: "var(--nca-control-height-xs)",
     // ── Motion ───────────────────────────────────────────────────────────────
     transitionFast: "var(--nca-transition-fast)",
     transitionNormal: "var(--nca-transition-normal)"
+  };
+  var NODE_TOKENS = {
+    message: {
+      stripe: "var(--nca-node-message-stripe)",
+      body: "var(--nca-node-message-body)",
+      edge: "var(--nca-node-message-edge)",
+      chip: "var(--nca-node-message-chip)",
+      chipEdge: "var(--nca-node-message-chip-edge)"
+    },
+    condition: {
+      stripe: "var(--nca-node-condition-stripe)",
+      body: "var(--nca-node-condition-body)",
+      edge: "var(--nca-node-condition-edge)",
+      chip: "var(--nca-node-condition-chip)",
+      chipEdge: "var(--nca-node-condition-chip-edge)"
+    },
+    action: {
+      stripe: "var(--nca-node-action-stripe)",
+      body: "var(--nca-node-action-body)",
+      edge: "var(--nca-node-action-edge)",
+      chip: "var(--nca-node-action-chip)",
+      chipEdge: "var(--nca-node-action-chip-edge)"
+    },
+    end: {
+      stripe: "var(--nca-node-end-stripe)",
+      body: "var(--nca-node-end-body)",
+      edge: "var(--nca-node-end-edge)",
+      chip: "var(--nca-node-end-chip)",
+      chipEdge: "var(--nca-node-end-chip-edge)"
+    }
   };
 
   // src/admin/i18n/i18n-context.tsx
@@ -24899,6 +24947,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "common.edit": "Edit",
     "common.cancel": "Cancel",
     "common.close": "Close",
+    "common.remove": "Remove",
+    "common.search": "Search nodes / actions\u2026",
+    "common.history": "History",
     "common.backToList": "Back to list",
     "common.new": "+ New",
     "common.add": "+ Add",
@@ -25009,6 +25060,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "node.addChoicePrompt": "Enter choice text",
     "node.variableName": "Variable name (to collect input)",
     "node.variablePlaceholder": "e.g. user_name",
+    "node.variableHint": "Variable name to reference in subsequent nodes",
+    "node.tab.config": "Config",
+    "node.tab.analytics": "Analytics",
+    "node.tab.connections": "Connections",
+    "node.edited": "Edited",
     "node.conditionVar": "Variable",
     "node.conditionVarPlaceholder": "e.g. user_answer",
     "node.operator": "Operator",
@@ -25126,6 +25182,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "common.edit": "\u7DE8\u96C6",
     "common.cancel": "\u30AD\u30E3\u30F3\u30BB\u30EB",
     "common.close": "\u9589\u3058\u308B",
+    "common.remove": "\u524A\u9664",
+    "common.search": "\u30CE\u30FC\u30C9 / \u30A2\u30AF\u30B7\u30E7\u30F3\u3092\u691C\u7D22\u2026",
+    "common.history": "\u5C65\u6B74",
     "common.backToList": "\u4E00\u89A7\u3078\u623B\u308B",
     "common.new": "\uFF0B \u65B0\u898F\u4F5C\u6210",
     "common.add": "\uFF0B \u8FFD\u52A0",
@@ -25236,6 +25295,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "node.addChoicePrompt": "\u9078\u629E\u80A2\u30C6\u30AD\u30B9\u30C8\u3092\u5165\u529B",
     "node.variableName": "\u5909\u6570\u540D\uFF08\u5165\u529B\u3092\u53CE\u96C6\u3059\u308B\u5834\u5408\uFF09",
     "node.variablePlaceholder": "\u4F8B: user_name",
+    "node.variableHint": "\u6B21\u306E\u30CE\u30FC\u30C9\u3067\u53C2\u7167\u3059\u308B\u5909\u6570\u540D",
+    "node.tab.config": "\u8A2D\u5B9A",
+    "node.tab.analytics": "\u5206\u6790",
+    "node.tab.connections": "\u63A5\u7D9A",
+    "node.edited": "\u66F4\u65B0\u6E08\u307F",
     "node.conditionVar": "\u5909\u6570\u540D",
     "node.conditionVarPlaceholder": "\u4F8B: user_answer",
     "node.operator": "\u6F14\u7B97\u5B50",
@@ -25350,7 +25414,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "common.delete": "Supprimer",
     "common.edit": "Modifier",
     "common.cancel": "Annuler",
-    "common.close": "Close",
+    "common.close": "Fermer",
+    "common.remove": "Supprimer",
+    "common.search": "Rechercher n\u0153uds / actions\u2026",
+    "common.history": "Historique",
     "common.backToList": "Retour \xE0 la liste",
     "common.new": "+ Nouveau",
     "common.add": "+ Ajouter",
@@ -25432,6 +25499,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "node.choices": "Choix rapides",
     "node.addChoice": "+ Ajouter un choix",
     "node.variableName": "Nom de variable (pour collecter la saisie)",
+    "node.variableHint": "Nom de variable \xE0 r\xE9f\xE9rencer dans les n\u0153uds suivants",
+    "node.tab.config": "Config",
+    "node.tab.analytics": "Analytiques",
+    "node.tab.connections": "Connexions",
+    "node.edited": "Modifi\xE9",
     "node.conditionVar": "Variable",
     "node.operator": "Op\xE9rateur",
     "node.compareValue": "Valeur de comparaison",
@@ -25523,7 +25595,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "common.delete": "\u5220\u9664",
     "common.edit": "\u7F16\u8F91",
     "common.cancel": "\u53D6\u6D88",
-    "common.close": "Close",
+    "common.close": "\u5173\u95ED",
+    "common.remove": "\u79FB\u9664",
+    "common.search": "\u641C\u7D22\u8282\u70B9 / \u64CD\u4F5C\u2026",
+    "common.history": "\u5386\u53F2",
     "common.backToList": "\u8FD4\u56DE\u5217\u8868",
     "common.new": "\uFF0B \u65B0\u5EFA",
     "common.add": "\uFF0B \u6DFB\u52A0",
@@ -25605,6 +25680,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "node.choices": "\u9009\u9879\uFF08\u5FEB\u6377\u56DE\u590D\uFF09",
     "node.addChoice": "\uFF0B \u6DFB\u52A0\u9009\u9879",
     "node.variableName": "\u53D8\u91CF\u540D\uFF08\u7528\u4E8E\u6536\u96C6\u8F93\u5165\uFF09",
+    "node.variableHint": "\u5728\u540E\u7EED\u8282\u70B9\u4E2D\u5F15\u7528\u7684\u53D8\u91CF\u540D",
+    "node.tab.config": "\u914D\u7F6E",
+    "node.tab.analytics": "\u5206\u6790",
+    "node.tab.connections": "\u8FDE\u63A5",
+    "node.edited": "\u5DF2\u7F16\u8F91",
     "node.conditionVar": "\u53D8\u91CF",
     "node.operator": "\u8FD0\u7B97\u7B26",
     "node.compareValue": "\u6BD4\u8F83\u503C",
@@ -25696,7 +25776,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "common.delete": "Excluir",
     "common.edit": "Editar",
     "common.cancel": "Cancelar",
-    "common.close": "Close",
+    "common.close": "Fechar",
+    "common.remove": "Remover",
+    "common.search": "Buscar n\xF3s / a\xE7\xF5es\u2026",
+    "common.history": "Hist\xF3rico",
     "common.backToList": "Voltar \xE0 lista",
     "common.new": "+ Novo",
     "common.add": "+ Adicionar",
@@ -25778,6 +25861,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "node.choices": "Op\xE7\xF5es (resposta r\xE1pida)",
     "node.addChoice": "+ Adicionar op\xE7\xE3o",
     "node.variableName": "Nome da vari\xE1vel (para coletar entrada)",
+    "node.variableHint": "Nome da vari\xE1vel para referenciar nos n\xF3s seguintes",
+    "node.tab.config": "Configura\xE7\xE3o",
+    "node.tab.analytics": "An\xE1lises",
+    "node.tab.connections": "Conex\xF5es",
+    "node.edited": "Editado",
     "node.conditionVar": "Vari\xE1vel",
     "node.operator": "Operador",
     "node.compareValue": "Valor de compara\xE7\xE3o",
@@ -25869,7 +25957,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "common.delete": "L\xF6schen",
     "common.edit": "Bearbeiten",
     "common.cancel": "Abbrechen",
-    "common.close": "Close",
+    "common.close": "Schlie\xDFen",
+    "common.remove": "Entfernen",
+    "common.search": "Knoten / Aktionen suchen\u2026",
+    "common.history": "Verlauf",
     "common.backToList": "Zur Liste",
     "common.new": "+ Neu",
     "common.add": "+ Hinzuf\xFCgen",
@@ -25951,6 +26042,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "node.choices": "Auswahlm\xF6glichkeiten (Schnellantwort)",
     "node.addChoice": "+ Auswahl hinzuf\xFCgen",
     "node.variableName": "Variablenname (zum Erfassen von Eingaben)",
+    "node.variableHint": "Variablenname f\xFCr die Referenz in nachfolgenden Knoten",
+    "node.tab.config": "Konfiguration",
+    "node.tab.analytics": "Analyse",
+    "node.tab.connections": "Verbindungen",
+    "node.edited": "Bearbeitet",
     "node.conditionVar": "Variable",
     "node.operator": "Operator",
     "node.compareValue": "Vergleichswert",
@@ -26105,19 +26201,64 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     el.style.borderColor = T.borderInput;
     el.style.boxShadow = "none";
   }
-  var NAV_ICONS = {
-    "/dashboard": "\u229E",
-    "/scenarios": "\u2261",
-    "/appearance": "\u25CE",
-    "/credentials": "\u25C6",
-    "/action-logs": "\u2263",
-    "/sessions": "\u25CB",
-    "/settings": "\u2699"
+  var I = {
+    dashboard: /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("svg", { width: "15", height: "15", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.7", strokeLinecap: "round", strokeLinejoin: "round", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("rect", { x: "3", y: "3", width: "7", height: "9" }),
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("rect", { x: "14", y: "3", width: "7", height: "5" }),
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("rect", { x: "14", y: "12", width: "7", height: "9" }),
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("rect", { x: "3", y: "16", width: "7", height: "5" })
+    ] }),
+    flow: /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("svg", { width: "15", height: "15", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.7", strokeLinecap: "round", strokeLinejoin: "round", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("rect", { x: "3", y: "3", width: "6", height: "6", rx: "1" }),
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("rect", { x: "15", y: "15", width: "6", height: "6", rx: "1" }),
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("rect", { x: "9", y: "9", width: "6", height: "6", rx: "1" })
+    ] }),
+    palette: /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("svg", { width: "15", height: "15", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.7", strokeLinecap: "round", strokeLinejoin: "round", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("circle", { cx: "12", cy: "12", r: "9" }),
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("circle", { cx: "8", cy: "9", r: "1.2", fill: "currentColor" }),
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("circle", { cx: "15", cy: "8", r: "1.2", fill: "currentColor" }),
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("circle", { cx: "16.5", cy: "13", r: "1.2", fill: "currentColor" })
+    ] }),
+    key: /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("svg", { width: "15", height: "15", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.7", strokeLinecap: "round", strokeLinejoin: "round", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("circle", { cx: "7.5", cy: "15.5", r: "3.5" }),
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "m21 2-9.6 9.6" }),
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "m15.5 7.5 3 3L22 7l-3-3" })
+    ] }),
+    logs: /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("svg", { width: "15", height: "15", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.7", strokeLinecap: "round", strokeLinejoin: "round", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" }),
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "M14 2v6h6M8 13h8M8 17h6" })
+    ] }),
+    sessions: /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("svg", { width: "15", height: "15", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.7", strokeLinecap: "round", strokeLinejoin: "round", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("circle", { cx: "12", cy: "12", r: "9" }),
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("circle", { cx: "12", cy: "12", r: "3" })
+    ] }),
+    settings: /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("svg", { width: "15", height: "15", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.7", strokeLinecap: "round", strokeLinejoin: "round", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("circle", { cx: "12", cy: "12", r: "3" }),
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" })
+    ] }),
+    logout: /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("svg", { width: "15", height: "15", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.7", strokeLinecap: "round", strokeLinejoin: "round", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" }),
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("polyline", { points: "16 17 21 12 16 7" }),
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("line", { x1: "21", y1: "12", x2: "9", y2: "12" })
+    ] }),
+    sun: /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("svg", { width: "13", height: "13", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.7", strokeLinecap: "round", strokeLinejoin: "round", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("circle", { cx: "12", cy: "12", r: "4" }),
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" })
+    ] }),
+    moon: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("svg", { width: "13", height: "13", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.7", strokeLinecap: "round", strokeLinejoin: "round", children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" }) })
   };
-  function NavItem({ to, label, open }) {
+  var NAV_ITEMS = [
+    { to: "/dashboard", icon: I.dashboard, key: "nav.dashboard" },
+    { to: "/scenarios", icon: I.flow, key: "nav.scenarios", divider: true },
+    { to: "/appearance", icon: I.palette, key: "nav.appearance" },
+    { to: "/credentials", icon: I.key, key: "nav.credentials" },
+    { to: "/action-logs", icon: I.logs, key: "nav.actionLogs" },
+    { to: "/sessions", icon: I.sessions, key: "nav.sessions", divider: true },
+    { to: "/settings", icon: I.settings, key: "nav.settings" }
+  ];
+  function NavItem({ to, icon, label, open }) {
     const loc = useLocation();
     const active = loc.pathname.startsWith(to);
-    const icon = NAV_ICONS[to] ?? "\xB7";
     return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
       Link,
       {
@@ -26129,15 +26270,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           justifyContent: open ? "flex-start" : "center",
           gap: open ? 10 : 0,
           padding: open ? "7px 12px" : "7px 0",
-          margin: "1px 0",
+          margin: "1px 8px",
           color: active ? T.sidebarTitle : T.sidebarText,
           textDecoration: "none",
-          borderRadius: T.radiusMd,
+          borderRadius: T.radiusLg,
           background: active ? T.sidebarActive : "transparent",
           fontWeight: active ? 600 : 400,
           fontSize: T.fontBase,
           overflow: "hidden",
           whiteSpace: "nowrap",
+          position: "relative",
           transition: `background ${T.transitionFast}, color ${T.transitionFast}`
         },
         onMouseEnter: (e) => {
@@ -26153,18 +26295,62 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           }
         },
         children: [
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: { opacity: 0.75, fontSize: 13, lineHeight: 1, flexShrink: 0 }, children: icon }),
+          active && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: {
+            position: "absolute",
+            left: -8,
+            top: 5,
+            bottom: 5,
+            width: 2,
+            background: T.primary,
+            borderRadius: 2
+          } }),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: {
+            display: "inline-flex",
+            flexShrink: 0,
+            color: active ? T.primary : "currentColor",
+            opacity: active ? 1 : 0.75
+          }, children: icon }),
           open && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: label })
         ]
       }
     );
   }
-  function NavDivider() {
-    return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { style: {
-      margin: "10px 0",
-      borderTop: `1px solid ${T.sidebarBorder}`,
-      opacity: 0.5
-    } });
+  function SlimNavItem({ to, icon, label }) {
+    const loc = useLocation();
+    const active = loc.pathname.startsWith(to);
+    return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
+      Link,
+      {
+        to,
+        title: label,
+        "aria-label": label,
+        style: {
+          width: 36,
+          height: 36,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          borderRadius: 7,
+          position: "relative",
+          background: active ? T.sidebarActive : "transparent",
+          color: active ? T.primary : T.sidebarText,
+          textDecoration: "none",
+          transition: `background ${T.transitionFast}, color ${T.transitionFast}`
+        },
+        children: [
+          active && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: {
+            position: "absolute",
+            left: -10,
+            top: 9,
+            bottom: 9,
+            width: 2.5,
+            background: T.primary,
+            borderRadius: 2
+          } }),
+          icon
+        ]
+      }
+    );
   }
   function Layout({ variant = "default" }) {
     const nav = useNavigate();
@@ -26182,6 +26368,108 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     function logout() {
       clearToken();
       nav("/");
+    }
+    if (variant === "editor") {
+      return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { style: { display: "flex", minHeight: "100vh" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("aside", { style: {
+          width: T.sidebarWidthSlim,
+          flexShrink: 0,
+          background: T.sidebar,
+          color: T.sidebarText,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          borderRight: `1px solid ${T.sidebarBorder}`,
+          position: "sticky",
+          top: 0,
+          height: "100vh",
+          padding: "12px 0",
+          gap: 4
+        }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { title: t("nav.brand"), style: {
+            width: 34,
+            height: 34,
+            borderRadius: 8,
+            background: T.primary,
+            color: T.primaryFg,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontWeight: 800,
+            fontSize: 14,
+            marginBottom: 6
+          }, children: "N" }),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { style: { width: 28, height: 1, background: T.sidebarBorder, marginBottom: 6 } }),
+          NAV_ITEMS.map((n, i) => /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("span", { style: { display: "contents" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(SlimNavItem, { to: n.to, icon: n.icon, label: t(n.key) }),
+            "divider" in n && n.divider && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { style: { width: 28, height: 1, background: T.sidebarBorder, margin: "4px 0" } })
+          ] }, i)),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { style: { flex: 1 } }),
+          canToggleVariant2 && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+            "button",
+            {
+              onClick: toggleVariant,
+              title: themeVariant2 === "dark" ? t("theme.toggleLight") : t("theme.toggleDark"),
+              "aria-label": themeVariant2 === "dark" ? t("theme.toggleLight") : t("theme.toggleDark"),
+              style: {
+                width: 36,
+                height: 36,
+                borderRadius: 7,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: "transparent",
+                border: "none",
+                cursor: "pointer",
+                color: themeVariant2 === "dark" ? "#FBBF24" : T.sidebarText
+              },
+              children: themeVariant2 === "dark" ? I.sun : I.moon
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+            "button",
+            {
+              onClick: logout,
+              title: t("nav.logout"),
+              "aria-label": t("nav.logout"),
+              style: {
+                width: 36,
+                height: 36,
+                borderRadius: 7,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: "transparent",
+                border: "none",
+                cursor: "pointer",
+                color: T.sidebarText
+              },
+              children: I.logout
+            }
+          ),
+          email && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { title: email, style: {
+            width: 30,
+            height: 30,
+            borderRadius: 99,
+            background: "linear-gradient(135deg, #F97316, #DB2777)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "#fff",
+            fontWeight: 700,
+            fontSize: 11,
+            marginTop: 4
+          }, children: email[0]?.toUpperCase() ?? "?" })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("main", { style: {
+          flex: 1,
+          minWidth: 0,
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
+          background: T.bg
+        }, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(Outlet, {}) })
+      ] });
     }
     const sidebarIconBtn = {
       flexShrink: 0,
@@ -26253,12 +26541,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               onClick: toggleSidebar,
               title: open ? t("nav.collapseSidebar") : t("nav.expandSidebar"),
               "aria-label": open ? t("nav.collapseSidebar") : t("nav.expandSidebar"),
-              style: {
-                ...sidebarIconBtn,
-                background: "transparent",
-                border: "none",
-                fontSize: 16
-              },
+              style: { ...sidebarIconBtn, background: "transparent", border: "none", fontSize: 16 },
               onMouseEnter: (e) => {
                 e.currentTarget.style.background = T.sidebarHover;
                 e.currentTarget.style.color = T.sidebarTitle;
@@ -26271,22 +26554,15 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             }
           )
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("nav", { style: {
+        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("nav", { style: {
           flex: 1,
-          padding: open ? "12px 8px" : "12px 4px",
+          padding: open ? "12px 0" : "12px 4px",
           overflowY: "auto",
           overflowX: "hidden"
-        }, "aria-label": "Main", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/dashboard", label: t("nav.dashboard"), open }),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/scenarios", label: t("nav.scenarios"), open }),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavDivider, {}),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/appearance", label: t("nav.appearance"), open }),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/credentials", label: t("nav.credentials"), open }),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/action-logs", label: t("nav.actionLogs"), open }),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/sessions", label: t("nav.sessions"), open }),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavDivider, {}),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: "/settings", label: t("nav.settings"), open })
-        ] }),
+        }, "aria-label": "Main", children: NAV_ITEMS.map((n, i) => /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("span", { style: { display: "contents" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: n.to, icon: n.icon, label: t(n.key), open }),
+          "divider" in n && n.divider && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { style: { margin: "10px 0", borderTop: `1px solid ${T.sidebarBorder}`, opacity: 0.5 } })
+        ] }, i)) }),
         /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { style: {
           flexShrink: 0,
           padding: open ? "10px 12px 12px" : "8px 4px",
@@ -26297,7 +26573,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           gap: open ? 0 : 6
         }, children: [
           open && /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(import_jsx_runtime3.Fragment, { children: [
-            email && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { style: {
+            email && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { title: email, style: {
               fontSize: T.fontXs,
               color: T.sidebarMuted,
               padding: "0 2px",
@@ -26305,7 +26581,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               overflow: "hidden",
               textOverflow: "ellipsis",
               whiteSpace: "nowrap"
-            }, title: email, children: email }),
+            }, children: email }),
             /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 6 }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
                 "select",
@@ -26337,15 +26613,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                   "aria-label": themeVariant2 === "dark" ? t("theme.toggleLight") : t("theme.toggleDark"),
                   title: themeVariant2 === "dark" ? t("theme.toggleLight") : t("theme.toggleDark"),
                   style: sidebarIconBtn,
-                  onMouseEnter: (e) => {
-                    e.currentTarget.style.background = T.sidebarHover;
-                    e.currentTarget.style.color = T.sidebarTitle;
-                  },
-                  onMouseLeave: (e) => {
-                    e.currentTarget.style.background = T.sidebarActive;
-                    e.currentTarget.style.color = T.sidebarText;
-                  },
-                  children: themeVariant2 === "dark" ? "\u2600" : "\u{1F319}"
+                  children: themeVariant2 === "dark" ? I.sun : I.moon
                 }
               ),
               /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
@@ -26355,17 +26623,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                   title: t("nav.logout"),
                   "aria-label": t("nav.logout"),
                   style: sidebarIconBtn,
-                  onMouseEnter: (e) => {
-                    e.currentTarget.style.background = "oklch(15% 0.05 25 / 0.8)";
-                    e.currentTarget.style.color = "oklch(75% 0.08 25)";
-                    e.currentTarget.style.borderColor = "oklch(30% 0.08 25)";
-                  },
-                  onMouseLeave: (e) => {
-                    e.currentTarget.style.background = T.sidebarActive;
-                    e.currentTarget.style.color = T.sidebarText;
-                    e.currentTarget.style.borderColor = T.sidebarBorder;
-                  },
-                  children: "\u21AA"
+                  children: I.logout
                 }
               )
             ] })
@@ -26377,32 +26635,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               title: t("nav.logout"),
               "aria-label": t("nav.logout"),
               style: sidebarIconBtn,
-              onMouseEnter: (e) => {
-                e.currentTarget.style.background = "oklch(15% 0.05 25 / 0.8)";
-                e.currentTarget.style.color = "oklch(75% 0.08 25)";
-                e.currentTarget.style.borderColor = "oklch(30% 0.08 25)";
-              },
-              onMouseLeave: (e) => {
-                e.currentTarget.style.background = T.sidebarActive;
-                e.currentTarget.style.color = T.sidebarText;
-                e.currentTarget.style.borderColor = T.sidebarBorder;
-              },
-              children: "\u21AA"
+              children: I.logout
             }
           )
         ] })
       ] }),
-      variant === "editor" ? (
-        /* エディタ: padding なし・maxWidth なし・フル高さ */
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("main", { style: {
-          flex: 1,
-          minWidth: 0,
-          display: "flex",
-          flexDirection: "column",
-          overflow: "hidden",
-          background: T.bg
-        }, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(Outlet, {}) })
-      ) : /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("main", { style: {
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("main", { style: {
         flex: 1,
         minWidth: 0,
         overflowY: "auto",
@@ -26411,10 +26649,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       }, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { style: { maxWidth: 960, margin: "0 auto" }, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(Outlet, {}) }) })
     ] });
   }
-  function PageTitle({
-    children: children2,
-    style: style2
-  }) {
+  function PageTitle({ children: children2, style: style2 }) {
     return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("h1", { style: {
       fontSize: T.font2xl,
       fontWeight: 700,
@@ -26425,10 +26660,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ...style2
     }, children: children2 });
   }
-  function Card({
-    children: children2,
-    style: style2
-  }) {
+  function Card({ children: children2, style: style2 }) {
     return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { style: {
       background: T.surface,
       border: `1px solid ${T.border}`,
@@ -26451,14 +26683,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       alignItems: "center",
       justifyContent: "center",
       height: T.controlHeight,
-      // ← CSS 変数 — 直書き禁止
       padding: "0 12px",
       gap: 6,
       borderRadius: T.radiusMd,
       fontWeight: 600,
       fontSize: T.fontBase,
       cursor: disabled ? "not-allowed" : "pointer",
-      border: "1.5px solid transparent",
+      border: "1px solid transparent",
       boxSizing: "border-box",
       lineHeight: 1,
       whiteSpace: "nowrap",
@@ -26483,12 +26714,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         },
         onMouseLeave: (e) => {
           e.currentTarget.style.filter = "";
-        },
-        onMouseDown: (e) => {
-          if (!disabled) e.currentTarget.style.filter = "brightness(0.83)";
-        },
-        onMouseUp: (e) => {
-          if (!disabled) e.currentTarget.style.filter = "brightness(0.90)";
         },
         children: children2
       }
@@ -26545,25 +26770,17 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var FIELD_INPUT_BASE = {
     width: "100%",
     height: T.controlHeight,
-    // ← CSS 変数
     padding: "0 12px",
     boxSizing: "border-box",
     borderRadius: T.radiusMd,
-    border: `1.5px solid ${T.borderInput}`,
+    border: `1px solid ${T.borderInput}`,
     fontSize: T.fontMd,
     outline: "none",
     background: T.surface,
     color: T.text,
     transition: `border-color ${T.transitionFast}, box-shadow ${T.transitionFast}`
   };
-  function Field({
-    label,
-    value,
-    onChange,
-    type = "text",
-    placeholder,
-    required
-  }) {
+  function Field({ label, value, onChange, type = "text", placeholder, required }) {
     return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("label", { style: { display: "block", marginBottom: 16 }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("span", { style: FIELD_LABEL_STYLE, children: [
         label,
@@ -26584,12 +26801,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       )
     ] });
   }
-  function Select({
-    label,
-    value,
-    onChange,
-    options
-  }) {
+  function Select({ label, value, onChange, options }) {
     return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("label", { style: { display: "block", marginBottom: 16 }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: FIELD_LABEL_STYLE, children: label }),
       /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
@@ -26873,7 +27085,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/ScenarioFormPage.tsx
-  var import_react11 = __toESM(require_react());
+  var import_react12 = __toESM(require_react());
 
   // node_modules/@xyflow/react/dist/esm/index.js
   var import_jsx_runtime6 = __toESM(require_jsx_runtime());
@@ -35709,7 +35921,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var NodeResizeControl = (0, import_react7.memo)(ResizeControl);
 
   // src/admin/components/editor/ScenarioCanvas.tsx
-  var import_react10 = __toESM(require_react());
+  var import_react11 = __toESM(require_react());
 
   // node_modules/uuid/dist/stringify.js
   var byteToHex = [];
@@ -35758,38 +35970,21 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   // src/admin/components/editor/NodeTypes.tsx
   var import_jsx_runtime7 = __toESM(require_jsx_runtime());
   var NODE_COLORS = {
-    message: {
-      bg: "color-mix(in oklch, oklch(52% 0.18 248) 14%, var(--nca-color-surface))",
-      header: "oklch(52% 0.18 248)",
-      text: "oklch(26% 0.16 248)"
-      // MiniMap などで参照（NodeShell 内は T.text を使用）
-    },
-    condition: {
-      bg: "color-mix(in oklch, oklch(62% 0.16 65) 14%, var(--nca-color-surface))",
-      header: "oklch(62% 0.16 65)",
-      text: "oklch(28% 0.14 65)"
-    },
-    action: {
-      bg: "color-mix(in oklch, oklch(52% 0.17 192) 14%, var(--nca-color-surface))",
-      header: "oklch(52% 0.17 192)",
-      text: "oklch(26% 0.14 192)"
-    },
-    end: {
-      bg: "color-mix(in oklch, oklch(44% 0.10 265) 14%, var(--nca-color-surface))",
-      header: "oklch(44% 0.10 265)",
-      text: "oklch(24% 0.10 265)"
-    }
+    message: { bg: NODE_TOKENS.message.body, header: NODE_TOKENS.message.stripe, text: T.text },
+    condition: { bg: NODE_TOKENS.condition.body, header: NODE_TOKENS.condition.stripe, text: T.text },
+    action: { bg: NODE_TOKENS.action.body, header: NODE_TOKENS.action.stripe, text: T.text },
+    end: { bg: NODE_TOKENS.end.body, header: NODE_TOKENS.end.stripe, text: T.text }
   };
   var NODE_ICONS = {
     message: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
       "svg",
       {
-        width: "14",
-        height: "14",
+        width: "11",
+        height: "11",
         viewBox: "0 0 16 16",
         fill: "none",
         stroke: "currentColor",
-        strokeWidth: "1.8",
+        strokeWidth: "1.9",
         strokeLinecap: "round",
         strokeLinejoin: "round",
         children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("path", { d: "M14 10.5A1.5 1.5 0 0 1 12.5 12H5L2 15V4.5A1.5 1.5 0 0 1 3.5 3h9A1.5 1.5 0 0 1 14 4.5z" })
@@ -35798,26 +35993,26 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     condition: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
       "svg",
       {
-        width: "14",
-        height: "14",
+        width: "11",
+        height: "11",
         viewBox: "0 0 16 16",
         fill: "none",
         stroke: "currentColor",
-        strokeWidth: "1.8",
+        strokeWidth: "1.9",
         strokeLinejoin: "round",
         children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("path", { d: "M8 1.5L14.5 8 8 14.5 1.5 8z" })
       }
     ),
-    action: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("svg", { width: "14", height: "14", viewBox: "0 0 16 16", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("path", { d: "M9.5 1.5L3 9.5h5L6.5 14.5 14 6.5H9L9.5 1.5z" }) }),
+    action: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("svg", { width: "11", height: "11", viewBox: "0 0 16 16", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("path", { d: "M9.5 1.5L3 9.5h5L6.5 14.5 14 6.5H9L9.5 1.5z" }) }),
     end: /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
       "svg",
       {
-        width: "14",
-        height: "14",
+        width: "11",
+        height: "11",
         viewBox: "0 0 16 16",
         fill: "none",
         stroke: "currentColor",
-        strokeWidth: "1.8",
+        strokeWidth: "1.9",
         strokeLinecap: "round",
         strokeLinejoin: "round",
         children: [
@@ -35834,79 +36029,111 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     end: "\u7D42\u7AEF"
   };
   function dropOffColor(rate) {
-    if (rate >= 0.5) return "oklch(52% 0.20 25)";
+    if (rate >= 0.5) return "oklch(58% 0.20 25)";
     if (rate >= 0.2) return "oklch(62% 0.16 65)";
     return "oklch(56% 0.16 145)";
   }
+  var MONO = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
   function NodeShell({
     type,
     label,
+    id: id2,
     children: children2,
     selected: selected2,
     analytics,
     isBottleneck
   }) {
-    const c = NODE_COLORS[type];
-    const boxShadow = isBottleneck ? "0 0 0 3px oklch(52% 0.20 25 / 0.55), 0 2px 8px rgba(0,0,0,.14)" : analytics ? `0 0 0 2px ${dropOffColor(analytics.drop_off_rate)} , 0 2px 8px rgba(0,0,0,.12)` : selected2 ? "0 0 0 3px oklch(62% 0.18 265 / 0.55), 0 2px 8px rgba(0,0,0,.14)" : "0 2px 8px rgba(0,0,0,.12)";
+    const tok = NODE_TOKENS[type];
+    const boxShadow = isBottleneck ? `0 0 0 2px oklch(58% 0.20 25 / 0.55), ${T.shadowCard}` : analytics ? `0 0 0 2px ${dropOffColor(analytics.drop_off_rate)}, ${T.shadowCard}` : selected2 ? `0 0 0 2px ${tok.stripe}80, ${T.shadowCard}` : T.shadowCard;
     return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: {
-      background: c.bg,
-      borderRadius: 3,
-      // シャープな角丸
+      background: tok.body,
+      border: `1px solid ${selected2 ? tok.stripe : tok.edge}`,
+      borderRadius: T.radiusNode,
       minWidth: 200,
       maxWidth: 240,
       boxShadow,
-      fontSize: 13,
+      fontSize: T.fontBase,
       position: "relative",
       overflow: "hidden"
-      // ヘッダーを角丸でクリップ
     }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { height: 2, background: tok.stripe } }),
       /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: {
-        background: c.header,
-        color: "#fff",
-        padding: "6px 10px",
-        fontWeight: 700,
-        fontSize: 12,
         display: "flex",
         alignItems: "center",
-        gap: 6
+        gap: 6,
+        padding: "6px 8px 4px"
       }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { children: NODE_ICONS[type] }),
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }, children: label || NODE_LABELS[type] }),
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: {
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: 16,
+          height: 16,
+          borderRadius: 3,
+          background: tok.chip,
+          color: tok.stripe,
+          border: `1px solid ${tok.chipEdge}`,
+          flexShrink: 0
+        }, children: NODE_ICONS[type] }),
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: {
+          flex: 1,
+          fontSize: T.fontSm,
+          fontWeight: 700,
+          color: T.text,
+          letterSpacing: "-0.005em",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          whiteSpace: "nowrap"
+        }, children: label || NODE_LABELS[type] }),
         isBottleneck && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: {
-          background: "oklch(52% 0.20 25)",
+          background: "oklch(58% 0.20 25)",
           color: "#fff",
           fontSize: 9,
           fontWeight: 700,
           padding: "1px 5px",
           borderRadius: 99,
           flexShrink: 0
-        }, children: "\u26A0" })
+        }, children: "\u26A0" }),
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: {
+          fontFamily: MONO,
+          fontSize: 9.5,
+          color: T.textFaint,
+          fontWeight: 500,
+          flexShrink: 0
+        }, children: id2 })
       ] }),
-      children2 && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { padding: "8px 10px", color: T.text, lineHeight: 1.4 }, children: children2 }),
+      children2 && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: {
+        padding: "0 8px 7px",
+        fontSize: T.fontXs,
+        color: T.textMuted,
+        lineHeight: 1.4
+      }, children: children2 }),
       analytics && /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: {
         padding: "5px 10px 6px",
-        borderTop: `1px solid ${T.border}`,
+        borderTop: `1px solid ${tok.edge}`,
         display: "flex",
         gap: 8,
         alignItems: "center",
-        background: T.tableHeader
+        background: T.surfaceAlt
       }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("span", { style: {
           display: "flex",
           alignItems: "center",
           gap: 3,
-          fontSize: 11,
+          fontSize: T.fontXs,
           fontWeight: 700,
-          color: T.textMuted
+          color: T.textMuted,
+          fontFamily: MONO
         }, children: [
-          "\u{1F441} ",
-          analytics.visit_count.toLocaleString()
+          analytics.visit_count.toLocaleString(),
+          " visits"
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("span", { style: {
-          fontSize: 11,
+          fontSize: T.fontXs,
           fontWeight: 700,
           color: dropOffColor(analytics.drop_off_rate),
-          marginLeft: "auto"
+          marginLeft: "auto",
+          fontFamily: MONO
         }, children: [
           Math.round(analytics.drop_off_rate * 100),
           "% \u2193"
@@ -35923,7 +36150,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   function getIsBottleneck(data2) {
     return data2["_isBottleneck"] === true;
   }
-  function MessageNode({ data: data2, selected: selected2 }) {
+  function MessageNode({ id: id2, data: data2, selected: selected2 }) {
     const d = data2;
     const a = getAnalytics(data2);
     return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_jsx_runtime7.Fragment, { children: [
@@ -35932,21 +36159,23 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         NodeShell,
         {
           type: "message",
+          id: id2,
           label: String(data2["label"] ?? ""),
           selected: selected2,
           ...a !== void 0 ? { analytics: a } : {},
           isBottleneck: getIsBottleneck(data2),
           children: [
-            d.text && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("p", { style: { margin: 0, fontSize: 12 }, children: truncate(d.text) }),
-            d.choices && d.choices.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { marginTop: 4, display: "flex", flexWrap: "wrap", gap: 4 }, children: d.choices.map((choice, i) => /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: {
-              background: "color-mix(in oklch, oklch(52% 0.18 248) 28%, var(--nca-color-surface))",
-              color: T.text,
+            d.text && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("p", { style: { margin: 0 }, children: truncate(d.text) }),
+            d.choices && d.choices.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { marginTop: 4, display: "flex", flexWrap: "wrap", gap: 3 }, children: d.choices.map((choice, i) => /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: {
+              background: NODE_TOKENS.message.chip,
+              color: NODE_TOKENS.message.stripe,
+              border: `1px solid ${NODE_TOKENS.message.chipEdge}`,
               borderRadius: 99,
-              padding: "2px 8px",
-              fontSize: 11,
+              padding: "1px 5px",
+              fontSize: 9.5,
               fontWeight: 600
             }, children: choice }, i)) }),
-            d.variable_name && /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("p", { style: { margin: "4px 0 0", fontSize: 11, color: "#6b7280" }, children: [
+            d.variable_name && /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("p", { style: { margin: "4px 0 0", fontSize: T.fontXs, color: T.textFaint, fontFamily: MONO }, children: [
               "\u2192 ",
               /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("code", { children: d.variable_name })
             ] })
@@ -35956,7 +36185,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Handle, { type: "source", position: Position.Bottom })
     ] });
   }
-  function ConditionNode({ data: data2, selected: selected2 }) {
+  function ConditionNode({ id: id2, data: data2, selected: selected2 }) {
     const d = data2;
     const a = getAnalytics(data2);
     return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_jsx_runtime7.Fragment, { children: [
@@ -35965,21 +36194,23 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         NodeShell,
         {
           type: "condition",
+          id: id2,
           label: String(data2["label"] ?? ""),
           selected: selected2,
           ...a !== void 0 ? { analytics: a } : {},
           isBottleneck: getIsBottleneck(data2),
           children: [
-            d.variable && /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("p", { style: { margin: 0, fontSize: 12 }, children: [
+            d.variable && /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("p", { style: { margin: 0, fontFamily: MONO, fontSize: T.fontXs }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("code", { children: d.variable }),
               d.operator ? ` ${d.operator}` : "",
               d.value ? ` "${d.value}"` : ""
             ] }),
-            a && Object.keys(a.branch_percentages).length > 0 && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { display: "flex", gap: 8, marginTop: 4 }, children: Object.entries(a.branch_percentages).map(([label, pct]) => /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("span", { style: {
+            a && Object.keys(a.branch_percentages).length > 0 && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { display: "flex", gap: 6, marginTop: 4 }, children: Object.entries(a.branch_percentages).map(([label, pct]) => /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("span", { style: {
               fontSize: 10,
               fontWeight: 700,
+              fontFamily: MONO,
               color: label === "true" ? "oklch(56% 0.17 145)" : "oklch(60% 0.20 25)",
-              background: label === "true" ? "color-mix(in oklch, oklch(52% 0.17 145) 25%, var(--nca-color-surface))" : "color-mix(in oklch, oklch(52% 0.20 25) 25%, var(--nca-color-surface))",
+              background: label === "true" ? "oklch(56% 0.17 145 / 0.16)" : "oklch(60% 0.20 25 / 0.16)",
               borderRadius: 99,
               padding: "1px 6px"
             }, children: [
@@ -35991,34 +36222,18 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           ]
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
-        Handle,
-        {
-          type: "source",
-          position: Position.Bottom,
-          id: "true",
-          style: { left: "30%" }
-        }
-      ),
-      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
-        Handle,
-        {
-          type: "source",
-          position: Position.Bottom,
-          id: "false",
-          style: { left: "70%" }
-        }
-      )
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Handle, { type: "source", position: Position.Bottom, id: "true", style: { left: "30%" } }),
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Handle, { type: "source", position: Position.Bottom, id: "false", style: { left: "70%" } })
     ] });
   }
-  var ACTION_ICONS = {
-    email: "\u{1F4E7}",
-    slack: "\u{1F4AC}",
-    chatwork: "\u{1F5E8}\uFE0F",
-    http: "\u{1F310}",
-    qr: "\u25FB"
+  var ACTION_TYPE_LABEL = {
+    email: "Email",
+    slack: "Slack",
+    chatwork: "Chatwork",
+    http: "HTTP",
+    qr: "QR"
   };
-  function ActionNode({ data: data2, selected: selected2 }) {
+  function ActionNode({ id: id2, data: data2, selected: selected2 }) {
     const d = data2;
     const a = getAnalytics(data2);
     return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_jsx_runtime7.Fragment, { children: [
@@ -36027,17 +36242,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         NodeShell,
         {
           type: "action",
+          id: id2,
           label: String(data2["label"] ?? ""),
           selected: selected2,
           ...a !== void 0 ? { analytics: a } : {},
           isBottleneck: getIsBottleneck(data2),
           children: [
-            d.action_type && /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("p", { style: { margin: 0, fontSize: 12 }, children: [
-              ACTION_ICONS[d.action_type] ?? "\u{1F527}",
-              " ",
-              d.action_type
-            ] }),
-            d.action_type === "qr" && d.qr_content && /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("p", { style: { margin: "3px 0 0", fontSize: 11, color: "oklch(36% 0.14 145)", wordBreak: "break-all" }, children: [
+            d.action_type && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("p", { style: { margin: 0, fontFamily: MONO, fontSize: T.fontXs }, children: ACTION_TYPE_LABEL[d.action_type] ?? d.action_type }),
+            d.action_type === "qr" && d.qr_content && /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("p", { style: { margin: "3px 0 0", fontSize: 10, color: T.textFaint, wordBreak: "break-all" }, children: [
               truncate(d.qr_content, 40),
               d.qr_variable && d.qr_variable !== "qr_url" ? ` \u2192 ${d.qr_variable}` : ""
             ] })
@@ -36047,7 +36259,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Handle, { type: "source", position: Position.Bottom })
     ] });
   }
-  function EndNode({ data: data2, selected: selected2 }) {
+  function EndNode({ id: id2, data: data2, selected: selected2 }) {
     const d = data2;
     const a = getAnalytics(data2);
     return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_jsx_runtime7.Fragment, { children: [
@@ -36056,33 +36268,31 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         NodeShell,
         {
           type: "end",
+          id: id2,
           label: String(data2["label"] ?? ""),
           selected: selected2,
           ...a !== void 0 ? { analytics: a } : {},
           isBottleneck: getIsBottleneck(data2),
-          children: d.outcome && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("p", { style: { margin: 0, fontSize: 12 }, children: d.outcome })
+          children: d.outcome && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("p", { style: { margin: 0, fontFamily: MONO, fontSize: T.fontXs }, children: d.outcome })
         }
       )
     ] });
   }
 
   // src/admin/components/editor/NodeConfigPanel.tsx
+  var import_react9 = __toESM(require_react());
   var import_jsx_runtime8 = __toESM(require_jsx_runtime());
+  var MONO2 = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
   var S = {
-    panel: {
-      background: T.surface,
-      overflowY: "auto",
-      padding: "16px",
-      display: "flex",
-      flexDirection: "column",
-      gap: 14
-    },
     label: {
       display: "block",
+      fontSize: T.fontXs,
       fontWeight: 600,
-      fontSize: T.fontSm,
-      marginBottom: 4,
-      color: T.textStrong,
+      color: T.textMuted,
+      fontFamily: MONO2,
+      letterSpacing: "0.06em",
+      textTransform: "uppercase",
+      marginBottom: 5,
       lineHeight: "1.4"
     },
     input: {
@@ -36091,12 +36301,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       padding: "0 10px",
       boxSizing: "border-box",
       borderRadius: T.radiusMd,
-      border: `1.5px solid ${T.borderInput}`,
+      border: `1px solid ${T.borderInput}`,
       fontSize: T.fontBase,
       outline: "none",
       background: T.surface,
       color: T.text,
-      transition: "border-color 150ms ease, box-shadow 150ms ease"
+      transition: `border-color ${T.transitionFast}, box-shadow ${T.transitionFast}`
     },
     select: {
       width: "100%",
@@ -36104,20 +36314,20 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       padding: "0 10px",
       boxSizing: "border-box",
       borderRadius: T.radiusMd,
-      border: `1.5px solid ${T.borderInput}`,
+      border: `1px solid ${T.borderInput}`,
       fontSize: T.fontBase,
       background: T.surface,
       color: T.text,
       outline: "none",
       cursor: "pointer",
-      transition: "border-color 150ms ease, box-shadow 150ms ease"
+      transition: `border-color ${T.transitionFast}, box-shadow ${T.transitionFast}`
     },
     textarea: {
       width: "100%",
       padding: "8px 10px",
       boxSizing: "border-box",
       borderRadius: T.radiusMd,
-      border: `1.5px solid ${T.borderInput}`,
+      border: `1px solid ${T.borderInput}`,
       fontSize: T.fontBase,
       outline: "none",
       resize: "vertical",
@@ -36125,156 +36335,329 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       minHeight: 80,
       background: T.surface,
       color: T.text,
-      transition: "border-color 150ms ease, box-shadow 150ms ease"
+      transition: `border-color ${T.transitionFast}, box-shadow ${T.transitionFast}`
     },
-    section: { borderTop: `1px solid ${T.borderLight}`, paddingTop: 12 },
-    tag: {
-      display: "inline-flex",
-      alignItems: "center",
-      gap: 4,
-      background: T.primaryBg,
-      color: T.primaryText,
-      borderRadius: T.radiusXl,
-      padding: "3px 10px",
-      fontSize: T.fontSm
-    },
-    tagList: { display: "flex", flexWrap: "wrap", gap: 6 },
-    hint: {
-      margin: "4px 0 0",
-      fontSize: T.fontXs,
-      color: T.textMuted,
-      lineHeight: "1.4"
-    }
+    field: { marginBottom: 14 },
+    hint: { margin: "4px 0 0", fontSize: T.fontXs, color: T.textFaint, lineHeight: "1.4" }
   };
   var onF = (e) => applyFocus(e.currentTarget);
   var onB = (e) => removeFocus(e.currentTarget);
-  function LabelInput({ label, value, onChange }) {
-    return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { children: [
+  var CloseIcon = () => /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+    "svg",
+    {
+      width: "12",
+      height: "12",
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: "currentColor",
+      strokeWidth: "2.2",
+      strokeLinecap: "round",
+      "aria-hidden": true,
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("line", { x1: "6", y1: "6", x2: "18", y2: "18" }),
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("line", { x1: "18", y1: "6", x2: "6", y2: "18" })
+      ]
+    }
+  );
+  var TrashIcon = () => /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+    "svg",
+    {
+      width: "12",
+      height: "12",
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: "currentColor",
+      strokeWidth: "2",
+      strokeLinecap: "round",
+      strokeLinejoin: "round",
+      "aria-hidden": true,
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("polyline", { points: "3 6 5 6 21 6" }),
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("path", { d: "M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" }),
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("path", { d: "M10 11v6M14 11v6" })
+      ]
+    }
+  );
+  function Field2({ label, children: children2, hint }) {
+    return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: S.field, children: [
       /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { style: S.label, children: label }),
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
-        "input",
-        {
-          style: S.input,
-          value,
-          onChange: (e) => onChange(e.target.value),
-          onFocus: onF,
-          onBlur: onB
-        }
-      )
+      children2,
+      hint && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { style: S.hint, children: hint })
     ] });
   }
-  function NodeConfigPanel({ node, credentials, onChange, onDelete }) {
+  function NodeConfigPanel({ node, credentials, onChange, onDelete, onClose }) {
     const { t } = useTranslation();
     const type = node.type;
     const data2 = node.data;
     const label = String(data2["label"] ?? "");
-    const colors = NODE_COLORS[type];
+    const tok = NODE_TOKENS[type];
+    const [tab, setTab] = (0, import_react9.useState)("config");
+    const typeLabel = t(`node.type.${type}`);
     function setLabel(v) {
       onChange(node.id, v, data2);
     }
     function setData(patch) {
       onChange(node.id, label, { ...data2, ...patch });
     }
-    function MessageConfig() {
-      const d = data2;
-      const choices = d.choices ?? [];
-      function addChoice() {
-        const v = prompt(t("node.addChoicePrompt"));
-        if (v) setData({ choices: [...choices, v] });
-      }
-      function removeChoice(i) {
-        setData({ choices: choices.filter((_, j) => j !== i) });
-      }
-      return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(LabelInput, { label: t("node.label"), value: label, onChange: setLabel }),
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: S.section, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { style: S.label, children: t("node.messageText") }),
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
-            "textarea",
-            {
-              style: S.textarea,
-              value: String(d.text ?? ""),
-              onChange: (e) => setData({ text: e.target.value }),
-              placeholder: t("node.messagePlaceholder"),
-              onFocus: onF,
-              onBlur: onB
-            }
-          )
+    return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: {
+      width: T.editorDrawerW,
+      height: "100%",
+      flexShrink: 0,
+      background: T.surfaceAlt,
+      borderLeft: `1px solid ${T.border}`,
+      display: "flex",
+      flexDirection: "column"
+    }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { height: 3, background: tok.stripe, flexShrink: 0 } }),
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: {
+        padding: "12px 14px 10px",
+        display: "flex",
+        alignItems: "center",
+        gap: 9,
+        borderBottom: `1px solid ${T.border}`,
+        background: T.surface,
+        flexShrink: 0
+      }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: {
+          width: 28,
+          height: 28,
+          borderRadius: 5,
+          background: tok.chip,
+          color: tok.stripe,
+          border: `1px solid ${tok.chipEdge}`,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexShrink: 0
+        }, children: NODE_ICONS[type] }),
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { flex: 1, minWidth: 0 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: {
+            fontSize: T.fontBase,
+            fontWeight: 700,
+            color: T.text,
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap"
+          }, children: label || typeLabel }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { fontSize: T.fontXs, color: T.textMuted, fontFamily: MONO2 }, children: [
+            typeLabel,
+            " \xB7 ",
+            node.id
+          ] })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: S.section, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { style: S.label, children: t("node.choices") }),
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: S.tagList, children: choices.map((c, i) => /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: S.tag, children: [
-            c,
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
-              "button",
-              {
-                onClick: () => removeChoice(i),
-                style: {
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  padding: 0,
-                  color: T.primaryText,
-                  fontSize: 14,
-                  lineHeight: 1
-                },
-                children: "\xD7"
-              }
-            )
-          ] }, i)) }),
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
-            "button",
-            {
-              onClick: addChoice,
-              style: {
-                marginTop: 6,
-                fontSize: T.fontSm,
-                color: T.primary,
-                background: "none",
-                border: `1px dashed ${T.primaryMuted}`,
-                borderRadius: T.radiusMd,
-                padding: "5px 10px",
-                cursor: "pointer",
-                width: "100%",
-                transition: "background 120ms ease"
-              },
-              onMouseEnter: (e) => {
-                e.currentTarget.style.background = T.primaryBg;
-              },
-              onMouseLeave: (e) => {
-                e.currentTarget.style.background = "none";
-              },
-              children: t("node.addChoice")
-            }
-          )
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: S.section, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { style: S.label, children: t("node.variableName") }),
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+        onClose && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+          "button",
+          {
+            onClick: onClose,
+            "aria-label": t("common.close"),
+            title: t("common.close"),
+            style: {
+              width: 24,
+              height: 24,
+              borderRadius: T.radiusSm,
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              background: "transparent",
+              border: "none",
+              color: T.textMuted,
+              cursor: "pointer",
+              flexShrink: 0
+            },
+            children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(CloseIcon, {})
+          }
+        )
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: {
+        display: "flex",
+        gap: 14,
+        padding: "4px 14px 0",
+        borderBottom: `1px solid ${T.border}`,
+        background: T.surface,
+        flexShrink: 0
+      }, children: ["config", "analytics", "connections"].map((k) => /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+        "button",
+        {
+          onClick: () => setTab(k),
+          style: {
+            padding: "8px 0 9px",
+            background: "transparent",
+            border: "none",
+            cursor: "pointer",
+            fontSize: T.fontSm,
+            fontWeight: tab === k ? 700 : 500,
+            color: tab === k ? T.text : T.textMuted,
+            borderBottom: tab === k ? `2px solid ${T.primary}` : "2px solid transparent",
+            marginBottom: -1
+          },
+          children: tabLabel(k, t)
+        },
+        k
+      )) }),
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { flex: 1, padding: "14px", overflowY: "auto" }, children: [
+        tab === "config" && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Field2, { label: t("node.label"), children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
             "input",
             {
               style: S.input,
-              value: String(d.variable_name ?? ""),
-              onChange: (e) => setData({ variable_name: e.target.value || void 0 }),
-              placeholder: t("node.variablePlaceholder"),
+              value: label,
+              onChange: (e) => setLabel(e.target.value),
               onFocus: onF,
               onBlur: onB
             }
-          )
-        ] })
-      ] });
+          ) }),
+          type === "message" && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(MessageConfig, { data: data2, setData }),
+          type === "condition" && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(ConditionConfig, { data: data2, setData }),
+          type === "action" && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(ActionConfig, { data: data2, setData, credentials }),
+          type === "end" && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(EndConfig, { data: data2, setData })
+        ] }),
+        tab === "analytics" && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(AnalyticsTab, { data: data2 }),
+        tab === "connections" && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(ConnectionsTab, { nodeId: node.id, type })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: {
+        padding: "10px 14px",
+        borderTop: `1px solid ${T.border}`,
+        display: "flex",
+        gap: 8,
+        alignItems: "center",
+        flexShrink: 0,
+        background: T.surface
+      }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { flex: 1, fontSize: T.fontXs, color: T.textFaint, fontFamily: MONO2 }, children: t("node.edited") }),
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+          "button",
+          {
+            onClick: () => onDelete(node.id),
+            title: t("node.delete"),
+            style: {
+              height: T.controlHeight,
+              padding: "0 10px",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 5,
+              borderRadius: T.radiusMd,
+              background: "transparent",
+              border: `1px solid ${T.border}`,
+              color: T.dangerFg,
+              cursor: "pointer",
+              fontSize: T.fontSm,
+              fontWeight: 600
+            },
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(TrashIcon, {}),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { children: t("node.delete") })
+            ]
+          }
+        )
+      ] })
+    ] });
+  }
+  function tabLabel(k, t) {
+    if (k === "config") return t("node.tab.config");
+    if (k === "analytics") return t("node.tab.analytics");
+    return t("node.tab.connections");
+  }
+  function MessageConfig({ data: data2, setData }) {
+    const { t } = useTranslation();
+    const choices = data2.choices ?? [];
+    function addChoice() {
+      const v = prompt(t("node.addChoicePrompt"));
+      if (v) setData({ choices: [...choices, v] });
     }
-    function ConditionConfig() {
-      const d = data2;
-      return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(LabelInput, { label: t("node.label"), value: label, onChange: setLabel }),
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: S.section, children: [
+    function removeChoice(i) {
+      setData({ choices: choices.filter((_, j) => j !== i) });
+    }
+    return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Field2, { label: t("node.messageText"), children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+        "textarea",
+        {
+          style: S.textarea,
+          value: String(data2.text ?? ""),
+          onChange: (e) => setData({ text: e.target.value }),
+          placeholder: t("node.messagePlaceholder"),
+          onFocus: onF,
+          onBlur: onB
+        }
+      ) }),
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(Field2, { label: t("node.choices"), children: [
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { display: "flex", flexWrap: "wrap", gap: 5 }, children: choices.map((c, i) => /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: {
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 4,
+          padding: "3px 5px 3px 9px",
+          borderRadius: 99,
+          background: T.primaryBg,
+          color: T.primaryText,
+          fontSize: T.fontSm
+        }, children: [
+          c,
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+            "button",
+            {
+              onClick: () => removeChoice(i),
+              "aria-label": t("common.remove"),
+              style: {
+                width: 14,
+                height: 14,
+                borderRadius: 99,
+                padding: 0,
+                background: "transparent",
+                border: "none",
+                cursor: "pointer",
+                color: T.primaryText,
+                fontSize: 14,
+                lineHeight: 1
+              },
+              children: "\xD7"
+            }
+          )
+        ] }, i)) }),
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+          "button",
+          {
+            onClick: addChoice,
+            style: {
+              marginTop: 6,
+              width: "100%",
+              fontSize: T.fontSm,
+              color: T.primary,
+              background: "transparent",
+              border: `1px dashed ${T.primaryMuted}`,
+              borderRadius: T.radiusMd,
+              padding: "5px 10px",
+              cursor: "pointer"
+            },
+            children: [
+              "+ ",
+              t("node.addChoice")
+            ]
+          }
+        )
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Field2, { label: t("node.variableName"), hint: t("node.variableHint"), children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+        "input",
+        {
+          style: { ...S.input, fontFamily: MONO2 },
+          value: String(data2.variable_name ?? ""),
+          onChange: (e) => setData({ variable_name: e.target.value || void 0 }),
+          placeholder: t("node.variablePlaceholder"),
+          onFocus: onF,
+          onBlur: onB
+        }
+      ) })
+    ] });
+  }
+  function ConditionConfig({ data: data2, setData }) {
+    const { t } = useTranslation();
+    return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1fr 90px", gap: 8, marginBottom: 14 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { children: [
           /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { style: S.label, children: t("node.conditionVar") }),
           /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
             "input",
             {
-              style: S.input,
-              value: d.variable ?? "",
+              style: { ...S.input, fontFamily: MONO2, fontSize: T.fontSm },
+              value: data2.variable ?? "",
               onChange: (e) => setData({ variable: e.target.value }),
               placeholder: t("node.conditionVarPlaceholder"),
               onFocus: onF,
@@ -36287,89 +36670,103 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
             "select",
             {
-              style: S.select,
-              value: d.operator ?? "eq",
+              style: { ...S.select, fontFamily: MONO2 },
+              value: data2.operator ?? "eq",
               onChange: (e) => setData({ operator: e.target.value }),
               onFocus: onF,
               onBlur: onB,
               children: [
-                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "eq", children: t("node.operator.eq") }),
-                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "neq", children: t("node.operator.neq") }),
-                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "contains", children: t("node.operator.contains") }),
-                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "exists", children: t("node.operator.exists") }),
-                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "not_exists", children: t("node.operator.not_exists") })
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "eq", children: "==" }),
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "neq", children: "!=" }),
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "contains", children: "\u220B" }),
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "exists", children: "?" }),
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "not_exists", children: "!?" })
               ]
             }
           )
-        ] }),
-        d.operator !== "exists" && d.operator !== "not_exists" && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { style: S.label, children: t("node.compareValue") }),
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
-            "input",
-            {
-              style: S.input,
-              value: d.value ?? "",
-              onChange: (e) => setData({ value: e.target.value }),
-              placeholder: t("node.compareValuePlaceholder"),
-              onFocus: onF,
-              onBlur: onB
-            }
-          )
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { style: S.hint, children: t("node.conditionHint") })
-      ] });
-    }
-    function ActionConfig() {
-      const d = data2;
-      const isQr = (d.action_type ?? "http") === "qr";
-      return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(LabelInput, { label: t("node.label"), value: label, onChange: setLabel }),
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: S.section, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { style: S.label, children: t("node.actionType") }),
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
-            "select",
-            {
-              style: S.select,
-              value: d.action_type ?? "http",
-              onChange: (e) => setData({ action_type: e.target.value }),
-              onFocus: onF,
-              onBlur: onB,
-              children: [
-                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "http", children: "HTTP" }),
-                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "email", children: "Email" }),
-                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "slack", children: "Slack" }),
-                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "chatwork", children: "Chatwork" }),
-                /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("option", { value: "qr", children: [
-                  "\u25FB ",
-                  t("node.qrCode")
-                ] })
-              ]
-            }
-          )
-        ] }),
-        isQr && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: S.section, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { style: S.label, children: t("node.qrContent") }),
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
-              "textarea",
-              {
-                style: S.textarea,
-                value: d.qr_content ?? "",
-                onChange: (e) => setData({ qr_content: e.target.value }),
-                placeholder: t("node.qrContentPlaceholder"),
-                onFocus: onF,
-                onBlur: onB
-              }
-            ),
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { style: S.hint, children: t("node.qrContentHint") })
-          ] }),
+        ] })
+      ] }),
+      data2.operator !== "exists" && data2.operator !== "not_exists" && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Field2, { label: t("node.compareValue"), children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+        "input",
+        {
+          style: S.input,
+          value: data2.value ?? "",
+          onChange: (e) => setData({ value: e.target.value }),
+          placeholder: t("node.compareValuePlaceholder"),
+          onFocus: onF,
+          onBlur: onB
+        }
+      ) }),
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: {
+        padding: 10,
+        background: T.bg,
+        border: `1px dashed ${T.border}`,
+        borderRadius: T.radiusMd,
+        marginBottom: 14
+      }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: S.label, children: "Preview" }),
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: {
+          fontSize: T.fontSm,
+          color: T.text,
+          fontFamily: MONO2,
+          lineHeight: 1.5
+        }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { color: NODE_TOKENS.action.stripe }, children: "if" }),
+          " ",
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { children: data2.variable || "var" }),
+          " ",
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { color: T.textMuted }, children: data2.operator ?? "eq" }),
+          " ",
+          data2.operator !== "exists" && data2.operator !== "not_exists" && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: { color: NODE_TOKENS.condition.stripe }, children: [
+            '"',
+            data2.value ?? "",
+            '"'
+          ] })
+        ] })
+      ] })
+    ] });
+  }
+  function ActionConfig({ data: data2, setData, credentials }) {
+    const { t } = useTranslation();
+    const isQr = (data2.action_type ?? "http") === "qr";
+    return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Field2, { label: t("node.actionType"), children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+        "select",
+        {
+          style: S.select,
+          value: data2.action_type ?? "http",
+          onChange: (e) => setData({ action_type: e.target.value }),
+          onFocus: onF,
+          onBlur: onB,
+          children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "http", children: "HTTP" }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "email", children: "Email" }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "slack", children: "Slack" }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "chatwork", children: "Chatwork" }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "qr", children: t("node.qrCode") })
+          ]
+        }
+      ) }),
+      isQr && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Field2, { label: t("node.qrContent"), hint: t("node.qrContentHint"), children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+          "textarea",
+          {
+            style: S.textarea,
+            value: data2.qr_content ?? "",
+            onChange: (e) => setData({ qr_content: e.target.value }),
+            placeholder: t("node.qrContentPlaceholder"),
+            onFocus: onF,
+            onBlur: onB
+          }
+        ) }),
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1fr 80px", gap: 8, marginBottom: 14 }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { children: [
             /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { style: S.label, children: t("node.qrVariable") }),
             /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
               "input",
               {
-                style: S.input,
-                value: d.qr_variable ?? "",
+                style: { ...S.input, fontFamily: MONO2 },
+                value: data2.qr_variable ?? "",
                 onChange: (e) => setData({ qr_variable: e.target.value || void 0 }),
                 placeholder: t("node.qrVariablePlaceholder"),
                 onFocus: onF,
@@ -36387,106 +36784,78 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 max: 800,
                 step: 8,
                 style: S.input,
-                value: d.qr_size ?? 200,
+                value: data2.qr_size ?? 200,
                 onChange: (e) => setData({ qr_size: Number(e.target.value) || void 0 }),
                 onFocus: onF,
                 onBlur: onB
               }
             )
           ] })
-        ] }),
-        !isQr && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { style: S.label, children: t("node.credential") }),
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
-            "select",
-            {
-              style: S.select,
-              value: String(d.credential_id ?? ""),
-              onChange: (e) => setData({ credential_id: e.target.value ? Number(e.target.value) : void 0 }),
-              onFocus: onF,
-              onBlur: onB,
-              children: [
-                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "", children: t("node.credentialNone") }),
-                credentials.filter((c) => !d.action_type || c.adapter === d.action_type).map((c) => /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: c.id, children: c.name }, c.id))
-              ]
-            }
-          )
         ] })
-      ] });
-    }
-    function EndConfig() {
-      const d = data2;
-      return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(LabelInput, { label: t("node.label"), value: label, onChange: setLabel }),
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: S.section, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { style: S.label, children: t("node.outcome") }),
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
-            "select",
-            {
-              style: S.select,
-              value: d.outcome ?? "completed",
-              onChange: (e) => setData({ outcome: e.target.value }),
-              onFocus: onF,
-              onBlur: onB,
-              children: [
-                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "completed", children: t("node.outcome.completed") }),
-                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "abandoned", children: t("node.outcome.abandoned") })
-              ]
-            }
-          )
-        ] })
-      ] });
-    }
-    const typeLabel = t(`node.type.${type}`);
-    return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: S.panel, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: {
-        padding: "8px 12px",
-        borderRadius: T.radiusMd,
-        marginBottom: 2,
-        background: colors.header,
-        color: "#fff",
-        fontWeight: 700,
-        fontSize: T.fontBase,
-        display: "flex",
-        alignItems: "center",
-        gap: 8
-      }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { children: NODE_ICONS[type] }),
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { children: typeLabel })
       ] }),
-      type === "message" && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(MessageConfig, {}),
-      type === "condition" && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(ConditionConfig, {}),
-      type === "action" && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(ActionConfig, {}),
-      type === "end" && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(EndConfig, {}),
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { borderTop: `1px solid ${T.borderLight}`, paddingTop: 12, marginTop: 2 }, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
-        "button",
+      !isQr && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Field2, { label: t("node.credential"), children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+        "select",
         {
-          onClick: () => onDelete(node.id),
-          style: {
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: "100%",
-            height: T.controlHeight,
-            boxSizing: "border-box",
-            background: T.dangerBg,
-            border: `1.5px solid ${T.dangerBorder}`,
-            color: T.dangerText,
-            borderRadius: T.radiusMd,
-            cursor: "pointer",
-            fontSize: T.fontBase,
-            fontWeight: 600,
-            transition: "filter 150ms ease"
-          },
-          onMouseEnter: (e) => {
-            e.currentTarget.style.filter = "brightness(0.94)";
-          },
-          onMouseLeave: (e) => {
-            e.currentTarget.style.filter = "";
-          },
-          children: t("node.delete")
+          style: S.select,
+          value: String(data2.credential_id ?? ""),
+          onChange: (e) => setData({ credential_id: e.target.value ? Number(e.target.value) : void 0 }),
+          onFocus: onF,
+          onBlur: onB,
+          children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "", children: t("node.credentialNone") }),
+            credentials.filter((c) => !data2.action_type || c.adapter === data2.action_type).map((c) => /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: c.id, children: c.name }, c.id))
+          ]
         }
       ) })
+    ] });
+  }
+  function EndConfig({ data: data2, setData }) {
+    const { t } = useTranslation();
+    return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Field2, { label: t("node.outcome"), children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+      "select",
+      {
+        style: S.select,
+        value: data2.outcome ?? "completed",
+        onChange: (e) => setData({ outcome: e.target.value }),
+        onFocus: onF,
+        onBlur: onB,
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "completed", children: t("node.outcome.completed") }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "abandoned", children: t("node.outcome.abandoned") })
+        ]
+      }
+    ) });
+  }
+  function AnalyticsTab({ data: data2 }) {
+    const a = data2["_analytics"];
+    if (!a) {
+      return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { style: { color: T.textMuted, fontSize: T.fontSm, padding: "8px 0" }, children: "Analytics \u30E2\u30FC\u30C9\u3092\u6709\u52B9\u306B\u3059\u308B\u3068\u3001\u3053\u306E\u30CE\u30FC\u30C9\u306E\u8A2A\u554F\u6570\u30FB\u96E2\u8131\u7387\u304C\u8868\u793A\u3055\u308C\u307E\u3059\u3002" });
+    }
+    return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: 10 }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Stat, { label: "Visits", value: (a.visit_count ?? 0).toLocaleString() }),
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Stat, { label: "Drop-off", value: `${Math.round((a.drop_off_rate ?? 0) * 100)}%` })
+    ] });
+  }
+  function Stat({ label, value }) {
+    return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: {
+      padding: 12,
+      background: T.surface,
+      border: `1px solid ${T.border}`,
+      borderRadius: T.radiusMd
+    }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: S.label, children: label }),
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { fontSize: 20, fontWeight: 700, color: T.text, fontFamily: MONO2 }, children: value })
+    ] });
+  }
+  function ConnectionsTab({ nodeId, type }) {
+    return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { style: S.label, children: "Outgoing edges" }),
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("p", { style: { color: T.textMuted, fontSize: T.fontSm, marginTop: 6 }, children: [
+        nodeId,
+        " (",
+        type,
+        ") \u304B\u3089\u306E\u63A5\u7D9A\u4E00\u89A7\u3002React Flow \u306E\u30A8\u30C3\u30B8\u60C5\u5831\u3092\u89AA\u304B\u3089\u53D7\u3051\u53D6\u3063\u3066\u8868\u793A\u3057\u3066\u304F\u3060\u3055\u3044\u3002"
+      ] })
     ] });
   }
 
@@ -36601,21 +36970,21 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       })() })
     ] });
   }
-  var ScenarioCanvas = (0, import_react10.forwardRef)(function ScenarioCanvas2({ scenarioId, initialNodes, initialEdges, credentials, onSave, analyticsMode }, ref) {
+  var ScenarioCanvas = (0, import_react11.forwardRef)(function ScenarioCanvas2({ scenarioId, initialNodes, initialEdges, credentials, onSave, analyticsMode }, ref) {
     const { t } = useTranslation();
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes.map(apiNodeToRF));
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges.map(apiEdgeToRF));
-    const [selectedNodeId, setSelectedNodeId] = (0, import_react10.useState)(null);
-    const reactFlowWrapper = (0, import_react10.useRef)(null);
-    const [period, setPeriod] = (0, import_react10.useState)("7d");
-    const [analyticsReport, setAnalyticsReport] = (0, import_react10.useState)(null);
-    const [analyticsLoading, setAnalyticsLoading] = (0, import_react10.useState)(false);
-    const [analyticsNoData, setAnalyticsNoData] = (0, import_react10.useState)(false);
-    (0, import_react10.useEffect)(() => {
+    const [selectedNodeId, setSelectedNodeId] = (0, import_react11.useState)(null);
+    const reactFlowWrapper = (0, import_react11.useRef)(null);
+    const [period, setPeriod] = (0, import_react11.useState)("7d");
+    const [analyticsReport, setAnalyticsReport] = (0, import_react11.useState)(null);
+    const [analyticsLoading, setAnalyticsLoading] = (0, import_react11.useState)(false);
+    const [analyticsNoData, setAnalyticsNoData] = (0, import_react11.useState)(false);
+    (0, import_react11.useEffect)(() => {
       setNodes(initialNodes.map(apiNodeToRF));
       setEdges(initialEdges.map(apiEdgeToRF));
     }, [initialNodes.length, initialEdges.length]);
-    (0, import_react10.useEffect)(() => {
+    (0, import_react11.useEffect)(() => {
       if (!analyticsMode) {
         setNodes((nds) => nds.map((n) => {
           const { _analytics, _isBottleneck, ...rest } = n.data;
@@ -36654,10 +37023,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         cancelled = true;
       };
     }, [analyticsMode, period, scenarioId]);
-    const onConnect = (0, import_react10.useCallback)((connection) => {
+    const onConnect = (0, import_react11.useCallback)((connection) => {
       setEdges((eds) => addEdge({ ...connection, id: `e-${v4_default()}` }, eds));
     }, [setEdges]);
-    const addNode = (0, import_react10.useCallback)((type) => {
+    const addNode = (0, import_react11.useCallback)((type) => {
       const id2 = v4_default();
       const defaults = {
         message: { text: "", choices: [], variable_name: "" },
@@ -36683,10 +37052,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       setEdges((eds) => eds.filter((e) => e.source !== id2 && e.target !== id2));
       setSelectedNodeId(null);
     }
-    const handleSave = (0, import_react10.useCallback)(() => {
+    const handleSave = (0, import_react11.useCallback)(() => {
       onSave(nodes.map(rfNodeToApi), edges.map(rfEdgeToApi));
     }, [nodes, edges, onSave]);
-    (0, import_react10.useImperativeHandle)(ref, () => ({ triggerSave: handleSave, addNode }), [handleSave, addNode]);
+    (0, import_react11.useImperativeHandle)(ref, () => ({ triggerSave: handleSave, addNode }), [handleSave, addNode]);
     const selectedNode = !analyticsMode ? nodes.find((n) => n.id === selectedNodeId) ?? null : null;
     const showRightPanel = analyticsMode || selectedNode !== null;
     return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { position: "relative", height: "100%" }, children: [
@@ -36802,46 +37171,208 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // src/admin/components/ScenarioFormPage.tsx
   var import_jsx_runtime10 = __toESM(require_jsx_runtime());
-  var PencilIcon = () => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("svg", { width: "10", height: "10", viewBox: "0 0 16 16", fill: "currentColor", "aria-hidden": true, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("path", { d: "M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z" }) });
-  var ChevronDownIcon = () => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("svg", { width: "9", height: "9", viewBox: "0 0 16 16", fill: "currentColor", "aria-hidden": true, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("path", { d: "M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" }) });
-  var DescEditIcon = () => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("svg", { width: "10", height: "10", viewBox: "0 0 16 16", fill: "currentColor", "aria-hidden": true, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("path", { d: "M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12z" }),
-    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("path", { d: "M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" })
-  ] });
-  var AnalyticsIcon = () => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("svg", { width: "11", height: "11", viewBox: "0 0 16 16", fill: "currentColor", "aria-hidden": true, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("path", { d: "M1 11a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm5-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1z" }) });
-  var SaveIcon = () => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("svg", { width: "11", height: "11", viewBox: "0 0 16 16", fill: "currentColor", "aria-hidden": true, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("path", { d: "M8 0a.5.5 0 0 1 .5.5v9.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 .708-.708L7.5 10.293V.5A.5.5 0 0 1 8 0" }),
-    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("path", { d: "M.5 9.9a.5.5 0 0 1 .5.5v2.1a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.1a.5.5 0 0 1 1 0v2.1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V10.4a.5.5 0 0 1 .5-.5" })
-  ] });
-  var TrashIcon = () => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("svg", { width: "11", height: "11", viewBox: "0 0 16 16", fill: "currentColor", "aria-hidden": true, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("path", { d: "M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0" }),
-    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("path", { d: "M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3v1h11V2h-11z" })
-  ] });
+  var MONO3 = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
+  var IconBack = () => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+    "svg",
+    {
+      width: "12",
+      height: "12",
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: "currentColor",
+      strokeWidth: "2.2",
+      strokeLinecap: "round",
+      strokeLinejoin: "round",
+      children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("polyline", { points: "15 18 9 12 15 6" })
+    }
+  );
+  var IconPencil = () => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+    "svg",
+    {
+      width: "11",
+      height: "11",
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: "currentColor",
+      strokeWidth: "2",
+      strokeLinecap: "round",
+      strokeLinejoin: "round",
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("path", { d: "M12 20h9" }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("path", { d: "M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4z" })
+      ]
+    }
+  );
+  var IconChevDown = () => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+    "svg",
+    {
+      width: "10",
+      height: "10",
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: "currentColor",
+      strokeWidth: "2.4",
+      strokeLinecap: "round",
+      strokeLinejoin: "round",
+      children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("polyline", { points: "6 9 12 15 18 9" })
+    }
+  );
+  var IconDesc = () => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+    "svg",
+    {
+      width: "11",
+      height: "11",
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: "currentColor",
+      strokeWidth: "2",
+      strokeLinecap: "round",
+      strokeLinejoin: "round",
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("path", { d: "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("path", { d: "M14 2v6h6M8 13h10M8 17h6" })
+      ]
+    }
+  );
+  var IconSearch = () => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+    "svg",
+    {
+      width: "12",
+      height: "12",
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: "currentColor",
+      strokeWidth: "2",
+      strokeLinecap: "round",
+      strokeLinejoin: "round",
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("circle", { cx: "11", cy: "11", r: "7" }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("line", { x1: "21", y1: "21", x2: "16.65", y2: "16.65" })
+      ]
+    }
+  );
+  var IconHistory = () => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+    "svg",
+    {
+      width: "13",
+      height: "13",
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: "currentColor",
+      strokeWidth: "1.8",
+      strokeLinecap: "round",
+      strokeLinejoin: "round",
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("path", { d: "M3 12a9 9 0 1 0 3-6.7L3 8" }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("polyline", { points: "3 3 3 8 8 8" }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("polyline", { points: "12 7 12 12 15 14" })
+      ]
+    }
+  );
+  var IconAnalytics = () => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+    "svg",
+    {
+      width: "12",
+      height: "12",
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: "currentColor",
+      strokeWidth: "2",
+      strokeLinecap: "round",
+      strokeLinejoin: "round",
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("line", { x1: "18", y1: "20", x2: "18", y2: "10" }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("line", { x1: "12", y1: "20", x2: "12", y2: "4" }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("line", { x1: "6", y1: "20", x2: "6", y2: "14" })
+      ]
+    }
+  );
+  var IconSave = () => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+    "svg",
+    {
+      width: "12",
+      height: "12",
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: "currentColor",
+      strokeWidth: "2",
+      strokeLinecap: "round",
+      strokeLinejoin: "round",
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("path", { d: "M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("polyline", { points: "17 21 17 13 7 13 7 21" }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("polyline", { points: "7 3 7 8 15 8" })
+      ]
+    }
+  );
+  var IconTrash = () => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+    "svg",
+    {
+      width: "12",
+      height: "12",
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: "currentColor",
+      strokeWidth: "2",
+      strokeLinecap: "round",
+      strokeLinejoin: "round",
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("polyline", { points: "3 6 5 6 21 6" }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("path", { d: "M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("path", { d: "M10 11v6M14 11v6" })
+      ]
+    }
+  );
   var NODE_TYPES = ["message", "condition", "action", "end"];
+  var pill = (extra) => ({
+    display: "flex",
+    alignItems: "center",
+    height: 30,
+    padding: "0 4px",
+    gap: 2,
+    background: T.surface,
+    border: `1px solid ${T.border}`,
+    borderRadius: T.radiusLg,
+    flexShrink: 0,
+    ...extra
+  });
+  var iconBtn = (active) => ({
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: 24,
+    height: 24,
+    borderRadius: T.radiusSm,
+    color: active ? T.primary : T.textMuted,
+    background: active ? T.primaryTint : "transparent",
+    border: "none",
+    cursor: "pointer",
+    flexShrink: 0
+  });
   function ScenarioFormPage() {
     const { id: id2 } = useParams();
     const isNew = id2 === void 0;
     const nav = useNavigate();
     const { t } = useTranslation();
-    const [name, setName] = (0, import_react11.useState)("");
-    const [description, setDescription] = (0, import_react11.useState)("");
-    const [status, setStatus] = (0, import_react11.useState)("draft");
-    const [nodes, setNodes] = (0, import_react11.useState)([]);
-    const [edges, setEdges] = (0, import_react11.useState)([]);
-    const [credentials, setCredentials] = (0, import_react11.useState)([]);
-    const [loading, setLoading] = (0, import_react11.useState)(!isNew);
-    const [saving, setSaving] = (0, import_react11.useState)(false);
-    const [error, setError] = (0, import_react11.useState)(null);
-    const [savedMsg, setSavedMsg] = (0, import_react11.useState)("");
-    const canvasRef = (0, import_react11.useRef)(null);
-    const [editingName, setEditingName] = (0, import_react11.useState)(isNew);
-    const [draftName, setDraftName] = (0, import_react11.useState)("");
-    const nameInputRef = (0, import_react11.useRef)(null);
-    const [showStatusDrop, setShowStatusDrop] = (0, import_react11.useState)(false);
-    const statusDropRef = (0, import_react11.useRef)(null);
-    const [showDetails, setShowDetails] = (0, import_react11.useState)(isNew);
-    const [analyticsMode, setAnalyticsMode] = (0, import_react11.useState)(false);
-    (0, import_react11.useEffect)(() => {
+    const [name, setName] = (0, import_react12.useState)("");
+    const [description, setDescription] = (0, import_react12.useState)("");
+    const [status, setStatus] = (0, import_react12.useState)("draft");
+    const [nodes, setNodes] = (0, import_react12.useState)([]);
+    const [edges, setEdges] = (0, import_react12.useState)([]);
+    const [credentials, setCredentials] = (0, import_react12.useState)([]);
+    const [loading, setLoading] = (0, import_react12.useState)(!isNew);
+    const [saving, setSaving] = (0, import_react12.useState)(false);
+    const [error, setError] = (0, import_react12.useState)(null);
+    const [savedMsg, setSavedMsg] = (0, import_react12.useState)("");
+    const canvasRef = (0, import_react12.useRef)(null);
+    const [editingName, setEditingName] = (0, import_react12.useState)(isNew);
+    const [draftName, setDraftName] = (0, import_react12.useState)("");
+    const nameInputRef = (0, import_react12.useRef)(null);
+    const [showStatusDrop, setShowStatusDrop] = (0, import_react12.useState)(false);
+    const statusDropRef = (0, import_react12.useRef)(null);
+    const [showDetails, setShowDetails] = (0, import_react12.useState)(isNew);
+    const [analyticsMode, setAnalyticsMode] = (0, import_react12.useState)(false);
+    (0, import_react12.useEffect)(() => {
       void listCredentials().then((r) => setCredentials(r.data)).catch(() => {
       });
       if (isNew) {
@@ -36863,7 +37394,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }
       })();
     }, [id2, isNew]);
-    (0, import_react11.useEffect)(() => {
+    (0, import_react12.useEffect)(() => {
       if (!showStatusDrop) return;
       function onClickOutside(e) {
         if (statusDropRef.current && !statusDropRef.current.contains(e.target)) {
@@ -36968,320 +37499,271 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       { value: "archived", label: t("scenario.status.archived") }
     ];
     if (loading) return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { color: T.textMuted, marginTop: 40, padding: "0 24px" }, children: t("common.loading") });
-    const divider = { width: 1, height: 14, background: T.border, flexShrink: 0 };
-    const cBtn = (opts = {}) => ({
-      display: "inline-flex",
-      alignItems: "center",
-      justifyContent: "center",
-      gap: 3,
-      height: 22,
-      padding: "0 7px",
-      borderRadius: T.radiusMd,
-      background: opts.fill ? T.primary : opts.active ? T.primaryLight : "transparent",
-      border: `1px solid ${opts.fill ? T.primary : opts.active ? T.primaryBorder : T.border}`,
-      color: opts.fill ? "#fff" : opts.active ? T.primaryText : T.textMuted,
-      fontSize: "10px",
-      fontWeight: 600,
-      cursor: "pointer",
-      flexShrink: 0,
-      letterSpacing: "0.01em"
-    });
+    function NodeChip({ type }) {
+      const tok = NODE_TOKENS[type];
+      const label = t(`node.type.${type}`);
+      return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+        "button",
+        {
+          onClick: () => canvasRef.current?.addNode(type),
+          title: t("node.addToCanvas", { type: label }),
+          style: {
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 5,
+            height: 22,
+            padding: "0 9px",
+            borderRadius: T.radiusSm,
+            background: "transparent",
+            color: T.text,
+            border: "none",
+            cursor: "pointer",
+            fontSize: T.fontXs,
+            fontWeight: 600,
+            whiteSpace: "nowrap"
+          },
+          children: [
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { width: 6, height: 6, borderRadius: 99, background: tok.stripe } }),
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { children: label })
+          ]
+        }
+      );
+    }
     return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column", flex: 1, overflow: "hidden" }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: {
         display: "flex",
         alignItems: "center",
-        gap: 4,
-        padding: "0 8px",
-        height: 36,
+        gap: 8,
+        padding: "0 12px",
+        height: T.editorHeaderH,
         flexShrink: 0,
         borderBottom: `1px solid ${T.border}`,
-        background: T.surface
+        background: T.surfaceAlt
       }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
-          "button",
-          {
-            onClick: () => nav("/scenarios"),
-            style: cBtn(),
-            onMouseEnter: (e) => {
-              e.currentTarget.style.background = T.surfaceHover;
-            },
-            onMouseLeave: (e) => {
-              e.currentTarget.style.background = "transparent";
-            },
-            children: [
-              "\u2190 ",
-              t("common.backToList")
-            ]
-          }
-        ),
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: divider }),
-        editingName ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-          "input",
-          {
-            ref: nameInputRef,
-            value: draftName,
-            onChange: (e) => setDraftName(e.target.value),
-            onBlur: () => {
-              void commitName();
-            },
-            onKeyDown: (e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-                void commitName();
-              }
-              if (e.key === "Escape") {
-                e.preventDefault();
-                cancelEditName();
-              }
-            },
-            placeholder: t("scenarioForm.namePlaceholder"),
-            style: {
-              fontSize: T.fontBase,
-              fontWeight: 600,
-              color: T.textStrong,
-              border: `1.5px solid ${T.primary}`,
-              borderRadius: T.radiusSm,
-              padding: "2px 7px",
-              background: T.surface,
-              minWidth: 130,
-              maxWidth: 240,
-              outline: "none"
-            }
-          }
-        ) : /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
-          "button",
-          {
-            onClick: startEditName,
-            title: t("scenarioForm.nameLabel"),
-            style: {
-              display: "flex",
-              alignItems: "center",
-              gap: 4,
-              fontSize: T.fontBase,
-              fontWeight: 600,
-              color: T.textStrong,
-              background: "transparent",
-              border: "none",
-              cursor: "text",
-              padding: "2px 5px",
-              borderRadius: T.radiusSm,
-              maxWidth: 200,
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap"
-            },
-            onMouseEnter: (e) => {
-              e.currentTarget.style.background = T.surfaceHover;
-            },
-            onMouseLeave: (e) => {
-              e.currentTarget.style.background = "transparent";
-            },
-            children: [
-              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { overflow: "hidden", textOverflow: "ellipsis" }, children: name || /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { color: T.textMuted, fontWeight: 400 }, children: t("scenarioForm.namePlaceholder") }) }),
-              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { color: T.textMuted, flexShrink: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(PencilIcon, {}) })
-            ]
-          }
-        ),
-        !isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { ref: statusDropRef, style: { position: "relative", flexShrink: 0 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: pill(), children: [
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
             "button",
             {
-              onClick: () => setShowStatusDrop((v) => !v),
+              onClick: () => nav("/scenarios"),
+              title: t("common.backToList"),
+              "aria-label": t("common.backToList"),
+              style: iconBtn(),
+              children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(IconBack, {})
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { width: 1, height: 14, background: T.border, margin: "0 4px" } }),
+          editingName ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+            "input",
+            {
+              ref: nameInputRef,
+              value: draftName,
+              onChange: (e) => setDraftName(e.target.value),
+              onBlur: () => {
+                void commitName();
+              },
+              onKeyDown: (e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  void commitName();
+                }
+                if (e.key === "Escape") {
+                  e.preventDefault();
+                  cancelEditName();
+                }
+              },
+              placeholder: t("scenarioForm.namePlaceholder"),
+              style: {
+                fontSize: T.fontBase,
+                fontWeight: 600,
+                color: T.textStrong,
+                border: `1px solid ${T.primary}`,
+                borderRadius: T.radiusSm,
+                padding: "2px 7px",
+                background: T.surface,
+                minWidth: 130,
+                maxWidth: 240,
+                outline: "none"
+              }
+            }
+          ) : /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+            "button",
+            {
+              onClick: startEditName,
+              title: t("scenarioForm.nameLabel"),
               style: {
                 display: "flex",
                 alignItems: "center",
-                gap: 3,
+                gap: 5,
+                padding: "0 6px",
+                fontSize: T.fontBase,
+                fontWeight: 600,
+                color: T.text,
                 background: "transparent",
                 border: "none",
-                cursor: "pointer",
-                padding: "2px 4px",
-                borderRadius: T.radiusSm
+                cursor: "text",
+                maxWidth: 220,
+                minWidth: 0,
+                overflow: "hidden",
+                whiteSpace: "nowrap"
               },
-              title: t("scenarioForm.statusLabel"),
               children: [
-                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Badge, { status }),
-                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { color: T.textMuted }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(ChevronDownIcon, {}) })
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: {
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  minWidth: 0
+                }, children: name || /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { color: T.textMuted, fontWeight: 400 }, children: t("scenarioForm.namePlaceholder") }) }),
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { color: T.textFaint, flexShrink: 0, display: "inline-flex" }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(IconPencil, {}) })
               ]
             }
           ),
-          showStatusDrop && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: {
-            position: "absolute",
-            top: "calc(100% + 4px)",
-            left: 0,
-            background: T.surface,
-            border: `1px solid ${T.border}`,
-            borderRadius: T.radiusMd,
-            boxShadow: "0 4px 12px rgba(0,0,0,.12)",
-            zIndex: 200,
-            overflow: "hidden",
-            minWidth: 100
-          }, children: statusOptions.map((o) => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-            "button",
-            {
-              onClick: () => {
-                void changeStatus(o.value);
-              },
-              style: {
-                display: "flex",
-                alignItems: "center",
-                width: "100%",
-                padding: "6px 12px",
-                background: o.value === status ? T.primaryLight : "transparent",
-                border: "none",
-                cursor: "pointer",
-                fontSize: T.fontSm,
-                color: T.text,
-                textAlign: "left"
-              },
-              onMouseEnter: (e) => {
-                if (o.value !== status) e.currentTarget.style.background = T.surfaceHover;
-              },
-              onMouseLeave: (e) => {
-                if (o.value !== status) e.currentTarget.style.background = "transparent";
-              },
-              children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Badge, { status: o.value })
-            },
-            o.value
-          )) })
-        ] }),
-        !isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-          "button",
-          {
-            onClick: () => setShowDetails((v) => !v),
-            title: t("scenarioForm.descLabel"),
-            style: {
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              width: 20,
-              height: 20,
-              padding: 0,
-              borderRadius: T.radiusSm,
-              background: showDetails ? T.primaryLight : "transparent",
-              border: `1px solid ${showDetails ? T.primaryBorder : "transparent"}`,
-              color: showDetails ? T.primaryText : T.textMuted,
-              cursor: "pointer",
-              flexShrink: 0
-            },
-            onMouseEnter: (e) => {
-              if (!showDetails) {
-                e.currentTarget.style.background = T.surfaceHover;
-                e.currentTarget.style.borderColor = T.border;
-              }
-            },
-            onMouseLeave: (e) => {
-              if (!showDetails) {
-                e.currentTarget.style.background = "transparent";
-                e.currentTarget.style.borderColor = "transparent";
-              }
-            },
-            children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(DescEditIcon, {})
-          }
-        ),
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { flex: 1 } }),
-        savedMsg && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "10px", color: T.successText, fontWeight: 600, whiteSpace: "nowrap", flexShrink: 0, marginRight: 4 }, children: [
-          "\u2713 ",
-          savedMsg
-        ] }),
-        !isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
-          analyticsMode ? (
-            /* Analytics モード中: 編集に戻る */
-            /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
-              "button",
-              {
-                onClick: () => setAnalyticsMode(false),
-                style: { ...cBtn({ fill: true }), fontWeight: 700 },
-                onMouseEnter: (e) => {
-                  e.currentTarget.style.filter = "brightness(1.1)";
-                },
-                onMouseLeave: (e) => {
-                  e.currentTarget.style.filter = "none";
-                },
-                children: [
-                  "\u2190 ",
-                  t("canvas.editMode")
-                ]
-              }
-            )
-          ) : (
-            /* 編集モード: ノードパレット */
-            NODE_TYPES.map((type) => {
-              const c = NODE_COLORS[type];
-              const label = t(`node.type.${type}`);
-              return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+          !isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { width: 1, height: 14, background: T.border, margin: "0 4px" } }),
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { ref: statusDropRef, style: { position: "relative", flexShrink: 0 }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
                 "button",
                 {
-                  onClick: () => canvasRef.current?.addNode(type),
-                  title: t("node.addToCanvas", { type: label }),
+                  onClick: () => setShowStatusDrop((v) => !v),
+                  title: t("scenarioForm.statusLabel"),
+                  style: {
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 4,
+                    height: 22,
+                    padding: "0 8px",
+                    marginRight: 2,
+                    background: status === "published" ? T.successPillBg : status === "draft" ? T.badgeDraftBg : T.badgeArchBg,
+                    color: status === "published" ? T.successFg : status === "draft" ? T.badgeDraftColor : T.badgeArchColor,
+                    borderRadius: 99,
+                    border: "none",
+                    cursor: "pointer",
+                    fontSize: T.fontXs,
+                    fontWeight: 700,
+                    whiteSpace: "nowrap"
+                  },
+                  children: [
+                    status === "published" && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { width: 5, height: 5, borderRadius: 99, background: "currentColor" } }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Badge, { status }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { display: "inline-flex", opacity: 0.7 }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(IconChevDown, {}) })
+                  ]
+                }
+              ),
+              showStatusDrop && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: {
+                position: "absolute",
+                top: "calc(100% + 4px)",
+                left: 0,
+                background: T.surface,
+                border: `1px solid ${T.border}`,
+                borderRadius: T.radiusMd,
+                boxShadow: T.shadowElevated,
+                zIndex: 200,
+                overflow: "hidden",
+                minWidth: 120
+              }, children: statusOptions.map((o) => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                "button",
+                {
+                  onClick: () => {
+                    void changeStatus(o.value);
+                  },
                   style: {
                     display: "flex",
                     alignItems: "center",
-                    gap: 3,
-                    padding: "1px 6px",
-                    height: 22,
-                    borderRadius: T.radiusMd,
-                    background: c.header,
+                    width: "100%",
+                    padding: "6px 12px",
+                    background: o.value === status ? T.primaryLight : "transparent",
                     border: "none",
-                    color: "#fff",
-                    fontWeight: 600,
-                    fontSize: "10px",
                     cursor: "pointer",
-                    flexShrink: 0,
-                    letterSpacing: "0.01em"
+                    fontSize: T.fontSm,
+                    color: T.text,
+                    textAlign: "left"
                   },
-                  onMouseEnter: (e) => {
-                    e.currentTarget.style.filter = "brightness(1.08)";
-                  },
-                  onMouseLeave: (e) => {
-                    e.currentTarget.style.filter = "none";
-                  },
-                  children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { display: "inline-flex", transform: "scale(0.8)", transformOrigin: "center", lineHeight: 0 }, children: NODE_ICONS[type] }),
-                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { children: label })
-                  ]
+                  children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Badge, { status: o.value })
                 },
-                type
-              );
-            })
-          ),
-          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: divider })
+                o.value
+              )) })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+              "button",
+              {
+                onClick: () => setShowDetails((v) => !v),
+                title: t("scenarioForm.descLabel"),
+                style: { ...iconBtn(showDetails), color: showDetails ? T.primary : T.textMuted },
+                children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(IconDesc, {})
+              }
+            )
+          ] })
         ] }),
-        !isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
-          "button",
-          {
-            onClick: () => setAnalyticsMode((v) => !v),
-            title: t("canvas.analyticsMode"),
-            style: cBtn({ active: analyticsMode }),
-            onMouseEnter: (e) => {
-              if (!analyticsMode) e.currentTarget.style.background = T.surfaceHover;
-            },
-            onMouseLeave: (e) => {
-              if (!analyticsMode) e.currentTarget.style.background = "transparent";
-            },
-            children: [
-              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(AnalyticsIcon, {}),
-              t("canvas.analyticsMode")
-            ]
-          }
-        ),
-        !isNew && !analyticsMode && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
-          "button",
-          {
-            disabled: saving,
-            onClick: () => canvasRef.current?.triggerSave(),
-            style: { ...cBtn({ fill: true }), opacity: saving ? 0.6 : 1 },
-            onMouseEnter: (e) => {
-              if (!saving) e.currentTarget.style.filter = "brightness(0.9)";
-            },
-            onMouseLeave: (e) => {
-              e.currentTarget.style.filter = "none";
-            },
-            children: [
-              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(SaveIcon, {}),
-              saving ? t("common.saving") : t("common.save")
-            ]
-          }
-        ),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { flex: 1, minWidth: 0 } }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: pill({ padding: "0 10px", gap: 7, minWidth: 220 }), children: [
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { color: T.textFaint, display: "inline-flex" }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(IconSearch, {}) }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { padding: "0 4px", fontSize: T.fontSm, color: T.textMuted, flex: 1 }, children: t("common.search") }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: {
+            padding: "1px 6px",
+            borderRadius: T.radiusSm,
+            background: T.surfaceAlt,
+            border: `1px solid ${T.border}`,
+            fontFamily: MONO3,
+            fontSize: 9.5,
+            color: T.textFaint
+          }, children: "\u2318K" })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { flex: 1, minWidth: 0 } }),
+        !isNew && !analyticsMode && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: pill(), children: [
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: {
+            padding: "0 6px",
+            fontSize: 9.5,
+            fontWeight: 700,
+            letterSpacing: "0.08em",
+            color: T.textFaint,
+            textTransform: "uppercase",
+            fontFamily: MONO3,
+            borderRight: `1px solid ${T.border}`,
+            marginRight: 2
+          }, children: "add" }),
+          NODE_TYPES.map((type) => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(NodeChip, { type }, type))
+        ] }),
+        !isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: pill(), children: [
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+            "button",
+            {
+              title: t("canvas.analyticsMode"),
+              onClick: () => setAnalyticsMode((v) => !v),
+              style: iconBtn(analyticsMode),
+              children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(IconAnalytics, {})
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("button", { title: t("common.history"), style: iconBtn(), children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(IconHistory, {}) }),
+          !analyticsMode && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { width: 1, height: 14, background: T.border, margin: "0 2px" } }),
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+              "button",
+              {
+                disabled: saving,
+                onClick: () => canvasRef.current?.triggerSave(),
+                style: {
+                  height: 22,
+                  padding: "0 10px",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 5,
+                  background: T.primary,
+                  color: T.primaryFg,
+                  border: "none",
+                  borderRadius: T.radiusSm,
+                  cursor: saving ? "wait" : "pointer",
+                  opacity: saving ? 0.6 : 1,
+                  fontSize: T.fontXs,
+                  fontWeight: 700,
+                  whiteSpace: "nowrap"
+                },
+                children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(IconSave, {}),
+                  saving ? t("common.saving") : t("common.save")
+                ]
+              }
+            )
+          ] })
+        ] }),
         isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
           Btn,
           {
@@ -37300,14 +37782,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             },
             title: t("common.delete"),
             style: {
+              width: 28,
+              height: 28,
+              borderRadius: 99,
               display: "inline-flex",
               alignItems: "center",
               justifyContent: "center",
-              width: 22,
-              height: 22,
-              padding: 0,
-              borderRadius: "50%",
-              background: "transparent",
+              background: T.surface,
               border: `1px solid ${T.border}`,
               color: T.textMuted,
               cursor: "pointer",
@@ -37316,16 +37797,30 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             onMouseEnter: (e) => {
               e.currentTarget.style.background = T.dangerBg;
               e.currentTarget.style.borderColor = T.dangerBorder;
-              e.currentTarget.style.color = T.dangerText;
+              e.currentTarget.style.color = T.dangerFg;
             },
             onMouseLeave: (e) => {
-              e.currentTarget.style.background = "transparent";
+              e.currentTarget.style.background = T.surface;
               e.currentTarget.style.borderColor = T.border;
               e.currentTarget.style.color = T.textMuted;
             },
-            children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(TrashIcon, {})
+            children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(IconTrash, {})
           }
-        )
+        ),
+        savedMsg && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: {
+          position: "absolute",
+          top: 52,
+          right: 16,
+          fontSize: T.fontXs,
+          color: T.successFg,
+          fontWeight: 600,
+          background: T.successBg,
+          padding: "4px 10px",
+          borderRadius: T.radiusXl
+        }, children: [
+          "\u2713 ",
+          savedMsg
+        ] })
       ] }),
       showDetails && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: {
         display: "flex",
@@ -37333,11 +37828,20 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         alignItems: "flex-end",
         padding: "8px 12px",
         flexShrink: 0,
-        background: T.bg,
+        background: T.surfaceAlt,
         borderBottom: `1px solid ${T.border}`
       }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { flex: 1 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("label", { style: { display: "block", fontSize: T.fontXs, fontWeight: 600, color: T.textMuted, marginBottom: 3 }, children: t("scenarioForm.descLabel") }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("label", { style: {
+            display: "block",
+            fontSize: T.fontXs,
+            fontWeight: 600,
+            color: T.textMuted,
+            fontFamily: MONO3,
+            letterSpacing: "0.06em",
+            textTransform: "uppercase",
+            marginBottom: 4
+          }, children: t("scenarioForm.descLabel") }),
           /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
             "input",
             {
@@ -37347,8 +37851,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               style: {
                 width: "100%",
                 padding: "5px 9px",
-                borderRadius: T.radiusSm,
-                border: `1.5px solid ${T.borderInput}`,
+                borderRadius: T.radiusMd,
+                border: `1px solid ${T.borderInput}`,
                 fontSize: T.fontBase,
                 boxSizing: "border-box",
                 background: T.surface,
@@ -37357,9 +37861,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             }
           )
         ] }),
-        isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Btn, { disabled: saving || !(draftName.trim() || name.trim()), onClick: () => {
-          void handleCreate();
-        }, children: saving ? t("common.creating") : t("common.create") }),
+        isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+          Btn,
+          {
+            disabled: saving || !(draftName.trim() || name.trim()),
+            onClick: () => {
+              void handleCreate();
+            },
+            children: saving ? t("common.creating") : t("common.create")
+          }
+        ),
         !isNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Btn, { disabled: saving, onClick: () => {
           void saveMeta();
         }, children: saving ? t("common.saving") : t("common.save") })
@@ -37394,7 +37905,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/AppearancePage.tsx
-  var import_react12 = __toESM(require_react());
+  var import_react13 = __toESM(require_react());
   var import_jsx_runtime11 = __toESM(require_jsx_runtime());
   function ColorSwatch({ color: color2 }) {
     return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: {
@@ -37410,11 +37921,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
   function AppearancePage() {
     const { t } = useTranslation();
-    const [form, setForm] = (0, import_react12.useState)(null);
-    const [loading, setLoading] = (0, import_react12.useState)(true);
-    const [saving, setSaving] = (0, import_react12.useState)(false);
-    const [error, setError] = (0, import_react12.useState)(null);
-    const [saved, setSaved] = (0, import_react12.useState)(false);
+    const [form, setForm] = (0, import_react13.useState)(null);
+    const [loading, setLoading] = (0, import_react13.useState)(true);
+    const [saving, setSaving] = (0, import_react13.useState)(false);
+    const [error, setError] = (0, import_react13.useState)(null);
+    const [saved, setSaved] = (0, import_react13.useState)(false);
     const positionOptions = [
       { value: "bottom-right", label: t("appearance.position.bottomRight") },
       { value: "bottom-left", label: t("appearance.position.bottomLeft") },
@@ -37427,7 +37938,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       { value: "exit_intent", label: t("appearance.trigger.exitIntent") },
       { value: "manual", label: t("appearance.trigger.manual") }
     ];
-    (0, import_react12.useEffect)(() => {
+    (0, import_react13.useEffect)(() => {
       void (async () => {
         try {
           setForm(await getAppearance());
@@ -37591,7 +38102,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/CredentialsPage.tsx
-  var import_react13 = __toESM(require_react());
+  var import_react14 = __toESM(require_react());
   var import_jsx_runtime12 = __toESM(require_jsx_runtime());
   var ADAPTER_COLORS = {
     http: { bg: "#e0f2fe", color: "#0369a1" },
@@ -37612,13 +38123,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
   function CredentialsPage() {
     const { t } = useTranslation();
-    const [creds, setCreds] = (0, import_react13.useState)([]);
-    const [loading, setLoading] = (0, import_react13.useState)(true);
-    const [error, setError] = (0, import_react13.useState)(null);
-    const [showForm, setShowForm] = (0, import_react13.useState)(false);
-    const [name, setName] = (0, import_react13.useState)("");
-    const [adapter, setAdapter] = (0, import_react13.useState)("http");
-    const [saving, setSaving] = (0, import_react13.useState)(false);
+    const [creds, setCreds] = (0, import_react14.useState)([]);
+    const [loading, setLoading] = (0, import_react14.useState)(true);
+    const [error, setError] = (0, import_react14.useState)(null);
+    const [showForm, setShowForm] = (0, import_react14.useState)(false);
+    const [name, setName] = (0, import_react14.useState)("");
+    const [adapter, setAdapter] = (0, import_react14.useState)("http");
+    const [saving, setSaving] = (0, import_react14.useState)(false);
     const adapterOptions = [
       { value: "http", label: t("credentials.adapter.http") },
       { value: "email", label: t("credentials.adapter.email") },
@@ -37637,7 +38148,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         setLoading(false);
       }
     }
-    (0, import_react13.useEffect)(() => {
+    (0, import_react14.useEffect)(() => {
       void load();
     }, []);
     async function handleCreate(e) {
@@ -37853,7 +38364,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/ActionLogsPage.tsx
-  var import_react14 = __toESM(require_react());
+  var import_react15 = __toESM(require_react());
   var import_jsx_runtime14 = __toESM(require_jsx_runtime());
   var ADAPTER_ICONS = {
     email: "\u{1F4E7}",
@@ -37882,15 +38393,15 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
   function ActionLogsPage() {
     const { t } = useTranslation();
-    const [logs, setLogs] = (0, import_react14.useState)([]);
-    const [total, setTotal] = (0, import_react14.useState)(0);
-    const [loading, setLoading] = (0, import_react14.useState)(true);
-    const [error, setError] = (0, import_react14.useState)(null);
-    const [adapter, setAdapter] = (0, import_react14.useState)("");
-    const [status, setStatus] = (0, import_react14.useState)("");
-    const [offset, setOffset] = (0, import_react14.useState)(0);
+    const [logs, setLogs] = (0, import_react15.useState)([]);
+    const [total, setTotal] = (0, import_react15.useState)(0);
+    const [loading, setLoading] = (0, import_react15.useState)(true);
+    const [error, setError] = (0, import_react15.useState)(null);
+    const [adapter, setAdapter] = (0, import_react15.useState)("");
+    const [status, setStatus] = (0, import_react15.useState)("");
+    const [offset, setOffset] = (0, import_react15.useState)(0);
     const limit = 50;
-    (0, import_react14.useEffect)(() => {
+    (0, import_react15.useEffect)(() => {
       setLoading(true);
       setError(null);
       void listActionLogs({
@@ -38114,7 +38625,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/DashboardPage.tsx
-  var import_react15 = __toESM(require_react());
+  var import_react16 = __toESM(require_react());
   var import_jsx_runtime15 = __toESM(require_jsx_runtime());
   function KpiCard({
     label,
@@ -38220,10 +38731,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
   function DashboardPage() {
     const { t } = useTranslation();
-    const [stats, setStats] = (0, import_react15.useState)(null);
-    const [loading, setLoading] = (0, import_react15.useState)(true);
-    const [error, setError] = (0, import_react15.useState)(null);
-    (0, import_react15.useEffect)(() => {
+    const [stats, setStats] = (0, import_react16.useState)(null);
+    const [loading, setLoading] = (0, import_react16.useState)(true);
+    const [error, setError] = (0, import_react16.useState)(null);
+    (0, import_react16.useEffect)(() => {
       setLoading(true);
       setError(null);
       void getDashboard().then((res) => setStats(res.data)).catch((err) => {
@@ -38309,7 +38820,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/SessionsPage.tsx
-  var import_react16 = __toESM(require_react());
+  var import_react17 = __toESM(require_react());
   var import_jsx_runtime16 = __toESM(require_jsx_runtime());
   var OUTCOME_COLORS = {
     active: { bg: "oklch(96% 0.05 220)", fg: "oklch(38% 0.15 220)", border: "oklch(83% 0.10 220)" },
@@ -38342,10 +38853,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     onClose
   }) {
     const { t } = useTranslation();
-    const [detail, setDetail] = (0, import_react16.useState)(null);
-    const [loading, setLoading] = (0, import_react16.useState)(true);
-    const [error, setError] = (0, import_react16.useState)(null);
-    (0, import_react16.useEffect)(() => {
+    const [detail, setDetail] = (0, import_react17.useState)(null);
+    const [loading, setLoading] = (0, import_react17.useState)(true);
+    const [error, setError] = (0, import_react17.useState)(null);
+    (0, import_react17.useEffect)(() => {
       setLoading(true);
       setError(null);
       void getSessionDetail(sessionId).then((res) => setDetail(res.data)).catch((err) => {
@@ -38523,16 +39034,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
   function SessionsPage() {
     const { t } = useTranslation();
-    const [sessions, setSessions] = (0, import_react16.useState)([]);
-    const [total, setTotal] = (0, import_react16.useState)(0);
-    const [loading, setLoading] = (0, import_react16.useState)(true);
-    const [error, setError] = (0, import_react16.useState)(null);
-    const [selectedId, setSelectedId] = (0, import_react16.useState)(null);
-    const [outcome, setOutcome] = (0, import_react16.useState)("");
-    const [hasConversion, setHasConversion] = (0, import_react16.useState)("");
-    const [offset, setOffset] = (0, import_react16.useState)(0);
+    const [sessions, setSessions] = (0, import_react17.useState)([]);
+    const [total, setTotal] = (0, import_react17.useState)(0);
+    const [loading, setLoading] = (0, import_react17.useState)(true);
+    const [error, setError] = (0, import_react17.useState)(null);
+    const [selectedId, setSelectedId] = (0, import_react17.useState)(null);
+    const [outcome, setOutcome] = (0, import_react17.useState)("");
+    const [hasConversion, setHasConversion] = (0, import_react17.useState)("");
+    const [offset, setOffset] = (0, import_react17.useState)(0);
     const limit = 50;
-    (0, import_react16.useEffect)(() => {
+    (0, import_react17.useEffect)(() => {
       setLoading(true);
       setError(null);
       void listSessions({
@@ -38781,7 +39292,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var container = document.getElementById("root");
   if (!container) throw new Error("Root element #root not found");
   (0, import_client.createRoot)(container).render(
-    /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(import_react17.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(I18nProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(App, {}) }) })
+    /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(import_react18.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(I18nProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(App, {}) }) })
   );
 })();
 /*! Bundled license information:
