@@ -570,13 +570,17 @@ export default function Layout({ variant = 'default' }: { variant?: 'default' | 
                 // mobile: sidebar is fixed so main takes full width
                 width: isMobile ? '100%' : undefined,
             }}>
-                {isMobile && providesHeader ? (
+                {/* ラッパー <div> は常に描画する。
+                    providesHeader 切替で wrapper を出し入れすると React が Outlet を
+                    unmount/remount し、ページ state が毎回リセットされる → useEffect の
+                    再発火による無限フェッチループの原因になる。 */}
+                <div style={{
+                    maxWidth: (isMobile && providesHeader) ? 'none' : 1100,
+                    margin:   '0 auto',
+                    width:    (isMobile && providesHeader) ? '100%' : undefined,
+                }}>
                     <Outlet />
-                ) : (
-                    <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-                        <Outlet />
-                    </div>
-                )}
+                </div>
             </main>
         </div>
         </LayoutContext.Provider>
