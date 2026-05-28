@@ -367,12 +367,15 @@ interface Props {
     analyticsMode: boolean;   // 親ヘッダーから制御
     /** モバイルヘッダーのノード数表示用 — 内部 nodes が変わるたびに発火 */
     onLiveNodeCount?: (n: number) => void;
+    /** ライブ state を親に通知 — リサイズで canvas が unmount/remount しても
+     *  親が ref に保存しておけば新 instance に initialNodes として渡せる。 */
+    onLiveStateChange?: (nodes: ScenarioNode[], edges: ScenarioEdge[]) => void;
 }
 
 // ── コンポーネント ──────────────────────────────────────────────────────────────
 
 const ScenarioCanvas = forwardRef<ScenarioCanvasRef, Props>(function ScenarioCanvas(
-    { scenarioId, initialNodes, initialEdges, credentials, onSave, analyticsMode, onLiveNodeCount },
+    { scenarioId, initialNodes, initialEdges, credentials, onSave, analyticsMode, onLiveNodeCount, onLiveStateChange },
     ref,
 ) {
     const { t } = useTranslation();
@@ -387,6 +390,12 @@ const ScenarioCanvas = forwardRef<ScenarioCanvasRef, Props>(function ScenarioCan
     useEffect(() => {
         onLiveNodeCount?.(nodes.length);
     }, [nodes.length, onLiveNodeCount]);
+
+    // ライブ state を親に通知 — リサイズで canvas が unmount/remount される場合に
+    // 親が ref で保持しておき、次の instance に initialNodes として渡せるようにする。
+    useEffect(() => {
+        onLiveStateChange?.(nodes.map(rfNodeToApi), edges.map(rfEdgeToApi));
+    }, [nodes, edges, onLiveStateChange]);
 
     // ── Analytics 状態（期間は内部管理、モードは親から制御）──────────────────────
     const [period, setPeriod]                   = useState<AnalyticsPeriod>('7d');

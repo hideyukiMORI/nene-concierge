@@ -118,6 +118,10 @@ export default function ScenarioFormPage() {
     const [error, setError]             = useState<string | null>(null);
     const [savedMsg, setSavedMsg]       = useState('');
     const canvasRef                     = useRef<ScenarioCanvasRef>(null);
+    // リサイズで canvas が unmount/remount された時に未保存編集を保持するための live state buffer。
+    // ScenarioCanvas の onLiveStateChange で毎更新ごとに上書き。
+    // id 変化時 (別シナリオへ遷移) はリセット。
+    const liveStateRef = useRef<{ nodes: ScenarioNode[]; edges: ScenarioEdge[] } | null>(null);
 
     // ── インライン編集 ──────────────────────────────────────────────────────
     const [editingName, setEditingName] = useState(isNew);
@@ -136,6 +140,8 @@ export default function ScenarioFormPage() {
 
     // ── ロード ──────────────────────────────────────────────────────────────
     useEffect(() => {
+        // 別シナリオへ遷移したら live state buffer をリセット
+        liveStateRef.current = null;
         void listCredentials().then(r => setCredentials(r.data)).catch(() => {});
         if (isNew) {
             setTimeout(() => nameInputRef.current?.focus(), 50);
@@ -437,12 +443,13 @@ export default function ScenarioFormPage() {
                     <ScenarioCanvas
                         ref={canvasRef}
                         scenarioId={Number(id)}
-                        initialNodes={nodes}
-                        initialEdges={edges}
+                        initialNodes={liveStateRef.current?.nodes ?? nodes}
+                        initialEdges={liveStateRef.current?.edges ?? edges}
                         credentials={credentials}
                         onSave={handleGraphSave}
                         analyticsMode={analyticsMode}
                         onLiveNodeCount={setLiveNodeCount}
+                        onLiveStateChange={(n, e) => { liveStateRef.current = { nodes: n, edges: e }; }}
                     />
                 </div>
 
@@ -770,11 +777,12 @@ export default function ScenarioFormPage() {
                     <ScenarioCanvas
                         ref={canvasRef}
                         scenarioId={Number(id)}
-                        initialNodes={nodes}
-                        initialEdges={edges}
+                        initialNodes={liveStateRef.current?.nodes ?? nodes}
+                        initialEdges={liveStateRef.current?.edges ?? edges}
                         credentials={credentials}
                         onSave={handleGraphSave}
                         analyticsMode={analyticsMode}
+                        onLiveStateChange={(n, e) => { liveStateRef.current = { nodes: n, edges: e }; }}
                     />
                 </div>
             )}
