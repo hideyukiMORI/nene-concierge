@@ -2,60 +2,50 @@ import type { ReactElement } from 'react';
 import { Handle, Position } from '@xyflow/react';
 import type { NodeProps } from '@xyflow/react';
 import type { ChatNodeType, NodeAnalyticsData } from '../../api.js';
-import { T } from '../../theme.js';
+import { T, NODE_TOKENS } from '../../theme.js';
 
-// ── カラーパレット (OKLCH) ────────────────────────────────────────────────────
-// Hue 248 = blue, 65 = amber, 192 = teal (primary), 265 = slate
+// ─────────────────────────────────────────────────────────────────────────────
+// v2 (2026-05-28) — モダンノードカード
+//   - 角丸 2px (CAD/dev tool feel)
+//   - 上端 2px の細いカラーアクセントエッジ
+//   - ノード色でほんのり染めたボディ (ダーク視認性UP)
+//   - ヘッダー: アイコンチップ + ラベル + モノスペース ID
+//   - 色は全テーマ対応 (CSS 変数経由 — index.html で定義)
+// ─────────────────────────────────────────────────────────────────────────────
+
+// ── NODE_COLORS (互換性のため残置 — CSS 変数を参照) ─────────────────────────
 //
-// bg: color-mix で各テーマの surface 色にヘッダー色を 14% 混ぜる
-//   → ライトテーマでは薄いパステル、ダークテーマでは暗いトーンに自然になじむ
-
+// 旧コードが NODE_COLORS[type].header を直接読んでいるケースに備えた橋渡し。
+// 新コードは NODE_TOKENS (theme.ts) を直接使うこと。
 export const NODE_COLORS: Record<ChatNodeType, { bg: string; header: string; text: string }> = {
-    message:   {
-        bg:     'color-mix(in oklch, oklch(52% 0.18 248) 14%, var(--nca-color-surface))',
-        header: 'oklch(52% 0.18 248)',
-        text:   'oklch(26% 0.16 248)',   // MiniMap などで参照（NodeShell 内は T.text を使用）
-    },
-    condition: {
-        bg:     'color-mix(in oklch, oklch(62% 0.16 65) 14%, var(--nca-color-surface))',
-        header: 'oklch(62% 0.16 65)',
-        text:   'oklch(28% 0.14 65)',
-    },
-    action:    {
-        bg:     'color-mix(in oklch, oklch(52% 0.17 192) 14%, var(--nca-color-surface))',
-        header: 'oklch(52% 0.17 192)',
-        text:   'oklch(26% 0.14 192)',
-    },
-    end:       {
-        bg:     'color-mix(in oklch, oklch(44% 0.10 265) 14%, var(--nca-color-surface))',
-        header: 'oklch(44% 0.10 265)',
-        text:   'oklch(24% 0.10 265)',
-    },
+    message:   { bg: NODE_TOKENS.message.body,   header: NODE_TOKENS.message.stripe,   text: T.text },
+    condition: { bg: NODE_TOKENS.condition.body, header: NODE_TOKENS.condition.stripe, text: T.text },
+    action:    { bg: NODE_TOKENS.action.body,    header: NODE_TOKENS.action.stripe,    text: T.text },
+    end:       { bg: NODE_TOKENS.end.body,       header: NODE_TOKENS.end.stripe,       text: T.text },
 };
 
 // ── ノードアイコン (inline SVG) ───────────────────────────────────────────────
-
 export const NODE_ICONS: Record<ChatNodeType, ReactElement> = {
     message: (
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"
-            stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="11" height="11" viewBox="0 0 16 16" fill="none"
+            stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
             <path d="M14 10.5A1.5 1.5 0 0 1 12.5 12H5L2 15V4.5A1.5 1.5 0 0 1 3.5 3h9A1.5 1.5 0 0 1 14 4.5z"/>
         </svg>
     ),
     condition: (
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"
-            stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round">
+        <svg width="11" height="11" viewBox="0 0 16 16" fill="none"
+            stroke="currentColor" strokeWidth="1.9" strokeLinejoin="round">
             <path d="M8 1.5L14.5 8 8 14.5 1.5 8z"/>
         </svg>
     ),
     action: (
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+        <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor">
             <path d="M9.5 1.5L3 9.5h5L6.5 14.5 14 6.5H9L9.5 1.5z"/>
         </svg>
     ),
     end: (
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"
-            stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="11" height="11" viewBox="0 0 16 16" fill="none"
+            stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="8" cy="8" r="6.5"/>
             <polyline points="5,8.5 7,10.5 11,6"/>
         </svg>
@@ -70,13 +60,11 @@ export const NODE_LABELS: Record<ChatNodeType, string> = {
 };
 
 // ── ノードデータ型 ────────────────────────────────────────────────────────────
-
 export interface MessageData  { text?: string; choices?: string[]; variable_name?: string; }
 export interface ConditionData { variable?: string; operator?: string; value?: string; }
 export interface ActionData {
     action_type?:  string;
     credential_id?: number;
-    /** QR adapter params */
     qr_content?:  string;
     qr_variable?: string;
     qr_size?:     number;
@@ -84,96 +72,113 @@ export interface ActionData {
 export interface EndData      { outcome?: string; }
 
 // ── Analytics カラーヘルパー ──────────────────────────────────────────────────
-
 function dropOffColor(rate: number): string {
-    if (rate >= 0.5) return 'oklch(52% 0.20 25)';  // 50%+ → 赤
-    if (rate >= 0.2) return 'oklch(62% 0.16 65)';  // 20-50% → 橙
-    return 'oklch(56% 0.16 145)';                   // < 20% → 緑
+    if (rate >= 0.5) return 'oklch(58% 0.20 25)';
+    if (rate >= 0.2) return 'oklch(62% 0.16 65)';
+    return 'oklch(56% 0.16 145)';
 }
 
-// ── 共通ノード UI ─────────────────────────────────────────────────────────────
+const MONO = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
 
+// ── 共通ノード UI ─────────────────────────────────────────────────────────────
 function NodeShell({
-    type, label, children, selected, analytics, isBottleneck,
+    type, label, id, children, selected, analytics, isBottleneck,
 }: {
     type:         ChatNodeType;
     label:        string;
+    id:           string;
     children?:    React.ReactNode;
     selected?:    boolean;
     analytics?:   NodeAnalyticsData;
     isBottleneck?: boolean;
 }) {
-    const c = NODE_COLORS[type];
+    const tok = NODE_TOKENS[type];
 
-    // 選択・ボトルネック・Analytics 離脱率は boxShadow のみで表現（border なし）
+    // 選択・ボトルネック・Analytics 離脱率の boxShadow 表現
     const boxShadow = isBottleneck
-        ? '0 0 0 3px oklch(52% 0.20 25 / 0.55), 0 2px 8px rgba(0,0,0,.14)'
+        ? `0 0 0 2px oklch(58% 0.20 25 / 0.55), ${T.shadowCard}`
         : analytics
-            ? `0 0 0 2px ${dropOffColor(analytics.drop_off_rate)} , 0 2px 8px rgba(0,0,0,.12)`
+            ? `0 0 0 2px ${dropOffColor(analytics.drop_off_rate)}, ${T.shadowCard}`
             : selected
-                ? '0 0 0 3px oklch(62% 0.18 265 / 0.55), 0 2px 8px rgba(0,0,0,.14)'
-                : '0 2px 8px rgba(0,0,0,.12)';
+                ? `0 0 0 2px ${tok.stripe}80, ${T.shadowCard}`
+                : T.shadowCard;
 
     return (
         <div style={{
-            background:   c.bg,
-            borderRadius: 3,            // シャープな角丸
+            background:   tok.body,
+            border:       `1px solid ${selected ? tok.stripe : tok.edge}`,
+            borderRadius: T.radiusNode,
             minWidth:     200,
             maxWidth:     240,
             boxShadow,
-            fontSize:     13,
+            fontSize:     T.fontBase,
             position:     'relative',
-            overflow:     'hidden',     // ヘッダーを角丸でクリップ
+            overflow:     'hidden',
         }}>
-            {/* ヘッダー (べた塗り) */}
+            {/* 上端: 細いカラーアクセント */}
+            <div style={{ height: 2, background: tok.stripe }}/>
+
+            {/* ヘッダー: icon chip + label + ID */}
             <div style={{
-                background: c.header, color: '#fff',
-                padding:    '6px 10px',
-                fontWeight: 700, fontSize: 12,
-                display:    'flex', alignItems: 'center', gap: 6,
+                display: 'flex', alignItems: 'center', gap: 6,
+                padding: '6px 8px 4px',
             }}>
-                <span>{NODE_ICONS[type]}</span>
-                <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {label || NODE_LABELS[type]}
-                </span>
-                {/* ボトルネックバッジ */}
+                <span style={{
+                    display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                    width: 16, height: 16, borderRadius: 3,
+                    background: tok.chip,
+                    color: tok.stripe,
+                    border: `1px solid ${tok.chipEdge}`,
+                    flexShrink: 0,
+                }}>{NODE_ICONS[type]}</span>
+                <span style={{
+                    flex: 1, fontSize: T.fontSm, fontWeight: 700, color: T.text,
+                    letterSpacing: '-0.005em',
+                    overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                }}>{label || NODE_LABELS[type]}</span>
                 {isBottleneck && (
                     <span style={{
-                        background: 'oklch(52% 0.20 25)', color: '#fff',
+                        background: 'oklch(58% 0.20 25)', color: '#fff',
                         fontSize: 9, fontWeight: 700,
                         padding: '1px 5px', borderRadius: 99,
                         flexShrink: 0,
-                    }}>
-                        ⚠
-                    </span>
+                    }}>⚠</span>
                 )}
+                <span style={{
+                    fontFamily: MONO, fontSize: 9.5, color: T.textFaint, fontWeight: 500,
+                    flexShrink: 0,
+                }}>{id}</span>
             </div>
-            {/* ボディ — テーマ対応テキスト色 */}
+
+            {/* ボディ */}
             {children && (
-                <div style={{ padding: '8px 10px', color: T.text, lineHeight: 1.4 }}>
+                <div style={{
+                    padding: '0 8px 7px', fontSize: T.fontXs,
+                    color: T.textMuted, lineHeight: 1.4,
+                }}>
                     {children}
                 </div>
             )}
-            {/* Analytics オーバーレイ — テーマ対応 */}
+
+            {/* Analytics オーバーレイ */}
             {analytics && (
                 <div style={{
                     padding: '5px 10px 6px',
-                    borderTop: `1px solid ${T.border}`,
+                    borderTop: `1px solid ${tok.edge}`,
                     display: 'flex', gap: 8, alignItems: 'center',
-                    background: T.tableHeader,
+                    background: T.surfaceAlt,
                 }}>
-                    {/* 訪問数 */}
                     <span style={{
                         display: 'flex', alignItems: 'center', gap: 3,
-                        fontSize: 11, fontWeight: 700, color: T.textMuted,
+                        fontSize: T.fontXs, fontWeight: 700, color: T.textMuted,
+                        fontFamily: MONO,
                     }}>
-                        👁 {analytics.visit_count.toLocaleString()}
+                        {analytics.visit_count.toLocaleString()} visits
                     </span>
-                    {/* 離脱率 */}
                     <span style={{
-                        fontSize: 11, fontWeight: 700,
+                        fontSize: T.fontXs, fontWeight: 700,
                         color: dropOffColor(analytics.drop_off_rate),
-                        marginLeft: 'auto',
+                        marginLeft: 'auto', fontFamily: MONO,
                     }}>
                         {Math.round(analytics.drop_off_rate * 100)}% ↓
                     </span>
@@ -188,7 +193,6 @@ function truncate(s: string, n = 80) {
 }
 
 // ── Analytics データ抽出ヘルパー ──────────────────────────────────────────────
-
 function getAnalytics(data: Record<string, unknown>): NodeAnalyticsData | undefined {
     return data['_analytics'] as NodeAnalyticsData | undefined;
 }
@@ -197,26 +201,28 @@ function getIsBottleneck(data: Record<string, unknown>): boolean {
 }
 
 // ── message ───────────────────────────────────────────────────────────────────
-
-export function MessageNode({ data, selected }: NodeProps) {
+export function MessageNode({ id, data, selected }: NodeProps) {
     const d = data as MessageData;
     const a = getAnalytics(data as Record<string, unknown>);
     return (
         <>
             <Handle type="target" position={Position.Top} />
             <NodeShell
-                type="message" label={String(data['label'] ?? '')} selected={selected}
+                type="message" id={id}
+                label={String(data['label'] ?? '')} selected={selected}
                 {...(a !== undefined ? { analytics: a } : {})}
                 isBottleneck={getIsBottleneck(data as Record<string, unknown>)}
             >
-                {d.text && <p style={{ margin: 0, fontSize: 12 }}>{truncate(d.text)}</p>}
+                {d.text && <p style={{ margin: 0 }}>{truncate(d.text)}</p>}
                 {d.choices && d.choices.length > 0 && (
-                    <div style={{ marginTop: 4, display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+                    <div style={{ marginTop: 4, display: 'flex', flexWrap: 'wrap', gap: 3 }}>
                         {d.choices.map((choice, i) => (
                             <span key={i} style={{
-                                background: 'color-mix(in oklch, oklch(52% 0.18 248) 28%, var(--nca-color-surface))',
-                                color: T.text,
-                                borderRadius: 99, padding: '2px 8px', fontSize: 11, fontWeight: 600,
+                                background: NODE_TOKENS.message.chip,
+                                color: NODE_TOKENS.message.stripe,
+                                border: `1px solid ${NODE_TOKENS.message.chipEdge}`,
+                                borderRadius: 99, padding: '1px 5px',
+                                fontSize: 9.5, fontWeight: 600,
                             }}>
                                 {choice}
                             </span>
@@ -224,7 +230,7 @@ export function MessageNode({ data, selected }: NodeProps) {
                     </div>
                 )}
                 {d.variable_name && (
-                    <p style={{ margin: '4px 0 0', fontSize: 11, color: '#6b7280' }}>
+                    <p style={{ margin: '4px 0 0', fontSize: T.fontXs, color: T.textFaint, fontFamily: MONO }}>
                         → <code>{d.variable_name}</code>
                     </p>
                 )}
@@ -235,35 +241,35 @@ export function MessageNode({ data, selected }: NodeProps) {
 }
 
 // ── condition ─────────────────────────────────────────────────────────────────
-
-export function ConditionNode({ data, selected }: NodeProps) {
+export function ConditionNode({ id, data, selected }: NodeProps) {
     const d = data as ConditionData;
     const a = getAnalytics(data as Record<string, unknown>);
     return (
         <>
             <Handle type="target" position={Position.Top} />
             <NodeShell
-                type="condition" label={String(data['label'] ?? '')} selected={selected}
+                type="condition" id={id}
+                label={String(data['label'] ?? '')} selected={selected}
                 {...(a !== undefined ? { analytics: a } : {})}
                 isBottleneck={getIsBottleneck(data as Record<string, unknown>)}
             >
                 {d.variable && (
-                    <p style={{ margin: 0, fontSize: 12 }}>
+                    <p style={{ margin: 0, fontFamily: MONO, fontSize: T.fontXs }}>
                         <code>{d.variable}</code>
                         {d.operator ? ` ${d.operator}` : ''}
                         {d.value ? ` "${d.value}"` : ''}
                     </p>
                 )}
-                {/* 分岐割合 (Analytics モード) */}
                 {a && Object.keys(a.branch_percentages).length > 0 && (
-                    <div style={{ display: 'flex', gap: 8, marginTop: 4 }}>
+                    <div style={{ display: 'flex', gap: 6, marginTop: 4 }}>
                         {Object.entries(a.branch_percentages).map(([label, pct]) => (
                             <span key={label} style={{
                                 fontSize: 10, fontWeight: 700,
+                                fontFamily: MONO,
                                 color: label === 'true' ? 'oklch(56% 0.17 145)' : 'oklch(60% 0.20 25)',
                                 background: label === 'true'
-                                    ? 'color-mix(in oklch, oklch(52% 0.17 145) 25%, var(--nca-color-surface))'
-                                    : 'color-mix(in oklch, oklch(52% 0.20 25) 25%, var(--nca-color-surface))',
+                                    ? 'oklch(56% 0.17 145 / 0.16)'
+                                    : 'oklch(60% 0.20 25 / 0.16)',
                                 borderRadius: 99, padding: '1px 6px',
                             }}>
                                 {label}: {Math.round(pct * 100)}%
@@ -272,41 +278,38 @@ export function ConditionNode({ data, selected }: NodeProps) {
                     </div>
                 )}
             </NodeShell>
-            <Handle type="source" position={Position.Bottom} id="true"
-                style={{ left: '30%' }} />
-            <Handle type="source" position={Position.Bottom} id="false"
-                style={{ left: '70%' }} />
+            <Handle type="source" position={Position.Bottom} id="true"  style={{ left: '30%' }} />
+            <Handle type="source" position={Position.Bottom} id="false" style={{ left: '70%' }} />
         </>
     );
 }
 
 // ── action ────────────────────────────────────────────────────────────────────
-
-const ACTION_ICONS: Record<string, string> = {
-    email: '📧', slack: '💬', chatwork: '🗨️', http: '🌐', qr: '◻',
+const ACTION_TYPE_LABEL: Record<string, string> = {
+    email: 'Email', slack: 'Slack', chatwork: 'Chatwork', http: 'HTTP', qr: 'QR',
 };
 
-export function ActionNode({ data, selected }: NodeProps) {
+export function ActionNode({ id, data, selected }: NodeProps) {
     const d = data as ActionData;
     const a = getAnalytics(data as Record<string, unknown>);
     return (
         <>
             <Handle type="target" position={Position.Top} />
             <NodeShell
-                type="action" label={String(data['label'] ?? '')} selected={selected}
+                type="action" id={id}
+                label={String(data['label'] ?? '')} selected={selected}
                 {...(a !== undefined ? { analytics: a } : {})}
                 isBottleneck={getIsBottleneck(data as Record<string, unknown>)}
             >
                 {d.action_type && (
-                    <p style={{ margin: 0, fontSize: 12 }}>
-                        {ACTION_ICONS[d.action_type] ?? '🔧'} {d.action_type}
+                    <p style={{ margin: 0, fontFamily: MONO, fontSize: T.fontXs }}>
+                        {ACTION_TYPE_LABEL[d.action_type] ?? d.action_type}
                     </p>
                 )}
                 {d.action_type === 'qr' && d.qr_content && (
-                    <p style={{ margin: '3px 0 0', fontSize: 11, color: 'oklch(36% 0.14 145)', wordBreak: 'break-all' }}>
+                    <p style={{ margin: '3px 0 0', fontSize: 10, color: T.textFaint, wordBreak: 'break-all' }}>
                         {truncate(d.qr_content, 40)}
-                        {d.qr_variable && d.qr_variable !== 'qr_url'
-                            ? ` → ${d.qr_variable}` : ''}
+                        {d.qr_variable && d.qr_variable !== 'qr_url' ? ` → ${d.qr_variable}` : ''}
                     </p>
                 )}
             </NodeShell>
@@ -316,19 +319,21 @@ export function ActionNode({ data, selected }: NodeProps) {
 }
 
 // ── end ───────────────────────────────────────────────────────────────────────
-
-export function EndNode({ data, selected }: NodeProps) {
+export function EndNode({ id, data, selected }: NodeProps) {
     const d = data as EndData;
     const a = getAnalytics(data as Record<string, unknown>);
     return (
         <>
             <Handle type="target" position={Position.Top} />
             <NodeShell
-                type="end" label={String(data['label'] ?? '')} selected={selected}
+                type="end" id={id}
+                label={String(data['label'] ?? '')} selected={selected}
                 {...(a !== undefined ? { analytics: a } : {})}
                 isBottleneck={getIsBottleneck(data as Record<string, unknown>)}
             >
-                {d.outcome && <p style={{ margin: 0, fontSize: 12 }}>{d.outcome}</p>}
+                {d.outcome && (
+                    <p style={{ margin: 0, fontFamily: MONO, fontSize: T.fontXs }}>{d.outcome}</p>
+                )}
             </NodeShell>
         </>
     );

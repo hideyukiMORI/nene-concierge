@@ -2,10 +2,9 @@
  * NeNe Concierge Admin — Design Token References
  *
  * CSS カスタムプロパティ名の定数。実際の値は
- * public_html/admin/index.html の :root ブロックで定義されています。
- * テーマを変更するには index.html の :root を編集してください。
+ * public_html/admin/index.html の :root / [data-nca-theme='*'] で定義。
  *
- * nene-corpus の cssVars パターンに準拠（--nca-* 名前空間）。
+ * v2 (2026-05-28): エディタ用に node/glass/minimap/dock トークン追加
  */
 export const T = {
     // ── Primary ──────────────────────────────────────────────────────────────
@@ -16,23 +15,28 @@ export const T = {
     primaryMuted:   'var(--nca-color-primary-muted)',
     primaryText:    'var(--nca-color-primary-text)',
     primaryBg:      'var(--nca-color-primary-bg)',
-    /** primary ボタン/バッジの前景色 — 明るいテーマでは暗色に上書きされる */
     primaryFg:      'var(--nca-color-primary-fg)',
+    primaryTint:    'var(--nca-color-primary-tint)',
+    primaryRing:    'var(--nca-color-primary-ring)',
 
     // ── Danger ───────────────────────────────────────────────────────────────
     danger:         'var(--nca-color-danger)',
     dangerBg:       'var(--nca-color-danger-bg)',
     dangerBorder:   'var(--nca-color-danger-border)',
     dangerText:     'var(--nca-color-danger-text)',
+    dangerFg:       'var(--nca-color-danger-fg)',
 
     // ── Success ──────────────────────────────────────────────────────────────
     successBg:      'var(--nca-color-success-bg)',
     successBorder:  'var(--nca-color-success-border)',
     successText:    'var(--nca-color-success-text)',
+    successFg:      'var(--nca-color-success-fg)',
+    successPillBg:  'var(--nca-color-success-pill-bg)',
 
     // ── Surface & Background ─────────────────────────────────────────────────
     bg:             'var(--nca-color-bg)',
     surface:        'var(--nca-color-surface)',
+    surfaceAlt:     'var(--nca-color-surface-alt)',
 
     // ── Sidebar ──────────────────────────────────────────────────────────────
     sidebar:        'var(--nca-color-sidebar)',
@@ -47,6 +51,7 @@ export const T = {
     text:           'var(--nca-color-text)',
     textStrong:     'var(--nca-color-text-strong)',
     textMuted:      'var(--nca-color-text-muted)',
+    textFaint:      'var(--nca-color-text-faint)',
 
     // ── Border ───────────────────────────────────────────────────────────────
     border:         'var(--nca-color-border)',
@@ -67,10 +72,11 @@ export const T = {
     badgeArchColor:  'var(--nca-badge-arch-color)',
 
     // ── Border radius ────────────────────────────────────────────────────────
-    radiusSm: 'var(--nca-radius-sm)',
-    radiusMd: 'var(--nca-radius-md)',
-    radiusLg: 'var(--nca-radius-lg)',
-    radiusXl: 'var(--nca-radius-xl)',
+    radiusSm:   'var(--nca-radius-sm)',
+    radiusMd:   'var(--nca-radius-md)',
+    radiusLg:   'var(--nca-radius-lg)',
+    radiusXl:   'var(--nca-radius-xl)',
+    radiusNode: 'var(--nca-radius-node)',
 
     // ── Font size ────────────────────────────────────────────────────────────
     fontXs:   'var(--nca-font-xs)',
@@ -82,14 +88,27 @@ export const T = {
     font2xl:  'var(--nca-font-2xl)',
 
     // ── Sidebar width ────────────────────────────────────────────────────────
-    sidebarWidth: 'var(--nca-sidebar-width)',
+    sidebarWidth:     'var(--nca-sidebar-width)',
+    sidebarWidthSlim: 'var(--nca-sidebar-width-slim)',
+    editorHeaderH:    'var(--nca-editor-header-height)',
+    editorDrawerW:    'var(--nca-editor-drawer-width)',
 
     // ── Shadow ───────────────────────────────────────────────────────────────
-    shadowCard:  'var(--nca-shadow-card)',
-    shadowFocus: 'var(--nca-shadow-focus)',
+    shadowCard:     'var(--nca-shadow-card)',
+    shadowElevated: 'var(--nca-shadow-elevated)',
+    shadowFocus:    'var(--nca-shadow-focus)',
+
+    // ── Glass / Dock / Minimap (v2 editor) ───────────────────────────────────
+    glassBg:      'var(--nca-glass-bg)',
+    glassDockBg:  'var(--nca-glass-dock-bg)',
+    minimapBg:    'var(--nca-minimap-bg)',
+
+    // ── Canvas (v2 editor) ───────────────────────────────────────────────────
+    canvasBg:   'var(--nca-canvas-bg)',
+    canvasDot:  'var(--nca-canvas-dot)',
+    edgeStroke: 'var(--nca-edge-stroke)',
 
     // ── Control heights ──────────────────────────────────────────────────────
-    // :root の --nca-control-height* を変えるだけでサイト全体に反映される
     controlHeight:   'var(--nca-control-height)',
     controlHeightSm: 'var(--nca-control-height-sm)',
     controlHeightXs: 'var(--nca-control-height-xs)',
@@ -100,3 +119,37 @@ export const T = {
 } as const;
 
 export type ThemeKey = keyof typeof T;
+
+// ── Node tokens (v2 editor) ──────────────────────────────────────────────────
+// 4 ノードタイプ × { stripe, body, edge, chip, chipEdge }
+// CSS 変数で各テーマに対応 — テーマ切替時に自動同期
+export const NODE_TOKENS = {
+    message: {
+        stripe:   'var(--nca-node-message-stripe)',
+        body:     'var(--nca-node-message-body)',
+        edge:     'var(--nca-node-message-edge)',
+        chip:     'var(--nca-node-message-chip)',
+        chipEdge: 'var(--nca-node-message-chip-edge)',
+    },
+    condition: {
+        stripe:   'var(--nca-node-condition-stripe)',
+        body:     'var(--nca-node-condition-body)',
+        edge:     'var(--nca-node-condition-edge)',
+        chip:     'var(--nca-node-condition-chip)',
+        chipEdge: 'var(--nca-node-condition-chip-edge)',
+    },
+    action: {
+        stripe:   'var(--nca-node-action-stripe)',
+        body:     'var(--nca-node-action-body)',
+        edge:     'var(--nca-node-action-edge)',
+        chip:     'var(--nca-node-action-chip)',
+        chipEdge: 'var(--nca-node-action-chip-edge)',
+    },
+    end: {
+        stripe:   'var(--nca-node-end-stripe)',
+        body:     'var(--nca-node-end-body)',
+        edge:     'var(--nca-node-end-edge)',
+        chip:     'var(--nca-node-end-chip)',
+        chipEdge: 'var(--nca-node-end-chip-edge)',
+    },
+} as const;
