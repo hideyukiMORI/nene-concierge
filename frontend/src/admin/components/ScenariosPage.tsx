@@ -1,8 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { listScenarios, deleteScenario, ApiError } from '../api.js';
 import type { ScenarioSummary } from '../api.js';
-import { PageHead, Card, Btn, StatusPill, ErrorMsg, trHover } from './Layout.js';
+import { PageHead, Card, Btn, StatusPill, ErrorMsg, trHover, useLayout } from './Layout.js';
+import {
+    MobileHeader, MobileIconBtn, FilterChips, Chip, CardList, ListItem,
+    SwipeRow, FAB, Pill, MetaDot, SkeletonListItem,
+} from './mobile/index.js';
+import type { PillVariant } from './mobile/index.js';
 import { T } from '../theme.js';
 import { useTranslation } from '../i18n/index.js';
 
@@ -16,12 +21,22 @@ const TH: React.CSSProperties = {
     borderBottom: `1px solid ${T.border}`,
 };
 
+type StatusFilter = '' | 'published' | 'draft' | 'archived';
+
+const STATUS_TO_PILL: Record<'draft' | 'published' | 'archived', PillVariant> = {
+    published: 'success',
+    draft:     'draft',
+    archived:  'archived',
+};
+
 export default function ScenariosPage() {
     const { t } = useTranslation();
+    const nav   = useNavigate();
+    const { isMobile } = useLayout();
     const [scenarios, setScenarios] = useState<ScenarioSummary[]>([]);
     const [loading, setLoading]     = useState(true);
     const [error, setError]         = useState<string | null>(null);
-    const [statusFilter, setStatusFilter] = useState('');
+    const [statusFilter, setStatusFilter] = useState<StatusFilter>('');
 
     async function load() {
         setLoading(true);
@@ -65,6 +80,100 @@ export default function ScenariosPage() {
         cursor: 'pointer', outline: 'none',
     };
 
+    // ─────────── Mobile layout ───────────
+    if (isMobile) {
+        const countAll       = scenarios.length;
+        const countPublished = scenarios.filter(s => s.status === 'published').length;
+        const countDraft     = scenarios.filter(s => s.status === 'draft').length;
+        const countArchived  = scenarios.filter(s => s.status === 'archived').length;
+
+        return (
+            <div style={{ minHeight: '100vh', background: T.bg }}>
+                <MobileHeader
+                    title="Scenarios"
+                    subtitle={loading ? '…' : `${countAll} total · ${countPublished} published`}
+                    trailing={
+                        <MobileIconBtn ariaLabel={t('common.search')}>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
+                                <circle cx="11" cy="11" r="7"/>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                            </svg>
+                        </MobileIconBtn>
+                    }
+                />
+
+                <FilterChips>
+                    <Chip active={statusFilter === ''}          onClick={() => setStatusFilter('')}>all · {countAll}</Chip>
+                    <Chip active={statusFilter === 'published'} onClick={() => setStatusFilter('published')}>published · {countPublished}</Chip>
+                    <Chip active={statusFilter === 'draft'}     onClick={() => setStatusFilter('draft')}>draft · {countDraft}</Chip>
+                    <Chip active={statusFilter === 'archived'}  onClick={() => setStatusFilter('archived')}>archived · {countArchived}</Chip>
+                </FilterChips>
+
+                {error && (
+                    <div style={{ padding: '12px 12px 0' }}>
+                        <ErrorMsg msg={error} />
+                    </div>
+                )}
+
+                {loading ? (
+                    <CardList>
+                        <SkeletonListItem />
+                        <SkeletonListItem />
+                        <SkeletonListItem />
+                    </CardList>
+                ) : filtered.length === 0 ? (
+                    <div style={{ padding: '40px 24px', textAlign: 'center', color: T.textMuted }}>
+                        <div style={{ fontSize: T.fontMd, marginBottom: 4 }}>{t('scenarios.empty')}</div>
+                        <div style={{ fontSize: T.fontSm }}>{t('scenarios.emptyHint')}</div>
+                    </div>
+                ) : (
+                    <CardList>
+                        {filtered.map((s, i) => {
+                            const isLast = i === filtered.length - 1;
+                            const item = (
+                                <ListItem
+                                    last={isLast}
+                                    icon={String(s.id).padStart(2, '0')}
+                                    title={s.name}
+                                    meta={
+                                        <>
+                                            <Pill variant={STATUS_TO_PILL[s.status]} label={s.status} />
+                                            {s.updated_at && (
+                                                <>
+                                                    <MetaDot />
+                                                    <span>{s.updated_at.slice(5, 16).replace('T', ' ')}</span>
+                                                </>
+                                            )}
+                                        </>
+                                    }
+                                    onClick={() => nav(`/scenarios/${s.id}`)}
+                                />
+                            );
+                            return (
+                                <SwipeRow
+                                    key={s.id}
+                                    actionLabel={t('common.delete')}
+                                    onAction={() => void handleDelete(s.id, s.name)}>
+                                    {item}
+                                </SwipeRow>
+                            );
+                        })}
+                    </CardList>
+                )}
+
+                <div style={{ height: 'calc(96px + env(safe-area-inset-bottom))' }}/>
+
+                <FAB ariaLabel={t('common.new')} onClick={() => nav('/scenarios/new')}>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden>
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                        <line x1="12" y1="5" x2="12" y2="19"/>
+                    </svg>
+                </FAB>
+            </div>
+        );
+    }
+
+    // ─────────── Desktop / Tablet layout ───────────
     return (
         <div>
             <PageHead title="Scenarios" subtitle={subtitle}>
@@ -105,7 +214,7 @@ export default function ScenariosPage() {
                     letterSpacing: '0.04em',
                 }}>
                     status:
-                    <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} style={filterSelectStyle}>
+                    <select value={statusFilter} onChange={e => setStatusFilter(e.target.value as StatusFilter)} style={filterSelectStyle}>
                         <option value="">all</option>
                         <option value="published">published</option>
                         <option value="draft">draft</option>
