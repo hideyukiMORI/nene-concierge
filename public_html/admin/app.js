@@ -21738,7 +21738,7 @@ var NeNeAdmin = (() => {
               "The result of getSnapshot should be cached to avoid an infinite loop"
             ), didWarnUncachedGetSnapshot = true);
           }
-          cachedValue = useState18({
+          cachedValue = useState19({
             inst: { value, getSnapshot }
           });
           var inst = cachedValue[0].inst, forceUpdate = cachedValue[1];
@@ -21750,7 +21750,7 @@ var NeNeAdmin = (() => {
             },
             [subscribe, value, getSnapshot]
           );
-          useEffect17(
+          useEffect18(
             function() {
               checkIfSnapshotChanged(inst) && forceUpdate({ inst });
               return subscribe(function() {
@@ -21776,7 +21776,7 @@ var NeNeAdmin = (() => {
           return getSnapshot();
         }
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-        var React15 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState18 = React15.useState, useEffect17 = React15.useEffect, useLayoutEffect5 = React15.useLayoutEffect, useDebugValue2 = React15.useDebugValue, didWarnOld18Alpha = false, didWarnUncachedGetSnapshot = false, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
+        var React15 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState19 = React15.useState, useEffect18 = React15.useEffect, useLayoutEffect5 = React15.useLayoutEffect, useDebugValue2 = React15.useDebugValue, didWarnOld18Alpha = false, didWarnUncachedGetSnapshot = false, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
         exports.useSyncExternalStore = void 0 !== React15.useSyncExternalStore ? React15.useSyncExternalStore : shim;
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(Error());
       })();
@@ -21804,7 +21804,7 @@ var NeNeAdmin = (() => {
           return x === y && (0 !== x || 1 / x === 1 / y) || x !== x && y !== y;
         }
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-        var React15 = require_react(), shim = require_shim(), objectIs = "function" === typeof Object.is ? Object.is : is, useSyncExternalStore = shim.useSyncExternalStore, useRef8 = React15.useRef, useEffect17 = React15.useEffect, useMemo6 = React15.useMemo, useDebugValue2 = React15.useDebugValue;
+        var React15 = require_react(), shim = require_shim(), objectIs = "function" === typeof Object.is ? Object.is : is, useSyncExternalStore = shim.useSyncExternalStore, useRef8 = React15.useRef, useEffect18 = React15.useEffect, useMemo6 = React15.useMemo, useDebugValue2 = React15.useDebugValue;
         exports.useSyncExternalStoreWithSelector = function(subscribe, getSnapshot, getServerSnapshot, selector, isEqual) {
           var instRef = useRef8(null);
           if (null === instRef.current) {
@@ -21847,7 +21847,7 @@ var NeNeAdmin = (() => {
             [getSnapshot, getServerSnapshot, selector, isEqual]
           );
           var value = useSyncExternalStore(subscribe, instRef[0], instRef[1]);
-          useEffect17(
+          useEffect18(
             function() {
               inst.hasValue = true;
               inst.value = value;
@@ -21875,7 +21875,7 @@ var NeNeAdmin = (() => {
   });
 
   // src/admin/index.tsx
-  var import_react17 = __toESM(require_react());
+  var import_react18 = __toESM(require_react());
   var import_client = __toESM(require_client());
 
   // node_modules/react-router/dist/development/chunk-4N6VE7H7.mjs
@@ -37725,7 +37725,97 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/SettingsPage.tsx
+  var import_react14 = __toESM(require_react());
   var import_jsx_runtime13 = __toESM(require_jsx_runtime());
+  var THEME_LINES = {
+    default: [
+      "> theme: default",
+      "# nene-concierge original palette",
+      "# accent: teal \u2014 oklch(62% 0.14 192)",
+      "> sidebar: always dark",
+      "> variants: light  dark"
+    ],
+    github: [
+      "> theme: github",
+      "# based on github primer design system",
+      "# launched on github.com  2020",
+      "> accent: blue \u2014 interactive ui",
+      "> variants: light  dark"
+    ],
+    solarized: [
+      "> theme: solarized",
+      "# by ethan schoonover \u2014 2011",
+      "# cielab-calibrated contrast ratios",
+      "> 8 accents \u2014 same across both variants",
+      "> variants: light  dark"
+    ],
+    dracula: [
+      "> theme: dracula",
+      "# by zeno rocha \u2014 2013",
+      "# 200k+ installs across editors",
+      "> accent: purple \u2014 #bd93f9",
+      "> variants: dark only"
+    ],
+    monokai: [
+      "> theme: monokai",
+      "# by wimer hazenberg \u2014 2006",
+      "# born in textmate, ported everywhere",
+      "> accent: lime green \u2014 #a6e22e",
+      "> variants: dark only"
+    ],
+    ubuntu: [
+      "> theme: ubuntu  (yaru)",
+      "# canonical official gtk theme \u2014 2018",
+      "# default on ubuntu 18.10 and later",
+      "> sidebar: aubergine \u2014 #2C001E",
+      "> accent: canonical orange \u2014 #E95420",
+      "> variants: light  dark"
+    ]
+  };
+  function Cursor({ accent }) {
+    const [on, setOn] = (0, import_react14.useState)(true);
+    (0, import_react14.useEffect)(() => {
+      const t = setInterval(() => setOn((v) => !v), 530);
+      return () => clearInterval(t);
+    }, []);
+    return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { style: { opacity: on ? 1 : 0, color: accent, fontWeight: 700 }, children: "\u2588" });
+  }
+  function ThemeTerminal({ themeId: themeId2, accent }) {
+    const lines = THEME_LINES[themeId2] ?? ["> theme: " + themeId2];
+    const [count, setCount] = (0, import_react14.useState)(0);
+    (0, import_react14.useEffect)(() => {
+      setCount(0);
+      let i = 0;
+      const iv = setInterval(() => {
+        i += 1;
+        setCount(i);
+        if (i >= lines.length) clearInterval(iv);
+      }, 55);
+      return () => clearInterval(iv);
+    }, [themeId2, lines.length]);
+    const MONO = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
+    return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: {
+      background: "oklch(11% 0.010 265)",
+      borderRadius: T.radiusMd,
+      border: `1px solid oklch(22% 0.010 265)`,
+      padding: "12px 16px",
+      fontFamily: MONO,
+      fontSize: T.fontSm,
+      lineHeight: 1.8,
+      minHeight: 128
+    }, children: lines.slice(0, count).map((line, i) => {
+      const isCmd = line.startsWith(">");
+      return /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: {
+        color: isCmd ? accent : "oklch(52% 0.012 265)",
+        display: "flex",
+        alignItems: "baseline",
+        gap: 0
+      }, children: [
+        line,
+        i === count - 1 && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { style: { marginLeft: 4 }, children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Cursor, { accent }) })
+      ] }, i);
+    }) });
+  }
   function ThemeCard({ def, isSelected, currentVariant, onSelect, onToggle }) {
     const { t } = useTranslation();
     const displayVariant = isSelected ? currentVariant : def.variants[0];
@@ -37779,11 +37869,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { style: { width: 14, height: 2, borderRadius: 2, background: preview.accent, opacity: 0.35 } }),
               /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { style: { width: 14, height: 2, borderRadius: 2, background: preview.accent, opacity: 0.35 } })
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: {
-              flex: 1,
-              background: preview.surface,
-              padding: "8px 10px"
-            }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { flex: 1, background: preview.surface, padding: "8px 10px" }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { width: "60%", height: 3, borderRadius: 2, background: preview.accent, marginBottom: 6 } }),
               /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { width: "100%", height: 2, borderRadius: 2, background: preview.sidebar, opacity: 0.12, marginBottom: 3 } }),
               /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { width: "75%", height: 2, borderRadius: 2, background: preview.sidebar, opacity: 0.12 } })
@@ -37829,6 +37915,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   function SettingsPage() {
     const { t } = useTranslation();
     const { adminThemeId, themeVariant: themeVariant2, setAdminTheme, toggleVariant } = useTheme();
+    const selectedDef = ADMIN_THEME_DEFS.find((d) => d.id === adminThemeId);
+    const displayVariant = themeVariant2;
+    const accentColor = selectedDef?.preview[displayVariant]?.accent ?? selectedDef?.preview[selectedDef.variants[0]]?.accent ?? T.primary;
     return /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { children: [
       /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(PageTitle, { children: t("settings.pageTitle") }),
       /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(Card, { children: [
@@ -37836,7 +37925,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: {
           display: "grid",
           gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))",
-          gap: 12
+          gap: 12,
+          marginBottom: 16
         }, children: ADMIN_THEME_DEFS.map((def) => /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
           ThemeCard,
           {
@@ -37847,13 +37937,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             onToggle: toggleVariant
           },
           def.id
-        )) })
+        )) }),
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(ThemeTerminal, { themeId: adminThemeId, accent: accentColor })
       ] })
     ] });
   }
 
   // src/admin/components/ActionLogsPage.tsx
-  var import_react14 = __toESM(require_react());
+  var import_react15 = __toESM(require_react());
   var import_jsx_runtime14 = __toESM(require_jsx_runtime());
   var ADAPTER_ICONS = {
     email: "\u{1F4E7}",
@@ -37882,15 +37973,15 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
   function ActionLogsPage() {
     const { t } = useTranslation();
-    const [logs, setLogs] = (0, import_react14.useState)([]);
-    const [total, setTotal] = (0, import_react14.useState)(0);
-    const [loading, setLoading] = (0, import_react14.useState)(true);
-    const [error, setError] = (0, import_react14.useState)(null);
-    const [adapter, setAdapter] = (0, import_react14.useState)("");
-    const [status, setStatus] = (0, import_react14.useState)("");
-    const [offset, setOffset] = (0, import_react14.useState)(0);
+    const [logs, setLogs] = (0, import_react15.useState)([]);
+    const [total, setTotal] = (0, import_react15.useState)(0);
+    const [loading, setLoading] = (0, import_react15.useState)(true);
+    const [error, setError] = (0, import_react15.useState)(null);
+    const [adapter, setAdapter] = (0, import_react15.useState)("");
+    const [status, setStatus] = (0, import_react15.useState)("");
+    const [offset, setOffset] = (0, import_react15.useState)(0);
     const limit = 50;
-    (0, import_react14.useEffect)(() => {
+    (0, import_react15.useEffect)(() => {
       setLoading(true);
       setError(null);
       void listActionLogs({
@@ -38114,7 +38205,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/DashboardPage.tsx
-  var import_react15 = __toESM(require_react());
+  var import_react16 = __toESM(require_react());
   var import_jsx_runtime15 = __toESM(require_jsx_runtime());
   function KpiCard({
     label,
@@ -38220,10 +38311,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
   function DashboardPage() {
     const { t } = useTranslation();
-    const [stats, setStats] = (0, import_react15.useState)(null);
-    const [loading, setLoading] = (0, import_react15.useState)(true);
-    const [error, setError] = (0, import_react15.useState)(null);
-    (0, import_react15.useEffect)(() => {
+    const [stats, setStats] = (0, import_react16.useState)(null);
+    const [loading, setLoading] = (0, import_react16.useState)(true);
+    const [error, setError] = (0, import_react16.useState)(null);
+    (0, import_react16.useEffect)(() => {
       setLoading(true);
       setError(null);
       void getDashboard().then((res) => setStats(res.data)).catch((err) => {
@@ -38309,7 +38400,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/SessionsPage.tsx
-  var import_react16 = __toESM(require_react());
+  var import_react17 = __toESM(require_react());
   var import_jsx_runtime16 = __toESM(require_jsx_runtime());
   var OUTCOME_COLORS = {
     active: { bg: "oklch(96% 0.05 220)", fg: "oklch(38% 0.15 220)", border: "oklch(83% 0.10 220)" },
@@ -38342,10 +38433,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     onClose
   }) {
     const { t } = useTranslation();
-    const [detail, setDetail] = (0, import_react16.useState)(null);
-    const [loading, setLoading] = (0, import_react16.useState)(true);
-    const [error, setError] = (0, import_react16.useState)(null);
-    (0, import_react16.useEffect)(() => {
+    const [detail, setDetail] = (0, import_react17.useState)(null);
+    const [loading, setLoading] = (0, import_react17.useState)(true);
+    const [error, setError] = (0, import_react17.useState)(null);
+    (0, import_react17.useEffect)(() => {
       setLoading(true);
       setError(null);
       void getSessionDetail(sessionId).then((res) => setDetail(res.data)).catch((err) => {
@@ -38523,16 +38614,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
   function SessionsPage() {
     const { t } = useTranslation();
-    const [sessions, setSessions] = (0, import_react16.useState)([]);
-    const [total, setTotal] = (0, import_react16.useState)(0);
-    const [loading, setLoading] = (0, import_react16.useState)(true);
-    const [error, setError] = (0, import_react16.useState)(null);
-    const [selectedId, setSelectedId] = (0, import_react16.useState)(null);
-    const [outcome, setOutcome] = (0, import_react16.useState)("");
-    const [hasConversion, setHasConversion] = (0, import_react16.useState)("");
-    const [offset, setOffset] = (0, import_react16.useState)(0);
+    const [sessions, setSessions] = (0, import_react17.useState)([]);
+    const [total, setTotal] = (0, import_react17.useState)(0);
+    const [loading, setLoading] = (0, import_react17.useState)(true);
+    const [error, setError] = (0, import_react17.useState)(null);
+    const [selectedId, setSelectedId] = (0, import_react17.useState)(null);
+    const [outcome, setOutcome] = (0, import_react17.useState)("");
+    const [hasConversion, setHasConversion] = (0, import_react17.useState)("");
+    const [offset, setOffset] = (0, import_react17.useState)(0);
     const limit = 50;
-    (0, import_react16.useEffect)(() => {
+    (0, import_react17.useEffect)(() => {
       setLoading(true);
       setError(null);
       void listSessions({
@@ -38781,7 +38872,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var container = document.getElementById("root");
   if (!container) throw new Error("Root element #root not found");
   (0, import_client.createRoot)(container).render(
-    /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(import_react17.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(I18nProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(App, {}) }) })
+    /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(import_react18.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(I18nProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(App, {}) }) })
   );
 })();
 /*! Bundled license information:
