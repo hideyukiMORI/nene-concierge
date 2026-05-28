@@ -426,6 +426,47 @@ final readonly class ScenarioServiceProvider implements ServiceProviderInterface
                 },
             )
             ->set(
+                GetScenarioRevisionUseCase::class,
+                static function (ContainerInterface $c): GetScenarioRevisionUseCase {
+                    $revisions = $c->get(ScenarioRevisionRepositoryInterface::class);
+
+                    if (!$revisions instanceof ScenarioRevisionRepositoryInterface) {
+                        throw new LogicException('Scenario revision repository service is invalid.');
+                    }
+
+                    return new GetScenarioRevisionUseCase($revisions);
+                },
+            )
+            ->set(
+                GetScenarioRevisionHandler::class,
+                static function (ContainerInterface $c): GetScenarioRevisionHandler {
+                    $uc   = $c->get(GetScenarioRevisionUseCase::class);
+                    $json = $c->get(JsonResponseFactory::class);
+
+                    if (!$uc instanceof GetScenarioRevisionUseCase) {
+                        throw new LogicException('GetScenarioRevision use case service is invalid.');
+                    }
+
+                    if (!$json instanceof JsonResponseFactory) {
+                        throw new LogicException('JSON response factory service is invalid.');
+                    }
+
+                    return new GetScenarioRevisionHandler($uc, $json);
+                },
+            )
+            ->set(
+                ScenarioRevisionNotFoundExceptionHandler::class,
+                static function (ContainerInterface $c): ScenarioRevisionNotFoundExceptionHandler {
+                    $problemDetails = $c->get(ProblemDetailsResponseFactory::class);
+
+                    if (!$problemDetails instanceof ProblemDetailsResponseFactory) {
+                        throw new LogicException('Problem details response factory service is invalid.');
+                    }
+
+                    return new ScenarioRevisionNotFoundExceptionHandler($problemDetails);
+                },
+            )
+            ->set(
                 ListScenarioRevisionsHandler::class,
                 static function (ContainerInterface $c): ListScenarioRevisionsHandler {
                     $uc   = $c->get(ListScenarioRevisionsUseCase::class);
@@ -547,7 +588,13 @@ final readonly class ScenarioServiceProvider implements ServiceProviderInterface
                         throw new LogicException('ListScenarioRevisions handler service is invalid.');
                     }
 
-                    return new ScenarioRouteRegistrar($list, $get, $create, $update, $delete, $export, $import, $saveGraph, $history, $revisions);
+                    $getRevision = $c->get(GetScenarioRevisionHandler::class);
+
+                    if (!$getRevision instanceof GetScenarioRevisionHandler) {
+                        throw new LogicException('GetScenarioRevision handler service is invalid.');
+                    }
+
+                    return new ScenarioRouteRegistrar($list, $get, $create, $update, $delete, $export, $import, $saveGraph, $history, $revisions, $getRevision);
                 },
             );
     }

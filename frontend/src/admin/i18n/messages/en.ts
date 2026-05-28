@@ -335,6 +335,21 @@ export const en = {
     'history.op.graph_save':    'Saved',
     'history.op.status_change': 'Status',
     'history.op.delete':        'Deleted',
+
+    // ── Revision diff modal (Issue #126) ─────────────────────────────────────
+    'diff.title':           'Revision #{{rev}}',
+    'diff.loading':         'Loading revision…',
+    'diff.noSnapshot':      'No snapshot data was stored for this revision — diff unavailable.',
+    'diff.noChanges':       'No structural changes between this revision and the previous one.',
+    'diff.noPrevious':      '(initial revision — nothing to compare to)',
+    'diff.fields':          'Field changes',
+    'diff.nodes':           'Node changes',
+    'diff.edges':           'Edge changes',
+    'diff.changed':         'changed',
+    'diff.meta.operation':  'operation',
+    'diff.meta.by':         'by',
+    'diff.meta.when':       'when',
+    'diff.meta.comparedTo': 'compared to',
 } as const
 
 /** Complete message catalog type — keys from the English source of truth, values are strings. */

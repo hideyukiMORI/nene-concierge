@@ -138,6 +138,33 @@ final class InMemoryScenarioRevisionRepository implements ScenarioRevisionReposi
         ));
     }
 
+    public function findById(int $id, int $organizationId): ?ScenarioRevision
+    {
+        foreach ($this->store as $r) {
+            if ($r->id === $id && $r->organizationId === $organizationId) {
+                return $r;
+            }
+        }
+
+        return null;
+    }
+
+    public function findPreviousFor(int $scenarioId, int $organizationId, int $revisionNo): ?ScenarioRevision
+    {
+        $candidates = array_values(array_filter(
+            $this->store,
+            static fn (ScenarioRevision $r): bool => $r->scenarioId === $scenarioId
+                && $r->organizationId === $organizationId
+                && $r->revisionNo < $revisionNo,
+        ));
+        if ($candidates === []) {
+            return null;
+        }
+        usort($candidates, static fn (ScenarioRevision $a, ScenarioRevision $b) => $b->revisionNo <=> $a->revisionNo);
+
+        return $candidates[0];
+    }
+
     /**
      * @return list<ScenarioRevision>
      */

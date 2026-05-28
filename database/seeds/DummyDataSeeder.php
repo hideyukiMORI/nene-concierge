@@ -358,15 +358,22 @@ final class DummyDataSeeder extends AbstractSeed
             $status      = (string) $meta['status'];
 
             // Each scenario gets between 15 and 35 revisions
-            $count    = 15 + mt_rand(0, 20);
+            $count     = 15 + mt_rand(0, 20);
             $createdAt = $anchor->modify('-' . (25 + mt_rand(0, 10)) . ' days');
-            $rev      = 1;
+            $rev       = 1;
+
+            // Initial graph (3-10 nodes chained)
+            $initialNodeCount = 3 + mt_rand(0, 7);
+            $nodes = [];
+            $nextNodeSeq = 1;
+            for ($n = 0; $n < $initialNodeCount; $n++) {
+                $nodes[] = $this->makeNode($nextNodeSeq++, $n);
+            }
+            $edges = $this->makeChainEdges($nodes);
 
             // First revision: create
-            $creator  = $userIds[array_rand($userIds)];
-            $nodeBase = 3 + mt_rand(0, 8);
-            $edgeBase = max(0, $nodeBase - 1);
-            $rows[] = $this->revisionRow(
+            $creator = $userIds[array_rand($userIds)];
+            $rows[]  = $this->revisionRow(
                 $scenarioId,
                 $rev++,
                 $creator,
@@ -374,9 +381,10 @@ final class DummyDataSeeder extends AbstractSeed
                 $name,
                 $description,
                 $status,
-                $nodeBase,
-                $edgeBase,
+                count($nodes),
+                count($edges),
                 $createdAt,
+                $this->snapshotJson($name, $description, $status, $nodes, $edges),
             );
 
             // Followup revisions
@@ -385,23 +393,23 @@ final class DummyDataSeeder extends AbstractSeed
                 if ($createdAt > $anchor) {
                     break;
                 }
-                $user      = $userIds[array_rand($userIds)];
-                $op        = $operations[array_rand($operations)];
-                $nodeBase += mt_rand(-1, 2);
-                if ($nodeBase < 2) {
-                    $nodeBase = 2;
-                }
-                $edgeBase  = max(0, $nodeBase - 1 + mt_rand(-1, 1));
+                $user = $userIds[array_rand($userIds)];
+                $op   = $operations[array_rand($operations)];
 
                 $rowStatus = $status;
                 $rowName   = $name;
                 if ($op === 'status_change') {
                     $rowStatus = $status === 'published' ? 'draft' : 'published';
-                    $status    = $rowStatus; // future revisions retain the change
+                    $status    = $rowStatus;
                 }
                 if ($op === 'update' && mt_rand(1, 100) <= 25) {
-                    // Occasional rename
                     $rowName = $name . ' v' . (1 + mt_rand(1, 3));
+                }
+
+                // Mutate graph for graph_save / update
+                if ($op === 'graph_save' || ($op === 'update' && mt_rand(1, 100) <= 60)) {
+                    [$nodes, $edges] = $this->mutateGraph($nodes, $edges, $nextNodeSeq);
+                    $nextNodeSeq = max($nextNodeSeq, $this->highestNodeSeq($nodes) + 1);
                 }
 
                 $rows[] = $this->revisionRow(
@@ -412,9 +420,10 @@ final class DummyDataSeeder extends AbstractSeed
                     $rowName,
                     $description,
                     $rowStatus,
-                    $nodeBase,
-                    $edgeBase,
+                    count($nodes),
+                    count($edges),
                     $createdAt,
+                    $this->snapshotJson($rowName, $description, $rowStatus, $nodes, $edges),
                 );
             }
         }
@@ -443,6 +452,7 @@ final class DummyDataSeeder extends AbstractSeed
         int $nodeCount,
         int $edgeCount,
         DateTimeImmutable $createdAt,
+        ?string $snapshotJson = null,
     ): array {
         return [
             'organization_id' => self::ORG_ID,
@@ -456,9 +466,147 @@ final class DummyDataSeeder extends AbstractSeed
             'status'          => $status,
             'node_count'      => $nodeCount,
             'edge_count'      => $edgeCount,
-            'snapshot_json'   => null,
+            'snapshot_json'   => $snapshotJson,
             'created_at'      => $createdAt->format('Y-m-d H:i:s'),
         ];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function makeNode(int $seq, int $orderIndex): array
+    {
+        $types  = ['message', 'message', 'message', 'condition', 'action', 'end'];
+        $labels = [
+            'Welcome', 'Ask name', 'Confirm details', 'Send notification',
+            'Branch by reply', 'Wait for input', 'Goodbye', 'Forward to ops',
+            'Validate email', 'Trigger webhook', 'Send Slack alert', 'Collect feedback',
+        ];
+        $type  = $orderIndex === 0 ? 'message' : $types[array_rand($types)];
+        $label = $labels[array_rand($labels)];
+
+        return [
+            'node_id'    => 'n' . $seq,
+            'type'       => $type,
+            'label'      => $label,
+            'data'       => ['text' => $label . ' (' . $seq . ')'],
+            'position_x' => 80 + ($orderIndex % 4) * 220,
+            'position_y' => 60 + intdiv($orderIndex, 4) * 160,
+        ];
+    }
+
+    /**
+     * @param list<array<string, mixed>> $nodes
+     * @return list<array<string, mixed>>
+     */
+    private function makeChainEdges(array $nodes): array
+    {
+        $edges = [];
+        $count = count($nodes);
+        for ($i = 0; $i < $count - 1; $i++) {
+            $edges[] = [
+                'source_node_id' => (string) $nodes[$i]['node_id'],
+                'target_node_id' => (string) $nodes[$i + 1]['node_id'],
+                'label'          => null,
+            ];
+        }
+
+        return $edges;
+    }
+
+    /**
+     * @param list<array<string, mixed>> $nodes
+     */
+    private function highestNodeSeq(array $nodes): int
+    {
+        $max = 0;
+        foreach ($nodes as $n) {
+            $id   = (string) $n['node_id'];
+            $num  = (int) ltrim($id, 'n');
+            if ($num > $max) {
+                $max = $num;
+            }
+        }
+
+        return $max;
+    }
+
+    /**
+     * Apply one or two small random mutations to the graph.
+     *
+     * @param  list<array<string, mixed>> $nodes
+     * @param  list<array<string, mixed>> $edges
+     * @return array{0: list<array<string, mixed>>, 1: list<array<string, mixed>>}
+     */
+    private function mutateGraph(array $nodes, array $edges, int $nextSeq): array
+    {
+        $mutations = 1 + mt_rand(0, 2);
+        for ($m = 0; $m < $mutations; $m++) {
+            $op = mt_rand(1, 100);
+            if ($op <= 35 && count($nodes) < 15) {
+                // ADD node + edge from a random existing node
+                $newNode = $this->makeNode($nextSeq++, count($nodes));
+                $nodes[] = $newNode;
+                if (count($nodes) >= 2) {
+                    $from = $nodes[array_rand(array_slice($nodes, 0, count($nodes) - 1, true))];
+                    $edges[] = [
+                        'source_node_id' => (string) $from['node_id'],
+                        'target_node_id' => (string) $newNode['node_id'],
+                        'label'          => null,
+                    ];
+                }
+            } elseif ($op <= 50 && count($nodes) > 2) {
+                // REMOVE a node + dangling edges
+                $idx       = array_rand($nodes);
+                $removedId = (string) $nodes[$idx]['node_id'];
+                unset($nodes[$idx]);
+                $nodes     = array_values($nodes);
+                $edges     = array_values(array_filter(
+                    $edges,
+                    static fn (array $e): bool => $e['source_node_id'] !== $removedId
+                        && $e['target_node_id'] !== $removedId,
+                ));
+            } elseif ($op <= 75) {
+                // MOVE a node
+                if ($nodes !== []) {
+                    $idx                  = array_rand($nodes);
+                    $nodes[$idx]['position_x'] = (float) (50 + mt_rand(0, 800));
+                    $nodes[$idx]['position_y'] = (float) (50 + mt_rand(0, 500));
+                }
+            } else {
+                // RELABEL
+                if ($nodes !== []) {
+                    $idx              = array_rand($nodes);
+                    $nodes[$idx]['label'] = (string) $nodes[$idx]['label'] . '*';
+                }
+            }
+        }
+
+        return [array_values($nodes), array_values($edges)];
+    }
+
+    /**
+     * @param list<array<string, mixed>> $nodes
+     * @param list<array<string, mixed>> $edges
+     */
+    private function snapshotJson(
+        string $name,
+        ?string $description,
+        string $status,
+        array $nodes,
+        array $edges,
+    ): string {
+        $payload = [
+            'name'        => $name,
+            'description' => $description,
+            'status'      => $status,
+            'nodes'       => $nodes,
+            'edges'       => $edges,
+        ];
+
+        $json = json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+        return $json !== false ? $json : '{}';
     }
 
     // ── helpers ───────────────────────────────────────────────────────────────

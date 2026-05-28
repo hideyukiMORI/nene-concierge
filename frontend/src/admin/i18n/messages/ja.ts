@@ -328,4 +328,19 @@ export const ja: Partial<MessageCatalog> = {
     'history.op.graph_save':    'グラフ保存',
     'history.op.status_change': 'ステータス変更',
     'history.op.delete':        '削除',
+
+    // ── リビジョン差分モーダル (Issue #126) ───────────────────────────────────
+    'diff.title':           'リビジョン #{{rev}}',
+    'diff.loading':         'リビジョンを読み込み中…',
+    'diff.noSnapshot':      'このリビジョンにはスナップショットが保存されていません — 差分を表示できません。',
+    'diff.noChanges':       '直前のリビジョンとの構造的な変更はありません。',
+    'diff.noPrevious':      '(最初のリビジョン — 比較対象なし)',
+    'diff.fields':          'フィールドの変更',
+    'diff.nodes':           'ノードの変更',
+    'diff.edges':           'エッジの変更',
+    'diff.changed':         '変更',
+    'diff.meta.operation':  '操作',
+    'diff.meta.by':         '実行者',
+    'diff.meta.when':       '日時',
+    'diff.meta.comparedTo': '比較対象',
 }

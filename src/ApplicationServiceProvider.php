@@ -31,6 +31,7 @@ use NeNeConcierge\Organization\OrganizationRouteRegistrar;
 use NeNeConcierge\Organization\OrganizationServiceProvider;
 use NeNeConcierge\Organization\OrganizationSlugConflictExceptionHandler;
 use NeNeConcierge\Scenario\ScenarioNotFoundExceptionHandler;
+use NeNeConcierge\Scenario\ScenarioRevisionNotFoundExceptionHandler;
 use NeNeConcierge\Scenario\ScenarioRouteRegistrar;
 use NeNeConcierge\Scenario\ScenarioServiceProvider;
 use Psr\Container\ContainerInterface;
@@ -71,6 +72,7 @@ final readonly class ApplicationServiceProvider implements ServiceProviderInterf
                     $orgNotFound        = $c->get(OrganizationNotFoundExceptionHandler::class);
                     $orgSlugConflict    = $c->get(OrganizationSlugConflictExceptionHandler::class);
                     $scenarioNotFound   = $c->get(ScenarioNotFoundExceptionHandler::class);
+                    $revisionNotFound   = $c->get(ScenarioRevisionNotFoundExceptionHandler::class);
                     $userNotFound       = $c->get(UserNotFoundExceptionHandler::class);
                     $userEmailConflict  = $c->get(UserEmailConflictExceptionHandler::class);
                     $userOpForbidden    = $c->get(UserOperationForbiddenExceptionHandler::class);
@@ -99,6 +101,10 @@ final readonly class ApplicationServiceProvider implements ServiceProviderInterf
                         throw new LogicException('ScenarioNotFoundExceptionHandler service is invalid.');
                     }
 
+                    if (!$revisionNotFound instanceof ScenarioRevisionNotFoundExceptionHandler) {
+                        throw new LogicException('ScenarioRevisionNotFoundExceptionHandler service is invalid.');
+                    }
+
                     if (!$userNotFound instanceof UserNotFoundExceptionHandler) {
                         throw new LogicException('UserNotFoundExceptionHandler service is invalid.');
                     }
@@ -118,6 +124,7 @@ final readonly class ApplicationServiceProvider implements ServiceProviderInterf
                         $orgNotFound,
                         $orgSlugConflict,
                         $scenarioNotFound,
+                        $revisionNotFound,
                         $userNotFound,
                         $userEmailConflict,
                         $userOpForbidden,

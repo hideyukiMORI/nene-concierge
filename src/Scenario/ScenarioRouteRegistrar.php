@@ -20,6 +20,7 @@ final readonly class ScenarioRouteRegistrar
         private SaveScenarioGraphHandler     $saveGraphHandler,
         private ListScenarioHistoryHandler   $historyHandler,
         private ListScenarioRevisionsHandler $revisionsHandler,
+        private GetScenarioRevisionHandler   $getRevisionHandler,
     ) {
     }
 
@@ -32,9 +33,10 @@ final readonly class ScenarioRouteRegistrar
         $delete    = $this->deleteHandler;
         $export    = $this->exportHandler;
         $import    = $this->importHandler;
-        $saveGraph = $this->saveGraphHandler;
-        $history   = $this->historyHandler;
-        $revisions = $this->revisionsHandler;
+        $saveGraph   = $this->saveGraphHandler;
+        $history     = $this->historyHandler;
+        $revisions   = $this->revisionsHandler;
+        $getRevision = $this->getRevisionHandler;
 
         $router->get('/api/v1/scenarios', static fn (ServerRequestInterface $r) => $list->handle($r));
         $router->get('/api/v1/scenarios/{id}', static fn (ServerRequestInterface $r) => $get->handle($r));
@@ -46,5 +48,6 @@ final readonly class ScenarioRouteRegistrar
         $router->put('/api/v1/scenarios/{id}/graph', static fn (ServerRequestInterface $r) => $saveGraph->handle($r));
         $router->get('/api/v1/scenarios/{id}/history', static fn (ServerRequestInterface $r) => $history->handle($r));
         $router->get('/api/v1/scenario-revisions', static fn (ServerRequestInterface $r) => $revisions->handle($r));
+        $router->get('/api/v1/scenario-revisions/{id}', static fn (ServerRequestInterface $r) => $getRevision->handle($r));
     }
 }

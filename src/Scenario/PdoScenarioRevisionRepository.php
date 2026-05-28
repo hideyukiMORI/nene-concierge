@@ -137,6 +137,29 @@ final readonly class PdoScenarioRevisionRepository implements ScenarioRevisionRe
         return (int) ($row['cnt'] ?? 0);
     }
 
+    public function findById(int $id, int $organizationId): ?ScenarioRevision
+    {
+        $row = $this->query->fetchOne(
+            'SELECT * FROM scenario_revisions WHERE id = ? AND organization_id = ? LIMIT 1',
+            [$id, $organizationId],
+        );
+
+        return $row !== null ? $this->hydrate($row) : null;
+    }
+
+    public function findPreviousFor(int $scenarioId, int $organizationId, int $revisionNo): ?ScenarioRevision
+    {
+        $row = $this->query->fetchOne(
+            'SELECT * FROM scenario_revisions
+             WHERE scenario_id = ? AND organization_id = ? AND revision_no < ?
+             ORDER BY revision_no DESC
+             LIMIT 1',
+            [$scenarioId, $organizationId, $revisionNo],
+        );
+
+        return $row !== null ? $this->hydrate($row) : null;
+    }
+
     /**
      * @return array{0: string, 1: list<scalar|null>}
      */
