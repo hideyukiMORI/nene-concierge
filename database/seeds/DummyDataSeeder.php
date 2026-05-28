@@ -275,7 +275,9 @@ final class DummyDataSeeder extends AbstractSeed
         $acc = 0;
         foreach ($values as $i => $v) {
             $acc += $weights[$i];
-            if ($r <= $acc) return $v;
+            if ($r <= $acc) {
+                return $v;
+            }
         }
         return $values[0];
     }
