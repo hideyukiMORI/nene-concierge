@@ -8,6 +8,7 @@ import {
     SwipeRow, FAB, Pill, MetaDot, SkeletonListItem,
 } from './mobile/index.js';
 import type { PillVariant } from './mobile/index.js';
+import { useModals } from './modal/index.js';
 import { T } from '../theme.js';
 import { useTranslation } from '../i18n/index.js';
 
@@ -33,6 +34,7 @@ export default function ScenariosPage() {
     const { t } = useTranslation();
     const nav   = useNavigate();
     const { isMobile } = useLayout();
+    const { confirm, alertDialog } = useModals();
     const [scenarios, setScenarios] = useState<ScenarioSummary[]>([]);
     const [loading, setLoading]     = useState(true);
     const [error, setError]         = useState<string | null>(null);
@@ -54,12 +56,22 @@ export default function ScenariosPage() {
     useEffect(() => { void load(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     async function handleDelete(id: number, name: string) {
-        if (!confirm(t('scenarios.confirmDelete', { name }))) return;
+        const ok = await confirm({
+            title: t('scenarios.confirmDeleteTitle'),
+            description: t('scenarios.confirmDelete', { name }),
+            tone: 'danger',
+            confirmLabel: t('common.delete'),
+        });
+        if (!ok) return;
         try {
             await deleteScenario(id);
             setScenarios(prev => prev.filter(s => s.id !== id));
         } catch (err) {
-            alert(err instanceof ApiError ? err.message : t('scenarios.deleteError'));
+            void alertDialog({
+                title: t('scenarios.deleteError'),
+                description: err instanceof ApiError ? err.message : undefined,
+                tone: 'danger',
+            });
         }
     }
 

@@ -8,6 +8,7 @@ import {
 } from '../api.js';
 import { Btn, Badge, ErrorMsg, useLayout } from './Layout.js';
 import { MobileHeader, BottomSheet } from './mobile/index.js';
+import { useModals } from './modal/index.js';
 
 const kebabItemStyle: React.CSSProperties = {
     display: 'flex', alignItems: 'center', gap: 12,
@@ -97,6 +98,7 @@ export default function ScenarioFormPage() {
     const nav     = useNavigate();
     const { t }   = useTranslation();
     const { isMobile, openMobileMenu } = useLayout();
+    const { confirm } = useModals();
     const [kebabOpen, setKebabOpen] = useState(false);
     const [liveNodeCount, setLiveNodeCount] = useState(0);
 
@@ -229,7 +231,23 @@ export default function ScenarioFormPage() {
     }
 
     async function handleDelete() {
-        if (!confirm(t('scenarios.confirmDelete', { name }))) return;
+        // 重要削除: 名称タイプ確認を要求 (verified delete pattern)
+        const verifyProps = name ? {
+            confirmText: name,
+            confirmTextHint: <>確認のため <span style={{
+                textTransform: 'none', letterSpacing: 0,
+                fontFamily: 'ui-monospace,monospace', fontWeight: 600,
+                color: T.text,
+            }}>{name}</span> と入力してください</>,
+        } : {};
+        const ok = await confirm({
+            title: t('scenarios.confirmDeleteTitle'),
+            description: t('scenarios.confirmDelete', { name }),
+            tone: 'danger',
+            confirmLabel: t('common.delete'),
+            ...verifyProps,
+        });
+        if (!ok) return;
         try { await deleteScenario(Number(id)); nav('/scenarios'); }
         catch (err) { setError(err instanceof ApiError ? err.message : t('scenarioForm.deleteError')); }
     }

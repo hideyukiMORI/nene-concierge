@@ -57,6 +57,7 @@ export const fr: Partial<MessageCatalog> = {
     'scenarios.emptyHint':     'Cliquez sur "Nouveau" pour en créer un.',
     'scenarios.loadError':     'Échec du chargement des scénarios.',
     'scenarios.deleteError':   'Échec de la suppression.',
+    'scenarios.confirmDeleteTitle': 'Supprimer le scénario',
     'scenarios.confirmDelete': 'Supprimer « {{name}} » ? Cette action est irréversible.',
 
     'scenario.status.draft':     'Brouillon',
@@ -104,7 +105,8 @@ export const fr: Partial<MessageCatalog> = {
     'credentials.secretHint':      "* Les paramètres sensibles peuvent être mis à jour via l'API après création.",
     'credentials.empty':           'Aucun identifiant.',
     'credentials.saveError':       'Échec de la création.',
-    'credentials.confirmDelete':   'Supprimer « {{name}} » ?',
+    'credentials.confirmDeleteTitle': 'Supprimer l’identifiant',
+    'credentials.confirmDelete':   'Supprimer « {{name}} » ? Les scénarios qui le référencent cesseront de fonctionner.',
 
     'node.type.message':   'Message',
     'node.type.condition': 'Condition',

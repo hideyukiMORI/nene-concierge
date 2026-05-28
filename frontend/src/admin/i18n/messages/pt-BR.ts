@@ -57,6 +57,7 @@ export const ptBR: Partial<MessageCatalog> = {
     'scenarios.emptyHint':     'Clique em "Novo" para criar um.',
     'scenarios.loadError':     'Falha ao carregar cenários.',
     'scenarios.deleteError':   'Falha ao excluir.',
+    'scenarios.confirmDeleteTitle': 'Excluir cenário',
     'scenarios.confirmDelete': 'Excluir "{{name}}"? Esta ação não pode ser desfeita.',
 
     'scenario.status.draft':     'Rascunho',
@@ -104,7 +105,8 @@ export const ptBR: Partial<MessageCatalog> = {
     'credentials.secretHint':    '* Configurações sensíveis podem ser atualizadas via API após a criação.',
     'credentials.empty':         'Nenhuma credencial ainda.',
     'credentials.saveError':     'Falha ao criar.',
-    'credentials.confirmDelete': 'Excluir "{{name}}"?',
+    'credentials.confirmDeleteTitle': 'Excluir credencial',
+    'credentials.confirmDelete': 'Excluir "{{name}}"? Cenários que a referenciam deixarão de funcionar.',
 
     'node.type.message':   'Mensagem',
     'node.type.condition': 'Condição',

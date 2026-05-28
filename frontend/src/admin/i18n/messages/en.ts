@@ -76,6 +76,7 @@ export const en = {
     'scenarios.emptyHint':     'Click "New" to create one.',
     'scenarios.loadError':     'Failed to load scenarios.',
     'scenarios.deleteError':   'Failed to delete.',
+    'scenarios.confirmDeleteTitle': 'Delete scenario',
     'scenarios.confirmDelete': 'Delete "{{name}}"? This cannot be undone.',
 
     'scenario.status.draft':     'Draft',
@@ -133,7 +134,8 @@ export const en = {
     'credentials.loadError':     'Failed to load credentials.',
     'credentials.saveError':     'Failed to create credential.',
     'credentials.deleteError':   'Failed to delete.',
-    'credentials.confirmDelete': 'Delete "{{name}}"?',
+    'credentials.confirmDeleteTitle': 'Delete credential',
+    'credentials.confirmDelete': 'Delete "{{name}}"? Scenarios that reference it will stop working.',
 
     'credentials.adapter.http':     'HTTP (External API)',
     'credentials.adapter.email':    'Email',
