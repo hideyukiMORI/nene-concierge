@@ -1,11 +1,13 @@
 import {
     ReactFlow,
     Background,
-    Controls,
+    BackgroundVariant,
     MiniMap,
+    Panel,
     addEdge,
     useNodesState,
     useEdgesState,
+    useReactFlow,
     type Node,
     type Edge,
     type Connection,
@@ -32,6 +34,8 @@ const nodeTypes: NodeTypes = {
     action:    ActionNode,
     end:       EndNode,
 };
+
+const MONO = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
 
 // ── ヘルパー: API 型 ↔ ReactFlow 型 ─────────────────────────────────────────
 
@@ -143,7 +147,7 @@ function AnalyticsSummaryPanel({
                             return (
                                 <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', padding: '8px 0', borderBottom: `1px solid ${T.border}` }}>
                                     <span style={{ fontSize: T.fontSm, color: T.textMuted }}>{label}</span>
-                                    <span style={{ fontSize: T.fontMd, fontWeight: 700, color: T.textStrong }}>
+                                    <span style={{ fontSize: T.fontSm, fontWeight: 700, color: T.textStrong, fontFamily: MONO }}>
                                         {value.toLocaleString()}
                                         {sub && <span style={{ fontSize: T.fontXs, fontWeight: 400, color: T.textMuted, marginLeft: 4 }}>{sub}</span>}
                                     </span>
@@ -156,7 +160,7 @@ function AnalyticsSummaryPanel({
                                 <StatRow label={t('canvas.analytics.sessions')}  value={report.total_sessions} />
                                 <StatRow label={t('canvas.analytics.completed')} value={report.completed_sessions} sub={`${dRate}%`} />
                                 <StatRow label={t('canvas.analytics.converted')} value={report.converted_sessions} sub={`${cRate}%`} />
-                                <div style={{ marginTop: 8, fontSize: T.fontXs, color: T.textMuted }}>
+                                <div style={{ marginTop: 8, fontSize: T.fontXs, color: T.textMuted, fontFamily: MONO }}>
                                     {report.period_from} – {report.period_to}
                                 </div>
                             </>
@@ -164,6 +168,87 @@ function AnalyticsSummaryPanel({
                     })()}
                 </div>
             )}
+        </div>
+    );
+}
+
+// ── BottomDock ────────────────────────────────────────────────────────────────
+// ReactFlow の Panel として canvas 内部に配置 → useReactFlow が使える
+
+const ZoomInIcon = () => (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        strokeWidth="2.2" strokeLinecap="round" aria-hidden>
+        <circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        <line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>
+    </svg>
+);
+const ZoomOutIcon = () => (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        strokeWidth="2.2" strokeLinecap="round" aria-hidden>
+        <circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        <line x1="8" y1="11" x2="14" y2="11"/>
+    </svg>
+);
+const FitViewIcon = () => (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+        <path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/>
+    </svg>
+);
+
+function DockBtn({ onClick, title, children }: {
+    onClick: () => void; title: string; children: React.ReactNode;
+}) {
+    return (
+        <button onClick={onClick} title={title}
+            style={{
+                width: 28, height: 28, borderRadius: T.radiusSm,
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                background: 'transparent', border: 'none', cursor: 'pointer',
+                color: T.textMuted,
+                transition: `background ${T.transitionFast}, color ${T.transitionFast}`,
+            }}
+            onMouseEnter={e => {
+                e.currentTarget.style.background = T.surfaceHover;
+                e.currentTarget.style.color = T.text;
+            }}
+            onMouseLeave={e => {
+                e.currentTarget.style.background = 'transparent';
+                e.currentTarget.style.color = T.textMuted;
+            }}>
+            {children}
+        </button>
+    );
+}
+
+function BottomDock({ nodeCount }: { nodeCount: number }) {
+    const { zoomIn, zoomOut, fitView } = useReactFlow();
+    return (
+        <div style={{
+            display: 'flex', alignItems: 'center', gap: 2,
+            background: T.glassDockBg,
+            border: `1px solid ${T.border}`,
+            borderRadius: T.radiusLg,
+            padding: '3px 6px',
+            boxShadow: T.shadowElevated,
+        }}>
+            <DockBtn onClick={() => zoomOut({ duration: 150 })} title="Zoom out">
+                <ZoomOutIcon/>
+            </DockBtn>
+            <DockBtn onClick={() => fitView({ padding: 0.6, maxZoom: 0.85, duration: 200 })} title="Fit view">
+                <FitViewIcon/>
+            </DockBtn>
+            <DockBtn onClick={() => zoomIn({ duration: 150 })} title="Zoom in">
+                <ZoomInIcon/>
+            </DockBtn>
+            <div style={{ width: 1, height: 14, background: T.border, margin: '0 4px' }}/>
+            <span style={{
+                fontSize: 10.5, fontFamily: MONO,
+                color: T.textFaint, padding: '0 4px',
+                whiteSpace: 'nowrap', userSelect: 'none',
+            }}>
+                {nodeCount} nodes
+            </span>
         </div>
     );
 }
@@ -306,7 +391,8 @@ const ScenarioCanvas = forwardRef<ScenarioCanvasRef, Props>(function ScenarioCan
 
     return (
         <div style={{ position: 'relative', height: '100%' }}>
-            <div ref={reactFlowWrapper} style={{ position: 'absolute', inset: 0 }}>
+            <div ref={reactFlowWrapper}
+                style={{ position: 'absolute', inset: 0, background: T.canvasBg }}>
                 <ReactFlow
                     nodes={nodes}
                     edges={edges}
@@ -322,13 +408,28 @@ const ScenarioCanvas = forwardRef<ScenarioCanvasRef, Props>(function ScenarioCan
                     nodesDraggable={!analyticsMode}
                     nodesConnectable={!analyticsMode}
                     elementsSelectable={!analyticsMode}
+                    defaultEdgeOptions={{
+                        style: { stroke: T.edgeStroke, strokeWidth: 1.5 },
+                    }}
                 >
-                    <Background gap={20} color={T.border} />
-                    <Controls />
+                    {/* ドットグリッド背景 */}
+                    <Background variant={BackgroundVariant.Dots} gap={24} size={1.5} color={T.canvasDot} />
+
+                    {/* ミニマップ — NODE_COLORS.header でテーマ追従 */}
                     <MiniMap
                         nodeColor={n => NODE_COLORS[n.type as ChatNodeType]?.header ?? T.sidebarMuted}
-                        style={{ background: T.tableHeader, border: `1px solid ${T.border}` }}
+                        style={{
+                            background: T.minimapBg,
+                            border: `1px solid ${T.border}`,
+                            borderRadius: T.radiusMd,
+                        }}
+                        maskColor="oklch(0% 0 0 / 0.08)"
                     />
+
+                    {/* ボトムドック: Zoom + ノード数 */}
+                    <Panel position="bottom-center" style={{ marginBottom: 14 }}>
+                        <BottomDock nodeCount={nodes.length} />
+                    </Panel>
                 </ReactFlow>
             </div>
 
