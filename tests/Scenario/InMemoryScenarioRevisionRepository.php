@@ -85,7 +85,13 @@ final class InMemoryScenarioRevisionRepository implements ScenarioRevisionReposi
         int $offset,
     ): array {
         $filtered = $this->applyFilters(
-            $organizationId, $scenarioId, $userId, $operation, $query, $dateFromUnix, $dateToUnix,
+            $organizationId,
+            $scenarioId,
+            $userId,
+            $operation,
+            $query,
+            $dateFromUnix,
+            $dateToUnix,
         );
         usort($filtered, static fn (ScenarioRevision $a, ScenarioRevision $b) => $b->id <=> $a->id);
         $page = array_slice($filtered, $offset, $limit);
@@ -122,7 +128,13 @@ final class InMemoryScenarioRevisionRepository implements ScenarioRevisionReposi
         ?int $dateToUnix,
     ): int {
         return count($this->applyFilters(
-            $organizationId, $scenarioId, $userId, $operation, $query, $dateFromUnix, $dateToUnix,
+            $organizationId,
+            $scenarioId,
+            $userId,
+            $operation,
+            $query,
+            $dateFromUnix,
+            $dateToUnix,
         ));
     }
 
@@ -139,7 +151,13 @@ final class InMemoryScenarioRevisionRepository implements ScenarioRevisionReposi
         ?int $dateToUnix,
     ): array {
         return array_values(array_filter($this->store, static function (ScenarioRevision $r) use (
-            $organizationId, $scenarioId, $userId, $operation, $query, $dateFromUnix, $dateToUnix,
+            $organizationId,
+            $scenarioId,
+            $userId,
+            $operation,
+            $query,
+            $dateFromUnix,
+            $dateToUnix,
         ): bool {
             if ($r->organizationId !== $organizationId) {
                 return false;

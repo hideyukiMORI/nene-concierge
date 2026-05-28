@@ -88,7 +88,13 @@ final readonly class PdoScenarioRevisionRepository implements ScenarioRevisionRe
         int $offset,
     ): array {
         [$where, $params] = $this->buildWhere(
-            $organizationId, $scenarioId, $userId, $operation, $query, $dateFromUnix, $dateToUnix,
+            $organizationId,
+            $scenarioId,
+            $userId,
+            $operation,
+            $query,
+            $dateFromUnix,
+            $dateToUnix,
         );
 
         $sql = 'SELECT r.*, s.name AS scenario_name
@@ -114,7 +120,13 @@ final readonly class PdoScenarioRevisionRepository implements ScenarioRevisionRe
         ?int $dateToUnix,
     ): int {
         [$where, $params] = $this->buildWhere(
-            $organizationId, $scenarioId, $userId, $operation, $query, $dateFromUnix, $dateToUnix,
+            $organizationId,
+            $scenarioId,
+            $userId,
+            $operation,
+            $query,
+            $dateFromUnix,
+            $dateToUnix,
         );
 
         $row = $this->query->fetchOne(
