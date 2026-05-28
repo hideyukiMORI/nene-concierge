@@ -69,4 +69,111 @@ final class InMemoryScenarioRevisionRepository implements ScenarioRevisionReposi
             static fn (ScenarioRevision $r) => $r->scenarioId === $scenarioId && $r->organizationId === $organizationId,
         ));
     }
+
+    /**
+     * @return list<array<string, mixed>>
+     */
+    public function searchByOrganization(
+        int $organizationId,
+        ?int $scenarioId,
+        ?int $userId,
+        ?string $operation,
+        ?string $query,
+        ?int $dateFromUnix,
+        ?int $dateToUnix,
+        int $limit,
+        int $offset,
+    ): array {
+        $filtered = $this->applyFilters(
+            $organizationId, $scenarioId, $userId, $operation, $query, $dateFromUnix, $dateToUnix,
+        );
+        usort($filtered, static fn (ScenarioRevision $a, ScenarioRevision $b) => $b->id <=> $a->id);
+        $page = array_slice($filtered, $offset, $limit);
+
+        return array_map(
+            static fn (ScenarioRevision $r): array => [
+                'id'              => $r->id,
+                'organization_id' => $r->organizationId,
+                'scenario_id'     => $r->scenarioId,
+                'scenario_name'   => null,
+                'revision_no'     => $r->revisionNo,
+                'user_id'         => $r->userId,
+                'user_email'      => $r->userEmail,
+                'operation'       => $r->operation,
+                'name'            => $r->name,
+                'description'     => $r->description,
+                'status'          => $r->status,
+                'node_count'      => $r->nodeCount,
+                'edge_count'      => $r->edgeCount,
+                'snapshot_json'   => $r->snapshotJson,
+                'created_at'      => $r->createdAt,
+            ],
+            $page,
+        );
+    }
+
+    public function countByOrganization(
+        int $organizationId,
+        ?int $scenarioId,
+        ?int $userId,
+        ?string $operation,
+        ?string $query,
+        ?int $dateFromUnix,
+        ?int $dateToUnix,
+    ): int {
+        return count($this->applyFilters(
+            $organizationId, $scenarioId, $userId, $operation, $query, $dateFromUnix, $dateToUnix,
+        ));
+    }
+
+    /**
+     * @return list<ScenarioRevision>
+     */
+    private function applyFilters(
+        int $organizationId,
+        ?int $scenarioId,
+        ?int $userId,
+        ?string $operation,
+        ?string $query,
+        ?int $dateFromUnix,
+        ?int $dateToUnix,
+    ): array {
+        return array_values(array_filter($this->store, static function (ScenarioRevision $r) use (
+            $organizationId, $scenarioId, $userId, $operation, $query, $dateFromUnix, $dateToUnix,
+        ): bool {
+            if ($r->organizationId !== $organizationId) {
+                return false;
+            }
+            if ($scenarioId !== null && $r->scenarioId !== $scenarioId) {
+                return false;
+            }
+            if ($userId !== null && $r->userId !== $userId) {
+                return false;
+            }
+            if ($operation !== null && $operation !== '' && $r->operation !== $operation) {
+                return false;
+            }
+            if ($query !== null && $query !== '') {
+                $hay  = strtolower(($r->name ?? '') . ' ' . ($r->userEmail ?? ''));
+                $q    = strtolower($query);
+                if (!str_contains($hay, $q)) {
+                    return false;
+                }
+            }
+            if ($dateFromUnix !== null || $dateToUnix !== null) {
+                $ts = $r->createdAt !== null ? strtotime($r->createdAt) : false;
+                if ($ts === false) {
+                    return false;
+                }
+                if ($dateFromUnix !== null && $ts < $dateFromUnix) {
+                    return false;
+                }
+                if ($dateToUnix !== null && $ts >= $dateToUnix) {
+                    return false;
+                }
+            }
+
+            return true;
+        }));
+    }
 }

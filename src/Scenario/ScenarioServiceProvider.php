@@ -414,6 +414,35 @@ final readonly class ScenarioServiceProvider implements ServiceProviderInterface
                 },
             )
             ->set(
+                ListScenarioRevisionsUseCase::class,
+                static function (ContainerInterface $c): ListScenarioRevisionsUseCase {
+                    $revisions = $c->get(ScenarioRevisionRepositoryInterface::class);
+
+                    if (!$revisions instanceof ScenarioRevisionRepositoryInterface) {
+                        throw new LogicException('Scenario revision repository service is invalid.');
+                    }
+
+                    return new ListScenarioRevisionsUseCase($revisions);
+                },
+            )
+            ->set(
+                ListScenarioRevisionsHandler::class,
+                static function (ContainerInterface $c): ListScenarioRevisionsHandler {
+                    $uc   = $c->get(ListScenarioRevisionsUseCase::class);
+                    $json = $c->get(JsonResponseFactory::class);
+
+                    if (!$uc instanceof ListScenarioRevisionsUseCase) {
+                        throw new LogicException('ListScenarioRevisions use case service is invalid.');
+                    }
+
+                    if (!$json instanceof JsonResponseFactory) {
+                        throw new LogicException('JSON response factory service is invalid.');
+                    }
+
+                    return new ListScenarioRevisionsHandler($uc, $json);
+                },
+            )
+            ->set(
                 ListScenarioHistoryUseCase::class,
                 static function (ContainerInterface $c): ListScenarioHistoryUseCase {
                     $scenarios = $c->get(ScenarioRepositoryInterface::class);
@@ -512,7 +541,13 @@ final readonly class ScenarioServiceProvider implements ServiceProviderInterface
                         throw new LogicException('ListScenarioHistory handler service is invalid.');
                     }
 
-                    return new ScenarioRouteRegistrar($list, $get, $create, $update, $delete, $export, $import, $saveGraph, $history);
+                    $revisions = $c->get(ListScenarioRevisionsHandler::class);
+
+                    if (!$revisions instanceof ListScenarioRevisionsHandler) {
+                        throw new LogicException('ListScenarioRevisions handler service is invalid.');
+                    }
+
+                    return new ScenarioRouteRegistrar($list, $get, $create, $update, $delete, $export, $import, $saveGraph, $history, $revisions);
                 },
             );
     }

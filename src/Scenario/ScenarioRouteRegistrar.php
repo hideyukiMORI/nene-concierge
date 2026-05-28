@@ -10,15 +10,16 @@ use Psr\Http\Message\ServerRequestInterface;
 final readonly class ScenarioRouteRegistrar
 {
     public function __construct(
-        private ListScenariosHandler       $listHandler,
-        private GetScenarioHandler         $getHandler,
-        private CreateScenarioHandler      $createHandler,
-        private UpdateScenarioHandler      $updateHandler,
-        private DeleteScenarioHandler      $deleteHandler,
-        private ExportScenarioHandler      $exportHandler,
-        private ImportScenarioHandler      $importHandler,
-        private SaveScenarioGraphHandler   $saveGraphHandler,
-        private ListScenarioHistoryHandler $historyHandler,
+        private ListScenariosHandler         $listHandler,
+        private GetScenarioHandler           $getHandler,
+        private CreateScenarioHandler        $createHandler,
+        private UpdateScenarioHandler        $updateHandler,
+        private DeleteScenarioHandler        $deleteHandler,
+        private ExportScenarioHandler        $exportHandler,
+        private ImportScenarioHandler        $importHandler,
+        private SaveScenarioGraphHandler     $saveGraphHandler,
+        private ListScenarioHistoryHandler   $historyHandler,
+        private ListScenarioRevisionsHandler $revisionsHandler,
     ) {
     }
 
@@ -33,6 +34,7 @@ final readonly class ScenarioRouteRegistrar
         $import    = $this->importHandler;
         $saveGraph = $this->saveGraphHandler;
         $history   = $this->historyHandler;
+        $revisions = $this->revisionsHandler;
 
         $router->get('/api/v1/scenarios', static fn (ServerRequestInterface $r) => $list->handle($r));
         $router->get('/api/v1/scenarios/{id}', static fn (ServerRequestInterface $r) => $get->handle($r));
@@ -43,5 +45,6 @@ final readonly class ScenarioRouteRegistrar
         $router->post('/api/v1/scenarios/import', static fn (ServerRequestInterface $r) => $import->handle($r));
         $router->put('/api/v1/scenarios/{id}/graph', static fn (ServerRequestInterface $r) => $saveGraph->handle($r));
         $router->get('/api/v1/scenarios/{id}/history', static fn (ServerRequestInterface $r) => $history->handle($r));
+        $router->get('/api/v1/scenario-revisions', static fn (ServerRequestInterface $r) => $revisions->handle($r));
     }
 }

@@ -264,6 +264,25 @@ export const en = {
     'sessions.detail.close':     'Close',
     'sessions.detail.loadError': 'Failed to load session detail.',
 
+    // ── History (scenario revisions cross-view — Issue #122) ─────────────────
+    'nav.history':                  'History',
+    'history.pageTitle':            'Edit history',
+    'history.subtitle':             '{{total}} revisions',
+    'history.searchPlaceholder':    'Search name or user…',
+    'history.allOps':               'All operations',
+    'history.allScenarios':         'All scenarios',
+    'history.filter.scenario':      'scenario',
+    'history.filter.operation':     'operation',
+    'history.filter.from':          'from',
+    'history.filter.to':            'to',
+    'history.col.operation':        'Operation',
+    'history.col.scenario':         'Scenario',
+    'history.col.user':             'User',
+    'history.col.nodes':            'Size',
+    'history.col.when':             'When',
+    'common.prev':                  'prev',
+    'common.next':                  'next',
+
     // ── Users (admin user management — Issue #116) ───────────────────────────
     'nav.users':                'Users',
     'users.pageTitle':          'Users',
