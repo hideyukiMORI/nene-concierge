@@ -191,6 +191,53 @@ export interface ScenarioRevisionsFilters {
     date_to?:     string;
 }
 
+export interface ScenarioRevisionSnapshotNode {
+    node_id:    string;
+    type:       ChatNodeType;
+    label:      string;
+    data:       Record<string, unknown>;
+    position_x: number;
+    position_y: number;
+}
+export interface ScenarioRevisionSnapshotEdge {
+    source_node_id: string;
+    target_node_id: string;
+    label:          string | null;
+}
+export interface ScenarioRevisionSnapshot {
+    name:        string | null;
+    description: string | null;
+    status:      string | null;
+    nodes:       ScenarioRevisionSnapshotNode[];
+    edges:       ScenarioRevisionSnapshotEdge[];
+}
+
+export interface ScenarioRevisionDetail {
+    id:              number;
+    scenario_id:     number;
+    organization_id: number;
+    revision_no:     number;
+    user_id:         number | null;
+    user_email:      string | null;
+    operation:       ScenarioRevisionOperation;
+    name:            string | null;
+    description:     string | null;
+    status:          string | null;
+    node_count:      number;
+    edge_count:      number;
+    snapshot:        ScenarioRevisionSnapshot | null;
+    created_at:      string | null;
+}
+
+export interface ScenarioRevisionDetailResponse {
+    revision: ScenarioRevisionDetail;
+    previous: ScenarioRevisionDetail | null;
+}
+
+export function getScenarioRevision(id: number): Promise<ScenarioRevisionDetailResponse> {
+    return request(`/api/v1/scenario-revisions/${id}`);
+}
+
 export function searchScenarioRevisions(
     filters: ScenarioRevisionsFilters,
     limit = 50,

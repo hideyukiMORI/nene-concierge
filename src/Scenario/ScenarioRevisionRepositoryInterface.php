@@ -41,4 +41,11 @@ interface ScenarioRevisionRepositoryInterface
         ?int $dateFromUnix,
         ?int $dateToUnix,
     ): int;
+
+    public function findById(int $id, int $organizationId): ?ScenarioRevision;
+
+    /**
+     * 直前 (revision_no - 1) の revision を返す。なければ null。
+     */
+    public function findPreviousFor(int $scenarioId, int $organizationId, int $revisionNo): ?ScenarioRevision;
 }

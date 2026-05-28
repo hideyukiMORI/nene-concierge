@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { getScenarioHistory, ApiError, type ScenarioRevision, type ScenarioRevisionOperation } from '../api.js';
 import { T } from '../theme.js';
 import { useTranslation } from '../i18n/index.js';
+import RevisionDiffModal from './RevisionDiffModal.js';
 
 const MONO = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
 
@@ -24,6 +25,7 @@ export default function ScenarioHistoryPanel({ scenarioId, open, onClose }: Prop
     const [items, setItems] = useState<ScenarioRevision[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [diffId, setDiffId] = useState<number | null>(null);
 
     useEffect(() => {
         if (!open || !scenarioId) return;
@@ -96,11 +98,16 @@ export default function ScenarioHistoryPanel({ scenarioId, open, onClose }: Prop
                     {!loading && items.map(rev => {
                         const palette = OPERATION_COLORS[rev.operation] ?? OPERATION_COLORS.update;
                         return (
-                            <div key={rev.id} style={{
-                                display: 'flex', gap: 12,
-                                padding: '10px 16px',
-                                borderBottom: `1px solid ${T.borderLight}`,
-                            }}>
+                            <div key={rev.id}
+                                onClick={() => setDiffId(rev.id)}
+                                style={{
+                                    display: 'flex', gap: 12,
+                                    padding: '10px 16px',
+                                    borderBottom: `1px solid ${T.borderLight}`,
+                                    cursor: 'pointer',
+                                }}
+                                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = T.surfaceHover; }}
+                                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = ''; }}>
                                 <div style={{
                                     fontFamily: MONO, fontSize: 10,
                                     color: T.textFaint, minWidth: 36,
@@ -143,6 +150,8 @@ export default function ScenarioHistoryPanel({ scenarioId, open, onClose }: Prop
                     })}
                 </div>
             </aside>
+
+            <RevisionDiffModal revisionId={diffId} onClose={() => setDiffId(null)} />
         </>
     );
 }

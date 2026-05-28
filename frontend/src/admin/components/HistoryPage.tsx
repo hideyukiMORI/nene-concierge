@@ -9,6 +9,7 @@ import {
 import { PageHead, Card, ErrorMsg, useLayout } from './Layout.js';
 import { MobileHeader, MobileIconBtn, CardList, ListItem, MetaDot, Pill, FilterChips, Chip } from './mobile/index.js';
 import type { PillVariant } from './mobile/index.js';
+import RevisionDiffModal from './RevisionDiffModal.js';
 import { T } from '../theme.js';
 import { useTranslation } from '../i18n/index.js';
 
@@ -74,6 +75,7 @@ export default function HistoryPage() {
     const [total, setTotal]   = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError]   = useState<string | null>(null);
+    const [diffId, setDiffId] = useState<number | null>(null);
 
     // filters
     const [scenarioId, setScenarioId]   = useState<string>('');
@@ -218,7 +220,7 @@ export default function HistoryPage() {
                                         <span style={{ fontFamily: MONO }}>{r.created_at ?? ''}</span>
                                     </>
                                 }
-                                onClick={() => { /* future: open snapshot */ }}
+                                onClick={() => setDiffId(r.id)}
                             />
                         ))}
                     </CardList>
@@ -226,6 +228,8 @@ export default function HistoryPage() {
 
                 <Pager />
                 <div style={{ height: 'calc(24px + env(safe-area-inset-bottom))' }}/>
+
+                <RevisionDiffModal revisionId={diffId} onClose={() => setDiffId(null)} />
             </div>
         );
     }
@@ -307,7 +311,13 @@ export default function HistoryPage() {
                             <tbody>
                                 {items.map((r, i) => (
                                     <tr key={r.id}
-                                        style={{ borderBottom: i < items.length - 1 ? `1px solid ${T.border}` : 'none' }}>
+                                        onClick={() => setDiffId(r.id)}
+                                        style={{
+                                            borderBottom: i < items.length - 1 ? `1px solid ${T.border}` : 'none',
+                                            cursor: 'pointer',
+                                        }}
+                                        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = T.surfaceHover; }}
+                                        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = ''; }}>
                                         <td style={{ ...TD, fontFamily: MONO, color: T.textFaint }}>{r.revision_no}</td>
                                         <td style={TD}>
                                             <Pill variant={opPillVariant(r.operation)} label={t(`history.op.${r.operation}`)} />
@@ -341,6 +351,8 @@ export default function HistoryPage() {
             </Card>
 
             <Pager />
+
+            <RevisionDiffModal revisionId={diffId} onClose={() => setDiffId(null)} />
         </div>
     );
 }
