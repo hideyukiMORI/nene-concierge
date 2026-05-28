@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja" data-nca-theme="default-light">
+<head>
+<meta charset="UTF-8">
+<title>ダッシュボード — NeNe Concierge Admin</title>
+<link rel="stylesheet" href="_shared.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body data-active="dashboard">
+<div class="layout">
+  <aside class="sidebar" id="nca-sidebar"></aside>
+  <main class="main-content">
+    <div class="main-inner" style="max-width: 1100px; margin: 0 auto;">
+
+      <!-- Page head -->
+      <div class="page-head">
+        <div>
+          <div class="page-title">Dashboard</div>
+          <div class="page-subtitle">overview · 7 days</div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <select class="filter-select" style="height:var(--nca-control-height);">
+            <option>Last 7 days</option>
+            <option>Last 24 hours</option>
+            <option>Last 30 days</option>
+          </select>
+          <button class="btn btn-ghost btn-sm">↻ Refresh</button>
+        </div>
+      </div>
+
+      <!-- Alert: action failures -->
+      <div class="alert alert-warn">
+        <span class="alert-icon">!</span>
+        <div>
+          <div style="font-weight:700; margin-bottom:2px;">3 件のアクション失敗が直近 24 時間に発生しました</div>
+          <a href="action-logs.html" style="font-size: var(--nca-font-xs); font-family: var(--nca-font-mono);">→ アクションログを確認</a>
+        </div>
+      </div>
+
+      <!-- KPI grid -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label"><span class="dot"></span>sessions · 7d</div>
+          <div class="kpi-value">248</div>
+          <div class="kpi-meta">↑ 12% vs prev</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label"><span class="dot"></span>conversions · 7d</div>
+          <div class="kpi-value">31</div>
+          <div class="kpi-meta">↑ 4% vs prev</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label"><span class="dot"></span>cv rate</div>
+          <div class="kpi-value success">12.5<span class="unit">%</span></div>
+          <div class="kpi-meta">target 10%</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label"><span class="dot"></span>active now</div>
+          <div class="kpi-value accent">5</div>
+          <div class="kpi-meta">live sessions</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label"><span class="dot"></span>published scenarios</div>
+          <div class="kpi-value">3</div>
+          <div class="kpi-meta">of 7 total</div>
+        </div>
+        <div class="kpi-card alert">
+          <div class="kpi-label"><span class="dot"></span>action failures · 24h</div>
+          <div class="kpi-value danger">3</div>
+          <div class="kpi-meta">SMTP / Slack</div>
+        </div>
+      </div>
+
+      <!-- Sparkline -->
+      <div class="card" style="margin-bottom:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:14px;">
+          <div>
+            <div class="card-sub">sessions · daily</div>
+            <div class="card-title" style="margin-bottom:0;">日別セッション数</div>
+          </div>
+          <div class="kpi-meta">7 days · 2026-05-22 → 05-28</div>
+        </div>
+        <svg viewBox="0 0 720 120" style="width:100%; height:120px; display:block;" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="sg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%"   stop-color="#0d9488" stop-opacity=".22"/>
+              <stop offset="100%" stop-color="#0d9488" stop-opacity=".02"/>
+            </linearGradient>
+          </defs>
+          <!-- gridlines -->
+          <g stroke="#E7E5E4" stroke-width="0.7" stroke-dasharray="2 3">
+            <line x1="0" x2="720" y1="30" y2="30"/>
+            <line x1="0" x2="720" y1="60" y2="60"/>
+            <line x1="0" x2="720" y1="90" y2="90"/>
+          </g>
+          <polygon points="10,90 10,68 130,58 250,82 370,30 490,42 610,18 710,22 710,110 10,110"
+            fill="url(#sg)"/>
+          <polyline points="10,68 130,58 250,82 370,30 490,42 610,18 710,22"
+            fill="none" stroke="#0d9488" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+          <g fill="#0d9488">
+            <circle cx="10" cy="68" r="3"/>
+            <circle cx="130" cy="58" r="3"/>
+            <circle cx="250" cy="82" r="3"/>
+            <circle cx="370" cy="30" r="4"/>
+            <circle cx="490" cy="42" r="3"/>
+            <circle cx="610" cy="18" r="3"/>
+            <circle cx="710" cy="22" r="3"/>
+          </g>
+        </svg>
+        <div style="display:flex; justify-content:space-between; margin-top:8px;
+          font-family:var(--nca-font-mono); font-size:var(--nca-font-xs); color:var(--nca-color-text-faint);">
+          <span>05-22</span><span>05-23</span><span>05-24</span><span>05-25</span><span>05-26</span><span>05-27</span><span>05-28</span>
+        </div>
+      </div>
+
+      <!-- Two-column: Top scenarios + Recent failures -->
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+
+        <div class="card flush">
+          <div style="padding: 14px 18px; border-bottom: 1px solid var(--nca-color-border);">
+            <div class="card-sub">top scenarios</div>
+            <div class="card-title" style="margin-bottom:0;">よく使われているシナリオ</div>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>name</th>
+                <th style="text-align:right;">sessions</th>
+                <th style="text-align:right;">cv</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><a href="#">お問い合わせフロー</a></td>
+                <td class="mono" style="text-align:right; color:var(--nca-color-text);">128</td>
+                <td class="mono" style="text-align:right; color:var(--nca-color-success-fg);">18 · 14%</td>
+              </tr>
+              <tr>
+                <td><a href="#">採用情報フロー</a></td>
+                <td class="mono" style="text-align:right; color:var(--nca-color-text);">76</td>
+                <td class="mono" style="text-align:right; color:var(--nca-color-success-fg);">9 · 12%</td>
+              </tr>
+              <tr>
+                <td><a href="#">カスタマーサポート</a></td>
+                <td class="mono" style="text-align:right; color:var(--nca-color-text);">44</td>
+                <td class="mono" style="text-align:right; color:var(--nca-color-success-fg);">4 · 9%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card flush">
+          <div style="padding: 14px 18px; border-bottom: 1px solid var(--nca-color-border); display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div class="card-sub">recent failures</div>
+              <div class="card-title" style="margin-bottom:0;">直近の失敗</div>
+            </div>
+            <a href="action-logs.html" style="font-size:var(--nca-font-xs); font-family:var(--nca-font-mono); letter-spacing:0.06em; text-transform:uppercase;">all →</a>
+          </div>
+          <table>
+            <tbody>
+              <tr>
+                <td style="width:80px;"><span class="adapter adapter-email">email</span></td>
+                <td>SMTP timeout</td>
+                <td class="mono" style="text-align:right; white-space:nowrap;">14:28</td>
+              </tr>
+              <tr>
+                <td><span class="adapter adapter-slack">slack</span></td>
+                <td>403 Forbidden</td>
+                <td class="mono" style="text-align:right; white-space:nowrap;">13:12</td>
+              </tr>
+              <tr>
+                <td><span class="adapter adapter-http">http</span></td>
+                <td>ECONNREFUSED</td>
+                <td class="mono" style="text-align:right; white-space:nowrap;">11:04</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+<script src="_sidebar.js"></script>
+<script src="_theme-switcher.js"></script>
+</body>
+</html>

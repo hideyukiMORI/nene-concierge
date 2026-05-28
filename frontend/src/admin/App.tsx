@@ -11,6 +11,7 @@ import SettingsPage      from './components/SettingsPage.js';
 import ActionLogsPage   from './components/ActionLogsPage.js';
 import DashboardPage    from './components/DashboardPage.js';
 import SessionsPage     from './components/SessionsPage.js';
+import ThemeSwitcher    from './components/ThemeSwitcher.js';
 
 function RequireAuth() {
     if (!isAuthenticated()) return <Navigate to="/" replace />;
@@ -51,6 +52,8 @@ export default function App() {
                 <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
         </BrowserRouter>
+        {/* ThemeSwitcher: fixed overlay, visible on all authenticated pages */}
+        {isAuthenticated() && <ThemeSwitcher />}
         </ThemeProvider>
     );
 }

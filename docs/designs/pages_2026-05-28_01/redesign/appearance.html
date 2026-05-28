@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ja" data-nca-theme="default-light">
+<head>
+<meta charset="UTF-8">
+<title>Appearance — NeNe Concierge Admin</title>
+<link rel="stylesheet" href="_shared.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* Page-specific styles */
+  .swatch-row { display: flex; align-items: center; gap: 10px; }
+  .swatch {
+    width: 28px; height: 28px; border-radius: var(--nca-radius-md);
+    border: 1px solid var(--nca-color-border-input);
+    flex-shrink: 0;
+  }
+  .swatch-hex {
+    width: 110px; height: var(--nca-control-height); padding: 0 10px;
+    border-radius: var(--nca-radius-md); border: 1px solid var(--nca-color-border-input);
+    font-family: var(--nca-font-mono); font-size: var(--nca-font-sm);
+    background: var(--nca-color-surface); color: var(--nca-color-text); outline: none;
+  }
+  .swatch-presets {
+    display: flex; gap: 5px;
+  }
+  .swatch-presets .dot {
+    width: 22px; height: 22px; border-radius: 99px;
+    border: 2px solid var(--nca-color-surface);
+    outline: 1px solid var(--nca-color-border);
+    cursor: pointer;
+  }
+  .swatch-presets .dot.selected {
+    outline: 2px solid var(--nca-color-primary);
+  }
+
+  /* Widget preview */
+  .preview-frame {
+    background: linear-gradient(135deg, #fafaf7 0%, #f0eee9 100%);
+    border-radius: var(--nca-radius-lg);
+    border: 1px solid var(--nca-color-border);
+    height: 360px;
+    position: relative;
+    overflow: hidden;
+  }
+  .preview-frame::before {
+    content: 'PREVIEW';
+    position: absolute; top: 12px; left: 16px;
+    font-family: var(--nca-font-mono); font-size: 9.5px; font-weight: 700;
+    letter-spacing: 0.10em; color: var(--nca-color-text-faint);
+  }
+  .widget-bubble {
+    position: absolute; right: 18px; bottom: 18px;
+    width: 280px; max-width: 80%;
+    background: white; border-radius: 12px;
+    box-shadow: 0 18px 50px -10px rgba(15,23,42,.18), 0 4px 12px rgba(15,23,42,.06);
+    overflow: hidden;
+  }
+  .widget-head {
+    padding: 12px 14px;
+    background: #2563EB; color: white;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .widget-head .avatar {
+    width: 28px; height: 28px; border-radius: 99px;
+    background: rgba(255,255,255,.25);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+  }
+  .widget-head .title { flex: 1; font-weight: 700; font-size: 13px; }
+  .widget-body { padding: 14px; }
+  .widget-msg {
+    padding: 8px 12px; border-radius: 12px 12px 12px 4px;
+    background: #f4f3ee; color: #18181b;
+    font-size: 13px; line-height: 1.5;
+    max-width: 80%;
+  }
+  .widget-choices { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 5px; }
+  .widget-choice {
+    padding: 5px 11px; border-radius: 999px;
+    background: rgba(37,99,235,.08); color: #2563EB;
+    border: 1px solid rgba(37,99,235,.25);
+    font-size: 11.5px; font-weight: 600;
+    cursor: pointer;
+  }
+  .widget-launcher {
+    position: absolute; right: 18px; bottom: 18px;
+    width: 52px; height: 52px; border-radius: 99px;
+    background: #2563EB;
+    box-shadow: 0 8px 22px rgba(37,99,235,.35);
+    display: flex; align-items: center; justify-content: center;
+    color: white;
+  }
+  /* anchor display when launcher visible */
+  .widget-preview-mode { display: block; }
+</style>
+</head>
+<body data-active="appearance">
+<div class="layout">
+  <aside class="sidebar" id="nca-sidebar"></aside>
+  <main class="main-content">
+    <div class="main-inner" style="max-width: 1100px; margin: 0 auto;">
+
+      <div class="page-head">
+        <div>
+          <div class="page-title">Appearance</div>
+          <div class="page-subtitle">widget · public-facing</div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button class="btn btn-ghost">Reset to defaults</button>
+          <button class="btn btn-primary">Save</button>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+
+        <!-- LEFT: Settings -->
+        <div>
+          <div class="card" style="margin-bottom: 12px;">
+            <div class="section-head">
+              <span class="label">colors</span>
+              <span class="rule"></span>
+            </div>
+            <div class="field">
+              <label class="field-label">primary</label>
+              <div class="swatch-row">
+                <div class="swatch" style="background:#2563EB;"></div>
+                <input class="swatch-hex" type="text" value="#2563EB">
+                <div class="swatch-presets">
+                  <div class="dot selected" style="background:#2563EB;" title="Blue"></div>
+                  <div class="dot" style="background:#0d9488;" title="Teal"></div>
+                  <div class="dot" style="background:#7c3aed;" title="Violet"></div>
+                  <div class="dot" style="background:#E95420;" title="Ubuntu Orange"></div>
+                  <div class="dot" style="background:#18181B;" title="Black"></div>
+                </div>
+              </div>
+            </div>
+            <div class="field" style="margin-bottom: 0;">
+              <label class="field-label">text on primary</label>
+              <div class="swatch-row">
+                <div class="swatch" style="background:#FFFFFF;"></div>
+                <input class="swatch-hex" type="text" value="#FFFFFF">
+                <span class="field-hint" style="margin: 0;">アイコン・タイトルの色 (通常は白)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-bottom: 12px;">
+            <div class="section-head">
+              <span class="label">behavior</span>
+              <span class="rule"></span>
+            </div>
+            <div class="field">
+              <label class="field-label">position</label>
+              <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;">
+                <button class="btn btn-ghost btn-sm" style="height: 56px; flex-direction: column; gap: 4px;">
+                  <svg width="32" height="22" viewBox="0 0 32 22"><rect x="0.5" y="0.5" width="31" height="21" rx="2" fill="none" stroke="currentColor" opacity="0.4"/><rect x="4" y="3" width="9" height="6" rx="1" fill="currentColor"/></svg>
+                  <span style="font-size: 10px;">top left</span>
+                </button>
+                <button class="btn btn-ghost btn-sm" style="height: 56px; flex-direction: column; gap: 4px;">
+                  <svg width="32" height="22" viewBox="0 0 32 22"><rect x="0.5" y="0.5" width="31" height="21" rx="2" fill="none" stroke="currentColor" opacity="0.4"/><rect x="19" y="3" width="9" height="6" rx="1" fill="currentColor"/></svg>
+                  <span style="font-size: 10px;">top right</span>
+                </button>
+                <button class="btn btn-ghost btn-sm" style="height: 56px; flex-direction: column; gap: 4px;">
+                  <svg width="32" height="22" viewBox="0 0 32 22"><rect x="0.5" y="0.5" width="31" height="21" rx="2" fill="none" stroke="currentColor" opacity="0.4"/><rect x="4" y="13" width="9" height="6" rx="1" fill="currentColor"/></svg>
+                  <span style="font-size: 10px;">bottom left</span>
+                </button>
+                <button class="btn btn-ghost btn-sm" style="height: 56px; flex-direction: column; gap: 4px; border-color: var(--nca-color-primary); color: var(--nca-color-primary); background: var(--nca-color-primary-tint);">
+                  <svg width="32" height="22" viewBox="0 0 32 22"><rect x="0.5" y="0.5" width="31" height="21" rx="2" fill="none" stroke="currentColor" opacity="0.7"/><rect x="19" y="13" width="9" height="6" rx="1" fill="currentColor"/></svg>
+                  <span style="font-size: 10px; font-weight: 700;">bottom right</span>
+                </button>
+              </div>
+            </div>
+            <div class="field" style="margin-bottom: 0;">
+              <label class="field-label">trigger</label>
+              <select class="field-select">
+                <option>ページ読み込み時に自動表示</option>
+                <option>スクロール時 (50% 到達)</option>
+                <option>離脱インテント検知時</option>
+                <option>手動 — ボタンクリックのみ</option>
+              </select>
+              <p class="field-hint">どのタイミングでウィジェットを開くか</p>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="section-head">
+              <span class="label">content</span>
+              <span class="rule"></span>
+            </div>
+            <div class="field">
+              <label class="field-label">icon url <span style="text-transform: none; font-weight: 500; letter-spacing: 0; opacity: 0.6;">(optional)</span></label>
+              <input class="field-input" type="text" placeholder="https://example.com/icon.png">
+            </div>
+            <div class="field" style="margin-bottom: 0;">
+              <label class="field-label">welcome message <span style="text-transform: none; font-weight: 500; letter-spacing: 0; opacity: 0.6;">(optional)</span></label>
+              <input class="field-input" type="text" value="ご用件はなんでしょうか？" placeholder="ご用件はなんでしょうか？">
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Preview -->
+        <div>
+          <div class="section-head">
+            <span class="label">live preview</span>
+            <span class="rule"></span>
+            <button class="btn btn-ghost btn-sm">
+              ↕ 切替
+            </button>
+          </div>
+          <div class="preview-frame">
+            <!-- Open state -->
+            <div class="widget-bubble">
+              <div class="widget-head">
+                <div class="avatar">N</div>
+                <div class="title">NeNe Concierge</div>
+                <div style="opacity: 0.7;">×</div>
+              </div>
+              <div class="widget-body">
+                <div class="widget-msg">
+                  ご用件はなんでしょうか？お気軽にお問い合わせください。
+                </div>
+                <div class="widget-choices">
+                  <span class="widget-choice">配送について</span>
+                  <span class="widget-choice">返品・交換</span>
+                  <span class="widget-choice">商品について</span>
+                  <span class="widget-choice">その他</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="field-hint" style="margin-top: 12px; text-align: center;">
+            設定変更は保存ボタンを押すまで本番には反映されません。
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+<script src="_sidebar.js"></script>
+<script src="_theme-switcher.js"></script>
+</body>
+</html>

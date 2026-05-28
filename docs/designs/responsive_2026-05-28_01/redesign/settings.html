@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ja" data-nca-theme="default-light">
+<head>
+<meta charset="UTF-8">
+<title>Settings — NeNe Concierge Admin</title>
+<link rel="stylesheet" href="_shared.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  .theme-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 14px;
+  }
+  .theme-card {
+    border: 1px solid var(--nca-color-border);
+    border-radius: var(--nca-radius-lg);
+    overflow: hidden;
+    cursor: pointer;
+    background: var(--nca-color-surface);
+    transition: border-color 150ms ease, transform 150ms ease, box-shadow 150ms ease;
+  }
+  .theme-card:hover { transform: translateY(-1px); box-shadow: var(--nca-shadow-card); }
+  .theme-card.selected {
+    border-color: var(--nca-color-primary);
+    box-shadow: 0 0 0 2px var(--nca-color-primary-tint);
+  }
+
+  /* mock preview: 100x60 mini sidebar + content */
+  .theme-prev {
+    display: grid; grid-template-columns: 36px 1fr;
+    height: 100px; overflow: hidden;
+  }
+  .theme-prev .sb {
+    display: flex; flex-direction: column;
+    align-items: stretch; padding: 8px 6px; gap: 4px;
+  }
+  .theme-prev .sb .brand {
+    font-family: var(--nca-font-mono); font-size: 9px; font-weight: 700;
+    text-align: center; opacity: 0.9; line-height: 1; padding: 1px 0 3px;
+  }
+  .theme-prev .sb .row {
+    height: 4px; border-radius: 2px; opacity: 0.5;
+  }
+  .theme-prev .sb .row.active { opacity: 0.95; }
+  .theme-prev .body {
+    padding: 10px 10px;
+    display: flex; flex-direction: column; gap: 5px;
+  }
+  .theme-prev .body .h { height: 6px; width: 60%; border-radius: 2px; }
+  .theme-prev .body .line { height: 4px; width: 100%; border-radius: 2px; opacity: 0.5; }
+  .theme-prev .body .line.short { width: 70%; opacity: 0.3; }
+  .theme-prev .body .pill {
+    align-self: flex-start;
+    height: 10px; width: 36px; border-radius: 99px;
+    font-size: 7px; font-family: var(--nca-font-mono);
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 2px;
+  }
+
+  .theme-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 9px 12px;
+    border-top: 1px solid var(--nca-color-border-light);
+    background: var(--nca-color-surface);
+  }
+  .theme-name { font-size: var(--nca-font-sm); font-weight: 500; color: var(--nca-color-text); }
+  .theme-card.selected .theme-name { font-weight: 700; color: var(--nca-color-text-strong); }
+  .theme-mode-toggle {
+    display: flex; align-items: center; gap: 3px;
+    padding: 2px;
+    background: var(--nca-color-surface-alt);
+    border: 1px solid var(--nca-color-border-light);
+    border-radius: 99px;
+  }
+  .theme-mode-toggle .seg {
+    width: 22px; height: 18px; border-radius: 99px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--nca-color-text-faint);
+    cursor: pointer;
+  }
+  .theme-mode-toggle .seg.active {
+    background: var(--nca-color-surface);
+    color: var(--nca-color-text-strong);
+    box-shadow: 0 1px 2px rgba(15,23,42,.10);
+  }
+</style>
+</head>
+<body data-active="settings">
+<div class="layout">
+  <aside class="sidebar" id="nca-sidebar"></aside>
+  <main class="main-content">
+    <div class="main-inner" style="max-width: 1100px; margin: 0 auto;">
+
+      <div class="page-head">
+        <div>
+          <div class="page-title">Settings</div>
+          <div class="page-subtitle">admin theme · 6 options</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-head">
+          <span class="label">admin theme</span>
+          <span class="rule"></span>
+          <span class="kpi-meta">applied immediately</span>
+        </div>
+
+        <div class="theme-grid">
+          <!-- Default (selected) -->
+          <div class="theme-card selected">
+            <div class="theme-prev" style="background:#FAFAF7;">
+              <div class="sb" style="background:#0E1116;">
+                <div class="brand" style="color:#2DD4BF;">[n]</div>
+                <div class="row" style="background:#2DD4BF;"></div>
+                <div class="row active" style="background:#2DD4BF;"></div>
+                <div class="row" style="background:#9CA3AF;"></div>
+                <div class="row" style="background:#9CA3AF;"></div>
+              </div>
+              <div class="body">
+                <div class="h" style="background:#18181B;"></div>
+                <div class="line" style="background:#71717A;"></div>
+                <div class="line short" style="background:#71717A;"></div>
+                <div class="pill" style="background:rgba(13,148,136,.16); color:#0d9488;">save</div>
+              </div>
+            </div>
+            <div class="theme-row">
+              <span class="theme-name">Default</span>
+              <div class="theme-mode-toggle">
+                <span class="seg active" title="Light">☀</span>
+                <span class="seg" title="Dark">🌙</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- GitHub -->
+          <div class="theme-card">
+            <div class="theme-prev" style="background:#f6f8fa;">
+              <div class="sb" style="background:#ffffff;">
+                <div class="brand" style="color:#1f883d;">[n]</div>
+                <div class="row" style="background:#1f883d;"></div>
+                <div class="row active" style="background:#1f883d;"></div>
+                <div class="row" style="background:#656d76;"></div>
+                <div class="row" style="background:#656d76;"></div>
+              </div>
+              <div class="body">
+                <div class="h" style="background:#1f2328;"></div>
+                <div class="line" style="background:#656d76;"></div>
+                <div class="line short" style="background:#656d76;"></div>
+                <div class="pill" style="background:rgba(31,136,61,.14); color:#1a7f37;">save</div>
+              </div>
+            </div>
+            <div class="theme-row">
+              <span class="theme-name">GitHub</span>
+              <div class="theme-mode-toggle">
+                <span class="seg" title="Light">☀</span>
+                <span class="seg" title="Dark">🌙</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Solarized -->
+          <div class="theme-card">
+            <div class="theme-prev" style="background:#fdf6e3;">
+              <div class="sb" style="background:#002b36;">
+                <div class="brand" style="color:#2aa198;">[n]</div>
+                <div class="row" style="background:#2aa198;"></div>
+                <div class="row active" style="background:#2aa198;"></div>
+                <div class="row" style="background:#93a1a1;"></div>
+                <div class="row" style="background:#93a1a1;"></div>
+              </div>
+              <div class="body">
+                <div class="h" style="background:#586e75;"></div>
+                <div class="line" style="background:#657b83;"></div>
+                <div class="line short" style="background:#657b83;"></div>
+                <div class="pill" style="background:rgba(38,139,210,.16); color:#268bd2;">save</div>
+              </div>
+            </div>
+            <div class="theme-row">
+              <span class="theme-name">Solarized</span>
+              <div class="theme-mode-toggle">
+                <span class="seg" title="Light">☀</span>
+                <span class="seg" title="Dark">🌙</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ubuntu -->
+          <div class="theme-card">
+            <div class="theme-prev" style="background:#F7F7F5;">
+              <div class="sb" style="background:#2C001E;">
+                <div class="brand" style="color:#E95420;">[n]</div>
+                <div class="row" style="background:#E95420;"></div>
+                <div class="row active" style="background:#E95420;"></div>
+                <div class="row" style="background:#C4B7B0;"></div>
+                <div class="row" style="background:#C4B7B0;"></div>
+              </div>
+              <div class="body">
+                <div class="h" style="background:#2C001E;"></div>
+                <div class="line" style="background:#5E5450;"></div>
+                <div class="line short" style="background:#5E5450;"></div>
+                <div class="pill" style="background:rgba(233,84,32,.16); color:#E95420;">save</div>
+              </div>
+            </div>
+            <div class="theme-row">
+              <span class="theme-name">Ubuntu</span>
+              <div class="theme-mode-toggle">
+                <span class="seg" title="Light">☀</span>
+                <span class="seg" title="Dark">🌙</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dracula (dark only) -->
+          <div class="theme-card">
+            <div class="theme-prev" style="background:#282a36;">
+              <div class="sb" style="background:#21222c;">
+                <div class="brand" style="color:#bd93f9;">[n]</div>
+                <div class="row" style="background:#bd93f9;"></div>
+                <div class="row active" style="background:#bd93f9;"></div>
+                <div class="row" style="background:#6272a4;"></div>
+                <div class="row" style="background:#6272a4;"></div>
+              </div>
+              <div class="body">
+                <div class="h" style="background:#f8f8f2;"></div>
+                <div class="line" style="background:#6272a4;"></div>
+                <div class="line short" style="background:#6272a4;"></div>
+                <div class="pill" style="background:rgba(189,147,249,.16); color:#bd93f9;">save</div>
+              </div>
+            </div>
+            <div class="theme-row">
+              <span class="theme-name">Dracula <span style="font-family: var(--nca-font-mono); font-size: 9.5px; color: var(--nca-color-text-faint); margin-left: 4px;">dark only</span></span>
+              <span style="width: 16px; height: 16px; display: inline-flex; align-items: center; justify-content: center; color: var(--nca-color-text-faint); font-size: 13px;">🌙</span>
+            </div>
+          </div>
+
+          <!-- Monokai (dark only) -->
+          <div class="theme-card">
+            <div class="theme-prev" style="background:#272822;">
+              <div class="sb" style="background:#1e1f1a;">
+                <div class="brand" style="color:#a6e22e;">[n]</div>
+                <div class="row" style="background:#a6e22e;"></div>
+                <div class="row active" style="background:#a6e22e;"></div>
+                <div class="row" style="background:#75715e;"></div>
+                <div class="row" style="background:#75715e;"></div>
+              </div>
+              <div class="body">
+                <div class="h" style="background:#f8f8f2;"></div>
+                <div class="line" style="background:#a59f85;"></div>
+                <div class="line short" style="background:#a59f85;"></div>
+                <div class="pill" style="background:rgba(166,226,46,.16); color:#a6e22e;">save</div>
+              </div>
+            </div>
+            <div class="theme-row">
+              <span class="theme-name">Monokai <span style="font-family: var(--nca-font-mono); font-size: 9.5px; color: var(--nca-color-text-faint); margin-left: 4px;">dark only</span></span>
+              <span style="width: 16px; height: 16px; display: inline-flex; align-items: center; justify-content: center; color: var(--nca-color-text-faint); font-size: 13px;">🌙</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="field-hint" style="margin-top: 16px;">
+          選択するとブラウザに即時反映され、ログアウト後も維持されます (localStorage)。
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+<script src="_sidebar.js"></script>
+<script src="_theme-switcher.js"></script>
+</body>
+</html>

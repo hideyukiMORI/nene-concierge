@@ -1,9 +1,27 @@
 import { useEffect, useState } from 'react';
-import { getDashboard, ApiError } from '../api.js';
-import type { DashboardStats } from '../api.js';
-import { PageTitle, Card, ErrorMsg } from './Layout.js';
+import { Link } from 'react-router';
+import { getDashboard, listScenarios, listActionLogs, ApiError } from '../api.js';
+import type { DashboardStats, ScenarioSummary, ActionLogEntry } from '../api.js';
+import { PageHead, Card, CardSub, SectionHead, AdapterTag, ErrorMsg } from './Layout.js';
 import { T } from '../theme.js';
 import { useTranslation } from '../i18n/index.js';
+
+const MONO = T.fontMono;
+
+// ── Table shared styles ────────────────────────────────────────────────────────
+
+const TH: React.CSSProperties = {
+    padding: '8px 14px', textAlign: 'left',
+    fontSize: T.fontXs, fontWeight: 700, color: T.textMuted,
+    fontFamily: MONO, letterSpacing: '0.05em', textTransform: 'uppercase',
+    background: T.surfaceAlt,
+    borderBottom: `1px solid ${T.border}`,
+};
+
+const TD: React.CSSProperties = {
+    padding: '9px 14px', fontSize: T.fontSm, color: T.text,
+    borderBottom: `1px solid ${T.border}`,
+};
 
 // ── KPI Card ──────────────────────────────────────────────────────────────────
 
@@ -11,128 +29,118 @@ function KpiCard({
     label,
     value,
     unit,
-    accent,
+    valueColor,
+    meta,
     alert,
 }: {
-    label:   string;
-    value:   number | string;
-    unit?:   string;
-    accent?: string;
-    alert?:  boolean;
+    label:       string;
+    value:       number | string;
+    unit?:       string;
+    valueColor?: string;
+    meta?:       string;
+    alert?:      boolean;
 }) {
     return (
         <div style={{
-            padding: '20px 24px',
+            background: alert ? T.dangerBg : T.surface,
+            border: `1px solid ${alert ? T.dangerBorder : T.border}`,
             borderRadius: T.radiusLg,
-            background: alert ? 'oklch(97% 0.04 25)' : T.surface,
-            border: `1px solid ${alert ? 'oklch(87% 0.08 25)' : T.border}`,
+            padding: '16px 18px',
+            boxShadow: T.shadowCard,
             display: 'flex', flexDirection: 'column', gap: 6,
         }}>
-            <div style={{ fontSize: T.fontXs, color: T.textMuted, fontWeight: 600, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+            <div style={{
+                display: 'flex', alignItems: 'center', gap: 5,
+                fontSize: T.fontXs, fontWeight: 700, color: T.textMuted,
+                fontFamily: MONO, letterSpacing: '0.04em', textTransform: 'uppercase',
+            }}>
+                <span style={{ width: 5, height: 5, borderRadius: 99, background: 'currentColor', flexShrink: 0 }} />
                 {label}
             </div>
             <div style={{
                 fontSize: '2rem', fontWeight: 800, lineHeight: 1,
-                color: alert ? 'oklch(40% 0.14 25)' : (accent ?? T.text),
+                color: valueColor ?? (alert ? T.dangerFg : T.textStrong),
             }}>
                 {value}
                 {unit && (
-                    <span style={{ fontSize: T.fontSm, fontWeight: 400, color: T.textMuted, marginLeft: 4 }}>
+                    <span style={{ fontSize: T.fontSm, fontWeight: 400, color: T.textMuted, marginLeft: 3 }}>
                         {unit}
                     </span>
                 )}
             </div>
+            {meta && (
+                <div style={{ fontSize: T.fontXs, color: T.textMuted, fontFamily: MONO }}>{meta}</div>
+            )}
         </div>
     );
 }
 
 // ── Sparkline ─────────────────────────────────────────────────────────────────
 
-function Sparkline({ data }: { data: { date: string; count: number }[] }) {
-    const { t } = useTranslation();
-
-    if (data.length === 0) {
-        return (
-            <p style={{ color: T.textMuted, fontSize: T.fontSm, textAlign: 'center', padding: '20px 0' }}>
-                {t('dashboard.noData')}
-            </p>
-        );
-    }
+function SparklineCard({ data }: { data: { date: string; count: number }[] }) {
+    if (data.length === 0) return null;
 
     const max    = Math.max(...data.map(d => d.count), 1);
-    const width  = 480;
-    const height = 80;
-    const pad    = 4;
+    const W      = 720;
+    const H      = 120;
+    const pad    = 10;
     const n      = data.length;
-    const xStep  = n > 1 ? (width - pad * 2) / (n - 1) : 0;
+    const xStep  = n > 1 ? (W - pad * 2) / (n - 1) : 0;
 
-    const points = data.map((d, i) => {
+    const pts = data.map((d, i) => {
         const x = pad + i * xStep;
-        const y = pad + (1 - d.count / max) * (height - pad * 2);
-        return `${x},${y}`;
-    }).join(' ');
+        const y = pad + (1 - d.count / max) * (H - pad * 2 - 10);
+        return [x, y] as [number, number];
+    });
 
-    // Fill area under curve
-    const firstX = pad;
-    const lastX  = pad + (n - 1) * xStep;
-    const fillPoints = `${firstX},${height} ${points} ${lastX},${height}`;
+    const polyline = pts.map(([x, y]) => `${x},${y}`).join(' ');
+    const fill = `${pts[0][0]},${H} ${polyline} ${pts[pts.length-1][0]},${H}`;
 
-    return (
-        <svg
-            viewBox={`0 0 ${width} ${height}`}
-            style={{ width: '100%', height: 80, display: 'block' }}
-            aria-hidden="true"
-        >
-            <defs>
-                <linearGradient id="sparkGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%"   stopColor={T.primary} stopOpacity="0.25" />
-                    <stop offset="100%" stopColor={T.primary} stopOpacity="0.02" />
-                </linearGradient>
-            </defs>
-            {/* Filled area */}
-            <polygon
-                points={fillPoints}
-                fill="url(#sparkGrad)"
-            />
-            {/* Line */}
-            <polyline
-                points={points}
-                fill="none"
-                stroke={T.primary}
-                strokeWidth="2"
-                strokeLinejoin="round"
-                strokeLinecap="round"
-            />
-            {/* Dots */}
-            {data.map((d, i) => {
-                const x = pad + i * xStep;
-                const y = pad + (1 - d.count / max) * (height - pad * 2);
-                return (
-                    <circle key={d.date} cx={x} cy={y} r="3" fill={T.primary} />
-                );
-            })}
-        </svg>
-    );
-}
-
-function SparklineCard({ data }: { data: { date: string; count: number }[] }) {
-    const { t } = useTranslation();
+    const dateRange = n > 0
+        ? `${data[0].date.slice(5)} → ${data[n-1].date.slice(5)}`
+        : '';
 
     return (
-        <Card>
-            <div style={{ marginBottom: 12, fontWeight: 600, fontSize: T.fontSm, color: T.text }}>
-                {t('dashboard.dailySessions')}
-            </div>
-            <Sparkline data={data} />
-            {data.length > 0 && (
-                <div style={{
-                    display: 'flex', justifyContent: 'space-between',
-                    marginTop: 6, fontSize: T.fontXs, color: T.textMuted,
-                }}>
-                    <span>{data[0].date}</span>
-                    <span>{data[data.length - 1].date}</span>
+        <Card style={{ marginBottom: 20 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 14 }}>
+                <div>
+                    <CardSub>sessions · daily</CardSub>
+                    <div style={{ fontWeight: 700, fontSize: T.fontMd, color: T.textStrong }}>日別セッション数</div>
                 </div>
-            )}
+                <div style={{ fontFamily: MONO, fontSize: T.fontXs, color: T.textMuted }}>
+                    7 days · {dateRange}
+                </div>
+            </div>
+            <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', height: 120, display: 'block' }} preserveAspectRatio="none" aria-hidden="true">
+                <defs>
+                    <linearGradient id="sparkGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%"   stopColor={T.primary} stopOpacity="0.22" />
+                        <stop offset="100%" stopColor={T.primary} stopOpacity="0.02" />
+                    </linearGradient>
+                </defs>
+                {/* gridlines at 25% 50% 75% */}
+                {[0.25, 0.5, 0.75].map(y => (
+                    <line key={y}
+                        x1="0" x2={W}
+                        y1={pad + y * (H - pad * 2 - 10)}
+                        y2={pad + y * (H - pad * 2 - 10)}
+                        stroke={T.border} strokeWidth="0.7" strokeDasharray="2 3"
+                    />
+                ))}
+                <polygon points={fill} fill="url(#sparkGrad)" />
+                <polyline points={polyline} fill="none" stroke={T.primary} strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
+                {pts.map(([x, y], i) => (
+                    <circle key={i} cx={x} cy={y} r={3} fill={T.primary} />
+                ))}
+            </svg>
+            <div style={{
+                display: 'flex', justifyContent: 'space-between', marginTop: 8,
+                fontFamily: MONO, fontSize: T.fontXs, color: T.textFaint,
+            }}>
+                {data.map(d => (
+                    <span key={d.date}>{d.date.slice(5)}</span>
+                ))}
+            </div>
         </Card>
     );
 }
@@ -142,41 +150,102 @@ function SparklineCard({ data }: { data: { date: string; count: number }[] }) {
 export default function DashboardPage() {
     const { t } = useTranslation();
 
-    const [stats, setStats]     = useState<DashboardStats | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError]     = useState<string | null>(null);
+    const [stats, setStats]         = useState<DashboardStats | null>(null);
+    const [scenarios, setScenarios] = useState<ScenarioSummary[]>([]);
+    const [failures, setFailures]   = useState<ActionLogEntry[]>([]);
+    const [loading, setLoading]     = useState(true);
+    const [error, setError]         = useState<string | null>(null);
 
-    useEffect(() => {
+    async function load() {
         setLoading(true);
         setError(null);
-        void getDashboard()
-            .then(res => setStats(res.data))
-            .catch(err => {
-                setError(err instanceof ApiError ? err.message : t('dashboard.loadError'));
-            })
-            .finally(() => setLoading(false));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+        try {
+            const [dashRes, scenRes, logRes] = await Promise.all([
+                getDashboard(),
+                listScenarios(),
+                listActionLogs({ status: 'failure', limit: 3 }),
+            ]);
+            setStats(dashRes.data);
+            // show published first, up to 3
+            const sorted = [...scenRes.data].sort((a, b) => {
+                if (a.status === 'published' && b.status !== 'published') return -1;
+                if (b.status === 'published' && a.status !== 'published') return 1;
+                return 0;
+            });
+            setScenarios(sorted.slice(0, 3));
+            setFailures(logRes.data);
+        } catch (err) {
+            setError(err instanceof ApiError ? err.message : t('dashboard.loadError'));
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    useEffect(() => { void load(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+    const cvRate = stats?.conversion_rate_7d ?? 0;
+    const cvColor = cvRate >= 10 ? T.successFg : cvRate >= 3 ? T.text : T.dangerFg;
 
     return (
         <div>
-            <PageTitle>{t('dashboard.pageTitle')}</PageTitle>
+            <PageHead title="Dashboard" subtitle="overview · 7 days">
+                <select style={{
+                    height: T.controlHeight, padding: '0 10px',
+                    borderRadius: T.radiusMd, border: `1px solid ${T.border}`,
+                    background: T.surface, color: T.text,
+                    fontSize: T.fontSm, cursor: 'pointer', outline: 'none',
+                }}>
+                    <option>Last 7 days</option>
+                    <option>Last 24 hours</option>
+                    <option>Last 30 days</option>
+                </select>
+                <button
+                    onClick={() => { void load(); }}
+                    style={{
+                        height: T.controlHeight, padding: '0 12px',
+                        borderRadius: T.radiusMd, border: `1px solid ${T.border}`,
+                        background: 'transparent', color: T.primary,
+                        fontSize: T.fontSm, fontWeight: 600, cursor: 'pointer',
+                        display: 'inline-flex', alignItems: 'center', gap: 5,
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.filter = 'brightness(0.9)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.filter = ''; }}
+                >
+                    ↻ Refresh
+                </button>
+            </PageHead>
 
             <ErrorMsg msg={error} />
 
-            {/* Action failures alert */}
+            {/* Alert banner */}
             {stats !== null && stats.action_failures_24h > 0 && (
                 <div style={{
-                    marginBottom: 20,
+                    display: 'flex', alignItems: 'flex-start', gap: 10,
+                    marginBottom: 16,
                     padding: '12px 16px',
                     borderRadius: T.radiusMd,
-                    background: 'oklch(97% 0.04 25)',
-                    border: '1px solid oklch(87% 0.08 25)',
-                    color: 'oklch(35% 0.14 25)',
+                    background: T.dangerBg,
+                    border: `1px solid ${T.dangerBorder}`,
+                    color: T.dangerFg,
                     fontSize: T.fontSm,
-                    display: 'flex', alignItems: 'center', gap: 8,
                 }}>
-                    ⚠️ {t('dashboard.failuresAlert').replace('{{count}}', String(stats.action_failures_24h))}
+                    <span style={{
+                        width: 20, height: 20, borderRadius: 99, flexShrink: 0,
+                        background: T.dangerFg, color: '#fff',
+                        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                        fontWeight: 800, fontSize: T.fontXs,
+                    }}>!</span>
+                    <div>
+                        <div style={{ fontWeight: 700, marginBottom: 2 }}>
+                            {stats.action_failures_24h} 件のアクション失敗が直近 24 時間に発生しました
+                        </div>
+                        <Link to="/action-logs" style={{
+                            fontSize: T.fontXs, fontFamily: MONO, color: T.dangerFg,
+                            textDecoration: 'none',
+                        }}>
+                            → アクションログを確認
+                        </Link>
+                    </div>
                 </div>
             )}
 
@@ -184,45 +253,43 @@ export default function DashboardPage() {
                 <p style={{ color: T.textMuted }}>{t('common.loading')}</p>
             ) : stats !== null ? (
                 <>
-                    {/* KPI グリッド */}
+                    {/* KPI grid */}
                     <div style={{
                         display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
-                        gap: 12,
+                        gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
+                        gap: 8,
                         marginBottom: 20,
                     }}>
                         <KpiCard
-                            label={t('dashboard.sessions7d')}
+                            label="sessions · 7d"
                             value={stats.sessions_7d}
+                            meta="↑ vs prev period"
                         />
                         <KpiCard
-                            label={t('dashboard.converted7d')}
+                            label="conversions · 7d"
                             value={stats.converted_7d}
-                            accent="oklch(40% 0.18 290)"
+                            meta="↑ vs prev period"
                         />
                         <KpiCard
-                            label={t('dashboard.conversionRate')}
+                            label="cv rate"
                             value={stats.conversion_rate_7d.toFixed(1)}
                             unit="%"
-                            accent={
-                                stats.conversion_rate_7d >= 10
-                                    ? 'oklch(40% 0.14 150)'
-                                    : stats.conversion_rate_7d >= 3
-                                    ? T.text
-                                    : 'oklch(40% 0.14 25)'
-                            }
+                            valueColor={cvColor}
+                            meta="target 10%"
                         />
                         <KpiCard
-                            label={t('dashboard.activeSessions')}
+                            label="active now"
                             value={stats.active_sessions}
-                            accent={T.primary}
+                            valueColor={T.primary}
+                            meta="live sessions"
                         />
                         <KpiCard
-                            label={t('dashboard.publishedScenarios')}
+                            label="published scenarios"
                             value={stats.published_scenarios}
+                            meta="of total"
                         />
                         <KpiCard
-                            label={t('dashboard.actionFailures24h')}
+                            label="action failures · 24h"
                             value={stats.action_failures_24h}
                             alert={stats.action_failures_24h > 0}
                         />
@@ -230,6 +297,93 @@ export default function DashboardPage() {
 
                     {/* Sparkline */}
                     <SparklineCard data={stats.daily_sessions} />
+
+                    {/* Two-column: Top scenarios + Recent failures */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+
+                        {/* Top scenarios */}
+                        <Card style={{ padding: 0, overflow: 'hidden' }}>
+                            <div style={{ padding: '14px 18px', borderBottom: `1px solid ${T.border}` }}>
+                                <CardSub>top scenarios</CardSub>
+                                <div style={{ fontWeight: 700, fontSize: T.fontMd, color: T.textStrong, marginTop: 2 }}>
+                                    よく使われているシナリオ
+                                </div>
+                            </div>
+                            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                <thead>
+                                    <tr>
+                                        <th style={TH}>name</th>
+                                        <th style={{ ...TH, textAlign: 'right' }}>sessions</th>
+                                        <th style={{ ...TH, textAlign: 'right' }}>cv</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {scenarios.map((s, i) => (
+                                        <tr key={s.id} style={{
+                                            borderBottom: i < scenarios.length - 1 ? `1px solid ${T.border}` : 'none',
+                                        }}>
+                                            <td style={TD}>
+                                                <Link to={`/scenarios/${s.id}`} style={{ color: T.primary, textDecoration: 'none', fontWeight: 600 }}>
+                                                    {s.name}
+                                                </Link>
+                                            </td>
+                                            <td style={{ ...TD, textAlign: 'right', fontFamily: MONO, fontSize: T.fontSm, color: T.text }}>—</td>
+                                            <td style={{ ...TD, textAlign: 'right', fontFamily: MONO, fontSize: T.fontSm, color: T.textMuted }}>—</td>
+                                        </tr>
+                                    ))}
+                                    {scenarios.length === 0 && (
+                                        <tr><td colSpan={3} style={{ ...TD, color: T.textMuted, textAlign: 'center' }}>—</td></tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        </Card>
+
+                        {/* Recent failures */}
+                        <Card style={{ padding: 0, overflow: 'hidden' }}>
+                            <div style={{
+                                padding: '14px 18px', borderBottom: `1px solid ${T.border}`,
+                                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                            }}>
+                                <div>
+                                    <CardSub>recent failures</CardSub>
+                                    <div style={{ fontWeight: 700, fontSize: T.fontMd, color: T.textStrong, marginTop: 2 }}>直近の失敗</div>
+                                </div>
+                                <Link to="/action-logs" style={{
+                                    fontSize: T.fontXs, fontFamily: MONO,
+                                    letterSpacing: '0.06em', textTransform: 'uppercase',
+                                    color: T.primary, textDecoration: 'none',
+                                }}>
+                                    all →
+                                </Link>
+                            </div>
+                            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                <tbody>
+                                    {failures.map((log, i) => (
+                                        <tr key={log.id ?? i} style={{
+                                            borderBottom: i < failures.length - 1 ? `1px solid ${T.border}` : 'none',
+                                        }}>
+                                            <td style={{ ...TD, width: 90 }}>
+                                                <AdapterTag adapter={log.adapter} />
+                                            </td>
+                                            <td style={{ ...TD, fontFamily: MONO, fontSize: T.fontXs, color: T.textMuted, maxWidth: 160, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                                {log.error_message ?? '—'}
+                                            </td>
+                                            <td style={{ ...TD, textAlign: 'right', fontFamily: MONO, fontSize: T.fontXs, color: T.textMuted, whiteSpace: 'nowrap' }}>
+                                                {log.executed_at?.slice(11, 16) ?? '—'}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                    {failures.length === 0 && (
+                                        <tr>
+                                            <td colSpan={3} style={{ ...TD, color: T.textMuted, textAlign: 'center' }}>
+                                                <SectionHead label="no failures" />
+                                            </td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        </Card>
+                    </div>
                 </>
             ) : null}
         </div>

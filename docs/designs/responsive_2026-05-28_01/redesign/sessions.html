@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ja" data-nca-theme="default-light">
+<head>
+<meta charset="UTF-8">
+<title>Sessions — NeNe Concierge Admin</title>
+<link rel="stylesheet" href="_shared.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* Page-specific: detail drawer + chat */
+  .outcome-cell { white-space: nowrap; }
+
+  .drawer-overlay {
+    position: fixed; inset: 0; z-index: 100;
+    background: rgba(15,23,42,.35);
+    backdrop-filter: blur(2px);
+    display: flex; justify-content: flex-end;
+  }
+  .drawer {
+    width: 480px; max-width: 95vw; height: 100vh;
+    background: var(--nca-color-surface);
+    box-shadow: -10px 0 40px -10px rgba(15,23,42,.25);
+    display: flex; flex-direction: column;
+    border-left: 1px solid var(--nca-color-border);
+  }
+  .drawer-stripe { height: 3px; background: var(--nca-color-primary); flex-shrink: 0; }
+  .drawer-head {
+    padding: 14px 18px;
+    display: flex; align-items: center; gap: 10px;
+    border-bottom: 1px solid var(--nca-color-border);
+    flex-shrink: 0;
+  }
+  .drawer-head-icon {
+    width: 28px; height: 28px; border-radius: 5px;
+    background: var(--nca-color-primary-tint); color: var(--nca-color-primary);
+    border: 1px solid var(--nca-color-primary-border);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .drawer-head h3 { font-size: var(--nca-font-md); font-weight: 700; margin: 0; }
+  .drawer-head .sub { font-family: var(--nca-font-mono); font-size: var(--nca-font-xs); color: var(--nca-color-text-muted); }
+  .drawer-close {
+    width: 26px; height: 26px; border-radius: var(--nca-radius-sm);
+    background: transparent; border: 1px solid var(--nca-color-border);
+    color: var(--nca-color-text-muted); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .drawer-body { flex: 1; overflow-y: auto; padding: 16px 18px 20px; }
+  .meta-grid {
+    display: grid; grid-template-columns: 100px 1fr;
+    gap: 8px 16px; margin-bottom: 18px;
+    font-size: var(--nca-font-sm); align-items: baseline;
+  }
+  .meta-key {
+    font-family: var(--nca-font-mono); font-size: var(--nca-font-xs);
+    color: var(--nca-color-text-muted);
+    letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .meta-val { color: var(--nca-color-text); }
+  .session-id {
+    padding: 10px; border-radius: var(--nca-radius-md);
+    background: var(--nca-color-surface-alt);
+    font-family: var(--nca-font-mono); font-size: var(--nca-font-xs);
+    color: var(--nca-color-text-muted); word-break: break-all;
+    margin-bottom: 20px;
+  }
+  .vars-table {
+    border-radius: var(--nca-radius-md);
+    border: 1px solid var(--nca-color-border);
+    overflow: hidden; margin-bottom: 20px;
+  }
+  .vars-row {
+    display: grid; grid-template-columns: 120px 1fr; gap: 12px;
+    padding: 7px 12px; font-size: var(--nca-font-sm);
+    border-bottom: 1px solid var(--nca-color-border-light);
+    align-items: baseline;
+  }
+  .vars-row:last-child { border-bottom: none; }
+  .vars-row:nth-child(even) { background: var(--nca-color-surface-alt); }
+  .vars-key { font-family: var(--nca-font-mono); color: var(--nca-color-text-muted); font-size: var(--nca-font-xs); }
+
+  .chat-wrap { display: flex; flex-direction: column; gap: 10px; }
+  .chat-row { display: flex; gap: 8px; align-items: flex-end; }
+  .chat-row.user { flex-direction: row-reverse; }
+  .chat-avatar {
+    width: 22px; height: 22px; border-radius: 5px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; flex-shrink: 0;
+  }
+  .chat-row.bot .chat-avatar {
+    background: var(--nca-color-primary-tint); color: var(--nca-color-primary);
+    border: 1px solid var(--nca-color-primary-border);
+  }
+  .chat-row.user .chat-avatar {
+    background: var(--nca-adapter-http-bg); color: var(--nca-adapter-http);
+    border: 1px solid rgba(79,118,166,.35);
+  }
+  .chat-bubble {
+    max-width: 78%; padding: 8px 12px; border-radius: var(--nca-radius-md);
+    font-size: var(--nca-font-sm); line-height: 1.5; color: var(--nca-color-text);
+  }
+  .chat-row.bot .chat-bubble {
+    background: var(--nca-color-surface-alt);
+    border: 1px solid var(--nca-color-border-light);
+    border-bottom-left-radius: 0;
+  }
+  .chat-row.user .chat-bubble {
+    background: var(--nca-adapter-http-bg);
+    color: var(--nca-color-text);
+    border: 1px solid rgba(79,118,166,.20);
+    border-bottom-right-radius: 0;
+  }
+  .chat-time {
+    font-family: var(--nca-font-mono); font-size: 10px;
+    color: var(--nca-color-text-faint);
+    text-align: center; margin: 2px 0;
+  }
+</style>
+</head>
+<body data-active="sessions">
+<div class="layout">
+  <aside class="sidebar" id="nca-sidebar"></aside>
+  <main class="main-content">
+    <div class="main-inner" style="max-width: 1180px; margin: 0 auto;">
+
+      <div class="page-head">
+        <div>
+          <div class="page-title">Sessions</div>
+          <div class="page-subtitle">248 records · 5 active now</div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <button class="btn btn-ghost btn-sm">↻ Refresh</button>
+          <button class="btn btn-ghost">↓ Export CSV</button>
+        </div>
+      </div>
+
+      <!-- Filter bar -->
+      <div class="filter-bar">
+        <label class="filter-label">
+          outcome:
+          <select class="filter-select">
+            <option>all</option>
+            <option>active</option>
+            <option>completed</option>
+            <option>abandoned</option>
+            <option>converted</option>
+          </select>
+        </label>
+        <label class="filter-label">
+          conversion:
+          <select class="filter-select">
+            <option>all</option>
+            <option>yes</option>
+            <option>no</option>
+          </select>
+        </label>
+        <label class="filter-label">
+          scenario:
+          <select class="filter-select">
+            <option>all</option>
+            <option>#1 お問い合わせ</option>
+            <option>#2 採用情報</option>
+          </select>
+        </label>
+        <span class="records-count">248 records</span>
+      </div>
+
+      <!-- Sessions table -->
+      <div class="card flush">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 130px;">outcome</th>
+              <th style="width: 80px;">scenario</th>
+              <th style="width: 100px;">cv</th>
+              <th style="width: 150px;" class="mono">started</th>
+              <th style="width: 150px;" class="mono">ended</th>
+              <th style="width: 90px;" class="mono">duration</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="cursor: pointer; background: var(--nca-color-primary-tint);">
+              <td><span class="pill pill-success"><span class="pill-dot"></span>converted</span></td>
+              <td class="mono" style="color: var(--nca-color-text);">#01</td>
+              <td class="mono" style="color: var(--nca-color-success-fg);">✓ yes</td>
+              <td class="mono">05-28 14:30:12</td>
+              <td class="mono">05-28 14:35:48</td>
+              <td class="mono">5m 36s</td>
+              <td class="muted">→ selected</td>
+            </tr>
+            <tr style="cursor: pointer;">
+              <td><span class="pill pill-published"><span class="pill-dot"></span>completed</span></td>
+              <td class="mono" style="color: var(--nca-color-text);">#01</td>
+              <td class="muted">— no</td>
+              <td class="mono">05-28 14:10:05</td>
+              <td class="mono">05-28 14:18:42</td>
+              <td class="mono">8m 37s</td>
+              <td></td>
+            </tr>
+            <tr style="cursor: pointer;">
+              <td><span class="pill pill-active"><span class="pill-dot"></span>active</span></td>
+              <td class="mono" style="color: var(--nca-color-text);">#02</td>
+              <td class="muted">— no</td>
+              <td class="mono">05-28 14:38:21</td>
+              <td class="muted">—</td>
+              <td class="muted">in progress</td>
+              <td></td>
+            </tr>
+            <tr style="cursor: pointer;">
+              <td><span class="pill pill-archived"><span class="pill-dot"></span>abandoned</span></td>
+              <td class="mono" style="color: var(--nca-color-text);">#01</td>
+              <td class="muted">— no</td>
+              <td class="mono">05-28 13:50:33</td>
+              <td class="mono">05-28 13:52:08</td>
+              <td class="mono">1m 35s</td>
+              <td></td>
+            </tr>
+            <tr style="cursor: pointer;">
+              <td><span class="pill pill-success"><span class="pill-dot"></span>converted</span></td>
+              <td class="mono" style="color: var(--nca-color-text);">#02</td>
+              <td class="mono" style="color: var(--nca-color-success-fg);">✓ yes</td>
+              <td class="mono">05-28 12:14:00</td>
+              <td class="mono">05-28 12:22:18</td>
+              <td class="mono">8m 18s</td>
+              <td></td>
+            </tr>
+            <tr style="cursor: pointer;">
+              <td><span class="pill pill-published"><span class="pill-dot"></span>completed</span></td>
+              <td class="mono" style="color: var(--nca-color-text);">#03</td>
+              <td class="muted">— no</td>
+              <td class="mono">05-28 11:38:42</td>
+              <td class="mono">05-28 11:45:13</td>
+              <td class="mono">6m 31s</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pagination">
+        <button class="pag-btn" disabled>← prev</button>
+        <span class="pag-pos">page 1 / 42</span>
+        <button class="pag-btn">next →</button>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- Detail drawer (selected) -->
+<div class="drawer-overlay">
+  <div class="drawer">
+    <div class="drawer-stripe"></div>
+    <div class="drawer-head">
+      <div class="drawer-head-icon">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg>
+      </div>
+      <div style="flex: 1; min-width: 0;">
+        <h3>Session #a3f9c2d1</h3>
+        <div class="sub">scenario #01 · お問い合わせフロー</div>
+      </div>
+      <button class="drawer-close">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="drawer-body">
+      <div class="meta-grid">
+        <div class="meta-key">outcome</div>
+        <div class="meta-val"><span class="pill pill-success"><span class="pill-dot"></span>converted</span></div>
+        <div class="meta-key">conversion</div>
+        <div class="meta-val" style="color: var(--nca-color-success-fg);">✓ yes</div>
+        <div class="meta-key">started</div>
+        <div class="meta-val mono" style="color: var(--nca-color-text);">2026-05-28 14:30:12</div>
+        <div class="meta-key">ended</div>
+        <div class="meta-val mono" style="color: var(--nca-color-text);">2026-05-28 14:35:48</div>
+        <div class="meta-key">duration</div>
+        <div class="meta-val mono" style="color: var(--nca-color-text);">5m 36s</div>
+      </div>
+
+      <div class="card-sub">session id</div>
+      <div class="session-id">a3f9c2d1-4e5b-4c3a-8d1f-b2c9e7f1a3d4</div>
+
+      <div class="card-sub">collected variables</div>
+      <div class="vars-table">
+        <div class="vars-row"><span class="vars-key">user_name</span><span>山田 太郎</span></div>
+        <div class="vars-row"><span class="vars-key">contact_type</span><span>商品について</span></div>
+        <div class="vars-row"><span class="vars-key">email</span><span class="mono" style="font-size: var(--nca-font-xs);">y.taro@example.com</span></div>
+      </div>
+
+      <div class="card-sub">messages · 4</div>
+      <div class="chat-wrap">
+        <div class="chat-row bot">
+          <div class="chat-avatar">N</div>
+          <div class="chat-bubble">ご用件はなんでしょうか？</div>
+        </div>
+        <div class="chat-time">14:30:14</div>
+        <div class="chat-row user">
+          <div class="chat-avatar">U</div>
+          <div class="chat-bubble">商品について聞きたいです。</div>
+        </div>
+        <div class="chat-time">14:30:42</div>
+        <div class="chat-row bot">
+          <div class="chat-avatar">N</div>
+          <div class="chat-bubble">どの製品についてご質問でしょうか？<br>担当者よりすぐにご返信いたします。</div>
+        </div>
+        <div class="chat-time">14:30:48</div>
+        <div class="chat-row user">
+          <div class="chat-avatar">U</div>
+          <div class="chat-bubble">注文番号 #12345 の状況を確認したいです。</div>
+        </div>
+        <div class="chat-time">14:31:24</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="_sidebar.js"></script>
+<script src="_theme-switcher.js"></script>
+</body>
+</html>

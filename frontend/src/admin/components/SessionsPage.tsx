@@ -5,54 +5,52 @@ import {
     ApiError,
 } from '../api.js';
 import type { SessionSummary, SessionDetail, SessionOutcome } from '../api.js';
-import { PageTitle, Card, ErrorMsg } from './Layout.js';
+import { PageHead, Card, CardSub, StatusPill, ErrorMsg } from './Layout.js';
 import { T } from '../theme.js';
 import { useTranslation } from '../i18n/index.js';
 
-// ── Outcome badge ─────────────────────────────────────────────────────────────
+const MONO = T.fontMono;
 
-const OUTCOME_COLORS: Record<SessionOutcome, { bg: string; fg: string; border: string }> = {
-    active:    { bg: 'oklch(96% 0.05 220)', fg: 'oklch(38% 0.15 220)', border: 'oklch(83% 0.10 220)' },
-    completed: { bg: 'oklch(96% 0.04 150)', fg: 'oklch(40% 0.14 150)', border: 'oklch(85% 0.09 150)' },
-    dropped:   { bg: 'oklch(97% 0.04 25)',  fg: 'oklch(40% 0.14 25)',  border: 'oklch(87% 0.08 25)'  },
-    converted: { bg: 'oklch(96% 0.06 290)', fg: 'oklch(38% 0.18 290)', border: 'oklch(83% 0.12 290)' },
-};
+// ── Duration helper ───────────────────────────────────────────────────────────
 
-function OutcomeBadge({ outcome }: { outcome: SessionOutcome }) {
-    const { t } = useTranslation();
-    const c = OUTCOME_COLORS[outcome];
-    const label: Record<SessionOutcome, string> = {
-        active:    t('sessions.active'),
-        completed: t('sessions.completed'),
-        dropped:   t('sessions.dropped'),
-        converted: t('sessions.converted'),
-    };
-    return (
-        <span style={{
-            display: 'inline-block',
-            padding: '2px 9px', borderRadius: 99,
-            fontSize: T.fontXs, fontWeight: 700,
-            background: c.bg, color: c.fg,
-            border: `1px solid ${c.border}`,
-        }}>
-            {label[outcome]}
-        </span>
-    );
+function calcDuration(start: string, end: string | null): string {
+    if (!end) return 'in progress';
+    const ms   = new Date(end).getTime() - new Date(start).getTime();
+    if (isNaN(ms) || ms < 0) return '—';
+    const secs = Math.floor(ms / 1000);
+    const m    = Math.floor(secs / 60);
+    const s    = secs % 60;
+    if (m === 0) return `${s}s`;
+    return `${m}m ${s}s`;
 }
 
-// ── Session Detail Panel ──────────────────────────────────────────────────────
+// ── Table styles ──────────────────────────────────────────────────────────────
 
-function SessionDetailPanel({
+const TH: React.CSSProperties = {
+    padding: '8px 14px', textAlign: 'left',
+    fontSize: T.fontXs, fontWeight: 700, color: T.textMuted,
+    fontFamily: MONO, letterSpacing: '0.05em', textTransform: 'uppercase',
+    background: T.surfaceAlt,
+    borderBottom: `1px solid ${T.border}`,
+};
+
+const TD: React.CSSProperties = {
+    padding: '9px 14px', fontSize: T.fontSm, color: T.text,
+};
+
+// ── Session Detail Drawer ─────────────────────────────────────────────────────
+
+function SessionDetailDrawer({
     sessionId,
     onClose,
 }: {
     sessionId: string;
-    onClose: () => void;
+    onClose:   () => void;
 }) {
     const { t } = useTranslation();
-    const [detail, setDetail] = useState<SessionDetail | null>(null);
+    const [detail, setDetail]   = useState<SessionDetail | null>(null);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError]     = useState<string | null>(null);
 
     useEffect(() => {
         setLoading(true);
@@ -66,47 +64,84 @@ function SessionDetailPanel({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [sessionId]);
 
-    return (
-        <div style={{
-            position: 'fixed', inset: 0, zIndex: 100,
-            display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-end',
-        }}>
-            {/* Overlay */}
-            <div
-                onClick={onClose}
-                style={{ position: 'absolute', inset: 0, background: 'oklch(0% 0 0 / 0.35)' }}
-            />
+    // Sessions icon SVG
+    const SessionIcon = (
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="9"/>
+            <circle cx="12" cy="12" r="3"/>
+        </svg>
+    );
+    const CloseIcon = (
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+            <line x1="6" y1="6" x2="18" y2="18"/>
+            <line x1="18" y1="6" x2="6" y2="18"/>
+        </svg>
+    );
 
-            {/* Panel */}
+    const shortId = sessionId.slice(0, 8);
+
+    return (
+        <div
+            style={{
+                position: 'fixed', inset: 0, zIndex: 100,
+                background: 'oklch(0% 0 0 / 0.35)',
+                backdropFilter: 'blur(2px)',
+                display: 'flex', justifyContent: 'flex-end',
+            }}
+            onClick={e => { if (e.target === e.currentTarget) onClose(); }}
+        >
             <div style={{
-                position: 'relative', zIndex: 1,
                 width: 480, maxWidth: '95vw', height: '100vh',
-                background: T.surface, boxShadow: '-4px 0 24px oklch(0% 0 0 / 0.12)',
-                overflowY: 'auto', display: 'flex', flexDirection: 'column',
+                background: T.surface,
+                boxShadow: '-10px 0 40px -10px rgba(15,23,42,.25)',
+                display: 'flex', flexDirection: 'column',
+                borderLeft: `1px solid ${T.border}`,
             }}>
-                {/* Header */}
+                {/* Top stripe */}
+                <div style={{ height: 3, background: T.primary, flexShrink: 0 }} />
+
+                {/* Head */}
                 <div style={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                    padding: '16px 20px', borderBottom: `1px solid ${T.border}`,
-                    position: 'sticky', top: 0, background: T.surface, zIndex: 1,
+                    padding: '14px 18px',
+                    display: 'flex', alignItems: 'center', gap: 10,
+                    borderBottom: `1px solid ${T.border}`,
+                    flexShrink: 0,
                 }}>
-                    <span style={{ fontWeight: 700, fontSize: T.fontMd }}>
-                        {t('sessions.detail.title')}
-                    </span>
+                    <div style={{
+                        width: 28, height: 28, borderRadius: 5,
+                        background: T.primaryTint, color: T.primary,
+                        border: `1px solid ${T.primaryBorder}`,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        flexShrink: 0,
+                    }}>
+                        {SessionIcon}
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ fontWeight: 700, fontSize: T.fontMd, color: T.textStrong }}>
+                            Session #{shortId}
+                        </div>
+                        {detail && (
+                            <div style={{ fontFamily: MONO, fontSize: T.fontXs, color: T.textMuted }}>
+                                scenario #{detail.scenario_id}
+                            </div>
+                        )}
+                    </div>
                     <button
                         onClick={onClose}
                         aria-label={t('sessions.detail.close')}
                         style={{
-                            background: 'none', border: 'none', cursor: 'pointer',
-                            fontSize: 20, color: T.textMuted, lineHeight: 1,
-                            padding: '2px 6px', borderRadius: T.radiusSm,
+                            width: 26, height: 26, borderRadius: T.radiusSm,
+                            background: 'transparent', border: `1px solid ${T.border}`,
+                            color: T.textMuted, cursor: 'pointer',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
                         }}
                     >
-                        ✕
+                        {CloseIcon}
                     </button>
                 </div>
 
-                <div style={{ padding: '16px 20px', flex: 1 }}>
+                {/* Body */}
+                <div style={{ flex: 1, overflowY: 'auto', padding: '16px 18px 20px' }}>
                     <ErrorMsg msg={error} />
 
                     {loading && (
@@ -115,59 +150,69 @@ function SessionDetailPanel({
 
                     {detail && (
                         <>
-                            {/* Meta info */}
+                            {/* Meta grid */}
                             <div style={{
-                                display: 'grid', gridTemplateColumns: '1fr 1fr',
-                                gap: '8px 16px', marginBottom: 20,
-                                fontSize: T.fontSm,
+                                display: 'grid', gridTemplateColumns: '100px 1fr',
+                                gap: '8px 16px', marginBottom: 18,
+                                fontSize: T.fontSm, alignItems: 'baseline',
                             }}>
-                                {[
-                                    [t('sessions.outcome'),    <OutcomeBadge key="o" outcome={detail.outcome} />],
-                                    [t('sessions.conversion'), detail.has_conversion ? `✓ ${t('sessions.yes')}` : `— ${t('sessions.no')}`],
-                                    [t('sessions.scenarioId'), `#${detail.scenario_id}`],
-                                    [t('sessions.startedAt'),  detail.started_at],
-                                    [t('sessions.endedAt'),    detail.ended_at ?? '—'],
-                                ].map(([label, val]) => (
-                                    <div key={String(label)}>
-                                        <div style={{ color: T.textMuted, marginBottom: 2 }}>{label}</div>
-                                        <div style={{ color: T.text }}>{val}</div>
-                                    </div>
+                                {([
+                                    ['outcome',    <StatusPill key="o" variant={detail.outcome === 'dropped' ? 'abandoned' : detail.outcome} />],
+                                    ['conversion', <span key="cv" style={{ color: detail.has_conversion ? T.successFg : T.textMuted }}>
+                                        {detail.has_conversion ? '✓ yes' : '— no'}
+                                    </span>],
+                                    ['started',    <span key="s" style={{ fontFamily: MONO, color: T.text }}>{detail.started_at}</span>],
+                                    ['ended',      <span key="e" style={{ fontFamily: MONO, color: T.text }}>{detail.ended_at ?? '—'}</span>],
+                                    ['duration',   <span key="d" style={{ fontFamily: MONO, color: T.text }}>{calcDuration(detail.started_at, detail.ended_at)}</span>],
+                                ] as [string, React.ReactNode][]).map(([key, val]) => (
+                                    <>
+                                        <div key={`k-${key}`} style={{
+                                            fontFamily: MONO, fontSize: T.fontXs, color: T.textMuted,
+                                            letterSpacing: '0.06em', textTransform: 'uppercase',
+                                        }}>{key}</div>
+                                        <div key={`v-${key}`}>{val}</div>
+                                    </>
                                 ))}
                             </div>
 
-                            {/* Session ID */}
-                            <div style={{ marginBottom: 20 }}>
-                                <div style={{ fontSize: T.fontXs, color: T.textMuted, marginBottom: 4 }}>ID</div>
-                                <code style={{
-                                    fontSize: T.fontXs, color: T.textMuted,
-                                    wordBreak: 'break-all',
-                                }}>
-                                    {detail.id}
-                                </code>
+                            {/* Session ID block */}
+                            <CardSub>session id</CardSub>
+                            <div style={{
+                                background: T.surfaceAlt,
+                                fontFamily: MONO, fontSize: T.fontXs,
+                                wordBreak: 'break-all', padding: 10,
+                                borderRadius: T.radiusMd,
+                                marginBottom: 20,
+                                color: T.textMuted,
+                            }}>
+                                {detail.id}
                             </div>
 
                             {/* Collected variables */}
                             {Object.keys(detail.variables).length > 0 && (
                                 <section style={{ marginBottom: 20 }}>
-                                    <h3 style={{ fontSize: T.fontSm, fontWeight: 700, marginBottom: 8, color: T.text }}>
-                                        {t('sessions.detail.variables')}
-                                    </h3>
+                                    <CardSub>collected variables</CardSub>
                                     <div style={{
-                                        background: T.bg, borderRadius: T.radiusMd,
-                                        border: `1px solid ${T.border}`, overflow: 'hidden',
+                                        borderRadius: T.radiusMd,
+                                        border: `1px solid ${T.border}`,
+                                        overflow: 'hidden',
+                                        marginTop: 8,
                                     }}>
-                                        {Object.entries(detail.variables).map(([key, val], i) => (
+                                        {Object.entries(detail.variables).map(([key, val], i, arr) => (
                                             <div
                                                 key={key}
                                                 style={{
-                                                    display: 'flex', gap: 12,
+                                                    display: 'grid', gridTemplateColumns: '120px 1fr',
+                                                    gap: 12,
                                                     padding: '7px 12px', fontSize: T.fontSm,
-                                                    background: i % 2 === 1 ? T.tableRow : 'transparent',
-                                                    borderBottom: i < Object.keys(detail.variables).length - 1
-                                                        ? `1px solid ${T.border}` : 'none',
+                                                    borderBottom: i < arr.length - 1 ? `1px solid ${T.borderLight}` : 'none',
+                                                    background: i % 2 === 1 ? T.surfaceAlt : 'transparent',
+                                                    alignItems: 'baseline',
                                                 }}
                                             >
-                                                <span style={{ color: T.textMuted, minWidth: 100, flexShrink: 0 }}>{key}</span>
+                                                <span style={{ fontFamily: MONO, color: T.textMuted, fontSize: T.fontXs }}>
+                                                    {key}
+                                                </span>
                                                 <span style={{ color: T.text, wordBreak: 'break-all' }}>{val}</span>
                                             </div>
                                         ))}
@@ -177,42 +222,48 @@ function SessionDetailPanel({
 
                             {/* Messages */}
                             <section>
-                                <h3 style={{ fontSize: T.fontSm, fontWeight: 700, marginBottom: 10, color: T.text }}>
-                                    {t('sessions.detail.messages')} ({detail.messages.length})
-                                </h3>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                                <CardSub>messages · {detail.messages.length}</CardSub>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 10 }}>
                                     {detail.messages.map((msg, i) => {
                                         const isBot = msg.role === 'bot';
                                         return (
-                                            <div
-                                                key={msg.id ?? i}
-                                                style={{
+                                            <div key={msg.id ?? i}>
+                                                <div style={{
                                                     display: 'flex',
                                                     flexDirection: isBot ? 'row' : 'row-reverse',
                                                     gap: 8, alignItems: 'flex-end',
-                                                }}
-                                            >
-                                                <div style={{
-                                                    fontSize: T.fontXs, color: T.textMuted,
-                                                    flexShrink: 0, paddingBottom: 4,
                                                 }}>
-                                                    {isBot ? '🤖' : '👤'}
-                                                </div>
-                                                <div style={{
-                                                    maxWidth: '80%',
-                                                    padding: '8px 12px', borderRadius: T.radiusMd,
-                                                    background: isBot ? T.bg : 'oklch(92% 0.08 250)',
-                                                    border: `1px solid ${T.border}`,
-                                                    fontSize: T.fontSm, color: T.text,
-                                                    lineHeight: 1.5,
-                                                }}>
-                                                    {msg.content}
+                                                    {/* Avatar */}
                                                     <div style={{
-                                                        marginTop: 4, fontSize: T.fontXs, color: T.textMuted,
-                                                        textAlign: isBot ? 'left' : 'right',
+                                                        width: 22, height: 22, borderRadius: 5,
+                                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                        fontSize: 11, flexShrink: 0,
+                                                        background: isBot ? T.primaryTint : T.adapterHttpBg,
+                                                        color: isBot ? T.primary : T.adapterHttp,
+                                                        border: `1px solid ${isBot ? T.primaryBorder : 'rgba(79,118,166,.35)'}`,
                                                     }}>
-                                                        {msg.created_at}
+                                                        {isBot ? 'N' : 'U'}
                                                     </div>
+                                                    {/* Bubble */}
+                                                    <div style={{
+                                                        maxWidth: '78%', padding: '8px 12px',
+                                                        borderRadius: T.radiusMd,
+                                                        fontSize: T.fontSm, lineHeight: 1.5, color: T.text,
+                                                        background: isBot ? T.surfaceAlt : T.adapterHttpBg,
+                                                        border: `1px solid ${isBot ? T.borderLight : 'rgba(79,118,166,.20)'}`,
+                                                        borderBottomLeftRadius:  isBot ? 0 : T.radiusMd,
+                                                        borderBottomRightRadius: isBot ? T.radiusMd : 0,
+                                                    }}>
+                                                        {msg.content}
+                                                    </div>
+                                                </div>
+                                                {/* Time */}
+                                                <div style={{
+                                                    fontFamily: MONO, fontSize: 10,
+                                                    color: T.textFaint,
+                                                    textAlign: 'center', margin: '2px 0',
+                                                }}>
+                                                    {msg.created_at?.slice(11, 19) ?? ''}
                                                 </div>
                                             </div>
                                         );
@@ -235,200 +286,264 @@ function SessionDetailPanel({
 export default function SessionsPage() {
     const { t } = useTranslation();
 
-    const [sessions, setSessions]   = useState<SessionSummary[]>([]);
-    const [total, setTotal]         = useState(0);
-    const [loading, setLoading]     = useState(true);
-    const [error, setError]         = useState<string | null>(null);
+    const [sessions, setSessions]     = useState<SessionSummary[]>([]);
+    const [total, setTotal]           = useState(0);
+    const [loading, setLoading]       = useState(true);
+    const [error, setError]           = useState<string | null>(null);
     const [selectedId, setSelectedId] = useState<string | null>(null);
 
-    // フィルター
+    // filters
     const [outcome, setOutcome]             = useState<SessionOutcome | ''>('');
     const [hasConversion, setHasConversion] = useState<'' | '0' | '1'>('');
+    const [scenarioFilter, setScenarioFilter] = useState('');
     const [offset, setOffset]               = useState(0);
     const limit = 50;
 
-    useEffect(() => {
+    async function load() {
         setLoading(true);
         setError(null);
-        void listSessions({
-            ...(outcome         ? { outcome: outcome as SessionOutcome }       : {}),
-            ...(hasConversion   ? { has_conversion: Number(hasConversion) as 0 | 1 } : {}),
-            limit,
-            offset,
-        }).then(res => {
+        try {
+            const res = await listSessions({
+                ...(outcome       ? { outcome: outcome as SessionOutcome } : {}),
+                ...(hasConversion ? { has_conversion: Number(hasConversion) as 0 | 1 } : {}),
+                limit, offset,
+            });
             setSessions(res.data);
             setTotal(res.meta.total);
-        }).catch(err => {
+        } catch (err) {
             setError(err instanceof ApiError ? err.message : t('sessions.loadError'));
-        }).finally(() => setLoading(false));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [outcome, hasConversion, offset]);
+        } finally {
+            setLoading(false);
+        }
+    }
 
-    const totalPages  = Math.ceil(total / limit);
-    const currentPage = Math.floor(offset / limit) + 1;
+    useEffect(() => { void load(); }, [outcome, hasConversion, offset]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    const selectStyle = {
-        height: T.controlHeightSm, padding: '0 8px', boxSizing: 'border-box',
+    const active       = sessions.filter(s => s.outcome === 'active').length;
+    const subtitle     = loading ? '…' : `${total} records · ${active} active now`;
+    const totalPages   = Math.ceil(total / limit);
+    const currentPage  = Math.floor(offset / limit) + 1;
+
+    // unique scenario ids for filter dropdown
+    const scenarioIds  = [...new Set(sessions.map(s => s.scenario_id))].sort((a, b) => a - b);
+
+    const filtered = scenarioFilter
+        ? sessions.filter(s => String(s.scenario_id) === scenarioFilter)
+        : sessions;
+
+    const filterSelectStyle: React.CSSProperties = {
+        height: 26, padding: '0 8px',
+        borderRadius: T.radiusMd, border: `1px solid ${T.border}`,
+        background: T.surface, color: T.text,
+        fontSize: T.fontXs, fontFamily: MONO,
+        cursor: 'pointer', outline: 'none',
+    };
+
+    const PAG_BTN: React.CSSProperties = {
+        height: T.controlHeightSm, padding: '0 14px', boxSizing: 'border-box',
         borderRadius: T.radiusMd,
-        border: `1.5px solid ${T.borderInput}`, background: T.surface,
-        color: T.text, fontSize: T.fontSm,
-        outline: 'none', cursor: 'pointer',
-    } as const;
+        border: `1px solid ${T.border}`, background: T.surface,
+        color: T.text, fontSize: T.fontSm, fontWeight: 500,
+        cursor: 'pointer', transition: 'filter 150ms ease',
+    };
 
     return (
         <div>
-            <PageTitle>{t('sessions.pageTitle')}</PageTitle>
+            <PageHead title="Sessions" subtitle={subtitle}>
+                <button
+                    onClick={() => { void load(); }}
+                    style={{
+                        height: T.controlHeightSm, padding: '0 10px',
+                        borderRadius: T.radiusMd, border: `1px solid ${T.border}`,
+                        background: 'transparent', color: T.primary,
+                        fontSize: T.fontXs, fontWeight: 600, cursor: 'pointer',
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.filter = 'brightness(0.9)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.filter = ''; }}
+                >
+                    ↻ Refresh
+                </button>
+                <button
+                    style={{
+                        height: T.controlHeight, padding: '0 12px',
+                        borderRadius: T.radiusMd, border: `1px solid ${T.border}`,
+                        background: 'transparent', color: T.primary,
+                        fontSize: T.fontSm, fontWeight: 600, cursor: 'pointer',
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.filter = 'brightness(0.9)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.filter = ''; }}
+                >
+                    ↓ Export CSV
+                </button>
+            </PageHead>
 
-            {/* フィルターバー */}
-            <div style={{ display: 'flex', gap: 10, marginBottom: 16, flexWrap: 'wrap', alignItems: 'center' }}>
-                {/* Outcome */}
-                <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: T.fontSm, color: T.textMuted }}>
-                    {t('sessions.filterOutcome')}:
+            <ErrorMsg msg={error} />
+
+            {/* Filter bar */}
+            <div style={{ display: 'flex', gap: 8, marginBottom: 12, flexWrap: 'wrap', alignItems: 'center' }}>
+                <label style={{
+                    display: 'flex', alignItems: 'center', gap: 5,
+                    fontFamily: MONO, fontSize: T.fontXs, color: T.textMuted, letterSpacing: '0.04em',
+                }}>
+                    outcome:
                     <select
                         value={outcome}
                         onChange={e => { setOutcome(e.target.value as SessionOutcome | ''); setOffset(0); }}
-                        style={selectStyle}
+                        style={filterSelectStyle}
                     >
-                        <option value="">{t('sessions.all')}</option>
-                        <option value="active">{t('sessions.active')}</option>
-                        <option value="completed">{t('sessions.completed')}</option>
-                        <option value="dropped">{t('sessions.dropped')}</option>
-                        <option value="converted">{t('sessions.converted')}</option>
+                        <option value="">all</option>
+                        <option value="active">active</option>
+                        <option value="completed">completed</option>
+                        <option value="dropped">abandoned</option>
+                        <option value="converted">converted</option>
                     </select>
                 </label>
-
-                {/* Conversion */}
-                <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: T.fontSm, color: T.textMuted }}>
-                    {t('sessions.filterConversion')}:
+                <label style={{
+                    display: 'flex', alignItems: 'center', gap: 5,
+                    fontFamily: MONO, fontSize: T.fontXs, color: T.textMuted, letterSpacing: '0.04em',
+                }}>
+                    conversion:
                     <select
                         value={hasConversion}
                         onChange={e => { setHasConversion(e.target.value as '' | '0' | '1'); setOffset(0); }}
-                        style={selectStyle}
+                        style={filterSelectStyle}
                     >
-                        <option value="">{t('sessions.all')}</option>
-                        <option value="1">✓ {t('sessions.yes')}</option>
-                        <option value="0">— {t('sessions.no')}</option>
+                        <option value="">all</option>
+                        <option value="1">yes</option>
+                        <option value="0">no</option>
                     </select>
                 </label>
-
-                <span style={{ marginLeft: 'auto', fontSize: T.fontSm, color: T.textMuted }}>
+                <label style={{
+                    display: 'flex', alignItems: 'center', gap: 5,
+                    fontFamily: MONO, fontSize: T.fontXs, color: T.textMuted, letterSpacing: '0.04em',
+                }}>
+                    scenario:
+                    <select
+                        value={scenarioFilter}
+                        onChange={e => setScenarioFilter(e.target.value)}
+                        style={filterSelectStyle}
+                    >
+                        <option value="">all</option>
+                        {scenarioIds.map(id => (
+                            <option key={id} value={String(id)}>#{id}</option>
+                        ))}
+                    </select>
+                </label>
+                <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: T.fontXs, color: T.textMuted }}>
                     {total} records
                 </span>
             </div>
 
-            <ErrorMsg msg={error} />
-
             <Card style={{ padding: 0, overflow: 'hidden' }}>
                 {loading ? (
-                    <p style={{ padding: '20px 24px', color: T.textMuted }}>{t('common.loading')}</p>
-                ) : sessions.length === 0 ? (
-                    <p style={{ padding: '20px 24px', color: T.textMuted }}>{t('sessions.empty')}</p>
+                    <p style={{ padding: '20px 18px', color: T.textMuted }}>{t('common.loading')}</p>
+                ) : filtered.length === 0 ? (
+                    <p style={{ padding: '20px 18px', color: T.textMuted }}>{t('sessions.empty')}</p>
                 ) : (
                     <div style={{ overflowX: 'auto' }}>
-                        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: T.fontSm }}>
+                        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                             <thead>
-                                <tr style={{ background: T.tableHeader, borderBottom: `1px solid ${T.border}` }}>
-                                    {[
-                                        t('sessions.outcome'),
-                                        t('sessions.scenarioId'),
-                                        t('sessions.conversion'),
-                                        t('sessions.startedAt'),
-                                        t('sessions.endedAt'),
-                                    ].map(h => (
-                                        <th key={h} style={{
-                                            padding: '10px 16px', textAlign: 'left',
-                                            fontWeight: 600, color: T.textMuted, whiteSpace: 'nowrap',
-                                        }}>
-                                            {h}
-                                        </th>
-                                    ))}
+                                <tr>
+                                    <th style={{ ...TH, width: 130 }}>outcome</th>
+                                    <th style={{ ...TH, width: 80 }}>scenario</th>
+                                    <th style={{ ...TH, width: 100 }}>cv</th>
+                                    <th style={{ ...TH, width: 150 }}>started</th>
+                                    <th style={{ ...TH, width: 150 }}>ended</th>
+                                    <th style={{ ...TH, width: 90 }}>duration</th>
+                                    <th style={TH}></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {sessions.map((s, i) => (
-                                    <tr
-                                        key={s.id}
-                                        onClick={() => setSelectedId(s.id)}
-                                        style={{
-                                            borderBottom: `1px solid ${T.border}`,
-                                            background: i % 2 === 1 ? T.tableRow : 'transparent',
-                                            cursor: 'pointer',
-                                        }}
-                                        onMouseEnter={e => (e.currentTarget.style.background = T.surfaceHover)}
-                                        onMouseLeave={e => (e.currentTarget.style.background = i % 2 === 1 ? T.tableRow : 'transparent')}
-                                    >
-                                        <td style={{ padding: '9px 16px' }}>
-                                            <OutcomeBadge outcome={s.outcome} />
-                                        </td>
-                                        <td style={{ padding: '9px 16px', color: T.textMuted }}>
-                                            #{s.scenario_id}
-                                        </td>
-                                        <td style={{ padding: '9px 16px', color: s.has_conversion ? 'oklch(40% 0.14 150)' : T.textMuted }}>
-                                            {s.has_conversion ? `✓ ${t('sessions.yes')}` : `— ${t('sessions.no')}`}
-                                        </td>
-                                        <td style={{ padding: '9px 16px', color: T.textMuted, whiteSpace: 'nowrap' }}>
-                                            {s.started_at}
-                                        </td>
-                                        <td style={{ padding: '9px 16px', color: T.textMuted, whiteSpace: 'nowrap' }}>
-                                            {s.ended_at ?? '—'}
-                                        </td>
-                                    </tr>
-                                ))}
+                                {filtered.map((s, i) => {
+                                    const isSelected = s.id === selectedId;
+                                    const pillVariant: Parameters<typeof StatusPill>[0]['variant'] =
+                                        s.outcome === 'dropped' ? 'abandoned' : s.outcome;
+                                    return (
+                                        <tr
+                                            key={s.id}
+                                            onClick={() => setSelectedId(s.id)}
+                                            style={{
+                                                borderBottom: i < filtered.length - 1 ? `1px solid ${T.border}` : 'none',
+                                                background: isSelected ? T.primaryTint : 'transparent',
+                                                cursor: 'pointer',
+                                            }}
+                                            onMouseEnter={e => {
+                                                if (!isSelected) e.currentTarget.style.background = T.surfaceHover;
+                                            }}
+                                            onMouseLeave={e => {
+                                                e.currentTarget.style.background = isSelected ? T.primaryTint : 'transparent';
+                                            }}
+                                        >
+                                            <td style={TD}>
+                                                <StatusPill variant={pillVariant} />
+                                            </td>
+                                            <td style={{ ...TD, fontFamily: MONO, fontSize: T.fontSm, color: T.text }}>
+                                                #{s.scenario_id}
+                                            </td>
+                                            <td style={{ ...TD, fontFamily: MONO, fontSize: T.fontSm, color: s.has_conversion ? T.successFg : T.textMuted }}>
+                                                {s.has_conversion ? '✓ yes' : '— no'}
+                                            </td>
+                                            <td style={{ ...TD, fontFamily: MONO, fontSize: T.fontSm, color: T.textMuted, whiteSpace: 'nowrap' }}>
+                                                {s.started_at}
+                                            </td>
+                                            <td style={{ ...TD, fontFamily: MONO, fontSize: T.fontSm, color: T.textMuted, whiteSpace: 'nowrap' }}>
+                                                {s.ended_at ?? '—'}
+                                            </td>
+                                            <td style={{ ...TD, fontFamily: MONO, fontSize: T.fontSm, color: T.textMuted }}>
+                                                {calcDuration(s.started_at, s.ended_at)}
+                                            </td>
+                                            <td style={{ ...TD, color: T.textMuted, fontSize: T.fontXs }}>
+                                                {isSelected ? '→ selected' : ''}
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
                             </tbody>
                         </table>
                     </div>
                 )}
             </Card>
 
-            {/* ページネーション */}
+            {/* Pagination */}
             {totalPages > 1 && (
                 <div style={{
                     display: 'flex', justifyContent: 'center', gap: 8,
                     marginTop: 16, alignItems: 'center',
+                    fontFamily: MONO, fontSize: T.fontXs, color: T.textMuted,
                 }}>
                     <button
                         disabled={currentPage <= 1}
                         onClick={() => setOffset(Math.max(0, offset - limit))}
                         style={{
-                            height: T.controlHeightSm, padding: '0 14px', boxSizing: 'border-box',
-                            borderRadius: T.radiusMd,
-                            border: `1.5px solid ${T.border}`, background: T.surface,
-                            color: T.text, fontSize: T.fontSm, fontWeight: 500,
+                            ...PAG_BTN,
                             cursor: currentPage <= 1 ? 'not-allowed' : 'pointer',
                             opacity: currentPage <= 1 ? 0.45 : 1,
-                            transition: 'filter 150ms ease',
                         }}
                         onMouseEnter={e => { if (currentPage > 1) e.currentTarget.style.filter = 'brightness(0.92)'; }}
                         onMouseLeave={e => { e.currentTarget.style.filter = ''; }}
                     >
-                        ← Prev
+                        ← prev
                     </button>
-                    <span style={{ fontSize: T.fontSm, color: T.textMuted }}>
-                        {currentPage} / {totalPages}
-                    </span>
+                    <span>page {currentPage} / {totalPages}</span>
                     <button
                         disabled={currentPage >= totalPages}
                         onClick={() => setOffset(offset + limit)}
                         style={{
-                            height: T.controlHeightSm, padding: '0 14px', boxSizing: 'border-box',
-                            borderRadius: T.radiusMd,
-                            border: `1.5px solid ${T.border}`, background: T.surface,
-                            color: T.text, fontSize: T.fontSm, fontWeight: 500,
+                            ...PAG_BTN,
                             cursor: currentPage >= totalPages ? 'not-allowed' : 'pointer',
                             opacity: currentPage >= totalPages ? 0.45 : 1,
-                            transition: 'filter 150ms ease',
                         }}
                         onMouseEnter={e => { if (currentPage < totalPages) e.currentTarget.style.filter = 'brightness(0.92)'; }}
                         onMouseLeave={e => { e.currentTarget.style.filter = ''; }}
                     >
-                        Next →
+                        next →
                     </button>
                 </div>
             )}
 
-            {/* Detail panel */}
+            {/* Detail drawer */}
             {selectedId !== null && (
-                <SessionDetailPanel
+                <SessionDetailDrawer
                     sessionId={selectedId}
                     onClose={() => setSelectedId(null)}
                 />
