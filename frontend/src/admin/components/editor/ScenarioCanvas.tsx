@@ -46,7 +46,7 @@ function apiNodeToRF(n: ScenarioNode): Node {
         id:       n.node_id,
         type:     n.type,
         position: { x: n.position_x, y: n.position_y },
-        data:     { label: n.label, ...n.data },
+        data:     { ...n.data, label: n.label },
     };
 }
 
@@ -466,15 +466,18 @@ const ScenarioCanvas = forwardRef<ScenarioCanvasRef, Props>(function ScenarioCan
             id,
             type,
             position: { x: 120 + Math.random() * 200, y: 80 + Math.random() * 180 },
-            data:     { label: defaultLabel, ...defaults[type] },
+            data:     { ...defaults[type], label: defaultLabel },
         };
         setNodes(nds => [...nds, newNode]);
         setSelectedNodeId(id);
     }, [setNodes, t]);
 
     // ── ノード設定変更 ─────────────────────────────────────────────────────────
+    // NOTE: スプレッドは `{ ...data, label }` の順序にする。逆順だと data 側の
+    //   古い label プロパティが新しい label を上書きしてしまい、LABEL 編集が
+    //   反映されない (NodeConfigPanel が node.data 全体を data として渡すため)。
     function handleNodeChange(id: string, label: string, data: Record<string, unknown>) {
-        setNodes(nds => nds.map(n => n.id === id ? { ...n, data: { label, ...data } } : n));
+        setNodes(nds => nds.map(n => n.id === id ? { ...n, data: { ...data, label } } : n));
     }
 
     // ── ノード削除 ─────────────────────────────────────────────────────────────

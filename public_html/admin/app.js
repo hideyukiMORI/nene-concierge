@@ -38168,7 +38168,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       id: n.node_id,
       type: n.type,
       position: { x: n.position_x, y: n.position_y },
-      data: { label: n.label, ...n.data }
+      data: { ...n.data, label: n.label }
     };
   }
   function apiEdgeToRF(e, i) {
@@ -38573,13 +38573,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         id: id2,
         type,
         position: { x: 120 + Math.random() * 200, y: 80 + Math.random() * 180 },
-        data: { label: defaultLabel, ...defaults[type] }
+        data: { ...defaults[type], label: defaultLabel }
       };
       setNodes((nds) => [...nds, newNode]);
       setSelectedNodeId(id2);
     }, [setNodes, t]);
     function handleNodeChange(id2, label, data2) {
-      setNodes((nds) => nds.map((n) => n.id === id2 ? { ...n, data: { label, ...data2 } } : n));
+      setNodes((nds) => nds.map((n) => n.id === id2 ? { ...n, data: { ...data2, label } } : n));
     }
     function handleNodeDelete(id2) {
       setNodes((nds) => nds.filter((n) => n.id !== id2));
