@@ -7,6 +7,7 @@ namespace NeNeConcierge\Scenario;
 use Nene2\Http\JsonRequestBodyParser;
 use Nene2\Http\JsonResponseFactory;
 use Nene2\Routing\Router;
+use NeNeConcierge\Auth\ActorContext;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -40,7 +41,7 @@ final readonly class UpdateScenarioHandler implements RequestHandlerInterface
             edges:       isset($body['edges']) ? array_values((array) $body['edges']) : null,
         );
 
-        $this->useCase->execute($input, $orgId);
+        $this->useCase->execute($input, $orgId, ActorContext::fromRequest($request));
 
         return $this->response->create([], 204);
     }

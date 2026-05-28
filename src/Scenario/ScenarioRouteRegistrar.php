@@ -10,14 +10,15 @@ use Psr\Http\Message\ServerRequestInterface;
 final readonly class ScenarioRouteRegistrar
 {
     public function __construct(
-        private ListScenariosHandler     $listHandler,
-        private GetScenarioHandler       $getHandler,
-        private CreateScenarioHandler    $createHandler,
-        private UpdateScenarioHandler    $updateHandler,
-        private DeleteScenarioHandler    $deleteHandler,
-        private ExportScenarioHandler    $exportHandler,
-        private ImportScenarioHandler    $importHandler,
-        private SaveScenarioGraphHandler $saveGraphHandler,
+        private ListScenariosHandler       $listHandler,
+        private GetScenarioHandler         $getHandler,
+        private CreateScenarioHandler      $createHandler,
+        private UpdateScenarioHandler      $updateHandler,
+        private DeleteScenarioHandler      $deleteHandler,
+        private ExportScenarioHandler      $exportHandler,
+        private ImportScenarioHandler      $importHandler,
+        private SaveScenarioGraphHandler   $saveGraphHandler,
+        private ListScenarioHistoryHandler $historyHandler,
     ) {
     }
 
@@ -31,6 +32,7 @@ final readonly class ScenarioRouteRegistrar
         $export    = $this->exportHandler;
         $import    = $this->importHandler;
         $saveGraph = $this->saveGraphHandler;
+        $history   = $this->historyHandler;
 
         $router->get('/api/v1/scenarios', static fn (ServerRequestInterface $r) => $list->handle($r));
         $router->get('/api/v1/scenarios/{id}', static fn (ServerRequestInterface $r) => $get->handle($r));
@@ -40,5 +42,6 @@ final readonly class ScenarioRouteRegistrar
         $router->get('/api/v1/scenarios/{id}/export', static fn (ServerRequestInterface $r) => $export->handle($r));
         $router->post('/api/v1/scenarios/import', static fn (ServerRequestInterface $r) => $import->handle($r));
         $router->put('/api/v1/scenarios/{id}/graph', static fn (ServerRequestInterface $r) => $saveGraph->handle($r));
+        $router->get('/api/v1/scenarios/{id}/history', static fn (ServerRequestInterface $r) => $history->handle($r));
     }
 }

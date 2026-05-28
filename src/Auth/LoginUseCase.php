@@ -33,10 +33,11 @@ final readonly class LoginUseCase
         $expiresAt = time() + self::TOKEN_TTL_SECONDS;
 
         $token = $this->tokenIssuer->issue([
-            'sub'  => $user->email,
-            'role' => $role->value,
-            'iat'  => time(),
-            'exp'  => $expiresAt,
+            'sub'     => $user->email,
+            'user_id' => $user->id,
+            'role'    => $role->value,
+            'iat'     => time(),
+            'exp'     => $expiresAt,
         ]);
 
         return new LoginOutput(

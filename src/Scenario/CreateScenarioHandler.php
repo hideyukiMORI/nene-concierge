@@ -8,6 +8,7 @@ use Nene2\Http\JsonRequestBodyParser;
 use Nene2\Http\JsonResponseFactory;
 use Nene2\Validation\ValidationError;
 use Nene2\Validation\ValidationException;
+use NeNeConcierge\Auth\ActorContext;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -43,7 +44,7 @@ final readonly class CreateScenarioHandler implements RequestHandlerInterface
             edges:       array_values((array) ($body['edges'] ?? [])),
         );
 
-        $scenarioId = $this->useCase->execute($input, $orgId);
+        $scenarioId = $this->useCase->execute($input, $orgId, ActorContext::fromRequest($request));
 
         return $this->response->create(
             ['id' => $scenarioId],

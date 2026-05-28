@@ -4,16 +4,19 @@ declare(strict_types=1);
 
 namespace NeNeConcierge\Scenario;
 
+use NeNeConcierge\Auth\ActorContext;
+
 final readonly class SaveScenarioGraphUseCase
 {
     public function __construct(
         private ScenarioRepositoryInterface     $scenarios,
         private ScenarioNodeRepositoryInterface $nodes,
         private ScenarioEdgeRepositoryInterface $edges,
+        private ScenarioRevisionRecorder        $revisions,
     ) {
     }
 
-    public function execute(SaveScenarioGraphInput $input): void
+    public function execute(SaveScenarioGraphInput $input, ActorContext $actor): void
     {
         $scenario = $this->scenarios->findById($input->scenarioId, $input->organizationId);
 
@@ -48,5 +51,12 @@ final readonly class SaveScenarioGraphUseCase
 
         $this->nodes->replaceAll($input->scenarioId, $input->organizationId, $nodes);
         $this->edges->replaceAll($input->scenarioId, $input->organizationId, $edges);
+
+        $this->scenarios->touchUpdatedBy($input->scenarioId, $input->organizationId, $actor->userId);
+
+        $reloaded = $this->scenarios->findById($input->scenarioId, $input->organizationId);
+        if ($reloaded !== null) {
+            $this->revisions->record($reloaded, 'graph_save', $actor);
+        }
     }
 }

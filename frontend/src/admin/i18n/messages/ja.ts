@@ -293,4 +293,14 @@ export const ja: Partial<MessageCatalog> = {
     'settings.adminTheme': '管理画面テーマ',
 
     'theme.label':       'テーマ',
+
+    // ── 編集履歴 ───────────────────────────────────────────────────────────────
+    'history.title':            '編集履歴',
+    'history.empty':            'まだ履歴がありません。',
+    'history.unknownUser':      '不明なユーザー',
+    'history.op.create':        '作成',
+    'history.op.update':        '編集',
+    'history.op.graph_save':    'グラフ保存',
+    'history.op.status_change': 'ステータス変更',
+    'history.op.delete':        '削除',
 }

@@ -4,22 +4,27 @@ declare(strict_types=1);
 
 namespace NeNeConcierge\Scenario;
 
+use NeNeConcierge\Auth\ActorContext;
+
 final readonly class CreateScenarioUseCase
 {
     public function __construct(
         private ScenarioRepositoryInterface     $scenarios,
         private ScenarioNodeRepositoryInterface $nodes,
         private ScenarioEdgeRepositoryInterface $edges,
+        private ScenarioRevisionRecorder        $revisions,
     ) {
     }
 
-    public function execute(CreateScenarioInput $input, int $organizationId): int
+    public function execute(CreateScenarioInput $input, int $organizationId, ActorContext $actor): int
     {
         $scenario = new Scenario(
-            name:           $input->name,
-            status:         ScenarioStatus::Draft,
-            organizationId: $organizationId,
-            description:    $input->description,
+            name:            $input->name,
+            status:          ScenarioStatus::Draft,
+            organizationId:  $organizationId,
+            description:     $input->description,
+            createdByUserId: $actor->userId,
+            updatedByUserId: $actor->userId,
         );
 
         $scenarioId = $this->scenarios->save($scenario);
@@ -38,6 +43,11 @@ final readonly class CreateScenarioUseCase
                 $input->edges,
             );
             $this->edges->replaceAll($scenarioId, $organizationId, $edgeEntities);
+        }
+
+        $saved = $this->scenarios->findById($scenarioId, $organizationId);
+        if ($saved !== null) {
+            $this->revisions->record($saved, 'create', $actor);
         }
 
         return $scenarioId;

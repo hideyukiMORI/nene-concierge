@@ -22,6 +22,7 @@ const kebabItemStyle: React.CSSProperties = {
 import { T, NODE_TOKENS } from '../theme.js';
 import { useTranslation } from '../i18n/index.js';
 import ScenarioCanvas, { type ScenarioCanvasRef } from './editor/ScenarioCanvas.js';
+import ScenarioHistoryPanel from './ScenarioHistoryPanel.js';
 
 // React Flow CSS は esbuild がバンドル
 import '@xyflow/react/dist/style.css';
@@ -137,6 +138,7 @@ export default function ScenarioFormPage() {
 
     // ── Analytics モード ────────────────────────────────────────────────────
     const [analyticsMode, setAnalyticsMode] = useState(false);
+    const [historyOpen, setHistoryOpen]     = useState(false);
 
     // ── ロード ──────────────────────────────────────────────────────────────
     useEffect(() => {
@@ -486,6 +488,13 @@ export default function ScenarioFormPage() {
                             <span>{t('canvas.analyticsMode')}</span>
                             {analyticsMode && <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 10, color: T.primary }}>ON</span>}
                         </button>
+                        <button onClick={() => { setKebabOpen(false); setHistoryOpen(true); }}
+                            style={kebabItemStyle}>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                                <path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><polyline points="3 3 3 8 8 8"/><polyline points="12 7 12 12 15 14"/>
+                            </svg>
+                            <span>{t('common.history')}</span>
+                        </button>
                         <button onClick={() => { setKebabOpen(false); void handleDelete(); }}
                             style={{ ...kebabItemStyle, color: T.dangerFg }}>
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
@@ -497,6 +506,14 @@ export default function ScenarioFormPage() {
                         </button>
                     </div>
                 </BottomSheet>
+
+                {!isNew && (
+                    <ScenarioHistoryPanel
+                        scenarioId={Number(id)}
+                        open={historyOpen}
+                        onClose={() => setHistoryOpen(false)}
+                    />
+                )}
             </div>
         );
     }
@@ -654,7 +671,9 @@ export default function ScenarioFormPage() {
                             style={iconBtn(analyticsMode)}>
                             <IconAnalytics/>
                         </button>
-                        <button title={t('common.history')} style={iconBtn()}>
+                        <button title={t('common.history')}
+                            onClick={() => setHistoryOpen(true)}
+                            style={iconBtn(historyOpen)}>
                             <IconHistory/>
                         </button>
                         {!analyticsMode && (
@@ -797,6 +816,14 @@ export default function ScenarioFormPage() {
                     <span style={{ fontSize: 32 }}>✦</span>
                     <p>{t('scenarioForm.canvasHint')}</p>
                 </div>
+            )}
+
+            {!isNew && (
+                <ScenarioHistoryPanel
+                    scenarioId={Number(id)}
+                    open={historyOpen}
+                    onClose={() => setHistoryOpen(false)}
+                />
             )}
         </div>
     );
