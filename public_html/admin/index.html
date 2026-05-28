@@ -195,6 +195,44 @@
     *, *::before, *::after { box-sizing: border-box; }
     button, input, select, textarea { font-family: inherit; }
 
+    /* ══════════════════════════════════════════════════════════════════════
+       Mobile UI primitives (Issue #81) — class-based helpers
+       Most styling is inline in React; these are for keyframes / scrollbar
+       hiding / body scroll-lock that cannot be expressed inline.
+    ══════════════════════════════════════════════════════════════════════ */
+
+    /* Body scroll lock when a BottomSheet / mobile drawer is open */
+    body.nca-no-scroll { overflow: hidden; touch-action: none; }
+
+    /* Hide scrollbars on horizontal filter chip strips */
+    .nca-h-scroll { -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+    .nca-h-scroll::-webkit-scrollbar { display: none; }
+
+    /* Skeleton shimmer */
+    @keyframes nca-shimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    .nca-skeleton {
+      background: linear-gradient(90deg,
+        var(--nca-color-surface-alt) 0%,
+        var(--nca-color-border-light) 50%,
+        var(--nca-color-surface-alt) 100%);
+      background-size: 200% 100%;
+      animation: nca-shimmer 1.4s linear infinite;
+      border-radius: var(--nca-radius-sm);
+    }
+
+    /* Pull-to-Refresh spinner */
+    @keyframes nca-spin { to { transform: rotate(360deg); } }
+    .nca-ptr-spinner {
+      width: 13px; height: 13px;
+      border: 1.5px solid var(--nca-color-border);
+      border-top-color: var(--nca-color-primary);
+      border-radius: 99px;
+      animation: nca-spin 0.9s linear infinite;
+    }
+
     /* ═══════════════════════════════════════════════════════════════════════
        Default Dark
     ═══════════════════════════════════════════════════════════════════════ */
