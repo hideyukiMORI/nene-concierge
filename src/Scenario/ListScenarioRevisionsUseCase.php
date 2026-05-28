@@ -29,7 +29,7 @@ final readonly class ListScenarioRevisionsUseCase
             static fn (array $row): ListScenarioRevisionsItem => new ListScenarioRevisionsItem(
                 id:           (int) $row['id'],
                 scenarioId:   (int) $row['scenario_id'],
-                scenarioName: isset($row['scenario_name']) && $row['scenario_name'] !== null ? (string) $row['scenario_name'] : null,
+                scenarioName: isset($row['scenario_name']) ? (string) $row['scenario_name'] : null,
                 revisionNo:   (int) $row['revision_no'],
                 userId:       isset($row['user_id']) ? (int) $row['user_id'] : null,
                 userEmail:    isset($row['user_email']) ? (string) $row['user_email'] : null,
