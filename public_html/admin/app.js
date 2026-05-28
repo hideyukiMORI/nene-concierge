@@ -21738,7 +21738,7 @@ var NeNeAdmin = (() => {
               "The result of getSnapshot should be cached to avoid an infinite loop"
             ), didWarnUncachedGetSnapshot = true);
           }
-          cachedValue = useState20({
+          cachedValue = useState21({
             inst: { value, getSnapshot }
           });
           var inst = cachedValue[0].inst, forceUpdate = cachedValue[1];
@@ -21750,7 +21750,7 @@ var NeNeAdmin = (() => {
             },
             [subscribe, value, getSnapshot]
           );
-          useEffect19(
+          useEffect20(
             function() {
               checkIfSnapshotChanged(inst) && forceUpdate({ inst });
               return subscribe(function() {
@@ -21776,7 +21776,7 @@ var NeNeAdmin = (() => {
           return getSnapshot();
         }
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-        var React15 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState20 = React15.useState, useEffect19 = React15.useEffect, useLayoutEffect5 = React15.useLayoutEffect, useDebugValue2 = React15.useDebugValue, didWarnOld18Alpha = false, didWarnUncachedGetSnapshot = false, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
+        var React15 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState21 = React15.useState, useEffect20 = React15.useEffect, useLayoutEffect5 = React15.useLayoutEffect, useDebugValue2 = React15.useDebugValue, didWarnOld18Alpha = false, didWarnUncachedGetSnapshot = false, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
         exports.useSyncExternalStore = void 0 !== React15.useSyncExternalStore ? React15.useSyncExternalStore : shim;
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(Error());
       })();
@@ -21804,7 +21804,7 @@ var NeNeAdmin = (() => {
           return x === y && (0 !== x || 1 / x === 1 / y) || x !== x && y !== y;
         }
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-        var React15 = require_react(), shim = require_shim(), objectIs = "function" === typeof Object.is ? Object.is : is, useSyncExternalStore = shim.useSyncExternalStore, useRef9 = React15.useRef, useEffect19 = React15.useEffect, useMemo6 = React15.useMemo, useDebugValue2 = React15.useDebugValue;
+        var React15 = require_react(), shim = require_shim(), objectIs = "function" === typeof Object.is ? Object.is : is, useSyncExternalStore = shim.useSyncExternalStore, useRef9 = React15.useRef, useEffect20 = React15.useEffect, useMemo6 = React15.useMemo, useDebugValue2 = React15.useDebugValue;
         exports.useSyncExternalStoreWithSelector = function(subscribe, getSnapshot, getServerSnapshot, selector, isEqual) {
           var instRef = useRef9(null);
           if (null === instRef.current) {
@@ -21847,7 +21847,7 @@ var NeNeAdmin = (() => {
             [getSnapshot, getServerSnapshot, selector, isEqual]
           );
           var value = useSyncExternalStore(subscribe, instRef[0], instRef[1]);
-          useEffect19(
+          useEffect20(
             function() {
               inst.hasValue = true;
               inst.value = value;
@@ -21875,7 +21875,7 @@ var NeNeAdmin = (() => {
   });
 
   // src/admin/index.tsx
-  var import_react19 = __toESM(require_react());
+  var import_react20 = __toESM(require_react());
   var import_client = __toESM(require_client());
 
   // node_modules/react-router/dist/development/chunk-4N6VE7H7.mjs
@@ -26933,8 +26933,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     };
     const variants = {
       primary: { background: T.primary, color: T.primaryFg, borderColor: T.primary },
-      danger: { background: T.danger, color: "#fff", borderColor: T.danger },
-      ghost: { background: "transparent", color: T.primary, borderColor: T.primary }
+      danger: { background: "transparent", color: T.dangerFg, borderColor: T.border },
+      ghost: { background: "transparent", color: T.text, borderColor: T.border }
+    };
+    const hoverStyles = {
+      primary: { bg: T.primary },
+      danger: { bg: T.dangerBg, border: T.dangerBorder },
+      ghost: { bg: T.surfaceHover }
     };
     return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
       "button",
@@ -26944,9 +26949,15 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         disabled,
         style: { ...base, ...variants[variant], ...style2 },
         onMouseEnter: (e) => {
-          if (!disabled) e.currentTarget.style.filter = "brightness(0.90)";
+          if (disabled) return;
+          const h = hoverStyles[variant];
+          e.currentTarget.style.background = h.bg;
+          if (h.border) e.currentTarget.style.borderColor = h.border;
+          if (variant === "primary") e.currentTarget.style.filter = "brightness(0.92)";
         },
         onMouseLeave: (e) => {
+          e.currentTarget.style.background = variants[variant].background;
+          e.currentTarget.style.borderColor = variants[variant].borderColor;
           e.currentTarget.style.filter = "";
         },
         children: children2
@@ -37431,19 +37442,22 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         top: 0,
         right: 0,
         bottom: 0,
-        width: 264,
+        width: T.editorDrawerW,
         zIndex: 10,
-        background: T.surface,
-        borderLeft: `1px solid ${T.border}`,
-        boxShadow: "-6px 0 20px rgba(0,0,0,.07)",
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
-        // スライドアニメーション
         transform: showRightPanel ? "translateX(0)" : "translateX(100%)",
         transition: "transform 0.20s cubic-bezier(0.4, 0, 0.2, 1)",
         pointerEvents: showRightPanel ? "auto" : "none"
-      }, children: analyticsMode ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+      }, children: analyticsMode ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: {
+        height: "100%",
+        background: T.surfaceAlt,
+        borderLeft: `1px solid ${T.border}`,
+        boxShadow: "-6px 0 20px rgba(0,0,0,.07)",
+        display: "flex",
+        flexDirection: "column"
+      }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
         AnalyticsSummaryPanel,
         {
           report: analyticsReport,
@@ -37452,54 +37466,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           period,
           onPeriodChange: setPeriod
         }
-      ) : selectedNode ? /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(import_jsx_runtime9.Fragment, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: {
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "6px 10px",
-          flexShrink: 0,
-          borderBottom: `1px solid ${T.border}`,
-          background: T.tableHeader
-        }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { fontSize: T.fontXs, fontWeight: 600, color: T.textMuted }, children: t("scenarioForm.detailsToggle") }),
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
-            "button",
-            {
-              onClick: () => setSelectedNodeId(null),
-              title: t("common.close"),
-              style: {
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                color: T.textMuted,
-                fontSize: 14,
-                lineHeight: 1,
-                padding: "1px 4px",
-                borderRadius: T.radiusSm,
-                display: "flex",
-                alignItems: "center"
-              },
-              onMouseEnter: (e) => {
-                e.currentTarget.style.background = T.border;
-              },
-              onMouseLeave: (e) => {
-                e.currentTarget.style.background = "none";
-              },
-              children: "\xD7"
-            }
-          )
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { flex: 1, overflowY: "auto" }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
-          NodeConfigPanel,
-          {
-            node: selectedNode,
-            credentials,
-            onChange: handleNodeChange,
-            onDelete: handleNodeDelete
-          }
-        ) })
-      ] }) : null })
+      ) }) : selectedNode ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+        NodeConfigPanel,
+        {
+          node: selectedNode,
+          credentials,
+          onChange: handleNodeChange,
+          onDelete: handleNodeDelete,
+          onClose: () => setSelectedNodeId(null)
+        }
+      ) : null })
     ] });
   });
   var ScenarioCanvas_default = ScenarioCanvas;
@@ -38860,6 +38836,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/SettingsPage.tsx
+  var import_react15 = __toESM(require_react());
   var import_jsx_runtime13 = __toESM(require_jsx_runtime());
   var MONO7 = T.fontMono;
   function ThemeCard({ def, isSelected, currentVariant, onSelect, onToggle }) {
@@ -39062,32 +39039,58 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       }
     );
   }
-  function ThemeTerminal() {
-    const { adminThemeId, themeVariant: themeVariant2 } = useTheme();
-    const lines = [
-      `$ nene-concierge theme`,
-      `> id:      ${adminThemeId}`,
-      `> variant: ${themeVariant2}`,
-      `> token:   --nca-color-primary`,
-      ``,
-      `// changes saved to localStorage`
-    ];
+  var THEME_LINES = {
+    default: ["> theme: default", "# nene-concierge original palette", "# accent: teal \u2014 oklch(62% 0.14 192)", "> sidebar: always dark", "> variants: light  dark"],
+    github: ["> theme: github", "# based on github primer design system", "# launched on github.com  2020", "> accent: blue \u2014 interactive ui", "> variants: light  dark"],
+    solarized: ["> theme: solarized", "# by ethan schoonover \u2014 2011", "# cielab-calibrated contrast ratios", "> 8 accents \u2014 same both variants", "> variants: light  dark"],
+    dracula: ["> theme: dracula", "# by zeno rocha \u2014 2013", "# 200k+ installs across editors", "> accent: purple \u2014 #bd93f9", "> variants: dark only"],
+    monokai: ["> theme: monokai", "# by wimer hazenberg \u2014 2006", "# born in textmate, ported everywhere", "> accent: lime green \u2014 #a6e22e", "> variants: dark only"],
+    ubuntu: ["> theme: ubuntu  (yaru)", "# canonical official gtk theme \u2014 2018", "# default on ubuntu 18.10 and later", "> sidebar: aubergine \u2014 #2C001E", "> accent: canonical orange \u2014 #E95420", "> variants: light  dark"]
+  };
+  function Cursor({ accent }) {
+    const [on, setOn] = (0, import_react15.useState)(true);
+    (0, import_react15.useEffect)(() => {
+      const t = setInterval(() => setOn((v) => !v), 530);
+      return () => clearInterval(t);
+    }, []);
+    return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { style: { opacity: on ? 1 : 0, color: accent, fontWeight: 700 }, children: "\u2588" });
+  }
+  function ThemeTerminal({ themeId: themeId2, accent }) {
+    const lines = THEME_LINES[themeId2] ?? ["> theme: " + themeId2];
+    const [count, setCount] = (0, import_react15.useState)(0);
+    (0, import_react15.useEffect)(() => {
+      setCount(0);
+      let i = 0;
+      const iv = setInterval(() => {
+        i += 1;
+        setCount(i);
+        if (i >= lines.length) clearInterval(iv);
+      }, 55);
+      return () => clearInterval(iv);
+    }, [themeId2, lines.length]);
     return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: {
-      background: "#0E1116",
+      background: "oklch(11% 0.010 265)",
       borderRadius: T.radiusMd,
-      padding: "14px 16px",
+      border: `1px solid oklch(22% 0.010 265)`,
+      padding: "12px 16px",
       fontFamily: MONO7,
-      fontSize: T.fontXs,
-      color: "#7EB8D0",
-      lineHeight: 1.7,
-      marginTop: 16,
-      border: `1px solid ${T.border}`
-    }, children: lines.map((l, i) => /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: {
-      color: l.startsWith("$") ? "#2DD4BF" : l.startsWith(">") ? "#A8D8A8" : l.startsWith("//") ? "#5E6472" : "#7EB8D0"
-    }, children: l || "\xA0" }, i)) });
+      fontSize: T.fontSm,
+      lineHeight: 1.8,
+      minHeight: 128,
+      marginTop: 16
+    }, children: lines.slice(0, count).map((line, i) => /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: {
+      color: line.startsWith(">") ? accent : "oklch(52% 0.012 265)",
+      display: "flex",
+      alignItems: "baseline"
+    }, children: [
+      line,
+      i === count - 1 && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { style: { marginLeft: 4 }, children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Cursor, { accent }) })
+    ] }, i)) });
   }
   function SettingsPage() {
     const { adminThemeId, themeVariant: themeVariant2, setAdminTheme, toggleVariant } = useTheme();
+    const selectedDef = ADMIN_THEME_DEFS.find((d) => d.id === adminThemeId);
+    const accentColor = selectedDef?.preview[themeVariant2]?.accent ?? selectedDef?.preview[selectedDef.variants[0]]?.accent ?? T.primary;
     return /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { children: [
       /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(PageHead, { title: "Settings", subtitle: `admin theme \xB7 ${ADMIN_THEME_DEFS.length} options` }),
       /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(Card, { children: [
@@ -39108,13 +39111,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           def.id
         )) }),
         /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("p", { style: { marginTop: 16, fontSize: T.fontXs, color: T.textMuted }, children: "\u9078\u629E\u3059\u308B\u3068\u30D6\u30E9\u30A6\u30B6\u306B\u5373\u6642\u53CD\u6620\u3055\u308C\u3001\u30ED\u30B0\u30A2\u30A6\u30C8\u5F8C\u3082\u7DAD\u6301\u3055\u308C\u307E\u3059 (localStorage)\u3002" }),
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(ThemeTerminal, {})
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(ThemeTerminal, { themeId: adminThemeId, accent: accentColor })
       ] })
     ] });
   }
 
   // src/admin/components/ActionLogsPage.tsx
-  var import_react15 = __toESM(require_react());
+  var import_react16 = __toESM(require_react());
   var import_jsx_runtime14 = __toESM(require_jsx_runtime());
   var MONO8 = T.fontMono;
   var TH3 = {
@@ -39149,16 +39152,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   };
   function ActionLogsPage() {
     const { t } = useTranslation();
-    const [logs, setLogs] = (0, import_react15.useState)([]);
-    const [total, setTotal] = (0, import_react15.useState)(0);
-    const [loading, setLoading] = (0, import_react15.useState)(true);
-    const [error, setError] = (0, import_react15.useState)(null);
-    const [adapter, setAdapter] = (0, import_react15.useState)("");
-    const [status, setStatus] = (0, import_react15.useState)("");
-    const [range, setRange] = (0, import_react15.useState)("last 24h");
-    const [offset, setOffset] = (0, import_react15.useState)(0);
+    const [logs, setLogs] = (0, import_react16.useState)([]);
+    const [total, setTotal] = (0, import_react16.useState)(0);
+    const [loading, setLoading] = (0, import_react16.useState)(true);
+    const [error, setError] = (0, import_react16.useState)(null);
+    const [adapter, setAdapter] = (0, import_react16.useState)("");
+    const [status, setStatus] = (0, import_react16.useState)("");
+    const [range, setRange] = (0, import_react16.useState)("last 24h");
+    const [offset, setOffset] = (0, import_react16.useState)(0);
     const limit = 50;
-    (0, import_react15.useEffect)(() => {
+    (0, import_react16.useEffect)(() => {
       setLoading(true);
       setError(null);
       void listActionLogs({
@@ -39407,7 +39410,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/DashboardPage.tsx
-  var import_react16 = __toESM(require_react());
+  var import_react17 = __toESM(require_react());
   var import_jsx_runtime15 = __toESM(require_jsx_runtime());
   var MONO9 = T.fontMono;
   var TH4 = {
@@ -39533,11 +39536,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
   function DashboardPage() {
     const { t } = useTranslation();
-    const [stats, setStats] = (0, import_react16.useState)(null);
-    const [scenarios, setScenarios] = (0, import_react16.useState)([]);
-    const [failures, setFailures] = (0, import_react16.useState)([]);
-    const [loading, setLoading] = (0, import_react16.useState)(true);
-    const [error, setError] = (0, import_react16.useState)(null);
+    const [stats, setStats] = (0, import_react17.useState)(null);
+    const [scenarios, setScenarios] = (0, import_react17.useState)([]);
+    const [failures, setFailures] = (0, import_react17.useState)([]);
+    const [loading, setLoading] = (0, import_react17.useState)(true);
+    const [error, setError] = (0, import_react17.useState)(null);
     async function load() {
       setLoading(true);
       setError(null);
@@ -39561,7 +39564,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         setLoading(false);
       }
     }
-    (0, import_react16.useEffect)(() => {
+    (0, import_react17.useEffect)(() => {
       void load();
     }, []);
     const cvRate = stats?.conversion_rate_7d ?? 0;
@@ -39774,7 +39777,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/SessionsPage.tsx
-  var import_react17 = __toESM(require_react());
+  var import_react18 = __toESM(require_react());
   var import_jsx_runtime16 = __toESM(require_jsx_runtime());
   var MONO10 = T.fontMono;
   function calcDuration(start2, end) {
@@ -39809,10 +39812,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     onClose
   }) {
     const { t } = useTranslation();
-    const [detail, setDetail] = (0, import_react17.useState)(null);
-    const [loading, setLoading] = (0, import_react17.useState)(true);
-    const [error, setError] = (0, import_react17.useState)(null);
-    (0, import_react17.useEffect)(() => {
+    const [detail, setDetail] = (0, import_react18.useState)(null);
+    const [loading, setLoading] = (0, import_react18.useState)(true);
+    const [error, setError] = (0, import_react18.useState)(null);
+    (0, import_react18.useEffect)(() => {
       setLoading(true);
       setError(null);
       void getSessionDetail(sessionId).then((res) => setDetail(res.data)).catch((err) => {
@@ -40032,15 +40035,15 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
   function SessionsPage() {
     const { t } = useTranslation();
-    const [sessions, setSessions] = (0, import_react17.useState)([]);
-    const [total, setTotal] = (0, import_react17.useState)(0);
-    const [loading, setLoading] = (0, import_react17.useState)(true);
-    const [error, setError] = (0, import_react17.useState)(null);
-    const [selectedId, setSelectedId] = (0, import_react17.useState)(null);
-    const [outcome, setOutcome] = (0, import_react17.useState)("");
-    const [hasConversion, setHasConversion] = (0, import_react17.useState)("");
-    const [scenarioFilter, setScenarioFilter] = (0, import_react17.useState)("");
-    const [offset, setOffset] = (0, import_react17.useState)(0);
+    const [sessions, setSessions] = (0, import_react18.useState)([]);
+    const [total, setTotal] = (0, import_react18.useState)(0);
+    const [loading, setLoading] = (0, import_react18.useState)(true);
+    const [error, setError] = (0, import_react18.useState)(null);
+    const [selectedId, setSelectedId] = (0, import_react18.useState)(null);
+    const [outcome, setOutcome] = (0, import_react18.useState)("");
+    const [hasConversion, setHasConversion] = (0, import_react18.useState)("");
+    const [scenarioFilter, setScenarioFilter] = (0, import_react18.useState)("");
+    const [offset, setOffset] = (0, import_react18.useState)(0);
     const limit = 50;
     async function load() {
       setLoading(true);
@@ -40060,7 +40063,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         setLoading(false);
       }
     }
-    (0, import_react17.useEffect)(() => {
+    (0, import_react18.useEffect)(() => {
       void load();
     }, [outcome, hasConversion, offset]);
     const active = sessions.filter((s) => s.outcome === "active").length;
@@ -40346,16 +40349,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/ThemeSwitcher.tsx
-  var import_react18 = __toESM(require_react());
+  var import_react19 = __toESM(require_react());
   var import_jsx_runtime17 = __toESM(require_jsx_runtime());
   var MONO11 = T.fontMono;
   function ThemeSwitcher() {
     const { adminThemeId, themeVariant: themeVariant2, setAdminTheme, toggleVariant } = useTheme();
     const bp = useBreakpoint();
-    const [open, setOpen] = (0, import_react18.useState)(false);
-    const containerRef = (0, import_react18.useRef)(null);
+    const [open, setOpen] = (0, import_react19.useState)(false);
+    const containerRef = (0, import_react19.useRef)(null);
     if (bp === "mobile") return null;
-    (0, import_react18.useEffect)(() => {
+    (0, import_react19.useEffect)(() => {
       if (!open) return;
       function handleClick(e) {
         if (containerRef.current && !containerRef.current.contains(e.target)) {
@@ -40671,7 +40674,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var container = document.getElementById("root");
   if (!container) throw new Error("Root element #root not found");
   (0, import_client.createRoot)(container).render(
-    /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(import_react19.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(I18nProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(App, {}) }) })
+    /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(import_react20.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(I18nProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(App, {}) }) })
   );
 })();
 /*! Bundled license information:

@@ -651,15 +651,30 @@ export function Btn({
         textDecoration: 'none',
     };
     const variants: Record<string, React.CSSProperties> = {
-        primary: { background: T.primary,     color: T.primaryFg, borderColor: T.primary },
-        danger:  { background: T.danger,      color: '#fff',      borderColor: T.danger },
-        ghost:   { background: 'transparent', color: T.primary,   borderColor: T.primary },
+        primary: { background: T.primary,      color: T.primaryFg, borderColor: T.primary },
+        danger:  { background: 'transparent',  color: T.dangerFg,  borderColor: T.border },
+        ghost:   { background: 'transparent',  color: T.text,      borderColor: T.border },
+    };
+    const hoverStyles: Record<string, { bg: string; border?: string }> = {
+        primary: { bg: T.primary },
+        danger:  { bg: T.dangerBg, border: T.dangerBorder },
+        ghost:   { bg: T.surfaceHover },
     };
     return (
         <button type={type} onClick={onClick} disabled={disabled}
             style={{ ...base, ...variants[variant], ...style }}
-            onMouseEnter={e => { if (!disabled) e.currentTarget.style.filter = 'brightness(0.90)'; }}
-            onMouseLeave={e => { e.currentTarget.style.filter = ''; }}>
+            onMouseEnter={e => {
+                if (disabled) return;
+                const h = hoverStyles[variant];
+                e.currentTarget.style.background = h.bg;
+                if (h.border) e.currentTarget.style.borderColor = h.border;
+                if (variant === 'primary') e.currentTarget.style.filter = 'brightness(0.92)';
+            }}
+            onMouseLeave={e => {
+                e.currentTarget.style.background = variants[variant].background as string;
+                e.currentTarget.style.borderColor = variants[variant].borderColor as string;
+                e.currentTarget.style.filter = '';
+            }}>
             {children}
         </button>
     );

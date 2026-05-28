@@ -332,61 +332,40 @@ const ScenarioCanvas = forwardRef<ScenarioCanvasRef, Props>(function ScenarioCan
                 </ReactFlow>
             </div>
 
-            {/* 右ドロワー: ノード設定 or Analytics サマリー（にゅっとスライドイン/アウト） */}
+            {/* 右ドロワー: ノード設定 or Analytics サマリー */}
             <div style={{
-                position: 'absolute', top: 0, right: 0, bottom: 0, width: 264,
+                position: 'absolute', top: 0, right: 0, bottom: 0,
+                width: T.editorDrawerW,
                 zIndex: 10,
-                background: T.surface,
-                borderLeft: `1px solid ${T.border}`,
-                boxShadow: '-6px 0 20px rgba(0,0,0,.07)',
                 display: 'flex', flexDirection: 'column', overflow: 'hidden',
-                // スライドアニメーション
                 transform: showRightPanel ? 'translateX(0)' : 'translateX(100%)',
                 transition: 'transform 0.20s cubic-bezier(0.4, 0, 0.2, 1)',
                 pointerEvents: showRightPanel ? 'auto' : 'none',
             }}>
                 {analyticsMode ? (
-                    <AnalyticsSummaryPanel
-                        report={analyticsReport}
-                        loading={analyticsLoading}
-                        noData={analyticsNoData}
-                        period={period}
-                        onPeriodChange={setPeriod}
-                    />
+                    <div style={{
+                        height: '100%',
+                        background: T.surfaceAlt,
+                        borderLeft: `1px solid ${T.border}`,
+                        boxShadow: '-6px 0 20px rgba(0,0,0,.07)',
+                        display: 'flex', flexDirection: 'column',
+                    }}>
+                        <AnalyticsSummaryPanel
+                            report={analyticsReport}
+                            loading={analyticsLoading}
+                            noData={analyticsNoData}
+                            period={period}
+                            onPeriodChange={setPeriod}
+                        />
+                    </div>
                 ) : selectedNode ? (
-                    <>
-                        {/* ドロワーヘッダー */}
-                        <div style={{
-                            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                            padding: '6px 10px', flexShrink: 0,
-                            borderBottom: `1px solid ${T.border}`,
-                            background: T.tableHeader,
-                        }}>
-                            <span style={{ fontSize: T.fontXs, fontWeight: 600, color: T.textMuted }}>
-                                {t('scenarioForm.detailsToggle')}
-                            </span>
-                            <button
-                                onClick={() => setSelectedNodeId(null)}
-                                title={t('common.close')}
-                                style={{
-                                    background: 'none', border: 'none', cursor: 'pointer',
-                                    color: T.textMuted, fontSize: 14, lineHeight: 1,
-                                    padding: '1px 4px', borderRadius: T.radiusSm,
-                                    display: 'flex', alignItems: 'center',
-                                }}
-                                onMouseEnter={e => { e.currentTarget.style.background = T.border; }}
-                                onMouseLeave={e => { e.currentTarget.style.background = 'none'; }}
-                            >×</button>
-                        </div>
-                        <div style={{ flex: 1, overflowY: 'auto' }}>
-                            <NodeConfigPanel
-                                node={selectedNode}
-                                credentials={credentials}
-                                onChange={handleNodeChange}
-                                onDelete={handleNodeDelete}
-                            />
-                        </div>
-                    </>
+                    <NodeConfigPanel
+                        node={selectedNode}
+                        credentials={credentials}
+                        onChange={handleNodeChange}
+                        onDelete={handleNodeDelete}
+                        onClose={() => setSelectedNodeId(null)}
+                    />
                 ) : null}
             </div>
         </div>
