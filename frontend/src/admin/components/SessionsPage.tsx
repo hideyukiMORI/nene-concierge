@@ -5,7 +5,12 @@ import {
     ApiError,
 } from '../api.js';
 import type { SessionSummary, SessionDetail, SessionOutcome } from '../api.js';
-import { PageHead, Card, CardSub, StatusPill, ErrorMsg } from './Layout.js';
+import { PageHead, Card, CardSub, StatusPill, ErrorMsg, useLayout } from './Layout.js';
+import {
+    MobileHeader, MobileIconBtn, FilterChips, Chip, CardList, ListItem,
+    Pill, MetaDot, SkeletonListItem, BottomSheet, MetaGrid,
+} from './mobile/index.js';
+import type { PillVariant } from './mobile/index.js';
 import { T } from '../theme.js';
 import { useTranslation } from '../i18n/index.js';
 
@@ -281,10 +286,143 @@ function SessionDetailDrawer({
     );
 }
 
+// ── Outcome → Pill 変換 (mobile) ──────────────────────────────────────────────
+
+function outcomeToPillVariant(o: SessionOutcome): PillVariant {
+    if (o === 'converted') return 'success';
+    if (o === 'active')    return 'active';
+    if (o === 'completed') return 'success';
+    if (o === 'dropped' || o === 'abandoned') return 'archived';
+    return 'neutral';
+}
+function outcomeIcon(o: SessionOutcome): string {
+    if (o === 'converted') return '✓';
+    if (o === 'active')    return '↻';
+    if (o === 'completed') return '●';
+    return '○';
+}
+
+// ── Mobile Session Detail (BottomSheet 内コンテンツ) ─────────────────────────
+
+function MobileSessionDetailSheet({ sessionId, onClose }: { sessionId: string | null; onClose: () => void }) {
+    const { t } = useTranslation();
+    const [detail, setDetail]   = useState<SessionDetail | null>(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError]     = useState<string | null>(null);
+
+    useEffect(() => {
+        if (!sessionId) { setDetail(null); return; }
+        setLoading(true);
+        setError(null);
+        let cancelled = false;
+        void getSessionDetail(sessionId)
+            .then(res => { if (!cancelled) setDetail(res.data); })
+            .catch(err => { if (!cancelled) setError(err instanceof ApiError ? err.message : t('sessions.detail.loadError')); })
+            .finally(() => { if (!cancelled) setLoading(false); });
+        return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [sessionId]);
+
+    const shortId = sessionId?.slice(0, 8);
+
+    const sheetProps = detail
+        ? { subtitle: `scenario #${detail.scenario_id}` }
+        : {};
+
+    return (
+        <BottomSheet
+            open={sessionId !== null}
+            onClose={onClose}
+            title={shortId ? `Session #${shortId}` : ''}
+            {...sheetProps}>
+            {error && <ErrorMsg msg={error} />}
+            {loading && <div style={{ color: T.textMuted, fontSize: T.fontSm }}>{t('common.loading')}</div>}
+            {detail && (
+                <>
+                    <MetaGrid rows={[
+                        { label: 'outcome',    value: <Pill variant={outcomeToPillVariant(detail.outcome)} label={detail.outcome} /> },
+                        { label: 'conversion', value: <span style={{ color: detail.has_conversion ? T.successFg : T.textMuted, fontFamily: T.fontMono }}>
+                            {detail.has_conversion ? '✓ yes' : '— no'}
+                        </span> },
+                        { label: 'duration',   value: <span style={{ fontFamily: T.fontMono }}>{calcDuration(detail.started_at, detail.ended_at)}</span> },
+                        { label: 'started',    value: <span style={{ fontFamily: T.fontMono, fontSize: 11 }}>{detail.started_at}</span> },
+                        { label: 'ended',      value: <span style={{ fontFamily: T.fontMono, fontSize: 11 }}>{detail.ended_at ?? '—'}</span> },
+                    ]}/>
+
+                    {Object.keys(detail.variables).length > 0 && (
+                        <>
+                            <div style={{
+                                fontFamily: T.fontMono, fontSize: 10, fontWeight: 700,
+                                letterSpacing: '0.10em', textTransform: 'uppercase',
+                                color: T.textFaint, marginBottom: 8,
+                            }}>collected variables</div>
+                            <div style={{
+                                background: T.surfaceAlt,
+                                borderRadius: T.radiusMd,
+                                padding: '8px 12px', marginBottom: 18,
+                                display: 'grid', gridTemplateColumns: '100px 1fr',
+                                gap: '4px 12px', fontSize: 12,
+                            }}>
+                                {Object.entries(detail.variables).map(([k, v]) => (
+                                    <span key={k} style={{ display: 'contents' }}>
+                                        <span style={{ color: T.textMuted, fontFamily: T.fontMono }}>{k}</span>
+                                        <span style={{ wordBreak: 'break-all', color: T.text }}>{String(v)}</span>
+                                    </span>
+                                ))}
+                            </div>
+                        </>
+                    )}
+
+                    {detail.messages.length > 0 && (
+                        <>
+                            <div style={{
+                                fontFamily: T.fontMono, fontSize: 10, fontWeight: 700,
+                                letterSpacing: '0.10em', textTransform: 'uppercase',
+                                color: T.textFaint, marginBottom: 10,
+                            }}>messages · {detail.messages.length}</div>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                                {detail.messages.map((m, i) => {
+                                    const isBot = m.role === 'bot';
+                                    return (
+                                        <div key={m.id ?? i}>
+                                            <div style={{
+                                                display: 'flex',
+                                                flexDirection: isBot ? 'row' : 'row-reverse',
+                                                gap: 8, alignItems: 'flex-end',
+                                            }}>
+                                                <div style={{
+                                                    maxWidth: '78%', padding: '10px 14px',
+                                                    borderRadius: 18,
+                                                    borderBottomLeftRadius:  isBot ? 4 : 18,
+                                                    borderBottomRightRadius: isBot ? 18 : 4,
+                                                    fontSize: 14, lineHeight: 1.4,
+                                                    color: T.textStrong,
+                                                    background: isBot ? T.surfaceAlt : T.adapterHttpBg,
+                                                }}>
+                                                    {m.content}
+                                                </div>
+                                            </div>
+                                            <div style={{
+                                                fontFamily: T.fontMono, fontSize: 10,
+                                                color: T.textFaint, textAlign: 'center', margin: '4px 0',
+                                            }}>{m.created_at?.slice(11, 19) ?? ''}</div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </>
+                    )}
+                </>
+            )}
+        </BottomSheet>
+    );
+}
+
 // ── SessionsPage ──────────────────────────────────────────────────────────────
 
 export default function SessionsPage() {
     const { t } = useTranslation();
+    const { isMobile } = useLayout();
 
     const [sessions, setSessions]     = useState<SessionSummary[]>([]);
     const [total, setTotal]           = useState(0);
@@ -347,6 +485,108 @@ export default function SessionsPage() {
         cursor: 'pointer', transition: 'filter 150ms ease',
     };
 
+    // ─────────── Mobile layout ───────────
+    if (isMobile) {
+        const countActive    = sessions.filter(s => s.outcome === 'active').length;
+        const countConverted = sessions.filter(s => s.outcome === 'converted').length;
+
+        return (
+            <div style={{ minHeight: '100vh', background: T.bg }}>
+                <MobileHeader
+                    title="Sessions"
+                    subtitle={loading ? '…' : `${total} records · ${countActive} active`}
+                    trailing={
+                        <MobileIconBtn ariaLabel={t('common.refresh')} onClick={() => { void load(); }}>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                                <polyline points="23 4 23 10 17 10"/>
+                                <polyline points="1 20 1 14 7 14"/>
+                                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                            </svg>
+                        </MobileIconBtn>
+                    }
+                />
+
+                <FilterChips>
+                    <Chip active={outcome === ''}          onClick={() => { setOutcome(''); setOffset(0); }}>all · {total}</Chip>
+                    <Chip active={outcome === 'active'}    onClick={() => { setOutcome('active'); setOffset(0); }}>active · {countActive}</Chip>
+                    <Chip active={outcome === 'converted'} onClick={() => { setOutcome('converted'); setOffset(0); }}>converted · {countConverted}</Chip>
+                    <Chip active={outcome === 'completed'} onClick={() => { setOutcome('completed'); setOffset(0); }}>completed</Chip>
+                    <Chip active={outcome === 'dropped'}   onClick={() => { setOutcome('dropped'); setOffset(0); }}>abandoned</Chip>
+                </FilterChips>
+
+                {error && (
+                    <div style={{ padding: '12px 12px 0' }}>
+                        <ErrorMsg msg={error} />
+                    </div>
+                )}
+
+                {loading ? (
+                    <CardList>
+                        <SkeletonListItem />
+                        <SkeletonListItem />
+                        <SkeletonListItem />
+                    </CardList>
+                ) : filtered.length === 0 ? (
+                    <div style={{ padding: '40px 24px', textAlign: 'center', color: T.textMuted, fontSize: T.fontSm }}>
+                        {t('sessions.empty')}
+                    </div>
+                ) : (
+                    <CardList>
+                        {filtered.map((s, i) => (
+                            <ListItem
+                                key={s.id}
+                                last={i === filtered.length - 1}
+                                icon={outcomeIcon(s.outcome)}
+                                title={s.id.slice(0, 8) + '…'}
+                                meta={
+                                    <>
+                                        <Pill variant={outcomeToPillVariant(s.outcome)} label={s.outcome} />
+                                        <MetaDot />
+                                        <span>{calcDuration(s.started_at, s.ended_at)}</span>
+                                    </>
+                                }
+                                onClick={() => setSelectedId(s.id)}
+                            />
+                        ))}
+                    </CardList>
+                )}
+
+                {/* Pagination (compact) */}
+                {totalPages > 1 && (
+                    <div style={{
+                        display: 'flex', justifyContent: 'center', gap: 8,
+                        margin: '12px 0', alignItems: 'center',
+                        fontFamily: MONO, fontSize: T.fontXs, color: T.textMuted,
+                    }}>
+                        <button disabled={currentPage <= 1}
+                            onClick={() => setOffset(Math.max(0, offset - limit))}
+                            style={{
+                                ...PAG_BTN,
+                                opacity: currentPage <= 1 ? 0.45 : 1,
+                                cursor: currentPage <= 1 ? 'not-allowed' : 'pointer',
+                            }}>← prev</button>
+                        <span>{currentPage} / {totalPages}</span>
+                        <button disabled={currentPage >= totalPages}
+                            onClick={() => setOffset(offset + limit)}
+                            style={{
+                                ...PAG_BTN,
+                                opacity: currentPage >= totalPages ? 0.45 : 1,
+                                cursor: currentPage >= totalPages ? 'not-allowed' : 'pointer',
+                            }}>next →</button>
+                    </div>
+                )}
+
+                <div style={{ height: 'calc(24px + env(safe-area-inset-bottom))' }}/>
+
+                <MobileSessionDetailSheet
+                    sessionId={selectedId}
+                    onClose={() => setSelectedId(null)}
+                />
+            </div>
+        );
+    }
+
+    // ─────────── Desktop / Tablet layout ───────────
     return (
         <div>
             <PageHead title="Sessions" subtitle={subtitle}>

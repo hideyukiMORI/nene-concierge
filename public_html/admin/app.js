@@ -27389,6 +27389,139 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       }
     );
   }
+  function BottomSheet({
+    open,
+    onClose,
+    title,
+    subtitle,
+    trailing,
+    children: children2,
+    height
+  }) {
+    (0, import_react5.useEffect)(() => {
+      if (!open) return;
+      document.body.classList.add("nca-no-scroll");
+      return () => {
+        document.body.classList.remove("nca-no-scroll");
+      };
+    }, [open]);
+    return /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(import_jsx_runtime5.Fragment, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+        "div",
+        {
+          onClick: onClose,
+          "aria-hidden": !open,
+          style: {
+            position: "fixed",
+            inset: 0,
+            zIndex: 70,
+            background: "rgba(15,23,42,.40)",
+            backdropFilter: "blur(2px)",
+            opacity: open ? 1 : 0,
+            pointerEvents: open ? "auto" : "none",
+            transition: "opacity 220ms ease"
+          }
+        }
+      ),
+      /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(
+        "div",
+        {
+          role: "dialog",
+          "aria-modal": "true",
+          "aria-hidden": !open,
+          style: {
+            position: "fixed",
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 71,
+            background: T.surface,
+            borderRadius: "18px 18px 0 0",
+            maxHeight: "86vh",
+            height,
+            display: "flex",
+            flexDirection: "column",
+            boxShadow: "0 -20px 60px -20px rgba(15,23,42,.30)",
+            paddingBottom: "env(safe-area-inset-bottom)",
+            transform: open ? "translateY(0)" : "translateY(100%)",
+            transition: "transform 260ms cubic-bezier(0.32, 0.72, 0, 1)",
+            pointerEvents: open ? "auto" : "none"
+          },
+          children: [
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { style: {
+              width: 36,
+              height: 4,
+              borderRadius: 99,
+              background: T.borderLight,
+              margin: "8px auto 4px",
+              flexShrink: 0
+            } }),
+            (title || trailing) && /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: {
+              padding: "8px 18px 12px",
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              borderBottom: `1px solid ${T.borderLight}`,
+              flexShrink: 0
+            }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: { flex: 1, minWidth: 0 }, children: [
+                title && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("h2", { style: {
+                  fontSize: 17,
+                  fontWeight: 700,
+                  margin: 0,
+                  color: T.textStrong,
+                  letterSpacing: "-0.01em",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap"
+                }, children: title }),
+                subtitle && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { style: {
+                  fontFamily: MONO,
+                  fontSize: 11,
+                  color: T.textMuted,
+                  marginTop: 1,
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap"
+                }, children: subtitle })
+              ] }),
+              trailing,
+              /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+                "button",
+                {
+                  onClick: onClose,
+                  "aria-label": "Close",
+                  style: {
+                    width: 32,
+                    height: 32,
+                    borderRadius: 99,
+                    background: T.surfaceAlt,
+                    color: T.textMuted,
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexShrink: 0,
+                    border: "none",
+                    cursor: "pointer"
+                  },
+                  children: /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round", "aria-hidden": true, children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("line", { x1: "18", y1: "6", x2: "6", y2: "18" }),
+                    /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("line", { x1: "6", y1: "6", x2: "18", y2: "18" })
+                  ] })
+                }
+              )
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { style: {
+              flex: 1,
+              overflowY: "auto",
+              padding: "14px 18px 32px",
+              WebkitOverflowScrolling: "touch"
+            }, children: children2 })
+          ]
+        }
+      )
+    ] });
+  }
   function FAB({
     onClick,
     ariaLabel,
@@ -27761,6 +27894,25 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { className: "nca-ptr-spinner" }),
       /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { children: label ?? "Refreshing" })
     ] });
+  }
+  function MetaGrid({ rows }) {
+    return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { style: {
+      display: "grid",
+      gridTemplateColumns: "100px 1fr",
+      gap: "8px 14px",
+      fontSize: 13,
+      marginBottom: 16
+    }, children: rows.map((r, i) => /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("span", { style: { display: "contents" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { style: {
+        fontFamily: MONO,
+        fontSize: 10,
+        letterSpacing: "0.06em",
+        textTransform: "uppercase",
+        color: T.textMuted,
+        alignSelf: "center"
+      }, children: r.label }),
+      /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { style: { color: T.textStrong, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis" }, children: r.value })
+    ] }, i)) });
   }
   function SwipeRow({
     children: children2,
@@ -40886,8 +41038,137 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       }
     );
   }
+  function outcomeToPillVariant(o) {
+    if (o === "converted") return "success";
+    if (o === "active") return "active";
+    if (o === "completed") return "success";
+    if (o === "dropped" || o === "abandoned") return "archived";
+    return "neutral";
+  }
+  function outcomeIcon(o) {
+    if (o === "converted") return "\u2713";
+    if (o === "active") return "\u21BB";
+    if (o === "completed") return "\u25CF";
+    return "\u25CB";
+  }
+  function MobileSessionDetailSheet({ sessionId, onClose }) {
+    const { t } = useTranslation();
+    const [detail, setDetail] = (0, import_react19.useState)(null);
+    const [loading, setLoading] = (0, import_react19.useState)(false);
+    const [error, setError] = (0, import_react19.useState)(null);
+    (0, import_react19.useEffect)(() => {
+      if (!sessionId) {
+        setDetail(null);
+        return;
+      }
+      setLoading(true);
+      setError(null);
+      let cancelled = false;
+      void getSessionDetail(sessionId).then((res) => {
+        if (!cancelled) setDetail(res.data);
+      }).catch((err) => {
+        if (!cancelled) setError(err instanceof ApiError ? err.message : t("sessions.detail.loadError"));
+      }).finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+      return () => {
+        cancelled = true;
+      };
+    }, [sessionId]);
+    const shortId = sessionId?.slice(0, 8);
+    const sheetProps = detail ? { subtitle: `scenario #${detail.scenario_id}` } : {};
+    return /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(
+      BottomSheet,
+      {
+        open: sessionId !== null,
+        onClose,
+        title: shortId ? `Session #${shortId}` : "",
+        ...sheetProps,
+        children: [
+          error && /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(ErrorMsg, { msg: error }),
+          loading && /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { style: { color: T.textMuted, fontSize: T.fontSm }, children: t("common.loading") }),
+          detail && /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(import_jsx_runtime17.Fragment, { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(MetaGrid, { rows: [
+              { label: "outcome", value: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Pill, { variant: outcomeToPillVariant(detail.outcome), label: detail.outcome }) },
+              { label: "conversion", value: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { style: { color: detail.has_conversion ? T.successFg : T.textMuted, fontFamily: T.fontMono }, children: detail.has_conversion ? "\u2713 yes" : "\u2014 no" }) },
+              { label: "duration", value: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { style: { fontFamily: T.fontMono }, children: calcDuration(detail.started_at, detail.ended_at) }) },
+              { label: "started", value: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { style: { fontFamily: T.fontMono, fontSize: 11 }, children: detail.started_at }) },
+              { label: "ended", value: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { style: { fontFamily: T.fontMono, fontSize: 11 }, children: detail.ended_at ?? "\u2014" }) }
+            ] }),
+            Object.keys(detail.variables).length > 0 && /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(import_jsx_runtime17.Fragment, { children: [
+              /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { style: {
+                fontFamily: T.fontMono,
+                fontSize: 10,
+                fontWeight: 700,
+                letterSpacing: "0.10em",
+                textTransform: "uppercase",
+                color: T.textFaint,
+                marginBottom: 8
+              }, children: "collected variables" }),
+              /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { style: {
+                background: T.surfaceAlt,
+                borderRadius: T.radiusMd,
+                padding: "8px 12px",
+                marginBottom: 18,
+                display: "grid",
+                gridTemplateColumns: "100px 1fr",
+                gap: "4px 12px",
+                fontSize: 12
+              }, children: Object.entries(detail.variables).map(([k, v]) => /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("span", { style: { display: "contents" }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { style: { color: T.textMuted, fontFamily: T.fontMono }, children: k }),
+                /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { style: { wordBreak: "break-all", color: T.text }, children: String(v) })
+              ] }, k)) })
+            ] }),
+            detail.messages.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(import_jsx_runtime17.Fragment, { children: [
+              /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { style: {
+                fontFamily: T.fontMono,
+                fontSize: 10,
+                fontWeight: 700,
+                letterSpacing: "0.10em",
+                textTransform: "uppercase",
+                color: T.textFaint,
+                marginBottom: 10
+              }, children: [
+                "messages \xB7 ",
+                detail.messages.length
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 6 }, children: detail.messages.map((m, i) => {
+                const isBot = m.role === "bot";
+                return /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { style: {
+                    display: "flex",
+                    flexDirection: isBot ? "row" : "row-reverse",
+                    gap: 8,
+                    alignItems: "flex-end"
+                  }, children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { style: {
+                    maxWidth: "78%",
+                    padding: "10px 14px",
+                    borderRadius: 18,
+                    borderBottomLeftRadius: isBot ? 4 : 18,
+                    borderBottomRightRadius: isBot ? 18 : 4,
+                    fontSize: 14,
+                    lineHeight: 1.4,
+                    color: T.textStrong,
+                    background: isBot ? T.surfaceAlt : T.adapterHttpBg
+                  }, children: m.content }) }),
+                  /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { style: {
+                    fontFamily: T.fontMono,
+                    fontSize: 10,
+                    color: T.textFaint,
+                    textAlign: "center",
+                    margin: "4px 0"
+                  }, children: m.created_at?.slice(11, 19) ?? "" })
+                ] }, m.id ?? i);
+              }) })
+            ] })
+          ] })
+        ]
+      }
+    );
+  }
   function SessionsPage() {
     const { t } = useTranslation();
+    const { isMobile } = useLayout();
     const [sessions, setSessions] = (0, import_react19.useState)([]);
     const [total, setTotal] = (0, import_react19.useState)(0);
     const [loading, setLoading] = (0, import_react19.useState)(true);
@@ -40950,6 +41231,127 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       cursor: "pointer",
       transition: "filter 150ms ease"
     };
+    if (isMobile) {
+      const countActive = sessions.filter((s) => s.outcome === "active").length;
+      const countConverted = sessions.filter((s) => s.outcome === "converted").length;
+      return /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { style: { minHeight: "100vh", background: T.bg }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
+          MobileHeader,
+          {
+            title: "Sessions",
+            subtitle: loading ? "\u2026" : `${total} records \xB7 ${countActive} active`,
+            trailing: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(MobileIconBtn, { ariaLabel: t("common.refresh"), onClick: () => {
+              void load();
+            }, children: /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("svg", { width: "20", height: "20", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round", "aria-hidden": true, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("polyline", { points: "23 4 23 10 17 10" }),
+              /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("polyline", { points: "1 20 1 14 7 14" }),
+              /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("path", { d: "M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" })
+            ] }) })
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(FilterChips, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(Chip, { active: outcome === "", onClick: () => {
+            setOutcome("");
+            setOffset(0);
+          }, children: [
+            "all \xB7 ",
+            total
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(Chip, { active: outcome === "active", onClick: () => {
+            setOutcome("active");
+            setOffset(0);
+          }, children: [
+            "active \xB7 ",
+            countActive
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(Chip, { active: outcome === "converted", onClick: () => {
+            setOutcome("converted");
+            setOffset(0);
+          }, children: [
+            "converted \xB7 ",
+            countConverted
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Chip, { active: outcome === "completed", onClick: () => {
+            setOutcome("completed");
+            setOffset(0);
+          }, children: "completed" }),
+          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Chip, { active: outcome === "dropped", onClick: () => {
+            setOutcome("dropped");
+            setOffset(0);
+          }, children: "abandoned" })
+        ] }),
+        error && /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { style: { padding: "12px 12px 0" }, children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(ErrorMsg, { msg: error }) }),
+        loading ? /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(CardList, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(SkeletonListItem, {}),
+          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(SkeletonListItem, {}),
+          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(SkeletonListItem, {})
+        ] }) : filtered.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { style: { padding: "40px 24px", textAlign: "center", color: T.textMuted, fontSize: T.fontSm }, children: t("sessions.empty") }) : /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(CardList, { children: filtered.map((s, i) => /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
+          ListItem,
+          {
+            last: i === filtered.length - 1,
+            icon: outcomeIcon(s.outcome),
+            title: s.id.slice(0, 8) + "\u2026",
+            meta: /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(import_jsx_runtime17.Fragment, { children: [
+              /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Pill, { variant: outcomeToPillVariant(s.outcome), label: s.outcome }),
+              /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(MetaDot, {}),
+              /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { children: calcDuration(s.started_at, s.ended_at) })
+            ] }),
+            onClick: () => setSelectedId(s.id)
+          },
+          s.id
+        )) }),
+        totalPages > 1 && /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { style: {
+          display: "flex",
+          justifyContent: "center",
+          gap: 8,
+          margin: "12px 0",
+          alignItems: "center",
+          fontFamily: MONO11,
+          fontSize: T.fontXs,
+          color: T.textMuted
+        }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
+            "button",
+            {
+              disabled: currentPage <= 1,
+              onClick: () => setOffset(Math.max(0, offset - limit)),
+              style: {
+                ...PAG_BTN2,
+                opacity: currentPage <= 1 ? 0.45 : 1,
+                cursor: currentPage <= 1 ? "not-allowed" : "pointer"
+              },
+              children: "\u2190 prev"
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("span", { children: [
+            currentPage,
+            " / ",
+            totalPages
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
+            "button",
+            {
+              disabled: currentPage >= totalPages,
+              onClick: () => setOffset(offset + limit),
+              style: {
+                ...PAG_BTN2,
+                opacity: currentPage >= totalPages ? 0.45 : 1,
+                cursor: currentPage >= totalPages ? "not-allowed" : "pointer"
+              },
+              children: "next \u2192"
+            }
+          )
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { style: { height: "calc(24px + env(safe-area-inset-bottom))" } }),
+        /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
+          MobileSessionDetailSheet,
+          {
+            sessionId: selectedId,
+            onClose: () => setSelectedId(null)
+          }
+        )
+      ] });
+    }
     return /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { children: [
       /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(PageHead, { title: "Sessions", subtitle, children: [
         /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
