@@ -39190,9 +39190,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                     style: {
                       background: T.minimapBg,
                       border: `1px solid ${T.border}`,
-                      borderRadius: T.radiusMd
+                      borderRadius: T.radiusMd,
+                      bottom: 64,
+                      right: 16
                     },
-                    maskColor: "oklch(0% 0 0 / 0.08)"
+                    maskColor: "oklch(0% 0 0 / 0.08)",
+                    pannable: true,
+                    zoomable: true
                   }
                 ),
                 !isMobile && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(Panel, { position: "bottom-center", style: { marginBottom: 14 }, children: /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(BottomDock, { nodeCount: nodes.length }) }),
