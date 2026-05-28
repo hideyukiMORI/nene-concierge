@@ -21,6 +21,9 @@ interface Props {
     onChange:    (id: string, label: string, data: Record<string, unknown>) => void;
     onDelete:    (id: string) => void;
     onClose?:    () => void;
+    /** モバイルインラインシート内で描画する時に true。
+     *  width: 固定 320 を 100% に、borderLeft / 上端 stripe を削除し、surface を sheet 用に変更。 */
+    mobile?:     boolean;
 }
 
 const MONO = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
@@ -99,7 +102,7 @@ function Field({ label, children, hint }: {
 }
 
 // ── 本体 ─────────────────────────────────────────────────────────────────────
-export default function NodeConfigPanel({ node, credentials, onChange, onDelete, onClose }: Props) {
+export default function NodeConfigPanel({ node, credentials, onChange, onDelete, onClose, mobile = false }: Props) {
     const { t }  = useTranslation();
     const type   = node.type as ChatNodeType;
     const data   = node.data as Record<string, unknown>;
@@ -118,14 +121,14 @@ export default function NodeConfigPanel({ node, credentials, onChange, onDelete,
 
     return (
         <div style={{
-            width: T.editorDrawerW,
+            width: mobile ? '100%' : T.editorDrawerW,
             height: '100%', flexShrink: 0,
-            background: T.surfaceAlt,
-            borderLeft: `1px solid ${T.border}`,
+            background: mobile ? T.surface : T.surfaceAlt,
+            borderLeft: mobile ? 'none' : `1px solid ${T.border}`,
             display: 'flex', flexDirection: 'column',
         }}>
-            {/* タイプアクセント */}
-            <div style={{ height: 3, background: tok.stripe, flexShrink: 0 }}/>
+            {/* タイプアクセント (mobile はシート側で出すので非表示) */}
+            {!mobile && <div style={{ height: 3, background: tok.stripe, flexShrink: 0 }}/>}
 
             {/* ヘッダー */}
             <div style={{
