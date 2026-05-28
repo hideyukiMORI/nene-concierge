@@ -149,6 +149,36 @@
       --nca-transition-normal: 200ms ease;
     }
 
+    /* ══════════════════════════════════════════════════════════════════════
+       Responsive — breakpoints:
+         desktop    > 1024px (default)
+         tablet    640-1024px : sidebar collapses to icon-only, tighter padding
+         mobile     < 640px   : sidebar hidden (hamburger), tables scroll-x
+    ══════════════════════════════════════════════════════════════════════ */
+
+    /* Hamburger button — hidden by default, shown on mobile via React */
+    .nca-mobile-menu {
+      display: none;
+      position: fixed; top: 12px; left: 12px;
+      z-index: 150;
+      width: 36px; height: 36px; padding: 0;
+      border-radius: var(--nca-radius-md);
+      background: var(--nca-color-surface);
+      border: 1px solid var(--nca-color-border);
+      color: var(--nca-color-text);
+      cursor: pointer;
+      align-items: center; justify-content: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,.07);
+    }
+    .nca-mobile-menu.visible { display: inline-flex; }
+
+    /* Tables always scroll-x (safe fallback) */
+    .nca-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .nca-table-wrap table { min-width: 520px; }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    button, input, select, textarea { font-family: inherit; }
+
     /* ═══════════════════════════════════════════════════════════════════════
        Default Dark
     ═══════════════════════════════════════════════════════════════════════ */

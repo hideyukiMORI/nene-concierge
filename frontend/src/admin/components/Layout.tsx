@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router';
 import { clearToken, getStoredEmail } from '../auth.js';
 import { T } from '../theme.js';
@@ -7,6 +7,24 @@ import type { SupportedLocale } from '../i18n/index.js';
 import { useTheme } from '../theme/index.js';
 
 const SIDEBAR_OPEN_KEY = 'nene_admin_sidebar_open';
+
+// ── Breakpoint hook — desktop > 1024 / tablet 640-1024 / mobile < 640 ─────────
+export type Breakpoint = 'desktop' | 'tablet' | 'mobile';
+
+export function useBreakpoint(): Breakpoint {
+    const getbp = (): Breakpoint => {
+        const w = typeof window !== 'undefined' ? window.innerWidth : 1200;
+        return w < 640 ? 'mobile' : w < 1024 ? 'tablet' : 'desktop';
+    };
+    const [bp, setBp] = useState<Breakpoint>(getbp);
+    useEffect(() => {
+        let raf = 0;
+        const handler = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => setBp(getbp())); };
+        window.addEventListener('resize', handler);
+        return () => { window.removeEventListener('resize', handler); cancelAnimationFrame(raf); };
+    }, []);
+    return bp;
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // v2 (2026-05-28) — エディタ画面 (variant="editor") は slim 54px サイドバー固定。
@@ -48,11 +66,11 @@ const NAV_ITEMS = [
 ] as const;
 
 // ── NavItem (default sidebar) ────────────────────────────────────────────────
-function NavItem({ to, icon, label, open }: { to: string; icon: React.ReactNode; label: string; open: boolean }) {
+function NavItem({ to, icon, label, open, onClick }: { to: string; icon: React.ReactNode; label: string; open: boolean; onClick?: () => void }) {
     const loc    = useLocation();
     const active = loc.pathname.startsWith(to);
     return (
-        <Link to={to} title={open ? undefined : label}
+        <Link to={to} title={open ? undefined : label} onClick={onClick}
             style={{
                 display: 'flex', alignItems: 'center',
                 justifyContent: open ? 'flex-start' : 'center',
@@ -123,11 +141,24 @@ export default function Layout({ variant = 'default' }: { variant?: 'default' | 
     const { t, locale, setLocale } = useTranslation();
     const { themeVariant, toggleVariant, canToggleVariant } = useTheme();
     const email = getStoredEmail();
+    const bp    = useBreakpoint();
 
     const [open, setOpen] = useState(() =>
         localStorage.getItem(SIDEBAR_OPEN_KEY) !== 'false',
     );
+    const [mobileOpen, setMobileOpen] = useState(false);
+
+    // タブレット時はサイドバーを強制 slim / モバイル時は開閉状態を管理
+    const isTablet = bp === 'tablet';
+    const isMobile = bp === 'mobile';
+
+    // モバイルメニューを閉じるとき body class も除去
+    useEffect(() => {
+        if (!isMobile) setMobileOpen(false);
+    }, [isMobile]);
+
     function toggleSidebar() {
+        if (isMobile) { setMobileOpen(v => !v); return; }
         const next = !open;
         setOpen(next);
         localStorage.setItem(SIDEBAR_OPEN_KEY, String(next));
@@ -252,7 +283,18 @@ export default function Layout({ variant = 'default' }: { variant?: 'default' | 
         );
     }
 
-    // ── Default sidebar (従来通り) ────────────────────────────────────────────
+    // ── Responsive sidebar state ─────────────────────────────────────────────
+    // desktop: open/closed toggle (240px / 52px)
+    // tablet:  always slim icon-only (56px)
+    // mobile:  fixed, off-screen; hamburger slides it in (240px)
+    const showLabels  = isMobile ? true  : isTablet ? false : open;
+    const sidebarW    = isMobile ? 240   : isTablet ? 56    : open ? 240 : 52;
+    const sidebarPos  = isMobile
+        ? { position: 'fixed' as const, top: 0, left: mobileOpen ? 0 : -240, zIndex: 145, height: '100vh', transition: 'left 220ms ease' }
+        : { position: 'sticky' as const, top: 0, height: '100vh' };
+
+    const mainPadding = isMobile ? '60px 16px 40px' : isTablet ? '24px 24px 48px' : '28px 36px 48px';
+
     const sidebarIconBtn: React.CSSProperties = {
         flexShrink: 0,
         display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
@@ -263,27 +305,61 @@ export default function Layout({ variant = 'default' }: { variant?: 'default' | 
         transition: `background ${T.transitionFast}, color ${T.transitionFast}, border-color ${T.transitionFast}`,
     };
 
+    // SVG hamburger icon
+    const HamburgerIcon = () => (
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+            <line x1="3" y1="6"  x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+    );
+
     return (
         <div style={{ display: 'flex', minHeight: '100vh' }}>
+
+            {/* Mobile overlay */}
+            {isMobile && mobileOpen && (
+                <div
+                    onClick={() => setMobileOpen(false)}
+                    style={{
+                        position: 'fixed', inset: 0, zIndex: 140,
+                        background: 'rgba(15,23,42,.40)',
+                        backdropFilter: 'blur(2px)',
+                    }}
+                />
+            )}
+
+            {/* Mobile hamburger button */}
+            {isMobile && (
+                <button
+                    onClick={() => setMobileOpen(v => !v)}
+                    aria-label="Open menu"
+                    className="nca-mobile-menu visible"
+                    style={{}}
+                >
+                    <HamburgerIcon />
+                </button>
+            )}
+
             <aside style={{
-                width: open ? T.sidebarWidth : '52px',
+                width: sidebarW,
                 flexShrink: 0,
                 background: T.sidebar, color: T.sidebarText,
                 display: 'flex', flexDirection: 'column',
                 borderRight: `1px solid ${T.sidebarBorder}`,
-                position: 'sticky', top: 0, height: '100vh',
                 overflow: 'hidden',
                 transition: 'width 200ms ease',
+                ...sidebarPos,
             }}>
                 <div style={{
                     display: 'flex', alignItems: 'center',
                     height: 56, flexShrink: 0,
-                    padding: open ? '0 8px 0 16px' : '0',
-                    justifyContent: open ? 'flex-start' : 'center',
+                    padding: showLabels ? '0 8px 0 16px' : '0',
+                    justifyContent: showLabels ? 'flex-start' : 'center',
                     borderBottom: `1px solid ${T.sidebarBorder}`,
                     gap: 8,
                 }}>
-                    {open ? (
+                    {showLabels ? (
                         <>
                             <div style={{ flex: 1, minWidth: 0 }}>
                                 <BrandMark open={true}/>
@@ -302,24 +378,41 @@ export default function Layout({ variant = 'default' }: { variant?: 'default' | 
                     ) : (
                         <BrandMark open={false}/>
                     )}
-                    <button onClick={toggleSidebar}
-                        title={open ? t('nav.collapseSidebar') : t('nav.expandSidebar')}
-                        aria-label={open ? t('nav.collapseSidebar') : t('nav.expandSidebar')}
-                        style={{ ...sidebarIconBtn, background: 'transparent', border: 'none', fontSize: 16 }}
-                        onMouseEnter={e => { e.currentTarget.style.background = T.sidebarHover; e.currentTarget.style.color = T.sidebarTitle; }}
-                        onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = T.sidebarText; }}>
-                        {open ? '‹' : '›'}
-                    </button>
+                    {/* Toggle button — desktop only */}
+                    {!isTablet && !isMobile && (
+                        <button onClick={toggleSidebar}
+                            title={open ? t('nav.collapseSidebar') : t('nav.expandSidebar')}
+                            aria-label={open ? t('nav.collapseSidebar') : t('nav.expandSidebar')}
+                            style={{ ...sidebarIconBtn, background: 'transparent', border: 'none', fontSize: 16 }}
+                            onMouseEnter={e => { e.currentTarget.style.background = T.sidebarHover; e.currentTarget.style.color = T.sidebarTitle; }}
+                            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = T.sidebarText; }}>
+                            {open ? '‹' : '›'}
+                        </button>
+                    )}
+                    {/* Mobile close button */}
+                    {isMobile && (
+                        <button onClick={() => setMobileOpen(false)}
+                            aria-label="Close menu"
+                            style={{ ...sidebarIconBtn, background: 'transparent', border: 'none', fontSize: 16 }}>
+                            ✕
+                        </button>
+                    )}
                 </div>
 
                 <nav style={{
                     flex: 1,
-                    padding: open ? '12px 0' : '12px 4px',
+                    padding: showLabels ? '12px 0' : '12px 4px',
                     overflowY: 'auto', overflowX: 'hidden',
                 }} aria-label="Main">
                     {NAV_ITEMS.map((n, i) => (
                         <span key={i} style={{ display: 'contents' }}>
-                            <NavItem to={n.to} icon={n.icon} label={t(n.key as Parameters<typeof t>[0])} open={open}/>
+                            <NavItem
+                                to={n.to}
+                                icon={n.icon}
+                                label={t(n.key as Parameters<typeof t>[0])}
+                                open={showLabels}
+                                {...(isMobile ? { onClick: () => setMobileOpen(false) } : {})}
+                            />
                             {'divider' in n && n.divider && (
                                 <div style={{ margin: '10px 0', borderTop: `1px solid ${T.sidebarBorder}`, opacity: 0.5 }}/>
                             )}
@@ -329,12 +422,12 @@ export default function Layout({ variant = 'default' }: { variant?: 'default' | 
 
                 <div style={{
                     flexShrink: 0,
-                    padding: open ? '10px 12px 12px' : '8px 4px',
+                    padding: showLabels ? '10px 12px 12px' : '8px 4px',
                     borderTop: `1px solid ${T.sidebarBorder}`,
                     display: 'flex', flexDirection: 'column',
-                    alignItems: open ? 'stretch' : 'center', gap: open ? 0 : 6,
+                    alignItems: showLabels ? 'stretch' : 'center', gap: showLabels ? 0 : 6,
                 }}>
-                    {open && (
+                    {showLabels && (
                         <>
                             {email && (
                                 <div title={email} style={{
@@ -373,7 +466,7 @@ export default function Layout({ variant = 'default' }: { variant?: 'default' | 
                             </div>
                         </>
                     )}
-                    {!open && (
+                    {!showLabels && (
                         <button onClick={logout} title={t('nav.logout')} aria-label={t('nav.logout')}
                             style={sidebarIconBtn}>
                             {I.logout}
@@ -384,9 +477,11 @@ export default function Layout({ variant = 'default' }: { variant?: 'default' | 
 
             <main style={{
                 flex: 1, minWidth: 0, overflowY: 'auto',
-                background: T.bg, padding: '32px 40px',
+                background: T.bg, padding: mainPadding,
+                // mobile: sidebar is fixed so main takes full width
+                width: isMobile ? '100%' : undefined,
             }}>
-                <div style={{ maxWidth: 960, margin: '0 auto' }}>
+                <div style={{ maxWidth: 1100, margin: '0 auto' }}>
                     <Outlet />
                 </div>
             </main>

@@ -21750,7 +21750,7 @@ var NeNeAdmin = (() => {
             },
             [subscribe, value, getSnapshot]
           );
-          useEffect17(
+          useEffect18(
             function() {
               checkIfSnapshotChanged(inst) && forceUpdate({ inst });
               return subscribe(function() {
@@ -21776,7 +21776,7 @@ var NeNeAdmin = (() => {
           return getSnapshot();
         }
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-        var React15 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState19 = React15.useState, useEffect17 = React15.useEffect, useLayoutEffect5 = React15.useLayoutEffect, useDebugValue2 = React15.useDebugValue, didWarnOld18Alpha = false, didWarnUncachedGetSnapshot = false, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
+        var React15 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState19 = React15.useState, useEffect18 = React15.useEffect, useLayoutEffect5 = React15.useLayoutEffect, useDebugValue2 = React15.useDebugValue, didWarnOld18Alpha = false, didWarnUncachedGetSnapshot = false, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
         exports.useSyncExternalStore = void 0 !== React15.useSyncExternalStore ? React15.useSyncExternalStore : shim;
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(Error());
       })();
@@ -21804,7 +21804,7 @@ var NeNeAdmin = (() => {
           return x === y && (0 !== x || 1 / x === 1 / y) || x !== x && y !== y;
         }
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-        var React15 = require_react(), shim = require_shim(), objectIs = "function" === typeof Object.is ? Object.is : is, useSyncExternalStore = shim.useSyncExternalStore, useRef8 = React15.useRef, useEffect17 = React15.useEffect, useMemo6 = React15.useMemo, useDebugValue2 = React15.useDebugValue;
+        var React15 = require_react(), shim = require_shim(), objectIs = "function" === typeof Object.is ? Object.is : is, useSyncExternalStore = shim.useSyncExternalStore, useRef8 = React15.useRef, useEffect18 = React15.useEffect, useMemo6 = React15.useMemo, useDebugValue2 = React15.useDebugValue;
         exports.useSyncExternalStoreWithSelector = function(subscribe, getSnapshot, getServerSnapshot, selector, isEqual) {
           var instRef = useRef8(null);
           if (null === instRef.current) {
@@ -21847,7 +21847,7 @@ var NeNeAdmin = (() => {
             [getSnapshot, getServerSnapshot, selector, isEqual]
           );
           var value = useSyncExternalStore(subscribe, instRef[0], instRef[1]);
-          useEffect17(
+          useEffect18(
             function() {
               inst.hasValue = true;
               inst.value = value;
@@ -26202,6 +26202,26 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   // src/admin/components/Layout.tsx
   var import_jsx_runtime3 = __toESM(require_jsx_runtime());
   var SIDEBAR_OPEN_KEY = "nene_admin_sidebar_open";
+  function useBreakpoint() {
+    const getbp = () => {
+      const w = typeof window !== "undefined" ? window.innerWidth : 1200;
+      return w < 640 ? "mobile" : w < 1024 ? "tablet" : "desktop";
+    };
+    const [bp, setBp] = (0, import_react3.useState)(getbp);
+    (0, import_react3.useEffect)(() => {
+      let raf = 0;
+      const handler = () => {
+        cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(() => setBp(getbp()));
+      };
+      window.addEventListener("resize", handler);
+      return () => {
+        window.removeEventListener("resize", handler);
+        cancelAnimationFrame(raf);
+      };
+    }, []);
+    return bp;
+  }
   function applyFocus(el) {
     el.style.borderColor = T.primary;
     el.style.boxShadow = T.shadowFocus;
@@ -26265,7 +26285,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     { to: "/sessions", icon: I.sessions, key: "nav.sessions", divider: true },
     { to: "/settings", icon: I.settings, key: "nav.settings" }
   ];
-  function NavItem({ to, icon, label, open }) {
+  function NavItem({ to, icon, label, open, onClick }) {
     const loc = useLocation();
     const active = loc.pathname.startsWith(to);
     return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
@@ -26273,6 +26293,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       {
         to,
         title: open ? void 0 : label,
+        onClick,
         style: {
           display: "flex",
           alignItems: "center",
@@ -26366,10 +26387,21 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const { t, locale, setLocale } = useTranslation();
     const { themeVariant: themeVariant2, toggleVariant, canToggleVariant: canToggleVariant2 } = useTheme();
     const email = getStoredEmail();
+    const bp = useBreakpoint();
     const [open, setOpen] = (0, import_react3.useState)(
       () => localStorage.getItem(SIDEBAR_OPEN_KEY) !== "false"
     );
+    const [mobileOpen, setMobileOpen] = (0, import_react3.useState)(false);
+    const isTablet = bp === "tablet";
+    const isMobile = bp === "mobile";
+    (0, import_react3.useEffect)(() => {
+      if (!isMobile) setMobileOpen(false);
+    }, [isMobile]);
     function toggleSidebar() {
+      if (isMobile) {
+        setMobileOpen((v) => !v);
+        return;
+      }
       const next = !open;
       setOpen(next);
       localStorage.setItem(SIDEBAR_OPEN_KEY, String(next));
@@ -26515,6 +26547,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(Outlet, {}) })
       ] });
     }
+    const showLabels = isMobile ? true : isTablet ? false : open;
+    const sidebarW = isMobile ? 240 : isTablet ? 56 : open ? 240 : 52;
+    const sidebarPos = isMobile ? { position: "fixed", top: 0, left: mobileOpen ? 0 : -240, zIndex: 145, height: "100vh", transition: "left 220ms ease" } : { position: "sticky", top: 0, height: "100vh" };
+    const mainPadding = isMobile ? "60px 16px 40px" : isTablet ? "24px 24px 48px" : "28px 36px 48px";
     const sidebarIconBtn = {
       flexShrink: 0,
       display: "inline-flex",
@@ -26531,32 +26567,58 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       lineHeight: 1,
       transition: `background ${T.transitionFast}, color ${T.transitionFast}, border-color ${T.transitionFast}`
     };
+    const HamburgerIcon = () => /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("line", { x1: "3", y1: "6", x2: "21", y2: "6" }),
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("line", { x1: "3", y1: "12", x2: "21", y2: "12" }),
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("line", { x1: "3", y1: "18", x2: "21", y2: "18" })
+    ] });
     return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { style: { display: "flex", minHeight: "100vh" }, children: [
+      isMobile && mobileOpen && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+        "div",
+        {
+          onClick: () => setMobileOpen(false),
+          style: {
+            position: "fixed",
+            inset: 0,
+            zIndex: 140,
+            background: "rgba(15,23,42,.40)",
+            backdropFilter: "blur(2px)"
+          }
+        }
+      ),
+      isMobile && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+        "button",
+        {
+          onClick: () => setMobileOpen((v) => !v),
+          "aria-label": "Open menu",
+          className: "nca-mobile-menu visible",
+          style: {},
+          children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(HamburgerIcon, {})
+        }
+      ),
       /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("aside", { style: {
-        width: open ? T.sidebarWidth : "52px",
+        width: sidebarW,
         flexShrink: 0,
         background: T.sidebar,
         color: T.sidebarText,
         display: "flex",
         flexDirection: "column",
         borderRight: `1px solid ${T.sidebarBorder}`,
-        position: "sticky",
-        top: 0,
-        height: "100vh",
         overflow: "hidden",
-        transition: "width 200ms ease"
+        transition: "width 200ms ease",
+        ...sidebarPos
       }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { style: {
           display: "flex",
           alignItems: "center",
           height: 56,
           flexShrink: 0,
-          padding: open ? "0 8px 0 16px" : "0",
-          justifyContent: open ? "flex-start" : "center",
+          padding: showLabels ? "0 8px 0 16px" : "0",
+          justifyContent: showLabels ? "flex-start" : "center",
           borderBottom: `1px solid ${T.sidebarBorder}`,
           gap: 8
         }, children: [
-          open ? /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(import_jsx_runtime3.Fragment, { children: [
+          showLabels ? /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(import_jsx_runtime3.Fragment, { children: [
             /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { style: { flex: 1, minWidth: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(BrandMark, { open: true }) }),
             /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: {
               fontFamily: 'ui-monospace, "JetBrains Mono", monospace',
@@ -26572,7 +26634,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               flexShrink: 0
             }, children: "admin" })
           ] }) : /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(BrandMark, { open: false }),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+          !isTablet && !isMobile && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
             "button",
             {
               onClick: toggleSidebar,
@@ -26589,27 +26651,45 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               },
               children: open ? "\u2039" : "\u203A"
             }
+          ),
+          isMobile && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+            "button",
+            {
+              onClick: () => setMobileOpen(false),
+              "aria-label": "Close menu",
+              style: { ...sidebarIconBtn, background: "transparent", border: "none", fontSize: 16 },
+              children: "\u2715"
+            }
           )
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("nav", { style: {
           flex: 1,
-          padding: open ? "12px 0" : "12px 4px",
+          padding: showLabels ? "12px 0" : "12px 4px",
           overflowY: "auto",
           overflowX: "hidden"
         }, "aria-label": "Main", children: NAV_ITEMS.map((n, i) => /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("span", { style: { display: "contents" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(NavItem, { to: n.to, icon: n.icon, label: t(n.key), open }),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+            NavItem,
+            {
+              to: n.to,
+              icon: n.icon,
+              label: t(n.key),
+              open: showLabels,
+              ...isMobile ? { onClick: () => setMobileOpen(false) } : {}
+            }
+          ),
           "divider" in n && n.divider && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { style: { margin: "10px 0", borderTop: `1px solid ${T.sidebarBorder}`, opacity: 0.5 } })
         ] }, i)) }),
         /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { style: {
           flexShrink: 0,
-          padding: open ? "10px 12px 12px" : "8px 4px",
+          padding: showLabels ? "10px 12px 12px" : "8px 4px",
           borderTop: `1px solid ${T.sidebarBorder}`,
           display: "flex",
           flexDirection: "column",
-          alignItems: open ? "stretch" : "center",
-          gap: open ? 0 : 6
+          alignItems: showLabels ? "stretch" : "center",
+          gap: showLabels ? 0 : 6
         }, children: [
-          open && /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(import_jsx_runtime3.Fragment, { children: [
+          showLabels && /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(import_jsx_runtime3.Fragment, { children: [
             email && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { title: email, style: {
               fontSize: T.fontXs,
               color: T.sidebarMuted,
@@ -26665,7 +26745,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               )
             ] })
           ] }),
-          !open && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+          !showLabels && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
             "button",
             {
               onClick: logout,
@@ -26682,8 +26762,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         minWidth: 0,
         overflowY: "auto",
         background: T.bg,
-        padding: "32px 40px"
-      }, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { style: { maxWidth: 960, margin: "0 auto" }, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(Outlet, {}) }) })
+        padding: mainPadding,
+        // mobile: sidebar is fixed so main takes full width
+        width: isMobile ? "100%" : void 0
+      }, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { style: { maxWidth: 1100, margin: "0 auto" }, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(Outlet, {}) }) })
     ] });
   }
   function PageTitle({ children: children2, style: style2 }) {
