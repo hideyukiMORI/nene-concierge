@@ -14,9 +14,13 @@ type TFn = ReturnType<typeof useTranslation>['t'];
 
 const MONO = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
 
+type DetailMode = 'overlay' | 'pane';
+
 interface Props {
     revisionId: number | null;
     onClose:    () => void;
+    /** 'overlay' = right-side drawer with backdrop. 'pane' = sticky right pane (wide layout). */
+    mode?:      DetailMode;
 }
 
 interface FieldChange {
@@ -95,7 +99,7 @@ function fieldChanges(before: ScenarioRevisionSnapshot | null, after: ScenarioRe
     return changes;
 }
 
-export default function RevisionDiffModal({ revisionId, onClose }: Props) {
+export default function RevisionDiffPanel({ revisionId, onClose, mode = 'overlay' }: Props) {
     const { t } = useTranslation();
     const [revision, setRevision] = useState<ScenarioRevisionDetail | null>(null);
     const [previous, setPrevious] = useState<ScenarioRevisionDetail | null>(null);
@@ -146,123 +150,165 @@ export default function RevisionDiffModal({ revisionId, onClose }: Props) {
         return diffEdges(previous?.snapshot?.edges ?? [], revision.snapshot.edges);
     }, [previous, revision]);
 
-    if (revisionId === null) return null;
+    if (revisionId === null && mode !== 'pane') return null;
 
-    return (
+    const inner = (
         <>
-            <div onClick={onClose} style={{
-                position: 'fixed', inset: 0, zIndex: 900,
-                background: 'rgba(0,0,0,0.5)',
-            }}/>
-            <div role="dialog" aria-modal="true"
-                style={{
-                    position: 'fixed',
-                    top: '50%', left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    width: 'min(720px, calc(100vw - 32px))',
-                    maxHeight: 'calc(100vh - 48px)',
-                    background: T.surface, color: T.text,
-                    borderRadius: T.radiusLg,
-                    boxShadow: T.shadowElevated,
-                    border: `1px solid ${T.border}`,
-                    display: 'flex', flexDirection: 'column',
-                    zIndex: 901,
-                }}>
-                <header style={{
-                    display: 'flex', alignItems: 'center', gap: 8,
-                    padding: '14px 18px',
-                    borderBottom: `1px solid ${T.borderLight}`,
-                    flexShrink: 0,
-                }}>
-                    <h2 style={{ margin: 0, fontSize: T.fontMd, fontWeight: 700, color: T.textStrong, flex: 1 }}>
-                        {revision
-                            ? t('diff.title', { rev: String(revision.revision_no) })
-                            : t('diff.loading')}
-                    </h2>
-                    <button onClick={onClose}
-                        aria-label={t('common.close')}
-                        style={{
-                            background: 'transparent', border: 'none', cursor: 'pointer',
-                            color: T.textMuted, padding: 4,
-                        }}>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-                        </svg>
-                    </button>
-                </header>
+            {/* Top stripe */}
+            <div style={{ height: 3, background: T.primary, flexShrink: 0 }} />
 
-                <div style={{ flex: 1, overflowY: 'auto', padding: '16px 18px' }}>
-                    {loading && <p style={{ color: T.textMuted, fontSize: T.fontSm }}>{t('common.loading')}</p>}
-                    {error && <p style={{ color: T.dangerFg, fontSize: T.fontSm }}>{error}</p>}
+            <header style={{
+                display: 'flex', alignItems: 'center', gap: 8,
+                padding: '14px 18px',
+                borderBottom: `1px solid ${T.border}`,
+                flexShrink: 0,
+            }}>
+                <h2 style={{ margin: 0, fontSize: T.fontMd, fontWeight: 700, color: T.textStrong, flex: 1 }}>
+                    {revision
+                        ? t('diff.title', { rev: String(revision.revision_no) })
+                        : revisionId === null ? '' : t('diff.loading')}
+                </h2>
+                <button onClick={onClose}
+                    aria-label={t('common.close')}
+                    style={{
+                        width: 26, height: 26, borderRadius: T.radiusSm,
+                        background: 'transparent', border: `1px solid ${T.border}`,
+                        color: T.textMuted, cursor: 'pointer',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    }}>
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        strokeWidth="2.2" strokeLinecap="round" aria-hidden>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                    </svg>
+                </button>
+            </header>
 
-                    {!loading && revision && (
-                        <>
-                            <DiffMeta revision={revision} previous={previous} t={t}/>
+            <div style={{ flex: 1, overflowY: 'auto', padding: '16px 18px' }}>
+                {revisionId === null && (
+                    <div style={{
+                        display: 'flex', flexDirection: 'column',
+                        alignItems: 'center', justifyContent: 'center',
+                        textAlign: 'center', color: T.textFaint, fontSize: T.fontSm,
+                        height: '100%', padding: 24,
+                    }}>
+                        <div style={{
+                            fontFamily: MONO, fontSize: 10, fontWeight: 700,
+                            letterSpacing: '0.10em', textTransform: 'uppercase',
+                            marginBottom: 6,
+                        }}>{t('diff.noSelection.title')}</div>
+                        <div>{t('diff.noSelection.hint')}</div>
+                    </div>
+                )}
+                {loading && <p style={{ color: T.textMuted, fontSize: T.fontSm }}>{t('common.loading')}</p>}
+                {error && <p style={{ color: T.dangerFg, fontSize: T.fontSm }}>{error}</p>}
 
-                            {!revision.snapshot && (
-                                <p style={{ color: T.textMuted, fontSize: T.fontSm, marginTop: 16 }}>
-                                    {t('diff.noSnapshot')}
-                                </p>
-                            )}
+                {!loading && revision && (
+                    <>
+                        <DiffMeta revision={revision} previous={previous} t={t}/>
 
-                            {revision.snapshot && fields.length > 0 && (
-                                <Section title={t('diff.fields')}>
-                                    {fields.map(f => (
-                                        <FieldChangeRow key={f.field}
-                                            field={f.field} before={f.before} after={f.after}/>
-                                    ))}
-                                </Section>
-                            )}
+                        {!revision.snapshot && (
+                            <p style={{ color: T.textMuted, fontSize: T.fontSm, marginTop: 16 }}>
+                                {t('diff.noSnapshot')}
+                            </p>
+                        )}
 
-                            {revision.snapshot && nodeDiff && (nodeDiff.added.length + nodeDiff.removed.length + nodeDiff.modified.length > 0) && (
-                                <Section title={t('diff.nodes')}>
-                                    {nodeDiff.added.map(n => (
-                                        <DiffRow key={'a-'+n.node_id} kind="add"
-                                            label={`${n.label || n.node_id}`}
-                                            meta={`${n.type} · ${n.node_id}`}/>
-                                    ))}
-                                    {nodeDiff.modified.map(m => (
-                                        <DiffRow key={'m-'+m.after.node_id} kind="mod"
-                                            label={m.after.label || m.after.node_id}
-                                            meta={`${m.after.type} · ${m.after.node_id} · ${t('diff.changed')}: ${m.changes.join(', ')}`}/>
-                                    ))}
-                                    {nodeDiff.removed.map(n => (
-                                        <DiffRow key={'r-'+n.node_id} kind="del"
-                                            label={n.label || n.node_id}
-                                            meta={`${n.type} · ${n.node_id}`}/>
-                                    ))}
-                                </Section>
-                            )}
+                        {revision.snapshot && fields.length > 0 && (
+                            <Section title={t('diff.fields')}>
+                                {fields.map(f => (
+                                    <FieldChangeRow key={f.field}
+                                        field={f.field} before={f.before} after={f.after}/>
+                                ))}
+                            </Section>
+                        )}
 
-                            {revision.snapshot && edgeDiff && (edgeDiff.added.length + edgeDiff.removed.length > 0) && (
-                                <Section title={t('diff.edges')}>
-                                    {edgeDiff.added.map((e, i) => (
-                                        <DiffRow key={'ea-'+i} kind="add"
-                                            label={`${e.source_node_id} → ${e.target_node_id}`}
-                                            meta={e.label ?? ''}/>
-                                    ))}
-                                    {edgeDiff.removed.map((e, i) => (
-                                        <DiffRow key={'er-'+i} kind="del"
-                                            label={`${e.source_node_id} → ${e.target_node_id}`}
-                                            meta={e.label ?? ''}/>
-                                    ))}
-                                </Section>
-                            )}
+                        {revision.snapshot && nodeDiff && (nodeDiff.added.length + nodeDiff.removed.length + nodeDiff.modified.length > 0) && (
+                            <Section title={t('diff.nodes')}>
+                                {nodeDiff.added.map(n => (
+                                    <DiffRow key={'a-'+n.node_id} kind="add"
+                                        label={`${n.label || n.node_id}`}
+                                        meta={`${n.type} · ${n.node_id}`}/>
+                                ))}
+                                {nodeDiff.modified.map(m => (
+                                    <DiffRow key={'m-'+m.after.node_id} kind="mod"
+                                        label={m.after.label || m.after.node_id}
+                                        meta={`${m.after.type} · ${m.after.node_id} · ${t('diff.changed')}: ${m.changes.join(', ')}`}/>
+                                ))}
+                                {nodeDiff.removed.map(n => (
+                                    <DiffRow key={'r-'+n.node_id} kind="del"
+                                        label={n.label || n.node_id}
+                                        meta={`${n.type} · ${n.node_id}`}/>
+                                ))}
+                            </Section>
+                        )}
 
-                            {revision.snapshot && nodeDiff && edgeDiff
-                                && nodeDiff.added.length + nodeDiff.removed.length + nodeDiff.modified.length === 0
-                                && edgeDiff.added.length + edgeDiff.removed.length === 0
-                                && fields.length === 0 && (
-                                <p style={{ color: T.textMuted, fontSize: T.fontSm, marginTop: 16 }}>
-                                    {t('diff.noChanges')}
-                                </p>
-                            )}
-                        </>
-                    )}
-                </div>
+                        {revision.snapshot && edgeDiff && (edgeDiff.added.length + edgeDiff.removed.length > 0) && (
+                            <Section title={t('diff.edges')}>
+                                {edgeDiff.added.map((e, i) => (
+                                    <DiffRow key={'ea-'+i} kind="add"
+                                        label={`${e.source_node_id} → ${e.target_node_id}`}
+                                        meta={e.label ?? ''}/>
+                                ))}
+                                {edgeDiff.removed.map((e, i) => (
+                                    <DiffRow key={'er-'+i} kind="del"
+                                        label={`${e.source_node_id} → ${e.target_node_id}`}
+                                        meta={e.label ?? ''}/>
+                                ))}
+                            </Section>
+                        )}
+
+                        {revision.snapshot && nodeDiff && edgeDiff
+                            && nodeDiff.added.length + nodeDiff.removed.length + nodeDiff.modified.length === 0
+                            && edgeDiff.added.length + edgeDiff.removed.length === 0
+                            && fields.length === 0 && (
+                            <p style={{ color: T.textMuted, fontSize: T.fontSm, marginTop: 16 }}>
+                                {t('diff.noChanges')}
+                            </p>
+                        )}
+                    </>
+                )}
             </div>
         </>
+    );
+
+    if (mode === 'pane') {
+        // Sticky right pane (≥1441px) — no backdrop, full viewport height
+        return (
+            <aside style={{
+                width: 480, flexShrink: 0,
+                borderLeft: `1px solid ${T.border}`,
+                background: T.surface,
+                height: '100vh', position: 'sticky', top: 0,
+                display: 'flex', flexDirection: 'column',
+                overflow: 'hidden',
+            }}>
+                {inner}
+            </aside>
+        );
+    }
+
+    // Overlay drawer
+    return (
+        <div
+            role="dialog" aria-modal="true"
+            style={{
+                position: 'fixed', inset: 0, zIndex: 900,
+                background: 'oklch(0% 0 0 / 0.35)',
+                backdropFilter: 'blur(2px)',
+                display: 'flex', justifyContent: 'flex-end',
+            }}
+            onClick={e => { if (e.target === e.currentTarget) onClose(); }}
+        >
+            <div style={{
+                width: 480, maxWidth: '95vw', height: '100vh',
+                background: T.surface,
+                boxShadow: '-10px 0 40px -10px rgba(15,23,42,.25)',
+                display: 'flex', flexDirection: 'column',
+                borderLeft: `1px solid ${T.border}`,
+            }}>
+                {inner}
+            </div>
+        </div>
     );
 }
 

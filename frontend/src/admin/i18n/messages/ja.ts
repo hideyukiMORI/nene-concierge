@@ -343,4 +343,6 @@ export const ja: Partial<MessageCatalog> = {
     'diff.meta.by':         '実行者',
     'diff.meta.when':       '日時',
     'diff.meta.comparedTo': '比較対象',
+    'diff.noSelection.title': 'リビジョン未選択',
+    'diff.noSelection.hint':  '行をクリックすると変更内容が表示されます。',
 }

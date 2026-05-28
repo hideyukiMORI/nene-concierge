@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { getScenarioHistory, ApiError, type ScenarioRevision, type ScenarioRevisionOperation } from '../api.js';
 import { T } from '../theme.js';
 import { useTranslation } from '../i18n/index.js';
-import RevisionDiffModal from './RevisionDiffModal.js';
+import RevisionDiffPanel from './RevisionDiffPanel.js';
 
 const MONO = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
 
@@ -151,7 +151,9 @@ export default function ScenarioHistoryPanel({ scenarioId, open, onClose }: Prop
                 </div>
             </aside>
 
-            <RevisionDiffModal revisionId={diffId} onClose={() => setDiffId(null)} />
+            {diffId !== null && (
+                <RevisionDiffPanel revisionId={diffId} onClose={() => setDiffId(null)} mode="overlay" />
+            )}
         </>
     );
 }
