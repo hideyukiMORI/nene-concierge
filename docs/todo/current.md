@@ -1,6 +1,6 @@
 # Current Work
 
-Last updated: 2026-05-28
+Last updated: 2026-05-28 (post-merge cleanup — PR #100 integrated)
 
 ## 状態サマリー
 
@@ -296,6 +296,30 @@ Last updated: 2026-05-28
 | ScenarioFormPage コンポーネントテスト | 🔲 | #58 |
 | DashboardPage コンポーネントテスト | 🔲 | #58 |
 | CI に `npm run test` ステップ追加 | 🔲 | #57 #58 |
+
+---
+
+**管理画面 v2 リデザイン (PC + Mobile + Wide) — 完了 ✅**
+
+PR #100 でスタックされた全 PR (#74 #76 #79 #90-#98 + 2-pane) を一括 main にマージ。
+
+| 項目 | 状態 | Issue |
+| --- | --- | --- |
+| 3 段階レスポンシブ (desktop / tablet / mobile) | ✅ | #73 |
+| 全 7 ページ完全実装 + ThemeSwitcher ウィジェット | ✅ | #75 |
+| Studio v2 Canvas 復元 (BottomDock / dots / edges / minimap) | ✅ | #78 |
+| モバイル UI プリミティブ (MobileHeader / Sheet / FAB / CardList / Pill 等) | ✅ | #81 |
+| Dashboard モバイル (Alert / KPI 2-col / Sparkline) | ✅ | #82 |
+| Scenarios モバイル (Filter chips / SwipeRow / FAB) | ✅ | #83 |
+| Sessions モバイル (Card list / BottomSheet 詳細) | ✅ | #84 |
+| ActionLogs モバイル (Failure 左赤ボーダー / Adapter chip) | ✅ | #85 |
+| ScenarioEditor モバイル (簡易ヘッダー / BottomSheet NodeConfig / FAB) | ✅ | #86 |
+| Credentials モバイル (Adapter 色分け Card / FAB) | ✅ | #87 |
+| Appearance モバイル (Sticky preview chip + 縦並びフォーム) | ✅ | #88 |
+| Settings モバイル (6 テーマピッカー 2 カラム) | ✅ | #89 |
+| レスポンシブ 2-pane (≥1441 Sessions / ActionLogs / Appearance / Dashboard) | ✅ | #99 |
+| Layout providesHeader unmount/remount 無限ループ修正 | ✅ | #80 配下 |
+| レイアウト検証用ダミーデータシーダー | ✅ | — |
 
 ---
 
