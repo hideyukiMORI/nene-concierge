@@ -39191,8 +39191,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                       background: T.minimapBg,
                       border: `1px solid ${T.border}`,
                       borderRadius: T.radiusMd,
-                      bottom: 64,
-                      right: 16
+                      bottom: 32,
+                      right: 8
                     },
                     maskColor: "oklch(0% 0 0 / 0.08)",
                     pannable: true,
