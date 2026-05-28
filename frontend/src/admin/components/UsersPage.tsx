@@ -6,7 +6,7 @@ import type { UserSummary, UserRole, UserStatus, CreateUserPayload, UpdateUserPa
 import {
     PageHead, Btn, ErrorMsg, SuccessMsg,
     FIELD_LABEL_STYLE, applyFocus, removeFocus,
-    Card, useLayout,
+    Card, useLayout, isWideBp,
 } from './Layout.js';
 import {
     MobileHeader, FilterChips, Chip, CardList, ListItem, FAB,
@@ -14,6 +14,7 @@ import {
 } from './mobile/index.js';
 import type { PillVariant } from './mobile/index.js';
 import { useModals } from './modal/index.js';
+import UserEditPanel, { type UserFormState } from './UserEditPanel.js';
 import { T } from '../theme.js';
 import { useTranslation } from '../i18n/index.js';
 import { getStoredEmail } from '../auth.js';
@@ -44,14 +45,9 @@ function formatDate(ts: number | null): string {
     return d.toISOString().slice(0, 10);
 }
 
-// ── User form (shared between create + edit) ──────────────────────────────────
+// ── User form (mobile BottomSheet only — desktop/tablet/wide uses UserEditPanel) ──
 
-interface FormState {
-    email:    string;
-    password: string;
-    role:     UserRole;
-    status:   UserStatus;
-}
+type FormState = UserFormState;
 
 function UserForm({
     initial, mode, onSubmit, onCancel, saving, error,
@@ -170,22 +166,35 @@ function UserForm({
 
 export default function UsersPage() {
     const { t } = useTranslation();
-    const { isMobile } = useLayout();
+    const { isMobile, bp, setFullWidth } = useLayout();
+    const wide = isWideBp(bp);
     const { confirm, alertDialog } = useModals();
     const myEmail = getStoredEmail();
+
+    // ≥1441px は 2-pane なので main を full-width 化する
+    useEffect(() => {
+        if (!wide) return;
+        setFullWidth(true);
+        return () => { setFullWidth(false); };
+    }, [wide, setFullWidth]);
 
     const [users, setUsers]       = useState<UserSummary[]>([]);
     const [loading, setLoading]   = useState(true);
     const [error, setError]       = useState<string | null>(null);
     const [saved, setSaved]       = useState<string | null>(null);
 
-    // editor sheet state
-    const [editing, setEditing]   = useState<UserSummary | null>(null);  // null + sheetOpen=true → create
-    const [sheetOpen, setSheetOpen] = useState(false);
+    // selection: undefined = nothing selected (wide pane shows hint),
+    //            null      = creating a new user,
+    //            UserSummary = editing existing user.
+    const [selection, setSelection] = useState<UserSummary | null | undefined>(undefined);
     const [formSaving, setFormSaving] = useState(false);
     const [formError, setFormError]   = useState<string | null>(null);
 
     const [roleFilter, setRoleFilter] = useState<UserRole | ''>('');
+
+    // Mobile path still uses BottomSheet — derive booleans from `selection`.
+    const sheetOpen = selection !== undefined;
+    const editing: UserSummary | null = selection === undefined ? null : selection;
 
     async function load() {
         setLoading(true);
@@ -203,17 +212,15 @@ export default function UsersPage() {
     useEffect(() => { void load(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     function openCreate() {
-        setEditing(null);
+        setSelection(null);
         setFormError(null);
-        setSheetOpen(true);
     }
     function openEdit(u: UserSummary) {
-        setEditing(u);
+        setSelection(u);
         setFormError(null);
-        setSheetOpen(true);
     }
     function closeSheet() {
-        setSheetOpen(false);
+        setSelection(undefined);
         setFormError(null);
     }
 
@@ -254,6 +261,9 @@ export default function UsersPage() {
         if (!ok) return;
         try {
             await deleteUser(u.id);
+            if (selection !== undefined && selection !== null && selection.id === u.id) {
+                setSelection(undefined);
+            }
             await load();
         } catch (err) {
             void alertDialog({
@@ -362,9 +372,9 @@ export default function UsersPage() {
         );
     }
 
-    // ─────────── Desktop / Tablet layout ───────────
-    return (
-        <div>
+    // ─────────── Desktop / Tablet / Wide layout ───────────
+    const listAndFilters = (
+        <div style={wide ? { padding: '28px 36px 48px', flex: 1, minWidth: 0 } : undefined}>
             <PageHead title={t('users.pageTitle')} subtitle={subtitle}>
                 <Btn onClick={openCreate}>
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden>
@@ -445,25 +455,55 @@ export default function UsersPage() {
                     </div>
                 )}
             </Card>
-
-            {/* Modal-style sheet (desktop): use BottomSheet for both PC + mobile — clean UX */}
-            <BottomSheet
-                open={sheetOpen}
-                onClose={closeSheet}
-                title={editing ? t('users.edit.title') : t('users.create.title')}
-                {...(editing ? { subtitle: editing.email } : {})}
-            >
-                {sheetOpen && (
-                    <UserForm
-                        mode={editing === null ? 'create' : 'edit'}
-                        {...(editing ? { initial: editing } : {})}
-                        onSubmit={form => void handleSubmit(form)}
-                        onCancel={closeSheet}
-                        saving={formSaving}
-                        error={formError}
-                    />
-                )}
-            </BottomSheet>
         </div>
+    );
+
+    const editSelection = selection !== undefined ? selection : undefined;
+    const deleteDisabled =
+        selection !== undefined && selection !== null
+            ? myEmail !== null && myEmail === selection.email
+            : false;
+
+    const editPanelCommon = {
+        onClose:  closeSheet,
+        onSubmit: (form: FormState) => void handleSubmit(form),
+        saving:   formSaving,
+        error:    formError,
+        ...(selection !== undefined && selection !== null
+            ? {
+                onDelete: () => void handleDelete(selection),
+                deleteDisabled,
+            }
+            : {}),
+    };
+
+    if (wide) {
+        // 2-pane: list + sticky right pane (always-on, hint when no selection)
+        return (
+            <div style={{ display: 'flex', alignItems: 'stretch', minHeight: '100vh' }}>
+                {listAndFilters}
+                <UserEditPanel
+                    key={selection === undefined ? 'none' : selection?.id ?? 'new'}
+                    editing={editSelection}
+                    open={selection !== undefined}
+                    mode="pane"
+                    {...editPanelCommon}
+                />
+            </div>
+        );
+    }
+
+    // desktop / tablet: list + overlay drawer on demand
+    return (
+        <>
+            {listAndFilters}
+            <UserEditPanel
+                key={selection === undefined ? 'none' : selection?.id ?? 'new'}
+                editing={editSelection}
+                open={selection !== undefined}
+                mode="overlay"
+                {...editPanelCommon}
+            />
+        </>
     );
 }
