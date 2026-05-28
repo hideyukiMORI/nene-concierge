@@ -43952,7 +43952,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const bp = useBreakpoint();
     const [open, setOpen] = (0, import_react22.useState)(false);
     const containerRef = (0, import_react22.useRef)(null);
-    if (bp === "mobile") return null;
     (0, import_react22.useEffect)(() => {
       if (!open) return;
       function handleClick(e) {
@@ -43966,6 +43965,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const currentDef = ADMIN_THEME_DEFS.find((d) => d.id === adminThemeId) ?? ADMIN_THEME_DEFS[0];
     const currentPreview = currentDef.preview[themeVariant2] ?? currentDef.preview[currentDef.variants[0]];
     const dotColor = currentPreview?.accent ?? T.primary;
+    if (bp === "mobile") return null;
     return /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
       "div",
       {

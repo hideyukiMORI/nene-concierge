@@ -15,10 +15,10 @@ export default function ThemeSwitcher() {
     const [open, setOpen] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
-    // Hide on mobile
-    if (bp === 'mobile') return null;
-
     // Close on outside click
+    // NOTE: hooks は早期 return より前に呼び出すこと。React のフック呼び出し回数が
+    //   レンダー間で変わると "Rendered fewer hooks than expected" エラーになる。
+    //   モバイル⇔PC リサイズで bp が切替わると即座に発火するため。
     useEffect(() => {
         if (!open) return;
         function handleClick(e: MouseEvent) {
@@ -34,6 +34,9 @@ export default function ThemeSwitcher() {
     const currentDef = ADMIN_THEME_DEFS.find(d => d.id === adminThemeId) ?? ADMIN_THEME_DEFS[0];
     const currentPreview = currentDef.preview[themeVariant] ?? currentDef.preview[currentDef.variants[0] as ThemeVariant];
     const dotColor = currentPreview?.accent ?? T.primary;
+
+    // Hide on mobile — 全 hooks の呼び出し完了後に早期 return
+    if (bp === 'mobile') return null;
 
     return (
         <div
