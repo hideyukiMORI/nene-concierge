@@ -26880,7 +26880,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         padding: mainPadding,
         // mobile: sidebar is fixed so main takes full width
         width: isMobile ? "100%" : void 0
-      }, children: isMobile && providesHeader ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(Outlet, {}) : /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { style: { maxWidth: 1100, margin: "0 auto" }, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(Outlet, {}) }) })
+      }, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { style: {
+        maxWidth: isMobile && providesHeader ? "none" : 1100,
+        margin: "0 auto",
+        width: isMobile && providesHeader ? "100%" : void 0
+      }, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(Outlet, {}) }) })
     ] }) });
   }
   function PageHead({ title, subtitle, children: children2 }) {
@@ -39449,8 +39453,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         setSaving(false);
       }
     }
-    if (loading) return /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("p", { style: { color: T.textMuted, marginTop: 40 }, children: t("common.loading") });
-    if (!form) return /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(ErrorMsg, { msg: error });
+    if (loading || !form) {
+      const content = loading ? /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("p", { style: { color: T.textMuted, margin: "40px 16px" }, children: t("common.loading") }) : /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(ErrorMsg, { msg: error });
+      if (isMobile) {
+        return /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { minHeight: "100vh", background: T.bg }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(MobileHeader, { title: "Appearance", subtitle: "widget \xB7 public" }),
+          content
+        ] });
+      }
+      return content;
+    }
     const primaryColor = form.color_primary || "#2563EB";
     const welcomeText = form.welcome_text || "\u3054\u7528\u4EF6\u306F\u306A\u3093\u3067\u3057\u3087\u3046\u304B\uFF1F";
     const inputBase = {
@@ -39538,13 +39550,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               fontFamily: MONO6,
               fontSize: 9,
               letterSpacing: "0.08em",
-              color: T.textMuted,
+              color: "#8c959f",
               marginBottom: 1
             }, children: "PREVIEW" }),
             /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: {
               fontSize: 12,
               fontWeight: 600,
-              color: T.textStrong,
+              color: "#18181b",
               overflow: "hidden",
               textOverflow: "ellipsis",
               whiteSpace: "nowrap"

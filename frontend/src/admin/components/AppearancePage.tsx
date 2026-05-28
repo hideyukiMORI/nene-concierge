@@ -76,8 +76,20 @@ export default function AppearancePage() {
         }
     }
 
-    if (loading) return <p style={{ color: T.textMuted, marginTop: 40 }}>{t('common.loading')}</p>;
-    if (!form)   return <ErrorMsg msg={error} />;
+    if (loading || !form) {
+        const content = loading
+            ? <p style={{ color: T.textMuted, margin: '40px 16px' }}>{t('common.loading')}</p>
+            : <ErrorMsg msg={error} />;
+        if (isMobile) {
+            return (
+                <div style={{ minHeight: '100vh', background: T.bg }}>
+                    <MobileHeader title="Appearance" subtitle="widget · public" />
+                    {content}
+                </div>
+            );
+        }
+        return content;
+    }
 
     const primaryColor = form.color_primary || '#2563EB';
     const welcomeText  = form.welcome_text  || 'ご用件はなんでしょうか？';
@@ -146,11 +158,11 @@ export default function AppearancePage() {
                         <div style={{ flex: 1, minWidth: 0 }}>
                             <div style={{
                                 fontFamily: MONO, fontSize: 9, letterSpacing: '0.08em',
-                                color: T.textMuted, marginBottom: 1,
+                                color: '#8c959f', marginBottom: 1,
                             }}>PREVIEW</div>
                             <div style={{
                                 fontSize: 12, fontWeight: 600,
-                                color: T.textStrong,
+                                color: '#18181b',
                                 overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
                             }}>{welcomeText}</div>
                         </div>
