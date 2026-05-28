@@ -232,7 +232,66 @@ export default function Layout({ variant = 'default' }: { variant?: 'default' | 
         return (
             <LayoutContext.Provider value={layoutCtx}>
             <div style={{ display: 'flex', minHeight: '100vh' }}>
-                <aside style={{
+
+                {/* Mobile drawer backdrop + drawer (reuse the default Layout の lookup) */}
+                {isMobile && mobileOpen && (
+                    <div
+                        onClick={() => setMobileOpen(false)}
+                        style={{
+                            position: 'fixed', inset: 0, zIndex: 140,
+                            background: 'rgba(15,23,42,.40)',
+                            backdropFilter: 'blur(2px)',
+                        }}
+                    />
+                )}
+                {/* Mobile slide-in drawer (240px) */}
+                {isMobile && (
+                    <aside style={{
+                        position: 'fixed', top: 0,
+                        left: mobileOpen ? 0 : -240,
+                        width: 240, height: '100vh', zIndex: 145,
+                        background: T.sidebar, color: T.sidebarText,
+                        borderRight: `1px solid ${T.sidebarBorder}`,
+                        transition: 'left 220ms ease',
+                        display: 'flex', flexDirection: 'column',
+                        paddingTop: 'env(safe-area-inset-top)',
+                    }}>
+                        <div style={{
+                            display: 'flex', alignItems: 'center',
+                            height: 56, flexShrink: 0, padding: '0 8px 0 16px',
+                            borderBottom: `1px solid ${T.sidebarBorder}`,
+                            gap: 8,
+                        }}>
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                                <BrandMark open={true}/>
+                            </div>
+                            <button onClick={() => setMobileOpen(false)} aria-label="Close menu"
+                                style={{
+                                    width: T.controlHeightXs, height: T.controlHeightXs,
+                                    display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                                    background: 'transparent', border: 'none',
+                                    color: T.sidebarText, fontSize: 16, cursor: 'pointer',
+                                    borderRadius: T.radiusMd,
+                                }}>✕</button>
+                        </div>
+                        <nav style={{ flex: 1, padding: '12px 0', overflowY: 'auto', overflowX: 'hidden' }} aria-label="Main">
+                            {NAV_ITEMS.map((n, i) => (
+                                <span key={i} style={{ display: 'contents' }}>
+                                    <NavItem to={n.to} icon={n.icon}
+                                        label={t(n.key as Parameters<typeof t>[0])}
+                                        open={true}
+                                        onClick={() => setMobileOpen(false)}/>
+                                    {'divider' in n && n.divider && (
+                                        <div style={{ margin: '10px 0', borderTop: `1px solid ${T.sidebarBorder}`, opacity: 0.5 }}/>
+                                    )}
+                                </span>
+                            ))}
+                        </nav>
+                    </aside>
+                )}
+
+                {/* Slim editor sidebar (desktop / tablet のみ — モバイルは非表示) */}
+                {!isMobile && <aside style={{
                     width: T.sidebarWidthSlim, flexShrink: 0,
                     background: T.sidebar, color: T.sidebarText,
                     display: 'flex', flexDirection: 'column', alignItems: 'center',
@@ -296,7 +355,7 @@ export default function Layout({ variant = 'default' }: { variant?: 'default' | 
                             marginTop: 4,
                         }}>{email[0]?.toUpperCase() ?? '?'}</div>
                     )}
-                </aside>
+                </aside>}
 
                 <main style={{
                     flex: 1, minWidth: 0,

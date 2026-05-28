@@ -6,7 +6,9 @@ import {
     ApiError,
     type ScenarioNode, type ScenarioEdge, type CredentialSummary, type ChatNodeType,
 } from '../api.js';
-import { Btn, Badge, ErrorMsg } from './Layout.js';
+import { Btn, Badge, ErrorMsg, useLayout } from './Layout.js';
+import { MobileHeader, MobileIconBtn, Pill } from './mobile/index.js';
+import type { PillVariant } from './mobile/index.js';
 import { T, NODE_TOKENS } from '../theme.js';
 import { useTranslation } from '../i18n/index.js';
 import ScenarioCanvas, { type ScenarioCanvasRef } from './editor/ScenarioCanvas.js';
@@ -85,6 +87,7 @@ export default function ScenarioFormPage() {
     const isNew   = id === undefined;
     const nav     = useNavigate();
     const { t }   = useTranslation();
+    const { isMobile } = useLayout();
 
     // ── メタ情報 ────────────────────────────────────────────────────────────
     const [name, setName]               = useState('');
@@ -249,6 +252,129 @@ export default function ScenarioFormPage() {
                 <span style={{ width: 6, height: 6, borderRadius: 99, background: tok.stripe }}/>
                 <span>{label}</span>
             </button>
+        );
+    }
+
+    // ─────────── Mobile layout ───────────
+    if (isMobile) {
+        const pillVariant: PillVariant =
+            status === 'published' ? 'success' :
+            status === 'archived'  ? 'archived' :
+                                     'draft';
+
+        // 新規作成: タイトル入力 + Create ボタンのみ
+        if (isNew) {
+            return (
+                <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: '100vh', background: T.bg }}>
+                    <MobileHeader
+                        title={t('scenarios.new' as Parameters<typeof t>[0]) || 'New scenario'}
+                        onBack={() => nav('/scenarios')}
+                    />
+                    <div style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
+                        <label style={{
+                            fontFamily: MONO, fontSize: 10, fontWeight: 700,
+                            letterSpacing: '0.06em', textTransform: 'uppercase',
+                            color: T.textMuted,
+                        }}>{t('scenarioForm.nameLabel')}</label>
+                        <input value={draftName}
+                            onChange={e => setDraftName(e.target.value)}
+                            placeholder={t('scenarioForm.namePlaceholder')}
+                            style={{
+                                height: T.controlHeight, padding: '0 12px',
+                                borderRadius: T.radiusMd, border: `1px solid ${T.borderInput}`,
+                                fontSize: T.fontMd, background: T.surface, color: T.text,
+                                outline: 'none',
+                            }}/>
+                        <label style={{
+                            fontFamily: MONO, fontSize: 10, fontWeight: 700,
+                            letterSpacing: '0.06em', textTransform: 'uppercase',
+                            color: T.textMuted, marginTop: 8,
+                        }}>{t('scenarioForm.descLabel')}</label>
+                        <input value={description}
+                            onChange={e => setDescription(e.target.value)}
+                            placeholder={t('scenarioForm.descPlaceholder')}
+                            style={{
+                                height: T.controlHeight, padding: '0 12px',
+                                borderRadius: T.radiusMd, border: `1px solid ${T.borderInput}`,
+                                fontSize: T.fontMd, background: T.surface, color: T.text,
+                                outline: 'none',
+                            }}/>
+                        {error && <ErrorMsg msg={error}/>}
+                        <Btn disabled={saving || !draftName.trim()}
+                            onClick={() => { void handleCreate(); }}
+                            style={{ marginTop: 8 }}>
+                            {saving ? t('common.creating') : t('common.create')}
+                        </Btn>
+                    </div>
+                </div>
+            );
+        }
+
+        return (
+            <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: '100vh', background: T.bg }}>
+                <MobileHeader
+                    showMenu={false}
+                    onBack={() => nav('/scenarios')}
+                    title={name || t('scenarioForm.namePlaceholder')}
+                    leading={
+                        <div style={{
+                            display: 'inline-flex', alignItems: 'center',
+                            marginLeft: -4, marginRight: 2,
+                        }}>
+                            <Pill variant={pillVariant} label={status} dot={false}/>
+                        </div>
+                    }
+                    trailing={
+                        <>
+                            <MobileIconBtn ariaLabel={t('canvas.analyticsMode')} onClick={() => setAnalyticsMode(v => !v)}>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={analyticsMode ? T.primary : 'currentColor'} strokeWidth="2" strokeLinecap="round" aria-hidden>
+                                    <line x1="18" y1="20" x2="18" y2="10"/>
+                                    <line x1="12" y1="20" x2="12" y2="4"/>
+                                    <line x1="6" y1="20" x2="6" y2="14"/>
+                                </svg>
+                            </MobileIconBtn>
+                            {!analyticsMode && (
+                                <MobileIconBtn ariaLabel={t('common.save')} onClick={() => canvasRef.current?.triggerSave()}>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={T.primary} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                                        <polyline points="17 21 17 13 7 13 7 21"/>
+                                        <polyline points="7 3 7 8 15 8"/>
+                                    </svg>
+                                </MobileIconBtn>
+                            )}
+                        </>
+                    }
+                />
+
+                {error && (
+                    <div style={{ padding: '6px 16px', background: T.dangerBg, flexShrink: 0 }}>
+                        <ErrorMsg msg={error} />
+                    </div>
+                )}
+
+                <div style={{ flex: 1, overflow: 'hidden', position: 'relative' }}>
+                    <ScenarioCanvas
+                        ref={canvasRef}
+                        scenarioId={Number(id)}
+                        initialNodes={nodes}
+                        initialEdges={edges}
+                        credentials={credentials}
+                        onSave={handleGraphSave}
+                        analyticsMode={analyticsMode}
+                    />
+                </div>
+
+                {savedMsg && (
+                    <span style={{
+                        position: 'fixed', top: 'calc(56px + env(safe-area-inset-top))', right: 16,
+                        fontSize: T.fontXs, color: T.successFg, fontWeight: 600,
+                        background: T.successBg, padding: '4px 10px',
+                        borderRadius: T.radiusXl, zIndex: 50,
+                    }}>
+                        ✓ {savedMsg}
+                    </span>
+                )}
+            </div>
         );
     }
 

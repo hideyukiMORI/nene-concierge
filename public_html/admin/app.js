@@ -26500,7 +26500,81 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     }
     if (variant === "editor") {
       return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(LayoutContext.Provider, { value: layoutCtx, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { style: { display: "flex", minHeight: "100vh" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("aside", { style: {
+        isMobile && mobileOpen && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+          "div",
+          {
+            onClick: () => setMobileOpen(false),
+            style: {
+              position: "fixed",
+              inset: 0,
+              zIndex: 140,
+              background: "rgba(15,23,42,.40)",
+              backdropFilter: "blur(2px)"
+            }
+          }
+        ),
+        isMobile && /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("aside", { style: {
+          position: "fixed",
+          top: 0,
+          left: mobileOpen ? 0 : -240,
+          width: 240,
+          height: "100vh",
+          zIndex: 145,
+          background: T.sidebar,
+          color: T.sidebarText,
+          borderRight: `1px solid ${T.sidebarBorder}`,
+          transition: "left 220ms ease",
+          display: "flex",
+          flexDirection: "column",
+          paddingTop: "env(safe-area-inset-top)"
+        }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { style: {
+            display: "flex",
+            alignItems: "center",
+            height: 56,
+            flexShrink: 0,
+            padding: "0 8px 0 16px",
+            borderBottom: `1px solid ${T.sidebarBorder}`,
+            gap: 8
+          }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { style: { flex: 1, minWidth: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(BrandMark, { open: true }) }),
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+              "button",
+              {
+                onClick: () => setMobileOpen(false),
+                "aria-label": "Close menu",
+                style: {
+                  width: T.controlHeightXs,
+                  height: T.controlHeightXs,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  background: "transparent",
+                  border: "none",
+                  color: T.sidebarText,
+                  fontSize: 16,
+                  cursor: "pointer",
+                  borderRadius: T.radiusMd
+                },
+                children: "\u2715"
+              }
+            )
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("nav", { style: { flex: 1, padding: "12px 0", overflowY: "auto", overflowX: "hidden" }, "aria-label": "Main", children: NAV_ITEMS.map((n, i) => /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("span", { style: { display: "contents" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+              NavItem,
+              {
+                to: n.to,
+                icon: n.icon,
+                label: t(n.key),
+                open: true,
+                onClick: () => setMobileOpen(false)
+              }
+            ),
+            "divider" in n && n.divider && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { style: { margin: "10px 0", borderTop: `1px solid ${T.sidebarBorder}`, opacity: 0.5 } })
+          ] }, i)) })
+        ] }),
+        !isMobile && /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("aside", { style: {
           width: T.sidebarWidthSlim,
           flexShrink: 0,
           background: T.sidebar,
@@ -38171,9 +38245,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
   var ScenarioCanvas = (0, import_react12.forwardRef)(function ScenarioCanvas2({ scenarioId, initialNodes, initialEdges, credentials, onSave, analyticsMode }, ref) {
     const { t } = useTranslation();
+    const { isMobile } = useLayout();
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes.map(apiNodeToRF));
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges.map(apiEdgeToRF));
     const [selectedNodeId, setSelectedNodeId] = (0, import_react12.useState)(null);
+    const [addPickerOpen, setAddPickerOpen] = (0, import_react12.useState)(false);
     const reactFlowWrapper = (0, import_react12.useRef)(null);
     const [period, setPeriod] = (0, import_react12.useState)("7d");
     const [analyticsReport, setAnalyticsReport] = (0, import_react12.useState)(null);
@@ -38290,7 +38366,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           ]
         }
       ) }),
-      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: {
+      !isMobile && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: {
         position: "absolute",
         top: 0,
         right: 0,
@@ -38328,7 +38404,112 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           onDelete: handleNodeDelete,
           onClose: () => setSelectedNodeId(null)
         }
-      ) : null })
+      ) : null }),
+      isMobile && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+        BottomSheet,
+        {
+          open: selectedNode !== null && !analyticsMode,
+          onClose: () => setSelectedNodeId(null),
+          height: "78vh",
+          children: selectedNode && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+            NodeConfigPanel,
+            {
+              node: selectedNode,
+              credentials,
+              onChange: handleNodeChange,
+              onDelete: handleNodeDelete,
+              onClose: () => setSelectedNodeId(null)
+            }
+          )
+        }
+      ),
+      isMobile && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+        BottomSheet,
+        {
+          open: analyticsMode,
+          onClose: () => {
+          },
+          title: "Analytics",
+          height: "60vh",
+          children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+            AnalyticsSummaryPanel,
+            {
+              report: analyticsReport,
+              loading: analyticsLoading,
+              noData: analyticsNoData,
+              period,
+              onPeriodChange: setPeriod
+            }
+          )
+        }
+      ),
+      isMobile && !analyticsMode && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(FAB, { ariaLabel: t("node.addToCanvas", { type: "" }), onClick: () => setAddPickerOpen(true), children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("svg", { width: "22", height: "22", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2.5", strokeLinecap: "round", "aria-hidden": true, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("line", { x1: "5", y1: "12", x2: "19", y2: "12" }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("line", { x1: "12", y1: "5", x2: "12", y2: "19" })
+        ] }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+          BottomSheet,
+          {
+            open: addPickerOpen,
+            onClose: () => setAddPickerOpen(false),
+            title: "Add node",
+            children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 8 }, children: ["message", "condition", "action", "end"].map((type) => {
+              const tok = NODE_TOKENS[type];
+              return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+                "button",
+                {
+                  onClick: () => {
+                    addNode(type);
+                    setAddPickerOpen(false);
+                  },
+                  style: {
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 10,
+                    padding: "12px 14px",
+                    background: T.surface,
+                    border: `1px solid ${T.border}`,
+                    borderLeft: `3px solid ${tok.stripe}`,
+                    borderRadius: T.radiusMd,
+                    cursor: "pointer",
+                    textAlign: "left",
+                    WebkitTapHighlightColor: "transparent"
+                  },
+                  children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: {
+                      width: 28,
+                      height: 28,
+                      borderRadius: T.radiusSm,
+                      background: tok.chip,
+                      border: `1px solid ${tok.chipEdge}`,
+                      color: tok.stripe,
+                      display: "inline-flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontWeight: 700,
+                      fontSize: 14,
+                      flexShrink: 0
+                    }, children: type[0]?.toUpperCase() }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: {
+                      flex: 1,
+                      fontSize: 15,
+                      fontWeight: 600,
+                      color: T.textStrong
+                    }, children: t(`node.type.${type}`) }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: {
+                      fontFamily: 'ui-monospace, "JetBrains Mono", monospace',
+                      fontSize: 11,
+                      color: T.textFaint
+                    }, children: type })
+                  ]
+                },
+                type
+              );
+            }) })
+          }
+        )
+      ] })
     ] });
   });
   var ScenarioCanvas_default = ScenarioCanvas;
@@ -38518,6 +38699,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const isNew = id2 === void 0;
     const nav = useNavigate();
     const { t } = useTranslation();
+    const { isMobile } = useLayout();
     const [name, setName] = (0, import_react13.useState)("");
     const [description, setDescription] = (0, import_react13.useState)("");
     const [status, setStatus] = (0, import_react13.useState)("draft");
@@ -38692,6 +38874,143 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           ]
         }
       );
+    }
+    if (isMobile) {
+      const pillVariant = status === "published" ? "success" : status === "archived" ? "archived" : "draft";
+      if (isNew) {
+        return /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", flexDirection: "column", flex: 1, minHeight: "100vh", background: T.bg }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+            MobileHeader,
+            {
+              title: t("scenarios.new") || "New scenario",
+              onBack: () => nav("/scenarios")
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { padding: 16, display: "flex", flexDirection: "column", gap: 12 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("label", { style: {
+              fontFamily: MONO5,
+              fontSize: 10,
+              fontWeight: 700,
+              letterSpacing: "0.06em",
+              textTransform: "uppercase",
+              color: T.textMuted
+            }, children: t("scenarioForm.nameLabel") }),
+            /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+              "input",
+              {
+                value: draftName,
+                onChange: (e) => setDraftName(e.target.value),
+                placeholder: t("scenarioForm.namePlaceholder"),
+                style: {
+                  height: T.controlHeight,
+                  padding: "0 12px",
+                  borderRadius: T.radiusMd,
+                  border: `1px solid ${T.borderInput}`,
+                  fontSize: T.fontMd,
+                  background: T.surface,
+                  color: T.text,
+                  outline: "none"
+                }
+              }
+            ),
+            /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("label", { style: {
+              fontFamily: MONO5,
+              fontSize: 10,
+              fontWeight: 700,
+              letterSpacing: "0.06em",
+              textTransform: "uppercase",
+              color: T.textMuted,
+              marginTop: 8
+            }, children: t("scenarioForm.descLabel") }),
+            /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+              "input",
+              {
+                value: description,
+                onChange: (e) => setDescription(e.target.value),
+                placeholder: t("scenarioForm.descPlaceholder"),
+                style: {
+                  height: T.controlHeight,
+                  padding: "0 12px",
+                  borderRadius: T.radiusMd,
+                  border: `1px solid ${T.borderInput}`,
+                  fontSize: T.fontMd,
+                  background: T.surface,
+                  color: T.text,
+                  outline: "none"
+                }
+              }
+            ),
+            error && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(ErrorMsg, { msg: error }),
+            /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+              Btn,
+              {
+                disabled: saving || !draftName.trim(),
+                onClick: () => {
+                  void handleCreate();
+                },
+                style: { marginTop: 8 },
+                children: saving ? t("common.creating") : t("common.create")
+              }
+            )
+          ] })
+        ] });
+      }
+      return /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", flexDirection: "column", flex: 1, minHeight: "100vh", background: T.bg }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+          MobileHeader,
+          {
+            showMenu: false,
+            onBack: () => nav("/scenarios"),
+            title: name || t("scenarioForm.namePlaceholder"),
+            leading: /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: {
+              display: "inline-flex",
+              alignItems: "center",
+              marginLeft: -4,
+              marginRight: 2
+            }, children: /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(Pill, { variant: pillVariant, label: status, dot: false }) }),
+            trailing: /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(import_jsx_runtime11.Fragment, { children: [
+              /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(MobileIconBtn, { ariaLabel: t("canvas.analyticsMode"), onClick: () => setAnalyticsMode((v) => !v), children: /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("svg", { width: "20", height: "20", viewBox: "0 0 24 24", fill: "none", stroke: analyticsMode ? T.primary : "currentColor", strokeWidth: "2", strokeLinecap: "round", "aria-hidden": true, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("line", { x1: "18", y1: "20", x2: "18", y2: "10" }),
+                /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("line", { x1: "12", y1: "20", x2: "12", y2: "4" }),
+                /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("line", { x1: "6", y1: "20", x2: "6", y2: "14" })
+              ] }) }),
+              !analyticsMode && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(MobileIconBtn, { ariaLabel: t("common.save"), onClick: () => canvasRef.current?.triggerSave(), children: /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("svg", { width: "20", height: "20", viewBox: "0 0 24 24", fill: "none", stroke: T.primary, strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round", "aria-hidden": true, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("path", { d: "M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" }),
+                /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("polyline", { points: "17 21 17 13 7 13 7 21" }),
+                /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("polyline", { points: "7 3 7 8 15 8" })
+              ] }) })
+            ] })
+          }
+        ),
+        error && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: { padding: "6px 16px", background: T.dangerBg, flexShrink: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(ErrorMsg, { msg: error }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: { flex: 1, overflow: "hidden", position: "relative" }, children: /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+          ScenarioCanvas_default,
+          {
+            ref: canvasRef,
+            scenarioId: Number(id2),
+            initialNodes: nodes,
+            initialEdges: edges,
+            credentials,
+            onSave: handleGraphSave,
+            analyticsMode
+          }
+        ) }),
+        savedMsg && /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("span", { style: {
+          position: "fixed",
+          top: "calc(56px + env(safe-area-inset-top))",
+          right: 16,
+          fontSize: T.fontXs,
+          color: T.successFg,
+          fontWeight: 600,
+          background: T.successBg,
+          padding: "4px 10px",
+          borderRadius: T.radiusXl,
+          zIndex: 50
+        }, children: [
+          "\u2713 ",
+          savedMsg
+        ] })
+      ] });
     }
     return /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", flexDirection: "column", flex: 1, overflow: "hidden" }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: {

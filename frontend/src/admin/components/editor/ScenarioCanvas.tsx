@@ -21,8 +21,10 @@ import type {
 import { getScenarioAnalytics } from '../../api.js';
 import { NODE_COLORS, MessageNode, ConditionNode, ActionNode, EndNode } from './NodeTypes.js';
 import NodeConfigPanel from './NodeConfigPanel.js';
-import { T } from '../../theme.js';
+import { T, NODE_TOKENS } from '../../theme.js';
 import { useTranslation } from '../../i18n/index.js';
+import { useLayout } from '../Layout.js';
+import { BottomSheet, FAB } from '../mobile/index.js';
 
 // ── React Flow ノードタイプ登録 ───────────────────────────────────────────────
 
@@ -193,9 +195,11 @@ const ScenarioCanvas = forwardRef<ScenarioCanvasRef, Props>(function ScenarioCan
     ref,
 ) {
     const { t } = useTranslation();
+    const { isMobile } = useLayout();
     const [nodes, setNodes, onNodesChange] = useNodesState<Node>(initialNodes.map(apiNodeToRF));
     const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>(initialEdges.map(apiEdgeToRF));
     const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
+    const [addPickerOpen, setAddPickerOpen]   = useState(false);
     const reactFlowWrapper = useRef<HTMLDivElement>(null);
 
     // ── Analytics 状態（期間は内部管理、モードは親から制御）──────────────────────
@@ -332,42 +336,132 @@ const ScenarioCanvas = forwardRef<ScenarioCanvasRef, Props>(function ScenarioCan
                 </ReactFlow>
             </div>
 
-            {/* 右ドロワー: ノード設定 or Analytics サマリー */}
-            <div style={{
-                position: 'absolute', top: 0, right: 0, bottom: 0,
-                width: T.editorDrawerW,
-                zIndex: 10,
-                display: 'flex', flexDirection: 'column', overflow: 'hidden',
-                transform: showRightPanel ? 'translateX(0)' : 'translateX(100%)',
-                transition: 'transform 0.20s cubic-bezier(0.4, 0, 0.2, 1)',
-                pointerEvents: showRightPanel ? 'auto' : 'none',
-            }}>
-                {analyticsMode ? (
-                    <div style={{
-                        height: '100%',
-                        background: T.surfaceAlt,
-                        borderLeft: `1px solid ${T.border}`,
-                        boxShadow: '-6px 0 20px rgba(0,0,0,.07)',
-                        display: 'flex', flexDirection: 'column',
-                    }}>
-                        <AnalyticsSummaryPanel
-                            report={analyticsReport}
-                            loading={analyticsLoading}
-                            noData={analyticsNoData}
-                            period={period}
-                            onPeriodChange={setPeriod}
+            {/* 右ドロワー (desktop / tablet) — モバイルは BottomSheet 経由 */}
+            {!isMobile && (
+                <div style={{
+                    position: 'absolute', top: 0, right: 0, bottom: 0,
+                    width: T.editorDrawerW,
+                    zIndex: 10,
+                    display: 'flex', flexDirection: 'column', overflow: 'hidden',
+                    transform: showRightPanel ? 'translateX(0)' : 'translateX(100%)',
+                    transition: 'transform 0.20s cubic-bezier(0.4, 0, 0.2, 1)',
+                    pointerEvents: showRightPanel ? 'auto' : 'none',
+                }}>
+                    {analyticsMode ? (
+                        <div style={{
+                            height: '100%',
+                            background: T.surfaceAlt,
+                            borderLeft: `1px solid ${T.border}`,
+                            boxShadow: '-6px 0 20px rgba(0,0,0,.07)',
+                            display: 'flex', flexDirection: 'column',
+                        }}>
+                            <AnalyticsSummaryPanel
+                                report={analyticsReport}
+                                loading={analyticsLoading}
+                                noData={analyticsNoData}
+                                period={period}
+                                onPeriodChange={setPeriod}
+                            />
+                        </div>
+                    ) : selectedNode ? (
+                        <NodeConfigPanel
+                            node={selectedNode}
+                            credentials={credentials}
+                            onChange={handleNodeChange}
+                            onDelete={handleNodeDelete}
+                            onClose={() => setSelectedNodeId(null)}
                         />
-                    </div>
-                ) : selectedNode ? (
-                    <NodeConfigPanel
-                        node={selectedNode}
-                        credentials={credentials}
-                        onChange={handleNodeChange}
-                        onDelete={handleNodeDelete}
-                        onClose={() => setSelectedNodeId(null)}
+                    ) : null}
+                </div>
+            )}
+
+            {/* モバイル: NodeConfigPanel を BottomSheet 内に描画 */}
+            {isMobile && (
+                <BottomSheet
+                    open={selectedNode !== null && !analyticsMode}
+                    onClose={() => setSelectedNodeId(null)}
+                    height="78vh">
+                    {selectedNode && (
+                        <NodeConfigPanel
+                            node={selectedNode}
+                            credentials={credentials}
+                            onChange={handleNodeChange}
+                            onDelete={handleNodeDelete}
+                            onClose={() => setSelectedNodeId(null)}
+                        />
+                    )}
+                </BottomSheet>
+            )}
+
+            {/* モバイル: Analytics サマリーも BottomSheet */}
+            {isMobile && (
+                <BottomSheet
+                    open={analyticsMode}
+                    onClose={() => { /* parent toggles analyticsMode */ }}
+                    title="Analytics"
+                    height="60vh">
+                    <AnalyticsSummaryPanel
+                        report={analyticsReport}
+                        loading={analyticsLoading}
+                        noData={analyticsNoData}
+                        period={period}
+                        onPeriodChange={setPeriod}
                     />
-                ) : null}
-            </div>
+                </BottomSheet>
+            )}
+
+            {/* モバイル: ノード追加 FAB + Picker BottomSheet */}
+            {isMobile && !analyticsMode && (
+                <>
+                    <FAB ariaLabel={t('node.addToCanvas', { type: '' })} onClick={() => setAddPickerOpen(true)}>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                        </svg>
+                    </FAB>
+                    <BottomSheet
+                        open={addPickerOpen}
+                        onClose={() => setAddPickerOpen(false)}
+                        title="Add node">
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                            {(['message','condition','action','end'] as ChatNodeType[]).map(type => {
+                                const tok = NODE_TOKENS[type];
+                                return (
+                                    <button key={type}
+                                        onClick={() => { addNode(type); setAddPickerOpen(false); }}
+                                        style={{
+                                            display: 'flex', alignItems: 'center', gap: 10,
+                                            padding: '12px 14px',
+                                            background: T.surface,
+                                            border: `1px solid ${T.border}`,
+                                            borderLeft: `3px solid ${tok.stripe}`,
+                                            borderRadius: T.radiusMd,
+                                            cursor: 'pointer',
+                                            textAlign: 'left',
+                                            WebkitTapHighlightColor: 'transparent',
+                                        }}>
+                                        <span style={{
+                                            width: 28, height: 28, borderRadius: T.radiusSm,
+                                            background: tok.chip, border: `1px solid ${tok.chipEdge}`,
+                                            color: tok.stripe,
+                                            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                                            fontWeight: 700, fontSize: 14, flexShrink: 0,
+                                        }}>{type[0]?.toUpperCase()}</span>
+                                        <span style={{
+                                            flex: 1, fontSize: 15, fontWeight: 600,
+                                            color: T.textStrong,
+                                        }}>{t(`node.type.${type}` as Parameters<typeof t>[0])}</span>
+                                        <span style={{
+                                            fontFamily: 'ui-monospace, "JetBrains Mono", monospace',
+                                            fontSize: 11, color: T.textFaint,
+                                        }}>{type}</span>
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    </BottomSheet>
+                </>
+            )}
         </div>
     );
 });
