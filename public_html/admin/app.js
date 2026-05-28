@@ -38158,6 +38158,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     action: ActionNode,
     end: EndNode
   };
+  var MONO5 = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
   function apiNodeToRF(n) {
     return {
       id: n.node_id,
@@ -38242,7 +38243,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         function StatRow({ label, value, sub }) {
           return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", alignItems: "baseline", justifyContent: "space-between", padding: "8px 0", borderBottom: `1px solid ${T.border}` }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontSize: T.fontSm, color: T.textMuted }, children: label }),
-            /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: T.fontMd, fontWeight: 700, color: T.textStrong }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: T.fontSm, fontWeight: 700, color: T.textStrong, fontFamily: MONO5 }, children: [
               value.toLocaleString(),
               sub && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontSize: T.fontXs, fontWeight: 400, color: T.textMuted, marginLeft: 4 }, children: sub })
             ] })
@@ -38252,13 +38253,125 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(StatRow, { label: t("canvas.analytics.sessions"), value: report.total_sessions }),
           /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(StatRow, { label: t("canvas.analytics.completed"), value: report.completed_sessions, sub: `${dRate}%` }),
           /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(StatRow, { label: t("canvas.analytics.converted"), value: report.converted_sessions, sub: `${cRate}%` }),
-          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { marginTop: 8, fontSize: T.fontXs, color: T.textMuted }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { marginTop: 8, fontSize: T.fontXs, color: T.textMuted, fontFamily: MONO5 }, children: [
             report.period_from,
             " \u2013 ",
             report.period_to
           ] })
         ] });
       })() })
+    ] });
+  }
+  var ZoomInIcon = () => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+    "svg",
+    {
+      width: "12",
+      height: "12",
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: "currentColor",
+      strokeWidth: "2.2",
+      strokeLinecap: "round",
+      "aria-hidden": true,
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("circle", { cx: "11", cy: "11", r: "7" }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("line", { x1: "21", y1: "21", x2: "16.65", y2: "16.65" }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("line", { x1: "11", y1: "8", x2: "11", y2: "14" }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("line", { x1: "8", y1: "11", x2: "14", y2: "11" })
+      ]
+    }
+  );
+  var ZoomOutIcon = () => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+    "svg",
+    {
+      width: "12",
+      height: "12",
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: "currentColor",
+      strokeWidth: "2.2",
+      strokeLinecap: "round",
+      "aria-hidden": true,
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("circle", { cx: "11", cy: "11", r: "7" }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("line", { x1: "21", y1: "21", x2: "16.65", y2: "16.65" }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("line", { x1: "8", y1: "11", x2: "14", y2: "11" })
+      ]
+    }
+  );
+  var FitViewIcon2 = () => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+    "svg",
+    {
+      width: "12",
+      height: "12",
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: "currentColor",
+      strokeWidth: "2",
+      strokeLinecap: "round",
+      strokeLinejoin: "round",
+      "aria-hidden": true,
+      children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("path", { d: "M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3" })
+    }
+  );
+  function DockBtn({ onClick, title, children: children2 }) {
+    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+      "button",
+      {
+        onClick,
+        title,
+        style: {
+          width: 28,
+          height: 28,
+          borderRadius: T.radiusSm,
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+          background: "transparent",
+          border: "none",
+          cursor: "pointer",
+          color: T.textMuted,
+          transition: `background ${T.transitionFast}, color ${T.transitionFast}`
+        },
+        onMouseEnter: (e) => {
+          e.currentTarget.style.background = T.surfaceHover;
+          e.currentTarget.style.color = T.text;
+        },
+        onMouseLeave: (e) => {
+          e.currentTarget.style.background = "transparent";
+          e.currentTarget.style.color = T.textMuted;
+        },
+        children: children2
+      }
+    );
+  }
+  function BottomDock({ nodeCount }) {
+    const { zoomIn, zoomOut, fitView } = useReactFlow();
+    return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 2,
+      background: T.glassDockBg,
+      border: `1px solid ${T.border}`,
+      borderRadius: T.radiusLg,
+      padding: "3px 6px",
+      boxShadow: T.shadowElevated
+    }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(DockBtn, { onClick: () => zoomOut({ duration: 150 }), title: "Zoom out", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(ZoomOutIcon, {}) }),
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(DockBtn, { onClick: () => fitView({ padding: 0.6, maxZoom: 0.85, duration: 200 }), title: "Fit view", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(FitViewIcon2, {}) }),
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(DockBtn, { onClick: () => zoomIn({ duration: 150 }), title: "Zoom in", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(ZoomInIcon, {}) }),
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { width: 1, height: 14, background: T.border, margin: "0 4px" } }),
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: {
+        fontSize: 10.5,
+        fontFamily: MONO5,
+        color: T.textFaint,
+        padding: "0 4px",
+        whiteSpace: "nowrap",
+        userSelect: "none"
+      }, children: [
+        nodeCount,
+        " nodes"
+      ] })
     ] });
   }
   var ScenarioCanvas = (0, import_react12.forwardRef)(function ScenarioCanvas2({ scenarioId, initialNodes, initialEdges, credentials, onSave, analyticsMode }, ref) {
@@ -38352,38 +38465,53 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const selectedNode = !analyticsMode ? nodes.find((n) => n.id === selectedNodeId) ?? null : null;
     const showRightPanel = analyticsMode || selectedNode !== null;
     return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { position: "relative", height: "100%" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { ref: reactFlowWrapper, style: { position: "absolute", inset: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
-        index,
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+        "div",
         {
-          nodes,
-          edges,
-          nodeTypes,
-          onNodesChange,
-          onEdgesChange,
-          onConnect,
-          onNodeClick: (_, node) => {
-            if (!analyticsMode) setSelectedNodeId(node.id);
-          },
-          onPaneClick: () => setSelectedNodeId(null),
-          fitView: true,
-          fitViewOptions: { padding: 0.6, maxZoom: 0.85 },
-          deleteKeyCode: analyticsMode ? null : "Delete",
-          nodesDraggable: !analyticsMode,
-          nodesConnectable: !analyticsMode,
-          elementsSelectable: !analyticsMode,
-          children: [
-            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Background, { gap: 20, color: T.border }),
-            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Controls, {}),
-            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-              MiniMap,
-              {
-                nodeColor: (n) => NODE_COLORS[n.type]?.header ?? T.sidebarMuted,
-                style: { background: T.tableHeader, border: `1px solid ${T.border}` }
-              }
-            )
-          ]
+          ref: reactFlowWrapper,
+          style: { position: "absolute", inset: 0, background: T.canvasBg },
+          children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+            index,
+            {
+              nodes,
+              edges,
+              nodeTypes,
+              onNodesChange,
+              onEdgesChange,
+              onConnect,
+              onNodeClick: (_, node) => {
+                if (!analyticsMode) setSelectedNodeId(node.id);
+              },
+              onPaneClick: () => setSelectedNodeId(null),
+              fitView: true,
+              fitViewOptions: { padding: 0.6, maxZoom: 0.85 },
+              deleteKeyCode: analyticsMode ? null : "Delete",
+              nodesDraggable: !analyticsMode,
+              nodesConnectable: !analyticsMode,
+              elementsSelectable: !analyticsMode,
+              defaultEdgeOptions: {
+                style: { stroke: T.edgeStroke, strokeWidth: 1.5 }
+              },
+              children: [
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Background, { variant: BackgroundVariant.Dots, gap: 24, size: 1.5, color: T.canvasDot }),
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                  MiniMap,
+                  {
+                    nodeColor: (n) => NODE_COLORS[n.type]?.header ?? T.sidebarMuted,
+                    style: {
+                      background: T.minimapBg,
+                      border: `1px solid ${T.border}`,
+                      borderRadius: T.radiusMd
+                    },
+                    maskColor: "oklch(0% 0 0 / 0.08)"
+                  }
+                ),
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Panel, { position: "bottom-center", style: { marginBottom: 14 }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(BottomDock, { nodeCount: nodes.length }) })
+              ]
+            }
+          )
         }
-      ) }),
+      ),
       !isMobile && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: {
         position: "absolute",
         top: 0,
@@ -38534,7 +38662,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // src/admin/components/ScenarioFormPage.tsx
   var import_jsx_runtime11 = __toESM(require_jsx_runtime());
-  var MONO5 = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
+  var MONO6 = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
   var IconBack = () => /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
     "svg",
     {
@@ -38906,7 +39034,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           ),
           /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { padding: 16, display: "flex", flexDirection: "column", gap: 12 }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("label", { style: {
-              fontFamily: MONO5,
+              fontFamily: MONO6,
               fontSize: 10,
               fontWeight: 700,
               letterSpacing: "0.06em",
@@ -38932,7 +39060,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               }
             ),
             /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("label", { style: {
-              fontFamily: MONO5,
+              fontFamily: MONO6,
               fontSize: 10,
               fontWeight: 700,
               letterSpacing: "0.06em",
@@ -39203,7 +39331,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             borderRadius: T.radiusSm,
             background: T.surfaceAlt,
             border: `1px solid ${T.border}`,
-            fontFamily: MONO5,
+            fontFamily: MONO6,
             fontSize: 9.5,
             color: T.textFaint
           }, children: "\u2318K" })
@@ -39217,7 +39345,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             letterSpacing: "0.08em",
             color: T.textFaint,
             textTransform: "uppercase",
-            fontFamily: MONO5,
+            fontFamily: MONO6,
             borderRight: `1px solid ${T.border}`,
             marginRight: 2
           }, children: "add" }),
@@ -39338,7 +39466,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             fontSize: T.fontXs,
             fontWeight: 600,
             color: T.textMuted,
-            fontFamily: MONO5,
+            fontFamily: MONO6,
             letterSpacing: "0.06em",
             textTransform: "uppercase",
             marginBottom: 4
@@ -39408,7 +39536,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   // src/admin/components/AppearancePage.tsx
   var import_react14 = __toESM(require_react());
   var import_jsx_runtime12 = __toESM(require_jsx_runtime());
-  var MONO6 = T.fontMono;
+  var MONO7 = T.fontMono;
   var COLOR_PRESETS = [
     "#2563EB",
     "#0d9488",
@@ -39569,7 +39697,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           }, children: "N" }),
           /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { flex: 1, minWidth: 0 }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: {
-              fontFamily: MONO6,
+              fontFamily: MONO7,
               fontSize: 9,
               letterSpacing: "0.08em",
               color: "#8c959f",
@@ -39600,7 +39728,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               marginBottom: 8
             }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("label", { style: {
-                fontFamily: MONO6,
+                fontFamily: MONO7,
                 fontSize: 10,
                 fontWeight: 700,
                 letterSpacing: "0.06em",
@@ -39633,7 +39761,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                       border: `1px solid ${T.borderInput}`,
                       borderRadius: T.radiusMd,
                       background: T.surface,
-                      fontFamily: MONO6,
+                      fontFamily: MONO7,
                       fontSize: 13,
                       color: T.text,
                       outline: "none"
@@ -39813,7 +39941,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                       boxSizing: "border-box",
                       borderRadius: T.radiusMd,
                       border: `1px solid ${T.borderInput}`,
-                      fontFamily: MONO6,
+                      fontFamily: MONO7,
                       fontSize: T.fontSm,
                       background: T.surface,
                       color: T.text,
@@ -39871,7 +39999,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                       boxSizing: "border-box",
                       borderRadius: T.radiusMd,
                       border: `1px solid ${T.borderInput}`,
-                      fontFamily: MONO6,
+                      fontFamily: MONO7,
                       fontSize: T.fontSm,
                       background: T.surface,
                       color: T.text,
@@ -40013,7 +40141,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               position: "absolute",
               top: 12,
               left: 16,
-              fontFamily: MONO6,
+              fontFamily: MONO7,
               fontSize: 9.5,
               fontWeight: 700,
               letterSpacing: "0.10em",
@@ -40101,14 +40229,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     slack: "slack",
     chatwork: "chatwork"
   };
-  var MONO7 = T.fontMono;
+  var MONO8 = T.fontMono;
   var TH2 = {
     padding: "8px 14px",
     textAlign: "left",
     fontSize: T.fontXs,
     fontWeight: 700,
     color: T.textMuted,
-    fontFamily: MONO7,
+    fontFamily: MONO8,
     letterSpacing: "0.05em",
     textTransform: "uppercase",
     background: T.surfaceAlt,
@@ -40415,17 +40543,17 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             children: [
               /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("td", { style: {
                 ...TD,
-                fontFamily: MONO7,
+                fontFamily: MONO8,
                 fontSize: T.fontXs,
                 color: T.textFaint,
                 width: 40
               }, children: String(c.id).padStart(2, "0") }),
               /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("td", { style: { ...TD, fontWeight: 600 }, children: c.name }),
               /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("td", { style: TD, children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(AdapterTag, { adapter: c.adapter }) }),
-              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("td", { style: { ...TD, fontFamily: MONO7, fontSize: T.fontSm, color: T.textMuted }, children: c.created_at?.slice(5, 10) ?? "\u2014" }),
+              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("td", { style: { ...TD, fontFamily: MONO8, fontSize: T.fontSm, color: T.textMuted }, children: c.created_at?.slice(5, 10) ?? "\u2014" }),
               /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("td", { style: {
                 ...TD,
-                fontFamily: MONO7,
+                fontFamily: MONO8,
                 fontSize: T.fontSm,
                 color: c.updated_at ? T.successFg : T.textFaint
               }, children: c.updated_at?.slice(5, 16) ?? "\u2014" }),
@@ -40449,7 +40577,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   // src/admin/components/SettingsPage.tsx
   var import_react16 = __toESM(require_react());
   var import_jsx_runtime14 = __toESM(require_jsx_runtime());
-  var MONO8 = T.fontMono;
+  var MONO9 = T.fontMono;
   function ThemeCard({ def, isSelected, currentVariant, onSelect, onToggle }) {
     const { t } = useTranslation();
     const displayVariant = isSelected ? currentVariant : def.variants[0];
@@ -40503,7 +40631,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               gap: 4
             }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { style: {
-                fontFamily: MONO8,
+                fontFamily: MONO9,
                 fontSize: 9,
                 fontWeight: 700,
                 textAlign: "center",
@@ -40541,7 +40669,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 justifyContent: "center",
                 color: preview.accent,
                 fontSize: 7,
-                fontFamily: MONO8
+                fontFamily: MONO9
               }, children: "save" })
             ] })
           ] }),
@@ -40562,7 +40690,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               display: "inline-flex",
               alignItems: "center",
               gap: 4,
-              fontFamily: MONO8,
+              fontFamily: MONO9,
               fontSize: 9.5,
               color: T.textFaint
             }, children: [
@@ -40684,7 +40812,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       borderRadius: T.radiusMd,
       border: `1px solid oklch(22% 0.010 265)`,
       padding: "12px 16px",
-      fontFamily: MONO8,
+      fontFamily: MONO9,
       fontSize: T.fontSm,
       lineHeight: 1.8,
       minHeight: 128,
@@ -40742,7 +40870,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { children: [
       /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(PageHead, { title: "Settings", subtitle: `admin theme \xB7 ${ADMIN_THEME_DEFS.length} options` }),
       /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(Card, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(SectionHead, { label: "admin theme", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { style: { fontFamily: MONO8, fontSize: T.fontXs, color: T.textMuted }, children: "applied immediately" }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(SectionHead, { label: "admin theme", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { style: { fontFamily: MONO9, fontSize: T.fontXs, color: T.textMuted }, children: "applied immediately" }) }),
         /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { style: {
           display: "grid",
           gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
@@ -40773,14 +40901,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     slack: "#",
     chatwork: "\u270E"
   };
-  var MONO9 = T.fontMono;
+  var MONO10 = T.fontMono;
   var TH3 = {
     padding: "8px 14px",
     textAlign: "left",
     fontSize: T.fontXs,
     fontWeight: 700,
     color: T.textMuted,
-    fontFamily: MONO9,
+    fontFamily: MONO10,
     letterSpacing: "0.05em",
     textTransform: "uppercase",
     background: T.surfaceAlt,
@@ -41060,7 +41188,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       background: T.surface,
       color: T.text,
       fontSize: T.fontXs,
-      fontFamily: MONO9,
+      fontFamily: MONO10,
       cursor: "pointer",
       outline: "none"
     };
@@ -41130,7 +41258,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("span", { style: {
                   fontSize: 12,
                   color: T.textMuted,
-                  fontFamily: MONO9,
+                  fontFamily: MONO10,
                   fontWeight: 400
                 }, children: [
                   log.adapter,
@@ -41140,7 +41268,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               ] }),
               meta: fail ? /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("span", { style: {
                 color: T.dangerFg,
-                fontFamily: MONO9,
+                fontFamily: MONO10,
                 fontSize: 11.5,
                 lineHeight: 1.4,
                 whiteSpace: "normal",
@@ -41162,7 +41290,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           gap: 8,
           margin: "12px 0",
           alignItems: "center",
-          fontFamily: MONO9,
+          fontFamily: MONO10,
           fontSize: T.fontXs,
           color: T.textMuted
         }, children: [
@@ -41226,7 +41354,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           display: "flex",
           alignItems: "center",
           gap: 5,
-          fontFamily: MONO9,
+          fontFamily: MONO10,
           fontSize: T.fontXs,
           color: T.textMuted,
           letterSpacing: "0.04em"
@@ -41255,7 +41383,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           display: "flex",
           alignItems: "center",
           gap: 5,
-          fontFamily: MONO9,
+          fontFamily: MONO10,
           fontSize: T.fontXs,
           color: T.textMuted,
           letterSpacing: "0.04em"
@@ -41282,7 +41410,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           display: "flex",
           alignItems: "center",
           gap: 5,
-          fontFamily: MONO9,
+          fontFamily: MONO10,
           fontSize: T.fontXs,
           color: T.textMuted,
           letterSpacing: "0.04em"
@@ -41302,7 +41430,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             }
           )
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("span", { style: { marginLeft: "auto", fontFamily: MONO9, fontSize: T.fontXs, color: T.textMuted }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("span", { style: { marginLeft: "auto", fontFamily: MONO10, fontSize: T.fontXs, color: T.textMuted }, children: [
           total,
           " records"
         ] })
@@ -41337,18 +41465,18 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               children: [
                 /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("td", { style: { ...TD2, boxShadow: isSel ? `inset 2px 0 0 ${fail ? T.dangerFg : T.primary}` : "none" }, children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(StatusPill, { variant: log.status }) }),
                 /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("td", { style: TD2, children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(AdapterTag, { adapter: log.adapter }) }),
-                /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("td", { style: { ...TD2, fontFamily: MONO9, fontSize: T.fontXs, color: T.textFaint }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("td", { style: { ...TD2, fontFamily: MONO10, fontSize: T.fontXs, color: T.textFaint }, children: [
                   log.session_id.slice(0, 8),
                   "\u2026"
                 ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("td", { style: { ...TD2, fontFamily: MONO9, fontSize: T.fontSm, color: T.text }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("td", { style: { ...TD2, fontFamily: MONO10, fontSize: T.fontSm, color: T.text }, children: [
                   "#",
                   log.scenario_id
                 ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("td", { style: { ...TD2, fontFamily: MONO9, fontSize: T.fontSm, color: T.textMuted, whiteSpace: "nowrap" }, children: log.executed_at }),
+                /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("td", { style: { ...TD2, fontFamily: MONO10, fontSize: T.fontSm, color: T.textMuted, whiteSpace: "nowrap" }, children: log.executed_at }),
                 /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("td", { style: {
                   ...TD2,
-                  fontFamily: MONO9,
+                  fontFamily: MONO10,
                   fontSize: T.fontXs,
                   color: fail ? T.dangerFg : T.textMuted,
                   maxWidth: 280,
@@ -41368,7 +41496,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         gap: 8,
         marginTop: 16,
         alignItems: "center",
-        fontFamily: MONO9,
+        fontFamily: MONO10,
         fontSize: T.fontXs,
         color: T.textMuted
       }, children: [
@@ -41447,7 +41575,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           padding: 24
         }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { style: {
-            fontFamily: MONO9,
+            fontFamily: MONO10,
             fontSize: 10,
             fontWeight: 700,
             letterSpacing: "0.10em",
@@ -41474,14 +41602,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   // src/admin/components/DashboardPage.tsx
   var import_react18 = __toESM(require_react());
   var import_jsx_runtime16 = __toESM(require_jsx_runtime());
-  var MONO10 = T.fontMono;
+  var MONO11 = T.fontMono;
   var TH4 = {
     padding: "8px 14px",
     textAlign: "left",
     fontSize: T.fontXs,
     fontWeight: 700,
     color: T.textMuted,
-    fontFamily: MONO10,
+    fontFamily: MONO11,
     letterSpacing: "0.05em",
     textTransform: "uppercase",
     background: T.surfaceAlt,
@@ -41518,7 +41646,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         fontSize: T.fontXs,
         fontWeight: 700,
         color: T.textMuted,
-        fontFamily: MONO10,
+        fontFamily: MONO11,
         letterSpacing: "0.04em",
         textTransform: "uppercase"
       }, children: [
@@ -41534,7 +41662,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         value,
         unit && /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("span", { style: { fontSize: T.fontSm, fontWeight: 400, color: T.textMuted, marginLeft: 3 }, children: unit })
       ] }),
-      meta && /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("div", { style: { fontSize: T.fontXs, color: T.textMuted, fontFamily: MONO10 }, children: meta })
+      meta && /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("div", { style: { fontSize: T.fontXs, color: T.textMuted, fontFamily: MONO11 }, children: meta })
     ] });
   }
   function SparklineCard({ data: data2 }) {
@@ -41559,7 +41687,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(CardSub, { children: "sessions \xB7 daily" }),
           /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("div", { style: { fontWeight: 700, fontSize: T.fontMd, color: T.textStrong }, children: "\u65E5\u5225\u30BB\u30C3\u30B7\u30E7\u30F3\u6570" })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { style: { fontFamily: MONO10, fontSize: T.fontXs, color: T.textMuted }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { style: { fontFamily: MONO11, fontSize: T.fontXs, color: T.textMuted }, children: [
           "7 days \xB7 ",
           dateRange
         ] })
@@ -41590,7 +41718,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         display: "flex",
         justifyContent: "space-between",
         marginTop: 8,
-        fontFamily: MONO10,
+        fontFamily: MONO11,
         fontSize: T.fontXs,
         color: T.textFaint
       }, children: data2.map((d) => /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("span", { children: d.date.slice(5) }, d.date)) })
@@ -41874,7 +42002,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Link, { to: "/action-logs", style: {
             fontSize: T.fontXs,
-            fontFamily: MONO10,
+            fontFamily: MONO11,
             color: T.dangerFg,
             textDecoration: "none"
           }, children: "\u2192 \u30A2\u30AF\u30B7\u30E7\u30F3\u30ED\u30B0\u3092\u78BA\u8A8D" })
@@ -41961,8 +42089,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                   borderBottom: i < scenarios.length - 1 ? `1px solid ${T.border}` : "none"
                 }, children: [
                   /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("td", { style: TD3, children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Link, { to: `/scenarios/${s.id}`, style: { color: T.primary, textDecoration: "none", fontWeight: 600 }, children: s.name }) }),
-                  /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("td", { style: { ...TD3, textAlign: "right", fontFamily: MONO10, fontSize: T.fontSm, color: T.text }, children: "\u2014" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("td", { style: { ...TD3, textAlign: "right", fontFamily: MONO10, fontSize: T.fontSm, color: T.textMuted }, children: "\u2014" })
+                  /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("td", { style: { ...TD3, textAlign: "right", fontFamily: MONO11, fontSize: T.fontSm, color: T.text }, children: "\u2014" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("td", { style: { ...TD3, textAlign: "right", fontFamily: MONO11, fontSize: T.fontSm, color: T.textMuted }, children: "\u2014" })
                 ] }, s.id)),
                 scenarios.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("tr", { children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("td", { colSpan: 3, style: { ...TD3, color: T.textMuted, textAlign: "center" }, children: "\u2014" }) })
               ] })
@@ -41982,7 +42110,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               ] }),
               /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Link, { to: "/action-logs", style: {
                 fontSize: T.fontXs,
-                fontFamily: MONO10,
+                fontFamily: MONO11,
                 letterSpacing: "0.06em",
                 textTransform: "uppercase",
                 color: T.primary,
@@ -41994,8 +42122,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 borderBottom: i < failures.length - 1 ? `1px solid ${T.border}` : "none"
               }, children: [
                 /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("td", { style: { ...TD3, width: 90 }, children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(AdapterTag, { adapter: log.adapter }) }),
-                /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("td", { style: { ...TD3, fontFamily: MONO10, fontSize: T.fontXs, color: T.textMuted, maxWidth: 160, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }, children: log.error_message ?? "\u2014" }),
-                /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("td", { style: { ...TD3, textAlign: "right", fontFamily: MONO10, fontSize: T.fontXs, color: T.textMuted, whiteSpace: "nowrap" }, children: log.executed_at?.slice(11, 16) ?? "\u2014" })
+                /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("td", { style: { ...TD3, fontFamily: MONO11, fontSize: T.fontXs, color: T.textMuted, maxWidth: 160, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }, children: log.error_message ?? "\u2014" }),
+                /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("td", { style: { ...TD3, textAlign: "right", fontFamily: MONO11, fontSize: T.fontXs, color: T.textMuted, whiteSpace: "nowrap" }, children: log.executed_at?.slice(11, 16) ?? "\u2014" })
               ] }, log.id ?? i)),
               failures.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("tr", { children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("td", { colSpan: 3, style: { ...TD3, color: T.textMuted, textAlign: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(SectionHead, { label: "no failures" }) }) })
             ] }) })
@@ -42008,7 +42136,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   // src/admin/components/SessionsPage.tsx
   var import_react19 = __toESM(require_react());
   var import_jsx_runtime17 = __toESM(require_jsx_runtime());
-  var MONO11 = T.fontMono;
+  var MONO12 = T.fontMono;
   function calcDuration(start2, end) {
     if (!end) return "in progress";
     const ms = new Date(end).getTime() - new Date(start2).getTime();
@@ -42025,7 +42153,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     fontSize: T.fontXs,
     fontWeight: 700,
     color: T.textMuted,
-    fontFamily: MONO11,
+    fontFamily: MONO12,
     letterSpacing: "0.05em",
     textTransform: "uppercase",
     background: T.surfaceAlt,
@@ -42089,7 +42217,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             "Session #",
             shortId
           ] }),
-          detail && /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { style: { fontFamily: MONO11, fontSize: T.fontXs, color: T.textMuted }, children: [
+          detail && /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { style: { fontFamily: MONO12, fontSize: T.fontXs, color: T.textMuted }, children: [
             "scenario #",
             detail.scenario_id
           ] })
@@ -42129,12 +42257,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           }, children: [
             ["outcome", /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(StatusPill, { variant: detail.outcome === "dropped" ? "abandoned" : detail.outcome }, "o")],
             ["conversion", /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { style: { color: detail.has_conversion ? T.successFg : T.textMuted }, children: detail.has_conversion ? "\u2713 yes" : "\u2014 no" }, "cv")],
-            ["started", /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { style: { fontFamily: MONO11, color: T.text }, children: detail.started_at }, "s")],
-            ["ended", /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { style: { fontFamily: MONO11, color: T.text }, children: detail.ended_at ?? "\u2014" }, "e")],
-            ["duration", /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { style: { fontFamily: MONO11, color: T.text }, children: calcDuration(detail.started_at, detail.ended_at) }, "d")]
+            ["started", /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { style: { fontFamily: MONO12, color: T.text }, children: detail.started_at }, "s")],
+            ["ended", /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { style: { fontFamily: MONO12, color: T.text }, children: detail.ended_at ?? "\u2014" }, "e")],
+            ["duration", /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { style: { fontFamily: MONO12, color: T.text }, children: calcDuration(detail.started_at, detail.ended_at) }, "d")]
           ].map(([key, val]) => /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(import_jsx_runtime17.Fragment, { children: [
             /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { style: {
-              fontFamily: MONO11,
+              fontFamily: MONO12,
               fontSize: T.fontXs,
               color: T.textMuted,
               letterSpacing: "0.06em",
@@ -42145,7 +42273,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(CardSub, { children: "session id" }),
           /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { style: {
             background: T.surfaceAlt,
-            fontFamily: MONO11,
+            fontFamily: MONO12,
             fontSize: T.fontXs,
             wordBreak: "break-all",
             padding: 10,
@@ -42174,7 +42302,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                   alignItems: "baseline"
                 },
                 children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { style: { fontFamily: MONO11, color: T.textMuted, fontSize: T.fontXs }, children: key }),
+                  /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { style: { fontFamily: MONO12, color: T.textMuted, fontSize: T.fontXs }, children: key }),
                   /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { style: { color: T.text, wordBreak: "break-all" }, children: val })
                 ]
               },
@@ -42223,7 +42351,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                     }, children: msg.content })
                   ] }),
                   /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { style: {
-                    fontFamily: MONO11,
+                    fontFamily: MONO12,
                     fontSize: 10,
                     color: T.textFaint,
                     textAlign: "center",
@@ -42463,7 +42591,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       background: T.surface,
       color: T.text,
       fontSize: T.fontXs,
-      fontFamily: MONO11,
+      fontFamily: MONO12,
       cursor: "pointer",
       outline: "none"
     };
@@ -42555,7 +42683,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           gap: 8,
           margin: "12px 0",
           alignItems: "center",
-          fontFamily: MONO11,
+          fontFamily: MONO12,
           fontSize: T.fontXs,
           color: T.textMuted
         }, children: [
@@ -42659,7 +42787,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           display: "flex",
           alignItems: "center",
           gap: 5,
-          fontFamily: MONO11,
+          fontFamily: MONO12,
           fontSize: T.fontXs,
           color: T.textMuted,
           letterSpacing: "0.04em"
@@ -42688,7 +42816,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           display: "flex",
           alignItems: "center",
           gap: 5,
-          fontFamily: MONO11,
+          fontFamily: MONO12,
           fontSize: T.fontXs,
           color: T.textMuted,
           letterSpacing: "0.04em"
@@ -42715,7 +42843,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           display: "flex",
           alignItems: "center",
           gap: 5,
-          fontFamily: MONO11,
+          fontFamily: MONO12,
           fontSize: T.fontXs,
           color: T.textMuted,
           letterSpacing: "0.04em"
@@ -42737,7 +42865,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             }
           )
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("span", { style: { marginLeft: "auto", fontFamily: MONO11, fontSize: T.fontXs, color: T.textMuted }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("span", { style: { marginLeft: "auto", fontFamily: MONO12, fontSize: T.fontXs, color: T.textMuted }, children: [
           total,
           " records"
         ] })
@@ -42772,14 +42900,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               },
               children: [
                 /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("td", { style: { ...TD4, boxShadow: isSelected ? `inset 2px 0 0 ${T.primary}` : "none" }, children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(StatusPill, { variant: pillVariant }) }),
-                /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("td", { style: { ...TD4, fontFamily: MONO11, fontSize: T.fontSm, color: T.text }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("td", { style: { ...TD4, fontFamily: MONO12, fontSize: T.fontSm, color: T.text }, children: [
                   "#",
                   s.scenario_id
                 ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("td", { style: { ...TD4, fontFamily: MONO11, fontSize: T.fontSm, color: s.has_conversion ? T.successFg : T.textMuted }, children: s.has_conversion ? "\u2713 yes" : "\u2014 no" }),
-                /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("td", { style: { ...TD4, fontFamily: MONO11, fontSize: T.fontSm, color: T.textMuted, whiteSpace: "nowrap" }, children: s.started_at }),
-                /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("td", { style: { ...TD4, fontFamily: MONO11, fontSize: T.fontSm, color: T.textMuted, whiteSpace: "nowrap" }, children: s.ended_at ?? "\u2014" }),
-                /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("td", { style: { ...TD4, fontFamily: MONO11, fontSize: T.fontSm, color: T.textMuted }, children: calcDuration(s.started_at, s.ended_at) }),
+                /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("td", { style: { ...TD4, fontFamily: MONO12, fontSize: T.fontSm, color: s.has_conversion ? T.successFg : T.textMuted }, children: s.has_conversion ? "\u2713 yes" : "\u2014 no" }),
+                /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("td", { style: { ...TD4, fontFamily: MONO12, fontSize: T.fontSm, color: T.textMuted, whiteSpace: "nowrap" }, children: s.started_at }),
+                /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("td", { style: { ...TD4, fontFamily: MONO12, fontSize: T.fontSm, color: T.textMuted, whiteSpace: "nowrap" }, children: s.ended_at ?? "\u2014" }),
+                /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("td", { style: { ...TD4, fontFamily: MONO12, fontSize: T.fontSm, color: T.textMuted }, children: calcDuration(s.started_at, s.ended_at) }),
                 /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("td", { style: { ...TD4, color: T.textMuted, fontSize: T.fontXs }, children: isSelected ? "\u2192 selected" : "" })
               ]
             },
@@ -42793,7 +42921,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         gap: 8,
         marginTop: 16,
         alignItems: "center",
-        fontFamily: MONO11,
+        fontFamily: MONO12,
         fontSize: T.fontXs,
         color: T.textMuted
       }, children: [
@@ -42872,7 +43000,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           padding: 24
         }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { style: {
-            fontFamily: MONO11,
+            fontFamily: MONO12,
             fontSize: 10,
             fontWeight: 700,
             letterSpacing: "0.10em",
@@ -42899,7 +43027,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   // src/admin/components/ThemeSwitcher.tsx
   var import_react20 = __toESM(require_react());
   var import_jsx_runtime18 = __toESM(require_jsx_runtime());
-  var MONO12 = T.fontMono;
+  var MONO13 = T.fontMono;
   function ThemeSwitcher() {
     const { adminThemeId, themeVariant: themeVariant2, setAdminTheme, toggleVariant } = useTheme();
     const bp = useBreakpoint();
@@ -42937,7 +43065,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             padding: 6
           }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("div", { style: {
-              fontFamily: MONO12,
+              fontFamily: MONO13,
               fontSize: 9.5,
               fontWeight: 700,
               letterSpacing: "0.08em",
@@ -43010,7 +43138,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                     }, children: [
                       def.name,
                       darkOnly && /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("span", { style: {
-                        fontFamily: MONO12,
+                        fontFamily: MONO13,
                         fontSize: 9.5,
                         color: T.textFaint,
                         marginLeft: 5
@@ -43099,7 +43227,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("div", { style: {
               marginTop: 4,
               padding: "8px 10px 4px",
-              fontFamily: MONO12,
+              fontFamily: MONO13,
               fontSize: 9.5,
               color: T.textFaint,
               letterSpacing: "0.04em",
@@ -43145,7 +43273,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                   flexShrink: 0
                 } }),
                 /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("span", { style: {
-                  fontFamily: MONO12,
+                  fontFamily: MONO13,
                   fontSize: 11,
                   fontWeight: 600,
                   letterSpacing: "0.04em",
