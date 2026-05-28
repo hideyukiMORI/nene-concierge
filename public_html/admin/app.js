@@ -37736,6 +37736,38 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             node.id
           ] })
         ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+          "button",
+          {
+            onClick: () => onDelete(node.id),
+            title: t("node.delete"),
+            "aria-label": t("node.delete"),
+            style: {
+              width: 28,
+              height: 28,
+              borderRadius: 5,
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              background: "transparent",
+              border: `1px solid ${T.border}`,
+              color: T.dangerFg,
+              cursor: "pointer",
+              flexShrink: 0,
+              marginRight: 2,
+              transition: `background ${T.transitionFast}, border-color ${T.transitionFast}`
+            },
+            onMouseEnter: (e) => {
+              e.currentTarget.style.background = T.dangerBg;
+              e.currentTarget.style.borderColor = T.dangerBorder;
+            },
+            onMouseLeave: (e) => {
+              e.currentTarget.style.background = "transparent";
+              e.currentTarget.style.borderColor = T.border;
+            },
+            children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(TrashIcon, {})
+          }
+        ),
         onClose && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
           "button",
           {
@@ -37805,42 +37837,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         tab === "analytics" && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(AnalyticsTab, { data: data2 }),
         tab === "connections" && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(ConnectionsTab, { nodeId: node.id, type })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: {
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: {
         padding: "10px 14px",
         borderTop: `1px solid ${T.border}`,
         display: "flex",
-        gap: 8,
         alignItems: "center",
         flexShrink: 0,
         background: T.surface
-      }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { flex: 1, fontSize: T.fontXs, color: T.textFaint, fontFamily: MONO4 }, children: t("node.edited") }),
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
-          "button",
-          {
-            onClick: () => onDelete(node.id),
-            title: t("node.delete"),
-            style: {
-              height: T.controlHeight,
-              padding: "0 10px",
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 5,
-              borderRadius: T.radiusMd,
-              background: "transparent",
-              border: `1px solid ${T.border}`,
-              color: T.dangerFg,
-              cursor: "pointer",
-              fontSize: T.fontSm,
-              fontWeight: 600
-            },
-            children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(TrashIcon, {}),
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { children: t("node.delete") })
-            ]
-          }
-        )
-      ] })
+      }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { flex: 1, fontSize: T.fontXs, color: T.textFaint, fontFamily: MONO4 }, children: t("node.edited") }) })
     ] });
   }
   function tabLabel(k, t) {
