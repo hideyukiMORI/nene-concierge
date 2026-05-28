@@ -1,6 +1,6 @@
 /** nene-records admin-theme-config.ts と同パターン。 */
 
-export type AdminThemeId = 'default' | 'github' | 'solarized' | 'dracula' | 'monokai'
+export type AdminThemeId = 'default' | 'github' | 'solarized' | 'dracula' | 'monokai' | 'ubuntu'
 export type ThemeVariant  = 'light' | 'dark'
 
 export interface ThemePreviewColors {
@@ -58,6 +58,15 @@ export const ADMIN_THEME_DEFS: readonly AdminThemeDef[] = [
         variants: ['dark'],
         preview: {
             dark: { surface: '#272822', sidebar: '#1e1e1c', accent: '#a6e22e' },
+        },
+    },
+    {
+        id: 'ubuntu',
+        name: 'Ubuntu',
+        variants: ['light', 'dark'],
+        preview: {
+            light: { surface: '#ffffff', sidebar: '#2c001e', accent: '#e95420' },
+            dark:  { surface: '#3d0e2c', sidebar: '#1e0014', accent: '#e95420' },
         },
     },
 ] as const
