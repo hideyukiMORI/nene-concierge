@@ -312,6 +312,21 @@ Last updated: 2026-05-29 (User Management + Edit History 完了)
 
 ---
 
+**Me エンドポイント + サイドバー組織表示 — 完了 ✅** (PR #121)
+
+| 項目 | 状態 | Issue |
+| --- | --- | --- |
+| GET /api/v1/me (id / email / role + 所属組織 + 現在組織) | ✅ | #120 |
+| 新モジュール src/Me/ (PSR-4 Handler→UseCase→Repository) | ✅ | #120 |
+| AdminApiAuthMiddleware: /api/v1/me を ADMIN_ONLY_PREFIXES に追加 (GET でも認証必須) | ✅ | #120 |
+| CapabilityResolver: /api/v1/me は認証済みなら誰でも通す | ✅ | #120 |
+| Layout サイドバー: OrgIndicator (現在組織名 + 他組織数 + slim 時イニシャル) | ✅ | #120 |
+| en/ja に me.* キー追加 | ✅ | #120 |
+
+**未対応 (将来 Issue)**: 実際の組織切替 (JWT org_id claim + resolver 上書き戦略)
+
+---
+
 **シナリオ編集履歴 (created_by / updated_by + scenario_revisions) — 完了 ✅** (PR #119)
 
 | 項目 | 状態 | Issue |
