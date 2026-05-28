@@ -223,6 +223,100 @@ function DockBtn({ onClick, title, children }: {
     );
 }
 
+// ── MobileZoomStack — bottom-left 縦型ズーム UI (mobile only) ────────────────
+
+function MobileZoomStack() {
+    const { zoomIn, zoomOut, fitView, getZoom } = useReactFlow();
+    const [pct, setPct] = useState(100);
+    useEffect(() => {
+        const tick = () => setPct(Math.round(getZoom() * 100));
+        const id = setInterval(tick, 300);
+        return () => clearInterval(id);
+    }, [getZoom]);
+    return (
+        <div style={{
+            background: T.glassDockBg,
+            backdropFilter: 'blur(10px)',
+            border: `1px solid ${T.border}`,
+            borderRadius: 8,
+            boxShadow: T.shadowElevated,
+            display: 'flex', flexDirection: 'column', overflow: 'hidden',
+        }}>
+            <div style={{
+                fontFamily: MONO, fontSize: 10, fontWeight: 700,
+                color: T.textStrong, letterSpacing: '0.04em',
+                borderBottom: `1px solid ${T.borderLight}`,
+                padding: '8px 0', textAlign: 'center', minWidth: 38,
+            }}>{pct}%</div>
+            <button onClick={() => zoomIn({ duration: 150 })} aria-label="Zoom in"
+                style={zoomStackBtn}>
+                <ZoomInIcon/>
+            </button>
+            <button onClick={() => zoomOut({ duration: 150 })} aria-label="Zoom out"
+                style={zoomStackBtn}>
+                <ZoomOutIcon/>
+            </button>
+            <button onClick={() => fitView({ padding: 0.6, maxZoom: 0.85, duration: 200 })} aria-label="Fit view"
+                style={{ ...zoomStackBtn, borderBottom: 'none' }}>
+                <FitViewIcon/>
+            </button>
+        </div>
+    );
+}
+const zoomStackBtn: React.CSSProperties = {
+    width: 38, height: 38, background: 'transparent',
+    border: 'none', borderBottom: `1px solid ${T.borderLight}`,
+    color: T.textMuted, cursor: 'pointer',
+    display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+};
+
+// ── MobileMiniMap — top-right の自前ミニマップ (110×78) ──────────────────────
+
+function MobileMiniMap({ nodes }: { nodes: Node[] }) {
+    if (nodes.length === 0) return null;
+    // node の bounding box を計算してミニマップに正規化
+    const xs = nodes.map(n => n.position.x);
+    const ys = nodes.map(n => n.position.y);
+    const minX = Math.min(...xs);
+    const maxX = Math.max(...xs) + 160;  // ノード幅 ~160 を加算
+    const minY = Math.min(...ys);
+    const maxY = Math.max(...ys) + 80;   // ノード高 ~80
+    const spanX = Math.max(maxX - minX, 1);
+    const spanY = Math.max(maxY - minY, 1);
+    return (
+        <div style={{
+            position: 'relative',
+            width: 110, height: 78,
+            background: T.glassDockBg,
+            backdropFilter: 'blur(10px)',
+            border: `1px solid ${T.border}`,
+            borderRadius: 8, padding: 6,
+            boxShadow: T.shadowElevated,
+        }}>
+            <span style={{
+                position: 'absolute', top: 3, left: 6,
+                fontFamily: MONO, fontSize: 8.5, fontWeight: 700,
+                letterSpacing: '0.10em', textTransform: 'uppercase',
+                color: T.textFaint,
+            }}>map</span>
+            {nodes.map(n => {
+                const tok = NODE_TOKENS[n.type as ChatNodeType];
+                const left = ((n.position.x - minX) / spanX) * 100;
+                const top  = ((n.position.y - minY) / spanY) * 100;
+                return (
+                    <span key={n.id} style={{
+                        position: 'absolute',
+                        left: `${left * 0.85 + 7}%`, top: `${top * 0.75 + 18}%`,
+                        width: 14, height: 5,
+                        borderRadius: 1.5,
+                        background: tok?.stripe ?? T.textFaint,
+                    }}/>
+                );
+            })}
+        </div>
+    );
+}
+
 function BottomDock({ nodeCount }: { nodeCount: number }) {
     const { zoomIn, zoomOut, fitView } = useReactFlow();
     return (
@@ -271,12 +365,14 @@ interface Props {
     credentials:   CredentialSummary[];
     onSave:        (nodes: ScenarioNode[], edges: ScenarioEdge[]) => void;
     analyticsMode: boolean;   // 親ヘッダーから制御
+    /** モバイルヘッダーのノード数表示用 — 内部 nodes が変わるたびに発火 */
+    onLiveNodeCount?: (n: number) => void;
 }
 
 // ── コンポーネント ──────────────────────────────────────────────────────────────
 
 const ScenarioCanvas = forwardRef<ScenarioCanvasRef, Props>(function ScenarioCanvas(
-    { scenarioId, initialNodes, initialEdges, credentials, onSave, analyticsMode },
+    { scenarioId, initialNodes, initialEdges, credentials, onSave, analyticsMode, onLiveNodeCount },
     ref,
 ) {
     const { t } = useTranslation();
@@ -286,6 +382,11 @@ const ScenarioCanvas = forwardRef<ScenarioCanvasRef, Props>(function ScenarioCan
     const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
     const [addPickerOpen, setAddPickerOpen]   = useState(false);
     const reactFlowWrapper = useRef<HTMLDivElement>(null);
+
+    // ライブノード数を親 (モバイルヘッダー) に通知
+    useEffect(() => {
+        onLiveNodeCount?.(nodes.length);
+    }, [nodes.length, onLiveNodeCount]);
 
     // ── Analytics 状態（期間は内部管理、モードは親から制御）──────────────────────
     const [period, setPeriod]                   = useState<AnalyticsPeriod>('7d');
@@ -393,10 +494,19 @@ const ScenarioCanvas = forwardRef<ScenarioCanvasRef, Props>(function ScenarioCan
     const selectedNode = !analyticsMode ? (nodes.find(n => n.id === selectedNodeId) ?? null) : null;
     const showRightPanel = analyticsMode || selectedNode !== null;
 
+    // モバイルで選択ノードシートを開いている時はキャンバスを上側に詰める
+    const sheetHeight = 380;
+    const canvasBottomInset = (isMobile && selectedNode && !analyticsMode) ? sheetHeight : 0;
+
     return (
         <div style={{ position: 'relative', height: '100%' }}>
             <div ref={reactFlowWrapper}
-                style={{ position: 'absolute', inset: 0, background: T.canvasBg }}>
+                style={{
+                    position: 'absolute', top: 0, left: 0, right: 0,
+                    bottom: canvasBottomInset,
+                    background: T.canvasBg,
+                    transition: 'bottom 200ms ease',
+                }}>
                 <ReactFlow
                     nodes={nodes}
                     edges={edges}
@@ -419,21 +529,39 @@ const ScenarioCanvas = forwardRef<ScenarioCanvasRef, Props>(function ScenarioCan
                     {/* ドットグリッド背景 */}
                     <Background variant={BackgroundVariant.Dots} gap={24} size={1.5} color={T.canvasDot} />
 
-                    {/* ミニマップ — NODE_COLORS.header でテーマ追従 */}
-                    <MiniMap
-                        nodeColor={n => NODE_COLORS[n.type as ChatNodeType]?.header ?? T.sidebarMuted}
-                        style={{
-                            background: T.minimapBg,
-                            border: `1px solid ${T.border}`,
-                            borderRadius: T.radiusMd,
-                        }}
-                        maskColor="oklch(0% 0 0 / 0.08)"
-                    />
+                    {/* ミニマップ (desktop のみ — モバイルは自前 .minimap を canvas 外に描画) */}
+                    {!isMobile && (
+                        <MiniMap
+                            nodeColor={n => NODE_COLORS[n.type as ChatNodeType]?.header ?? T.sidebarMuted}
+                            style={{
+                                background: T.minimapBg,
+                                border: `1px solid ${T.border}`,
+                                borderRadius: T.radiusMd,
+                            }}
+                            maskColor="oklch(0% 0 0 / 0.08)"
+                        />
+                    )}
 
-                    {/* ボトムドック: Zoom + ノード数 */}
-                    <Panel position="bottom-center" style={{ marginBottom: 14 }}>
-                        <BottomDock nodeCount={nodes.length} />
-                    </Panel>
+                    {/* ボトムドック (desktop のみ — モバイルは縦型 ZoomStack) */}
+                    {!isMobile && (
+                        <Panel position="bottom-center" style={{ marginBottom: 14 }}>
+                            <BottomDock nodeCount={nodes.length} />
+                        </Panel>
+                    )}
+
+                    {/* モバイル: 縦型 ZoomStack を bottom-left に */}
+                    {isMobile && (
+                        <Panel position="bottom-left" style={{ marginBottom: 12, marginLeft: 12 }}>
+                            <MobileZoomStack />
+                        </Panel>
+                    )}
+
+                    {/* モバイル: 自前の mini minimap を top-right に */}
+                    {isMobile && (
+                        <Panel position="top-right" style={{ marginTop: 12, marginRight: 12 }}>
+                            <MobileMiniMap nodes={nodes} />
+                        </Panel>
+                    )}
                 </ReactFlow>
             </div>
 
@@ -476,23 +604,43 @@ const ScenarioCanvas = forwardRef<ScenarioCanvasRef, Props>(function ScenarioCan
                 </div>
             )}
 
-            {/* モバイル: NodeConfigPanel を BottomSheet 内に描画 */}
-            {isMobile && (
-                <BottomSheet
-                    open={selectedNode !== null && !analyticsMode}
-                    onClose={() => setSelectedNodeId(null)}
-                    height="78vh">
-                    {selectedNode && (
-                        <NodeConfigPanel
-                            node={selectedNode}
-                            credentials={credentials}
-                            onChange={handleNodeChange}
-                            onDelete={handleNodeDelete}
-                            onClose={() => setSelectedNodeId(null)}
-                        />
-                    )}
-                </BottomSheet>
-            )}
+            {/* モバイル: インライン Sheet (canvas 下に張り付き、380px) */}
+            {isMobile && selectedNode && !analyticsMode && (() => {
+                const tok = NODE_TOKENS[selectedNode.type as ChatNodeType];
+                return (
+                    <div style={{
+                        position: 'absolute', left: 0, right: 0, bottom: 0,
+                        height: sheetHeight,
+                        background: T.surface,
+                        borderRadius: '18px 18px 0 0',
+                        boxShadow: '0 -10px 30px -10px rgba(15,23,42,.18)',
+                        display: 'flex', flexDirection: 'column',
+                        paddingBottom: 'env(safe-area-inset-bottom)',
+                        overflow: 'hidden',
+                        zIndex: 20,
+                    }}>
+                        {/* type stripe */}
+                        <div style={{ height: 3, background: tok.stripe, flexShrink: 0 }}/>
+                        {/* drag handle */}
+                        <div style={{
+                            width: 36, height: 4, borderRadius: 99,
+                            background: T.borderLight,
+                            margin: '8px auto 4px', flexShrink: 0,
+                        }}/>
+                        {/* NodeConfigPanel をシート内に埋め込み (mobile prop) */}
+                        <div style={{ flex: 1, minHeight: 0, overflow: 'hidden' }}>
+                            <NodeConfigPanel
+                                node={selectedNode}
+                                credentials={credentials}
+                                onChange={handleNodeChange}
+                                onDelete={handleNodeDelete}
+                                onClose={() => setSelectedNodeId(null)}
+                                mobile
+                            />
+                        </div>
+                    </div>
+                );
+            })()}
 
             {/* モバイル: Analytics サマリーも BottomSheet */}
             {isMobile && (

@@ -7,8 +7,17 @@ import {
     type ScenarioNode, type ScenarioEdge, type CredentialSummary, type ChatNodeType,
 } from '../api.js';
 import { Btn, Badge, ErrorMsg, useLayout } from './Layout.js';
-import { MobileHeader, MobileIconBtn, Pill } from './mobile/index.js';
-import type { PillVariant } from './mobile/index.js';
+import { MobileHeader, BottomSheet } from './mobile/index.js';
+
+const kebabItemStyle: React.CSSProperties = {
+    display: 'flex', alignItems: 'center', gap: 12,
+    padding: '12px 14px',
+    background: 'transparent', border: 'none',
+    borderRadius: 8, cursor: 'pointer',
+    fontSize: 14, color: 'inherit',
+    WebkitTapHighlightColor: 'transparent',
+    textAlign: 'left',
+};
 import { T, NODE_TOKENS } from '../theme.js';
 import { useTranslation } from '../i18n/index.js';
 import ScenarioCanvas, { type ScenarioCanvasRef } from './editor/ScenarioCanvas.js';
@@ -87,7 +96,9 @@ export default function ScenarioFormPage() {
     const isNew   = id === undefined;
     const nav     = useNavigate();
     const { t }   = useTranslation();
-    const { isMobile } = useLayout();
+    const { isMobile, openMobileMenu } = useLayout();
+    const [kebabOpen, setKebabOpen] = useState(false);
+    const [liveNodeCount, setLiveNodeCount] = useState(0);
 
     // ── メタ情報 ────────────────────────────────────────────────────────────
     const [name, setName]               = useState('');
@@ -257,11 +268,6 @@ export default function ScenarioFormPage() {
 
     // ─────────── Mobile layout ───────────
     if (isMobile) {
-        const pillVariant: PillVariant =
-            status === 'published' ? 'success' :
-            status === 'archived'  ? 'archived' :
-                                     'draft';
-
         // 新規作成: タイトル入力 + Create ボタンのみ
         if (isNew) {
             return (
@@ -310,41 +316,98 @@ export default function ScenarioFormPage() {
             );
         }
 
+        const pillBg = status === 'published' ? T.successPillBg
+            : status === 'archived' ? T.badgeArchBg
+            : T.badgeDraftBg;
+        const pillFg = status === 'published' ? T.successFg
+            : status === 'archived' ? T.badgeArchColor
+            : T.badgeDraftColor;
+        const edIconBtn: React.CSSProperties = {
+            width: 36, height: 36,
+            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+            borderRadius: 6, background: 'transparent', border: 'none',
+            color: T.text, flexShrink: 0, cursor: 'pointer',
+        };
+
         return (
             <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: '100vh', background: T.bg }}>
-                <MobileHeader
-                    showMenu={false}
-                    onBack={() => nav('/scenarios')}
-                    title={name || t('scenarioForm.namePlaceholder')}
-                    leading={
-                        <div style={{
-                            display: 'inline-flex', alignItems: 'center',
-                            marginLeft: -4, marginRight: 2,
+                {/* 専用 .ed-header (要件書 mobile/scenario-editor.html 準拠) */}
+                <header style={{
+                    display: 'flex', alignItems: 'center', gap: 6,
+                    padding: '8px 10px 10px',
+                    paddingTop: 'calc(8px + env(safe-area-inset-top))',
+                    background: T.bg,
+                    borderBottom: `1px solid ${T.borderLight}`,
+                    flexShrink: 0,
+                }}>
+                    <button onClick={() => nav('/scenarios')} aria-label={t('common.back')}
+                        style={edIconBtn}>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                            <polyline points="15 18 9 12 15 6"/>
+                        </svg>
+                    </button>
+
+                    {/* Title + meta */}
+                    <div style={{
+                        flex: 1, minWidth: 0,
+                        display: 'flex', flexDirection: 'column', gap: 1,
+                        padding: '0 4px',
+                    }}>
+                        <span style={{
+                            fontSize: 15, fontWeight: 700, color: T.textStrong,
+                            overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                            letterSpacing: '-0.01em',
+                        }}>{name || t('scenarioForm.namePlaceholder')}</span>
+                        <span style={{
+                            fontFamily: MONO, fontSize: 10, color: T.textMuted,
+                            display: 'inline-flex', alignItems: 'center', gap: 5,
+                            letterSpacing: '0.04em',
                         }}>
-                            <Pill variant={pillVariant} label={status} dot={false}/>
-                        </div>
-                    }
-                    trailing={
-                        <>
-                            <MobileIconBtn ariaLabel={t('canvas.analyticsMode')} onClick={() => setAnalyticsMode(v => !v)}>
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={analyticsMode ? T.primary : 'currentColor'} strokeWidth="2" strokeLinecap="round" aria-hidden>
-                                    <line x1="18" y1="20" x2="18" y2="10"/>
-                                    <line x1="12" y1="20" x2="12" y2="4"/>
-                                    <line x1="6" y1="20" x2="6" y2="14"/>
-                                </svg>
-                            </MobileIconBtn>
-                            {!analyticsMode && (
-                                <MobileIconBtn ariaLabel={t('common.save')} onClick={() => canvasRef.current?.triggerSave()}>
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={T.primary} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
-                                        <polyline points="17 21 17 13 7 13 7 21"/>
-                                        <polyline points="7 3 7 8 15 8"/>
-                                    </svg>
-                                </MobileIconBtn>
-                            )}
-                        </>
-                    }
-                />
+                            <span style={{
+                                display: 'inline-flex', alignItems: 'center', gap: 3,
+                                height: 14, padding: '0 6px', borderRadius: 99,
+                                background: pillBg, color: pillFg,
+                                fontFamily: MONO, fontSize: 9, fontWeight: 700,
+                                letterSpacing: '0.06em', textTransform: 'uppercase',
+                            }}>
+                                <span style={{ width: 4, height: 4, borderRadius: 99, background: 'currentColor' }}/>
+                                {status}
+                            </span>
+                            <span>· {liveNodeCount} nodes</span>
+                        </span>
+                    </div>
+
+                    {/* Kebab menu */}
+                    <button onClick={() => setKebabOpen(true)} aria-label="More"
+                        style={edIconBtn}>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+                            <circle cx="12" cy="5"  r="1.5" fill="currentColor"/>
+                            <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+                            <circle cx="12" cy="19" r="1.5" fill="currentColor"/>
+                        </svg>
+                    </button>
+
+                    {/* Filled Save button */}
+                    {!analyticsMode && (
+                        <button onClick={() => canvasRef.current?.triggerSave()} disabled={saving}
+                            style={{
+                                height: 28, padding: '0 12px',
+                                display: 'inline-flex', alignItems: 'center', gap: 5,
+                                background: T.primary, color: T.primaryFg,
+                                border: 'none', borderRadius: 6, flexShrink: 0,
+                                fontSize: 12, fontWeight: 700,
+                                cursor: saving ? 'wait' : 'pointer',
+                                opacity: saving ? 0.6 : 1,
+                            }}>
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                                <polyline points="17 21 17 13 7 13 7 21"/>
+                                <polyline points="7 3 7 8 15 8"/>
+                            </svg>
+                            {saving ? t('common.saving') : t('common.save')}
+                        </button>
+                    )}
+                </header>
 
                 {error && (
                     <div style={{ padding: '6px 16px', background: T.dangerBg, flexShrink: 0 }}>
@@ -361,6 +424,7 @@ export default function ScenarioFormPage() {
                         credentials={credentials}
                         onSave={handleGraphSave}
                         analyticsMode={analyticsMode}
+                        onLiveNodeCount={setLiveNodeCount}
                     />
                 </div>
 
@@ -374,6 +438,40 @@ export default function ScenarioFormPage() {
                         ✓ {savedMsg}
                     </span>
                 )}
+
+                {/* Kebab BottomSheet */}
+                <BottomSheet open={kebabOpen} onClose={() => setKebabOpen(false)} title={name || t('scenarioForm.namePlaceholder')}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                        <button onClick={() => { setKebabOpen(false); openMobileMenu(); }}
+                            style={kebabItemStyle}>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
+                                <line x1="3" y1="6"  x2="21" y2="6"/>
+                                <line x1="3" y1="12" x2="21" y2="12"/>
+                                <line x1="3" y1="18" x2="21" y2="18"/>
+                            </svg>
+                            <span>{t('common.menu')}</span>
+                        </button>
+                        <button onClick={() => { setKebabOpen(false); setAnalyticsMode(v => !v); }}
+                            style={{ ...kebabItemStyle, color: analyticsMode ? T.primary : T.text }}>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
+                                <line x1="18" y1="20" x2="18" y2="10"/>
+                                <line x1="12" y1="20" x2="12" y2="4"/>
+                                <line x1="6" y1="20" x2="6" y2="14"/>
+                            </svg>
+                            <span>{t('canvas.analyticsMode')}</span>
+                            {analyticsMode && <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 10, color: T.primary }}>ON</span>}
+                        </button>
+                        <button onClick={() => { setKebabOpen(false); void handleDelete(); }}
+                            style={{ ...kebabItemStyle, color: T.dangerFg }}>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                                <polyline points="3 6 5 6 21 6"/>
+                                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                                <path d="M10 11v6M14 11v6"/>
+                            </svg>
+                            <span>{t('common.delete')}</span>
+                        </button>
+                    </div>
+                </BottomSheet>
             </div>
         );
     }
