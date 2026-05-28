@@ -398,6 +398,176 @@
       --nca-shadow-focus:         0 0 0 3px oklch(84% 0.20 127 / 0.35);
     }
 
+    /* ── Ubuntu Light (Yaru) ──────────────────────────────────────────── */
+    [data-nca-theme='ubuntu-light'] {
+      /* Primary — Ubuntu Orange #E95420 */
+      --nca-color-primary:        oklch(57% 0.22 29);
+      --nca-color-primary-hover:  oklch(52% 0.22 29);
+      --nca-color-primary-light:  oklch(96% 0.04 29);
+      --nca-color-primary-border: oklch(73% 0.14 29);
+      --nca-color-primary-muted:  oklch(80% 0.10 29);
+      --nca-color-primary-text:   oklch(38% 0.18 29);
+      --nca-color-primary-bg:     oklch(94% 0.06 29);
+      /* Sidebar — Ubuntu Aubergine #2C001E */
+      --nca-color-sidebar:        oklch(9%  0.12 350);
+      --nca-color-sidebar-hover:  oklch(13% 0.12 350);
+      --nca-color-sidebar-active: oklch(17% 0.12 350);
+      --nca-color-sidebar-border: oklch(6%  0.10 350);
+      --nca-color-sidebar-text:   oklch(76% 0.020 30);
+      --nca-color-sidebar-muted:  oklch(55% 0.020 30);
+      --nca-color-sidebar-title:  oklch(94% 0.010 30);
+      /* Surface */
+      --nca-color-bg:             oklch(97% 0.006 70);
+      --nca-color-surface:        oklch(100% 0 0);
+      /* Text */
+      --nca-color-text:           oklch(18% 0.020 60);
+      --nca-color-text-strong:    oklch(12% 0.020 60);
+      --nca-color-text-muted:     oklch(50% 0.015 60);
+      /* Border */
+      --nca-color-border:         oklch(86% 0.010 60);
+      --nca-color-border-input:   oklch(78% 0.012 60);
+      --nca-color-border-light:   oklch(92% 0.007 60);
+      /* Table */
+      --nca-color-table-header:   oklch(96% 0.006 60);
+      --nca-color-table-row:       oklch(99% 0.003 60);
+      --nca-color-surface-hover:   oklch(96% 0.005 60);
+      /* Badge */
+      --nca-badge-draft-bg:       oklch(93% 0.010 60);
+      --nca-badge-draft-color:    oklch(34% 0.020 60);
+      --nca-badge-pub-bg:         oklch(94% 0.05 145);
+      --nca-badge-pub-color:      oklch(36% 0.15 145);
+      --nca-badge-arch-bg:        oklch(94% 0.06 29);
+      --nca-badge-arch-color:     oklch(38% 0.18 29);
+      --nca-shadow-focus:         0 0 0 3px oklch(57% 0.22 29 / 0.30);
+      /* v2 editor tokens */
+      --nca-color-primary-fg:     #fff;
+      --nca-color-primary-tint:   oklch(57% 0.22 29 / 0.10);
+      --nca-color-primary-ring:   oklch(57% 0.22 29 / 0.35);
+      --nca-color-danger-fg:      oklch(45% 0.20 25);
+      --nca-color-success-fg:     oklch(50% 0.18 145);
+      --nca-color-success-pill-bg: oklch(95% 0.07 145 / 0.6);
+      --nca-color-surface-alt:    oklch(97% 0.005 70);
+      --nca-color-text-faint:     oklch(66% 0.012 60);
+      --nca-shadow-elevated:      0 10px 30px -10px oklch(0% 0 0 / 0.18), 0 2px 6px oklch(0% 0 0 / 0.06);
+      --nca-glass-bg:             oklch(100% 0 0 / 0.80);
+      --nca-glass-dock-bg:        oklch(99% 0.004 60 / 0.95);
+      --nca-minimap-bg:           oklch(92% 0.018 60 / 0.76);
+      --nca-canvas-bg:            oklch(97% 0.008 60);
+      --nca-canvas-dot:           oklch(40% 0.030 29 / 0.10);
+      --nca-edge-stroke:          oklch(57% 0.030 29 / 0.38);
+      /* Node tokens — orange/blue/violet/slate on warm light */
+      --nca-node-message-stripe:     #3A7DC4;
+      --nca-node-message-body:       #EEF3FB;
+      --nca-node-message-edge:       #C5D5EB;
+      --nca-node-message-chip:       #DAE6F5;
+      --nca-node-message-chip-edge:  #9FBDDA;
+      --nca-node-condition-stripe:   #E95420;
+      --nca-node-condition-body:     #FCF1EC;
+      --nca-node-condition-edge:     #F0C9B2;
+      --nca-node-condition-chip:     #F7DBCA;
+      --nca-node-condition-chip-edge:#E8A882;
+      --nca-node-action-stripe:      #7E3A89;
+      --nca-node-action-body:        #F7F0F8;
+      --nca-node-action-edge:        #E0C9E5;
+      --nca-node-action-chip:        #ECDAEE;
+      --nca-node-action-chip-edge:   #CCA1D4;
+      --nca-node-end-stripe:         #5E6576;
+      --nca-node-end-body:           #F3F4F6;
+      --nca-node-end-edge:           #D8DBE2;
+      --nca-node-end-chip:           #E6E8ED;
+      --nca-node-end-chip-edge:      #BFC4CE;
+    }
+
+    /* ── Ubuntu Dark (Yaru Dark) ──────────────────────────────────────── */
+    [data-nca-theme='ubuntu-dark'] {
+      /* Primary — brighter Ubuntu Orange for dark bg */
+      --nca-color-primary:        oklch(67% 0.22 29);
+      --nca-color-primary-hover:  oklch(72% 0.22 29);
+      --nca-color-primary-light:  oklch(17% 0.08 29);
+      --nca-color-primary-border: oklch(34% 0.14 29);
+      --nca-color-primary-muted:  oklch(40% 0.12 29);
+      --nca-color-primary-text:   oklch(70% 0.18 29);
+      --nca-color-primary-bg:     oklch(16% 0.08 29);
+      /* dark text on bright orange for contrast */
+      --nca-color-primary-fg:     oklch(14% 0.005 60);
+      /* Danger / Success */
+      --nca-color-danger:         oklch(65% 0.22 25);
+      --nca-color-danger-bg:      oklch(16% 0.06 25);
+      --nca-color-danger-border:  oklch(28% 0.10 25);
+      --nca-color-danger-text:    oklch(70% 0.18 25);
+      --nca-color-success-bg:     oklch(16% 0.06 145);
+      --nca-color-success-border: oklch(28% 0.10 145);
+      --nca-color-success-text:   oklch(66% 0.14 145);
+      /* Surface — Yaru Dark warm gray */
+      --nca-color-bg:             oklch(22% 0.005 60);
+      --nca-color-surface:        oklch(27% 0.005 60);
+      /* Sidebar — very dark aubergine */
+      --nca-color-sidebar:        oklch(8%  0.10 350);
+      --nca-color-sidebar-hover:  oklch(13% 0.10 350);
+      --nca-color-sidebar-active: oklch(18% 0.10 350);
+      --nca-color-sidebar-border: oklch(5%  0.08 350);
+      --nca-color-sidebar-text:   oklch(74% 0.018 30);
+      --nca-color-sidebar-muted:  oklch(52% 0.015 30);
+      --nca-color-sidebar-title:  oklch(92% 0.008 30);
+      /* Text */
+      --nca-color-text:           oklch(91% 0.006 60);
+      --nca-color-text-strong:    oklch(97% 0.004 60);
+      --nca-color-text-muted:     oklch(64% 0.010 60);
+      /* Border */
+      --nca-color-border:         oklch(34% 0.008 60);
+      --nca-color-border-input:   oklch(40% 0.010 60);
+      --nca-color-border-light:   oklch(28% 0.006 60);
+      /* Table */
+      --nca-color-table-header:   oklch(20% 0.005 60);
+      --nca-color-table-row:       oklch(24% 0.004 60);
+      --nca-color-surface-hover:   oklch(29% 0.005 60);
+      /* Badge */
+      --nca-badge-draft-bg:       oklch(30% 0.008 60);
+      --nca-badge-draft-color:    oklch(72% 0.010 60);
+      --nca-badge-pub-bg:         oklch(16% 0.08 145);
+      --nca-badge-pub-color:      oklch(66% 0.14 145);
+      --nca-badge-arch-bg:        oklch(17% 0.08 29);
+      --nca-badge-arch-color:     oklch(68% 0.18 29);
+      --nca-shadow-card:          0 1px 3px oklch(0% 0 0 / 0.35);
+      --nca-shadow-focus:         0 0 0 3px oklch(67% 0.22 29 / 0.38);
+      /* v2 editor tokens */
+      --nca-color-primary-tint:   oklch(67% 0.22 29 / 0.18);
+      --nca-color-primary-ring:   oklch(67% 0.22 29 / 0.40);
+      --nca-color-danger-fg:      oklch(72% 0.20 25);
+      --nca-color-success-fg:     oklch(74% 0.18 145);
+      --nca-color-success-pill-bg: oklch(67% 0.22 29 / 0.16);
+      --nca-color-surface-alt:    oklch(24% 0.005 60);
+      --nca-color-text-faint:     oklch(50% 0.010 60);
+      --nca-shadow-elevated:      0 12px 32px -10px oklch(0% 0 0 / 0.55), 0 2px 6px oklch(0% 0 0 / 0.40);
+      --nca-glass-bg:             oklch(25% 0.005 60 / 0.78);
+      --nca-glass-dock-bg:        oklch(28% 0.005 60 / 0.92);
+      --nca-minimap-bg:           oklch(23% 0.005 60 / 0.65);
+      --nca-canvas-bg:            oklch(20% 0.005 60);
+      --nca-canvas-dot:           oklch(67% 0.022 29 / 0.16);
+      --nca-edge-stroke:          oklch(65% 0.015 60 / 0.45);
+      /* Node tokens — vivid orange/blue/violet/slate on warm dark */
+      --nca-node-message-stripe:     #60A5FA;
+      --nca-node-message-body:       #0F1B2E;
+      --nca-node-message-edge:       #1E3350;
+      --nca-node-message-chip:       rgba(96,165,250,.18);
+      --nca-node-message-chip-edge:  rgba(96,165,250,.45);
+      --nca-node-condition-stripe:   #FF6D35;
+      --nca-node-condition-body:     #2A1508;
+      --nca-node-condition-edge:     #4A250E;
+      --nca-node-condition-chip:     rgba(255,109,53,.18);
+      --nca-node-condition-chip-edge:rgba(255,109,53,.45);
+      --nca-node-action-stripe:      #C678D4;
+      --nca-node-action-body:        #261330;
+      --nca-node-action-edge:        #422254;
+      --nca-node-action-chip:        rgba(198,120,212,.18);
+      --nca-node-action-chip-edge:   rgba(198,120,212,.45);
+      --nca-node-end-stripe:         #94A3B8;
+      --nca-node-end-body:           #1A1F28;
+      --nca-node-end-edge:           #2D3442;
+      --nca-node-end-chip:           rgba(148,163,184,.16);
+      --nca-node-end-chip-edge:      rgba(148,163,184,.40);
+    }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     /* ブラウザ UA stylesheet が button/input 等のフォントをリセットするのを防ぐ */
     button, input, select, textarea { font-family: inherit; font-size: inherit; }

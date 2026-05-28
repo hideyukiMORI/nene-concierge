@@ -24671,6 +24671,15 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       preview: {
         dark: { surface: "#272822", sidebar: "#1e1e1c", accent: "#a6e22e" }
       }
+    },
+    {
+      id: "ubuntu",
+      name: "Ubuntu",
+      variants: ["light", "dark"],
+      preview: {
+        light: { surface: "#faf9f7", sidebar: "#2c001e", accent: "#e95420" },
+        dark: { surface: "#2d2d2d", sidebar: "#1a0011", accent: "#ff6d35" }
+      }
     }
   ];
   function getDataAttr(id2, variant) {
