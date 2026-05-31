@@ -40,7 +40,7 @@ interface EdgeDiff {
     removed: ScenarioRevisionSnapshotEdge[];
 }
 
-function diffNodes(
+export function diffNodes(
     before: ScenarioRevisionSnapshotNode[],
     after:  ScenarioRevisionSnapshotNode[],
 ): NodeDiff {
@@ -75,7 +75,7 @@ function edgeKey(e: ScenarioRevisionSnapshotEdge): string {
     return `${e.source_node_id}→${e.target_node_id}|${e.label ?? ''}`;
 }
 
-function diffEdges(
+export function diffEdges(
     before: ScenarioRevisionSnapshotEdge[],
     after:  ScenarioRevisionSnapshotEdge[],
 ): EdgeDiff {
