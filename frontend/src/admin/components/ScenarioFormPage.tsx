@@ -33,7 +33,7 @@ import '@xyflow/react/dist/style.css';
 //   3px ピル、46px ヘッダー高さ。CSS 変数経由でテーマ自動追従。
 // ─────────────────────────────────────────────────────────────────────────────
 
-const MONO = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
+const MONO = T.fontMono;
 
 // ── Icons ────────────────────────────────────────────────────────────────────
 const IconBack = () => (

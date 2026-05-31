@@ -6,7 +6,7 @@ import type { UserSummary, UserRole, UserStatus, CreateUserPayload, UpdateUserPa
 import {
     PageHead, Btn, ErrorMsg, SuccessMsg,
     FIELD_LABEL_STYLE, applyFocus, removeFocus,
-    Card, useLayout, isWideBp,
+    Card, useLayout, isWideBp, TH, TD,
 } from './Layout.js';
 import {
     MobileHeader, FilterChips, Chip, CardList, ListItem, FAB,
@@ -20,17 +20,6 @@ import { useTranslation } from '../i18n/index.js';
 import { getStoredEmail } from '../auth.js';
 
 const MONO = T.fontMono;
-
-const TH: React.CSSProperties = {
-    padding: '8px 14px', textAlign: 'left',
-    fontSize: T.fontXs, fontWeight: 700, color: T.textMuted,
-    fontFamily: MONO, letterSpacing: '0.05em', textTransform: 'uppercase',
-    background: T.surfaceAlt,
-    borderBottom: `1px solid ${T.border}`,
-};
-const TD: React.CSSProperties = {
-    padding: '9px 14px', fontSize: T.fontSm, color: T.text,
-};
 
 const ROLE_TO_PILL: Record<UserRole, PillVariant> = {
     superadmin: 'active',

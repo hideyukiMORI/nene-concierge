@@ -21,7 +21,7 @@ import { useEffect, useRef } from 'react';
 import { T } from '../../theme.js';
 import { useLayout } from '../Layout.js';
 
-const MONO = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
+const MONO = T.fontMono;
 
 // ── MobileHeader ─────────────────────────────────────────────────────────────
 // sticky 上部ヘッダー (戻る / タイトル + sub / 末尾アクション)

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { UserSummary, UserRole, UserStatus } from '../api.js';
-import { Btn, ErrorMsg, FIELD_LABEL_STYLE, applyFocus, removeFocus } from './Layout.js';
+import { Btn, ErrorMsg, FIELD_LABEL_STYLE, applyFocus, removeFocus, CloseIcon, RightPane } from './Layout.js';
 import { T } from '../theme.js';
 import { useTranslation } from '../i18n/index.js';
 
@@ -83,11 +83,7 @@ export default function UserEditPanel({
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                     }}
                 >
-                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        strokeWidth="2.2" strokeLinecap="round" aria-hidden>
-                        <line x1="6" y1="6" x2="18" y2="18"/>
-                        <line x1="18" y1="6" x2="6" y2="18"/>
-                    </svg>
+                    <CloseIcon />
                 </button>
             </header>
 
@@ -124,43 +120,7 @@ export default function UserEditPanel({
         </>
     );
 
-    if (mode === 'pane') {
-        return (
-            <aside style={{
-                width: 480, flexShrink: 0,
-                borderLeft: `1px solid ${T.border}`,
-                background: T.surface,
-                height: '100vh', position: 'sticky', top: 0,
-                display: 'flex', flexDirection: 'column',
-                overflow: 'hidden',
-            }}>
-                {inner}
-            </aside>
-        );
-    }
-
-    return (
-        <div
-            role="dialog" aria-modal="true"
-            style={{
-                position: 'fixed', inset: 0, zIndex: 900,
-                background: 'oklch(0% 0 0 / 0.35)',
-                backdropFilter: 'blur(2px)',
-                display: 'flex', justifyContent: 'flex-end',
-            }}
-            onClick={e => { if (e.target === e.currentTarget) onClose(); }}
-        >
-            <div style={{
-                width: 480, maxWidth: '95vw', height: '100vh',
-                background: T.surface,
-                boxShadow: '-10px 0 40px -10px rgba(15,23,42,.25)',
-                display: 'flex', flexDirection: 'column',
-                borderLeft: `1px solid ${T.border}`,
-            }}>
-                {inner}
-            </div>
-        </div>
-    );
+    return <RightPane mode={mode} onClose={onClose} zIndex={900}>{inner}</RightPane>;
 }
 
 function UserFormInner({

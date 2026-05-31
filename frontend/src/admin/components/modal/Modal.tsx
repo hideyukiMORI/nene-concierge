@@ -23,7 +23,7 @@ import { T } from '../../theme.js';
 import { useBreakpoint } from '../Layout.js';
 import { useTranslation } from '../../i18n/index.js';
 
-const MONO = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
+const MONO = T.fontMono;
 
 export type ModalTone = 'danger' | 'warning' | 'primary';
 

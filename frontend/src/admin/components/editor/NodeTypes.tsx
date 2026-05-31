@@ -78,7 +78,7 @@ function dropOffColor(rate: number): string {
     return 'oklch(56% 0.16 145)';
 }
 
-const MONO = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
+const MONO = T.fontMono;
 
 // ── 共通ノード UI ─────────────────────────────────────────────────────────────
 function NodeShell({
