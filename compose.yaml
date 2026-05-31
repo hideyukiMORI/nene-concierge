@@ -25,7 +25,7 @@ services:
       TENANT_RESOLUTION: ${TENANT_RESOLUTION:-single}
       ORG_SLUG: ${ORG_SLUG:-}
     ports:
-      - "${NENE_CONCIERGE_PORT:-8090}:80"
+      - "${NENE_CONCIERGE_PORT:-8790}:80"
     volumes:
       - .:/var/www/html
       - ../NENE2:/var/www/NENE2:ro
@@ -40,7 +40,7 @@ services:
       MYSQL_PASSWORD: ${DB_PASSWORD:-nene_concierge}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-nene_concierge_root}
     ports:
-      - "${NENE_CONCIERGE_MYSQL_PORT:-3390}:3306"
+      - "${NENE_CONCIERGE_MYSQL_PORT:-3790}:3306"
     volumes:
       - mysql-data:/var/lib/mysql
     healthcheck:
@@ -63,7 +63,7 @@ services:
       PMA_HOST: mysql
       PMA_PORT: 3306
     ports:
-      - "${NENE_CONCIERGE_PHPMYADMIN_PORT:-8091}:80"
+      - "${NENE_CONCIERGE_PHPMYADMIN_PORT:-8791}:80"
 
 volumes:
   mysql-data:
