@@ -102,4 +102,80 @@ final class ConditionEvaluatorTest extends TestCase
 
         self::assertFalse($this->evaluator->evaluate($data, ['x' => 'y']));
     }
+
+    // ── 境界値 ────────────────────────────────────────────────────────────────
+
+    public function testNeqReturnsTrueWhenVariableIsAbsent(): void
+    {
+        // 変数が存在しない場合 actual = null → null !== 'free' → true
+        $data = ['conditions' => [['variable' => 'plan', 'operator' => 'neq', 'value' => 'free']]];
+
+        self::assertTrue($this->evaluator->evaluate($data, []));
+    }
+
+    public function testContainsWithEmptyValueMatchesAnyNonNullString(): void
+    {
+        // value = '' は str_contains(actual, '') = true（常に真）
+        $data = ['conditions' => [['variable' => 'text', 'operator' => 'contains', 'value' => '']]];
+
+        self::assertTrue($this->evaluator->evaluate($data, ['text' => 'anything']));
+        self::assertTrue($this->evaluator->evaluate($data, ['text' => '']));
+        // 変数未設定 → actual = null → contains は false
+        self::assertFalse($this->evaluator->evaluate($data, []));
+    }
+
+    public function testEqIsCaseSensitive(): void
+    {
+        $data = ['conditions' => [['variable' => 'tag', 'operator' => 'eq', 'value' => 'Pro']]];
+
+        self::assertTrue($this->evaluator->evaluate($data, ['tag' => 'Pro']));
+        self::assertFalse($this->evaluator->evaluate($data, ['tag' => 'pro']));
+        self::assertFalse($this->evaluator->evaluate($data, ['tag' => 'PRO']));
+    }
+
+    public function testMatchAnyReturnsFalseWhenAllConditionsFail(): void
+    {
+        $data = [
+            'conditions' => [
+                ['variable' => 'status', 'operator' => 'eq', 'value' => 'active'],
+                ['variable' => 'status', 'operator' => 'eq', 'value' => 'trial'],
+            ],
+            'match' => 'any',
+        ];
+
+        self::assertFalse($this->evaluator->evaluate($data, ['status' => 'inactive']));
+    }
+
+    public function testMatchAllReturnsTrueForSingleTrueCondition(): void
+    {
+        $data = [
+            'conditions' => [['variable' => 'x', 'operator' => 'eq', 'value' => '1']],
+            'match'      => 'all',
+        ];
+
+        self::assertTrue($this->evaluator->evaluate($data, ['x' => '1']));
+    }
+
+    public function testExistsReturnsFalseForWhitespaceOnlyValue(): void
+    {
+        // 'exists' は空文字のみガード。空白は非空なので true
+        $data = ['conditions' => [['variable' => 'notes', 'operator' => 'exists']]];
+
+        self::assertTrue($this->evaluator->evaluate($data, ['notes' => ' ']));
+    }
+
+    public function testMissingConditionsKeyTreatedAsEmpty(): void
+    {
+        // 'conditions' キーなし → 空配列扱い → 常に true
+        self::assertTrue($this->evaluator->evaluate(['match' => 'all'], ['x' => '1']));
+    }
+
+    public function testConditionWithEmptyVariableNameMatchesEmptyKey(): void
+    {
+        // variable = '' の場合 $variables[''] を参照する
+        $data = ['conditions' => [['variable' => '', 'operator' => 'eq', 'value' => 'hello']]];
+
+        self::assertFalse($this->evaluator->evaluate($data, ['name' => 'hello']));
+        self::assertTrue($this->evaluator->evaluate($data, ['' => 'hello']));
+    }
 }
