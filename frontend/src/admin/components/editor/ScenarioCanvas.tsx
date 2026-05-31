@@ -37,7 +37,7 @@ const nodeTypes: NodeTypes = {
     end:       EndNode,
 };
 
-const MONO = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
+const MONO = T.fontMono;
 
 // ── ヘルパー: API 型 ↔ ReactFlow 型 ─────────────────────────────────────────
 

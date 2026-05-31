@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { getDashboard, listScenarios, listActionLogs, ApiError } from '../api.js';
 import type { DashboardStats, ScenarioSummary, ActionLogEntry } from '../api.js';
-import { PageHead, Card, CardSub, SectionHead, AdapterTag, ErrorMsg, useLayout, isWideBp, isUltraWideBp } from './Layout.js';
+import { PageHead, Card, CardSub, SectionHead, AdapterTag, ErrorMsg, useLayout, isWideBp, isUltraWideBp, TH } from './Layout.js';
 import {
     MobileHeader, MobileIconBtn, MobileSectionHead, KpiGrid, KpiCard as MKpiCard,
     AlertCard, CardList, ListItem, MetaDot, PullToRefreshHint,
@@ -12,16 +12,7 @@ import { useTranslation } from '../i18n/index.js';
 
 const MONO = T.fontMono;
 
-// ── Table shared styles ────────────────────────────────────────────────────────
-
-const TH: React.CSSProperties = {
-    padding: '8px 14px', textAlign: 'left',
-    fontSize: T.fontXs, fontWeight: 700, color: T.textMuted,
-    fontFamily: MONO, letterSpacing: '0.05em', textTransform: 'uppercase',
-    background: T.surfaceAlt,
-    borderBottom: `1px solid ${T.border}`,
-};
-
+// DashboardPage の TD は borderBottom あり (テーブルの見た目を保つ)
 const TD: React.CSSProperties = {
     padding: '9px 14px', fontSize: T.fontSm, color: T.text,
     borderBottom: `1px solid ${T.border}`,

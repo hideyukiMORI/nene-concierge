@@ -7,6 +7,7 @@ import type { CredentialSummary } from '../api.js';
 import {
     PageHead, Card, Btn, SectionHead, AdapterTag,
     ErrorMsg, FIELD_LABEL_STYLE, applyFocus, removeFocus, trHover, useLayout,
+    TH, TD,
 } from './Layout.js';
 import {
     MobileHeader, FilterChips, Chip, CardList, ListItem, FAB,
@@ -27,18 +28,6 @@ const ADAPTER_COLOR_KEY: Record<string, 'http' | 'email' | 'slack' | 'chatwork'>
 };
 
 const MONO = T.fontMono;
-
-const TH: React.CSSProperties = {
-    padding: '8px 14px', textAlign: 'left',
-    fontSize: T.fontXs, fontWeight: 700, color: T.textMuted,
-    fontFamily: MONO, letterSpacing: '0.05em', textTransform: 'uppercase',
-    background: T.surfaceAlt,
-    borderBottom: `1px solid ${T.border}`,
-};
-
-const TD: React.CSSProperties = {
-    padding: '9px 14px', fontSize: T.fontSm, color: T.text,
-};
 
 export default function CredentialsPage() {
     const { t } = useTranslation();

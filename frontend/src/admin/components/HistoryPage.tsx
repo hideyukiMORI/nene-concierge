@@ -6,14 +6,14 @@ import {
     type ScenarioRevisionListItem, type ScenarioRevisionOperation,
     type ScenarioSummary,
 } from '../api.js';
-import { PageHead, Card, ErrorMsg, useLayout, isWideBp } from './Layout.js';
+import { PageHead, Card, ErrorMsg, useLayout, isWideBp, PAG_BTN } from './Layout.js';
 import { MobileHeader, MobileIconBtn, CardList, ListItem, MetaDot, Pill, FilterChips, Chip } from './mobile/index.js';
 import type { PillVariant } from './mobile/index.js';
 import RevisionDiffPanel from './RevisionDiffPanel.js';
 import { T } from '../theme.js';
 import { useTranslation } from '../i18n/index.js';
 
-const MONO = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
+const MONO = T.fontMono;
 
 const OPERATIONS: ScenarioRevisionOperation[] = ['create', 'update', 'graph_save', 'status_change', 'delete'];
 
@@ -26,14 +26,6 @@ function opPillVariant(op: ScenarioRevisionOperation): PillVariant {
         case 'delete':        return 'failure';
     }
 }
-
-const PAG_BTN: React.CSSProperties = {
-    height: T.controlHeightSm, padding: '0 14px', boxSizing: 'border-box',
-    borderRadius: T.radiusMd,
-    border: `1px solid ${T.border}`, background: T.surface,
-    color: T.text, fontSize: T.fontSm, fontWeight: 500,
-    cursor: 'pointer', transition: 'filter 150ms ease',
-};
 
 const TH: React.CSSProperties = {
     textAlign: 'left', padding: '10px 12px',
