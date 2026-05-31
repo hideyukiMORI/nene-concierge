@@ -130,8 +130,34 @@ src/
 
 ```bash
 docker compose run --rm app composer check   # tests + PHPStan + CS-Fixer + OpenAPI + MCP
-npm run check --prefix frontend              # type-check + lint + test
+npm run check --prefix frontend              # type-check + test + build
 ```
+
+---
+
+## ローカル開発ポート（固定）
+
+並行稼働する NeNe エコシステムとのポート競合を避けるため、**87xx / 3790** に固定する。
+
+| サービス | ホストポート | 備考 |
+| --- | --- | --- |
+| PHP app | **8790** | `http://localhost:8790` |
+| phpMyAdmin | **8791** | `http://localhost:8791` |
+| MySQL | **3790** | `mysql -P 3790` |
+
+`.env.example` に記載済み。`.env` にコピーして使うこと。
+
+### NeNe エコシステム ポートマップ（競合確認用）
+
+| プロジェクト | Web | DB |
+| --- | --- | --- |
+| NENE2 | 82xx | 3316 |
+| NeNe Clear | 83xx | — (5173) |
+| NeNe Records | 180xx | — |
+| NeNe Profile | 84xx | 3409 |
+| NeNe Invoice | 85xx | 5185 |
+| NeNe Vault | 86xx | 5186 |
+| **NeNe Concierge** | **87xx** | **3790** |
 
 ---
 
