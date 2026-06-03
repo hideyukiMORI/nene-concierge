@@ -72,7 +72,7 @@ export interface ActionData {
 export interface EndData      { outcome?: string; }
 
 // ── Analytics カラーヘルパー ──────────────────────────────────────────────────
-function dropOffColor(rate: number): string {
+export function dropOffColor(rate: number): string {
     if (rate >= 0.5) return 'oklch(58% 0.20 25)';
     if (rate >= 0.2) return 'oklch(62% 0.16 65)';
     return 'oklch(56% 0.16 145)';

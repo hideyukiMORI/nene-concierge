@@ -105,7 +105,7 @@ const DATA_IMAGE_RE = /(data:image\/[a-z+]+;base64,[A-Za-z0-9+/=]+)/g;
  * テキスト内の data:image/... URI を <img> として描画し、
  * それ以外のテキスト部分はそのまま表示する。
  */
-function renderMessageContent(bubble: HTMLDivElement, text: string): void {
+export function renderMessageContent(bubble: HTMLDivElement, text: string): void {
     const parts = text.split(DATA_IMAGE_RE);
 
     for (const part of parts) {
