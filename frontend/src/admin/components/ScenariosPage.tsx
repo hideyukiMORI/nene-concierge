@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { listScenarios, deleteScenario, ApiError } from '../api.js';
 import type { ScenarioSummary } from '../api.js';
-import { PageHead, Card, Btn, StatusPill, ErrorMsg, trHover, useLayout } from './Layout.js';
+import { PageHead, Card, Btn, StatusPill, ErrorMsg, trHover, useLayout, TH, FILTER_SELECT } from './Layout.js';
 import {
     MobileHeader, MobileIconBtn, FilterChips, Chip, CardList, ListItem,
     SwipeRow, FAB, Pill, MetaDot, SkeletonListItem,
@@ -13,14 +13,6 @@ import { T } from '../theme.js';
 import { useTranslation } from '../i18n/index.js';
 
 const MONO = T.fontMono;
-
-const TH: React.CSSProperties = {
-    padding: '8px 14px', textAlign: 'left',
-    fontSize: T.fontXs, fontWeight: 700, color: T.textMuted,
-    fontFamily: MONO, letterSpacing: '0.05em', textTransform: 'uppercase',
-    background: T.surfaceAlt,
-    borderBottom: `1px solid ${T.border}`,
-};
 
 type StatusFilter = '' | 'published' | 'draft' | 'archived';
 
@@ -84,13 +76,7 @@ export default function ScenariosPage() {
         ? '…'
         : `${scenarios.length} total · ${published} published`;
 
-    const filterSelectStyle: React.CSSProperties = {
-        height: 26, padding: '0 8px',
-        borderRadius: T.radiusMd, border: `1px solid ${T.border}`,
-        background: T.surface, color: T.text,
-        fontSize: T.fontXs, fontFamily: MONO,
-        cursor: 'pointer', outline: 'none',
-    };
+    const filterSelectStyle = FILTER_SELECT;
 
     // ─────────── Mobile layout ───────────
     if (isMobile) {

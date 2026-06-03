@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { getScenarioHistory, ApiError, type ScenarioRevision, type ScenarioRevisionOperation } from '../api.js';
 import { T } from '../theme.js';
+import { CloseIcon } from './Layout.js';
 import { useTranslation } from '../i18n/index.js';
 import RevisionDiffPanel from './RevisionDiffPanel.js';
 
-const MONO = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
+const MONO = T.fontMono;
 
 const OPERATION_COLORS: Record<ScenarioRevisionOperation, { bg: string; fg: string }> = {
     create:        { bg: 'rgba(34,197,94,0.15)',  fg: '#16a34a' },
@@ -74,10 +75,7 @@ export default function ScenarioHistoryPanel({ scenarioId, open, onClose }: Prop
                             background: 'transparent', border: 'none', cursor: 'pointer',
                             color: T.textMuted, padding: 4,
                         }}>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-                        </svg>
+                        <CloseIcon size={16} />
                     </button>
                 </header>
 

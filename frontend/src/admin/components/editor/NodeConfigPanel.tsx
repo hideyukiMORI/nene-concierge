@@ -4,7 +4,7 @@ import type { CredentialSummary, ChatNodeType } from '../../api.js';
 import { NODE_ICONS } from './NodeTypes.js';
 import type { MessageData, ConditionData, ActionData, EndData } from './NodeTypes.js';
 import { T, NODE_TOKENS } from '../../theme.js';
-import { applyFocus, removeFocus } from '../Layout.js';
+import { applyFocus, removeFocus, CloseIcon } from '../Layout.js';
 import { useTranslation } from '../../i18n/index.js';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -26,7 +26,7 @@ interface Props {
     mobile?:     boolean;
 }
 
-const MONO = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
+const MONO = T.fontMono;
 
 // ── Panel-scoped style constants ──────────────────────────────────────────────
 const S = {
@@ -72,12 +72,6 @@ const onB = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement | HTMLText
     removeFocus(e.currentTarget);
 
 // ── Icons ────────────────────────────────────────────────────────────────────
-const CloseIcon = () => (
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-        strokeWidth="2.2" strokeLinecap="round" aria-hidden>
-        <line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/>
-    </svg>
-);
 
 const TrashIcon = () => (
     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -184,7 +178,7 @@ export default function NodeConfigPanel({ node, credentials, onChange, onDelete,
                             background: 'transparent', border: 'none',
                             color: T.textMuted, cursor: 'pointer', flexShrink: 0,
                         }}>
-                        <CloseIcon/>
+                        <CloseIcon size={12} />
                     </button>
                 )}
             </div>

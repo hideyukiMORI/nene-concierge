@@ -182,7 +182,7 @@ function SlimNavItem({ to, icon, label }: { to: string; icon: React.ReactNode; l
 
 // ── OrgIndicator ─────────────────────────────────────────────────────────────
 // 現在の組織名 + 所属組織数を表示する read-only バッジ。サイドバー上部に配置。
-const MONO = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
+const MONO = T.fontMono;
 
 type TFn = ReturnType<typeof useTranslation>['t'];
 
@@ -1006,3 +1006,108 @@ export const trHover = {
         e.currentTarget.style.background = '';
     },
 };
+
+// ── 共通テーブルスタイル ───────────────────────────────────────────────────────
+
+export const TH: React.CSSProperties = {
+    padding: '8px 14px', textAlign: 'left',
+    fontSize: T.fontXs, fontWeight: 700, color: T.textMuted,
+    fontFamily: T.fontMono, letterSpacing: '0.05em', textTransform: 'uppercase',
+    background: T.surfaceAlt,
+    borderBottom: `1px solid ${T.border}`,
+};
+
+export const TD: React.CSSProperties = {
+    padding: '9px 14px', fontSize: T.fontSm, color: T.text,
+};
+
+// ── 共通ページネーションボタンスタイル ──────────────────────────────────────────
+
+export const PAG_BTN: React.CSSProperties = {
+    height: T.controlHeightSm, padding: '0 14px', boxSizing: 'border-box',
+    borderRadius: T.radiusMd,
+    border: `1px solid ${T.border}`, background: T.surface,
+    color: T.text, fontSize: T.fontSm, fontWeight: 500,
+    cursor: 'pointer', transition: 'filter 150ms ease',
+};
+
+// ── 共通フィルター UI スタイル ─────────────────────────────────────────────────
+
+export const FILTER_SELECT: React.CSSProperties = {
+    height: 26, padding: '0 8px',
+    borderRadius: T.radiusMd, border: `1px solid ${T.border}`,
+    background: T.surface, color: T.text,
+    fontSize: T.fontXs, fontFamily: T.fontMono,
+    cursor: 'pointer', outline: 'none',
+};
+
+export const FILTER_INPUT: React.CSSProperties = {
+    height: 28, padding: '0 8px',
+    borderRadius: T.radiusMd, border: `1px solid ${T.borderInput}`,
+    background: T.surface, color: T.text,
+    fontSize: T.fontXs,
+    outline: 'none', boxSizing: 'border-box',
+};
+
+// ── CloseIcon ─────────────────────────────────────────────────────────────────
+
+export function CloseIcon({ size = 11 }: { size?: number }) {
+    return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+            <line x1="18" y1="6" x2="6" y2="18"/>
+        </svg>
+    );
+}
+
+// ── RightPane ─────────────────────────────────────────────────────────────────
+// 右側ドロワー / スティッキーペイン の共通構造。
+//   mode="pane"    → wide レイアウト時のスティッキーサイドパネル
+//   mode="overlay" → それ以外のオーバーレイドロワー（背景クリックで閉じる）
+
+export function RightPane({
+    mode, onClose, children, zIndex = 100,
+}: {
+    mode:     'pane' | 'overlay';
+    onClose:  () => void;
+    children: React.ReactNode;
+    zIndex?:  number;
+}) {
+    if (mode === 'pane') {
+        return (
+            <aside style={{
+                width: 480, flexShrink: 0,
+                borderLeft: `1px solid ${T.border}`,
+                background: T.surface,
+                height: '100vh', position: 'sticky', top: 0,
+                display: 'flex', flexDirection: 'column',
+                overflow: 'hidden',
+            }}>
+                {children}
+            </aside>
+        );
+    }
+    return (
+        <div
+            role="dialog" aria-modal
+            style={{
+                position: 'fixed', inset: 0, zIndex,
+                background: 'oklch(0% 0 0 / 0.35)',
+                backdropFilter: 'blur(2px)',
+                display: 'flex', justifyContent: 'flex-end',
+            }}
+            onClick={e => { if (e.target === e.currentTarget) onClose(); }}
+        >
+            <div style={{
+                width: 480, maxWidth: '95vw', height: '100vh',
+                background: T.surface,
+                boxShadow: '-10px 0 40px -10px rgba(15,23,42,.25)',
+                display: 'flex', flexDirection: 'column',
+                borderLeft: `1px solid ${T.border}`,
+            }}>
+                {children}
+            </div>
+        </div>
+    );
+}

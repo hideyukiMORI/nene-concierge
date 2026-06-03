@@ -5,7 +5,7 @@ import {
     ApiError,
 } from '../api.js';
 import type { SessionSummary, SessionDetail, SessionOutcome } from '../api.js';
-import { PageHead, Card, CardSub, StatusPill, ErrorMsg, useLayout, isWideBp } from './Layout.js';
+import { PageHead, Card, CardSub, StatusPill, ErrorMsg, useLayout, isWideBp, TH, TD, PAG_BTN, FILTER_SELECT, CloseIcon, RightPane } from './Layout.js';
 import {
     MobileHeader, MobileIconBtn, FilterChips, Chip, CardList, ListItem,
     Pill, MetaDot, SkeletonListItem, BottomSheet, MetaGrid,
@@ -28,20 +28,6 @@ function calcDuration(start: string, end: string | null): string {
     if (m === 0) return `${s}s`;
     return `${m}m ${s}s`;
 }
-
-// ── Table styles ──────────────────────────────────────────────────────────────
-
-const TH: React.CSSProperties = {
-    padding: '8px 14px', textAlign: 'left',
-    fontSize: T.fontXs, fontWeight: 700, color: T.textMuted,
-    fontFamily: MONO, letterSpacing: '0.05em', textTransform: 'uppercase',
-    background: T.surfaceAlt,
-    borderBottom: `1px solid ${T.border}`,
-};
-
-const TD: React.CSSProperties = {
-    padding: '9px 14px', fontSize: T.fontSm, color: T.text,
-};
 
 // ── Session Detail View (shared between overlay drawer & wide right pane) ────
 
@@ -76,12 +62,6 @@ function SessionDetailView({
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="12" cy="12" r="9"/>
             <circle cx="12" cy="12" r="3"/>
-        </svg>
-    );
-    const CloseIcon = (
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
-            <line x1="6" y1="6" x2="18" y2="18"/>
-            <line x1="18" y1="6" x2="6" y2="18"/>
         </svg>
     );
 
@@ -130,7 +110,7 @@ function SessionDetailView({
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
                         }}
                     >
-                        {CloseIcon}
+                        <CloseIcon />
                     </button>
                 </div>
 
@@ -273,43 +253,7 @@ function SessionDetailView({
         </>
     );
 
-    if (isPane) {
-        // Sticky right pane (≥1441px) — no backdrop, full viewport height
-        return (
-            <aside style={{
-                width: 480, flexShrink: 0,
-                borderLeft: `1px solid ${T.border}`,
-                background: T.surface,
-                height: '100vh', position: 'sticky', top: 0,
-                display: 'flex', flexDirection: 'column',
-                overflow: 'hidden',
-            }}>
-                {inner}
-            </aside>
-        );
-    }
-    // Overlay drawer (<1441px)
-    return (
-        <div
-            style={{
-                position: 'fixed', inset: 0, zIndex: 100,
-                background: 'oklch(0% 0 0 / 0.35)',
-                backdropFilter: 'blur(2px)',
-                display: 'flex', justifyContent: 'flex-end',
-            }}
-            onClick={e => { if (e.target === e.currentTarget) onClose(); }}
-        >
-            <div style={{
-                width: 480, maxWidth: '95vw', height: '100vh',
-                background: T.surface,
-                boxShadow: '-10px 0 40px -10px rgba(15,23,42,.25)',
-                display: 'flex', flexDirection: 'column',
-                borderLeft: `1px solid ${T.border}`,
-            }}>
-                {inner}
-            </div>
-        </div>
-    );
+    return <RightPane mode={isPane ? 'pane' : 'overlay'} onClose={onClose}>{inner}</RightPane>;
 }
 
 // ── Outcome → Pill 変換 (mobile) ──────────────────────────────────────────────
@@ -503,21 +447,7 @@ export default function SessionsPage() {
         ? sessions.filter(s => String(s.scenario_id) === scenarioFilter)
         : sessions;
 
-    const filterSelectStyle: React.CSSProperties = {
-        height: 26, padding: '0 8px',
-        borderRadius: T.radiusMd, border: `1px solid ${T.border}`,
-        background: T.surface, color: T.text,
-        fontSize: T.fontXs, fontFamily: MONO,
-        cursor: 'pointer', outline: 'none',
-    };
-
-    const PAG_BTN: React.CSSProperties = {
-        height: T.controlHeightSm, padding: '0 14px', boxSizing: 'border-box',
-        borderRadius: T.radiusMd,
-        border: `1px solid ${T.border}`, background: T.surface,
-        color: T.text, fontSize: T.fontSm, fontWeight: 500,
-        cursor: 'pointer', transition: 'filter 150ms ease',
-    };
+    const filterSelectStyle = FILTER_SELECT;
 
     // ─────────── Mobile layout ───────────
     if (isMobile) {
