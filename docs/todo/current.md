@@ -1,6 +1,20 @@
 # Current Work
 
-Last updated: 2026-05-29 (User Management + Edit History 完了)
+Last updated: 2026-07-05 (JWT フェイルクローズ + NENE2 GuardedJwtSecretResolver 移行 完了)
+
+## 直近の完了（2026-05-31 → 2026-07-05）
+
+| 項目 | 状態 | Issue / PR |
+| --- | --- | --- |
+| バックエンド UT 全域カバレッジ（未テストモジュール + 境界値） | ✅ | #132 (PR #133) |
+| Handler 層 + GetUserByIdUseCase の UT 追加 | ✅ | #134 (PR #135) |
+| フロントエンド UT（Vitest セットアップ + 全機能テスト）+ Frontend CI | ✅ | #57 #58 (PR #136 #137) |
+| ローカル Docker ポートを 87xx/3790 に固定（ポートマップを CLAUDE.md へ） | ✅ | #138 (PR #139) |
+| フロントエンド共通スタイル定数・RightPane / CloseIcon 抽出（重複排除） | ✅ | #140 (PR #141) |
+| 本番 JWT フェイルクローズ — dev secret フォールバック廃止 | ✅ | #144 (PR #145) |
+| 自前 resolveJwtSecret を撤去し NENE2 GuardedJwtSecretResolver へ移行 | ✅ | #146 (PR #147) |
+
+---
 
 ## 状態サマリー
 
@@ -262,7 +276,7 @@ Last updated: 2026-05-29 (User Management + Edit History 完了)
 
 ---
 
-**セッションログ一覧・詳細 — PR #45 (feat/44-session-logs) レビュー待ち 🔶**
+**セッションログ一覧・詳細 — 完了 ✅** (PR #45 マージ済み)
 
 | 項目 | 状態 | Issue |
 | --- | --- | --- |
@@ -282,20 +296,16 @@ Last updated: 2026-05-29 (User Management + Edit History 完了)
 
 ---
 
-**フロントエンド品質基盤 — バックログ 🔲**
+**フロントエンド品質基盤 — 一部完了 🔶**（CI + 単体テスト済 / 追加のコンポーネントテスト #58 残）
 
 | 項目 | 状態 | Issue |
 | --- | --- | --- |
-| `.github/workflows/frontend-ci.yml` 新設（type-check + build ステップ） | 🔲 | #57 |
-| `tsconfig.json` の `noEmit` + `strict` 設定確認 | 🔲 | #57 |
-| `npm run type-check` / `npm run build` スクリプト整備 | 🔲 | #57 |
-| Vitest + @testing-library/react セットアップ | 🔲 | #58 |
-| ScenarioCanvas コンポーネントテスト | 🔲 | #58 |
-| NodeConfigPanel コンポーネントテスト | 🔲 | #58 |
-| SessionsPage コンポーネントテスト | 🔲 | #58 |
-| ScenarioFormPage コンポーネントテスト | 🔲 | #58 |
-| DashboardPage コンポーネントテスト | 🔲 | #58 |
-| CI に `npm run test` ステップ追加 | 🔲 | #57 #58 |
+| `.github/workflows/frontend-ci.yml` 新設（type-check + build ステップ） | ✅ | #57 |
+| `tsconfig.json` の `noEmit` + `strict` 設定確認 | ✅ | #57 |
+| `npm run type-check` / `npm run build` スクリプト整備 | ✅ | #57 |
+| Vitest + @testing-library/react セットアップ | ✅ | #58 (PR #136) |
+| 全機能ユニットテスト実装 + CI に `npm run test` ステップ追加 | ✅ | #57 #58 (PR #136 #137) |
+| 追加のコンポーネントテスト（ScenarioCanvas / NodeConfigPanel / SessionsPage 等）拡充 | 🔲 | #58 (open) |
 
 ---
 
