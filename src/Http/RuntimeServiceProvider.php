@@ -295,6 +295,26 @@ final readonly class RuntimeServiceProvider implements ServiceProviderInterface
                     $resolvedSlug   = (string) (getenv('ORG_SLUG') ?: '');
                     $resolvedDomain = (string) (getenv('BASE_DOMAIN') ?: 'localhost');
 
+                    // CORS allowlist: comma-separated exact origins from env. The
+                    // framework default (empty list) fails closed — no CORS
+                    // headers are emitted. Production installs that serve the
+                    // admin SPA or embed widget from another origin MUST set
+                    // NENE_CONCIERGE_ALLOWED_ORIGINS explicitly. Wildcard '*' is
+                    // rejected by CorsMiddleware, so it is filtered out here.
+                    $allowedOrigins = array_values(array_filter(
+                        array_map('trim', explode(',', (string) (getenv('NENE_CONCIERGE_ALLOWED_ORIGINS') ?: ''))),
+                        static fn (string $origin): bool => $origin !== '' && $origin !== '*',
+                    ));
+
+                    // HSTS: opt-in via env, off by default. Enable only when the
+                    // app is served over HTTPS (directly or behind a
+                    // TLS-terminating proxy).
+                    $enableHsts = in_array(
+                        strtolower((string) (getenv('NENE_CONCIERGE_ENABLE_HSTS') ?: '')),
+                        ['1', 'true', 'yes', 'on'],
+                        true,
+                    );
+
                     $orgRepo = $container->get(OrganizationRepositoryInterface::class);
                     if (!$orgRepo instanceof OrganizationRepositoryInterface) {
                         throw new LogicException('OrganizationRepositoryInterface service is invalid.');
@@ -339,6 +359,8 @@ final readonly class RuntimeServiceProvider implements ServiceProviderInterface
                         routeRegistrars: $routeRegistrars,
                         authMiddleware: $authMiddleware,
                         debug: $config->debug,
+                        allowedOrigins: $allowedOrigins,
+                        enableHsts: $enableHsts,
                     );
                 },
             )
