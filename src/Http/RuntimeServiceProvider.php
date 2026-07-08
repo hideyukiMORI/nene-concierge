@@ -21,10 +21,12 @@ use Nene2\DependencyInjection\ContainerBuilder;
 use Nene2\DependencyInjection\ServiceProviderInterface;
 use Nene2\Error\DomainExceptionHandlerInterface;
 use Nene2\Error\ProblemDetailsResponseFactory;
+use Nene2\Http\ClockInterface;
 use Nene2\Http\JsonResponseFactory;
 use Nene2\Http\RequestScopedHolder;
 use Nene2\Http\ResponseEmitter;
 use Nene2\Http\RuntimeApplicationFactory;
+use Nene2\Http\UtcClock;
 use Nene2\Log\MonologLoggerFactory;
 use Nene2\Log\RequestIdHolder;
 use NeNeConcierge\ApplicationServiceProvider;
@@ -121,6 +123,7 @@ final readonly class RuntimeServiceProvider implements ServiceProviderInterface
                     return new PdoDatabaseTransactionManager($connectionFactory);
                 },
             )
+            ->set(ClockInterface::class, static fn (ContainerInterface $container): ClockInterface => new UtcClock())
             ->set(Psr17Factory::class, static fn (ContainerInterface $container): Psr17Factory => new Psr17Factory())
             ->set(
                 ResponseFactoryInterface::class,

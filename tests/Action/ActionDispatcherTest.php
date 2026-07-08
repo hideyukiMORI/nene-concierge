@@ -6,6 +6,7 @@ namespace NeNeConcierge\Tests\Action;
 
 use NeNeConcierge\Action\ActionDispatcher;
 use NeNeConcierge\Action\ActionException;
+use NeNeConcierge\Tests\Support\FixedClock;
 use PHPUnit\Framework\TestCase;
 
 final class ActionDispatcherTest extends TestCase
@@ -21,7 +22,7 @@ final class ActionDispatcherTest extends TestCase
 
     private function makeDispatcher(SpyActionAdapter ...$adapters): ActionDispatcher
     {
-        return new ActionDispatcher(array_values($adapters), $this->logRepo);
+        return new ActionDispatcher(array_values($adapters), $this->logRepo, new FixedClock());
     }
 
     // ── Tests ─────────────────────────────────────────────────────────────────

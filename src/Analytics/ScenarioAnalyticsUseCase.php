@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace NeNeConcierge\Analytics;
 
 use Nene2\Database\DatabaseQueryExecutorInterface;
+use Nene2\Http\ClockInterface;
 use NeNeConcierge\Scenario\ScenarioNotFoundException;
 use NeNeConcierge\Scenario\ScenarioRepositoryInterface;
 
@@ -29,6 +30,7 @@ final readonly class ScenarioAnalyticsUseCase
     public function __construct(
         private DatabaseQueryExecutorInterface $query,
         private ScenarioRepositoryInterface    $scenarios,
+        private ClockInterface                 $clock,
     ) {
     }
 
@@ -111,9 +113,11 @@ final readonly class ScenarioAnalyticsUseCase
      */
     private function resolvePeriod(string $period, ?string $from, ?string $to): array
     {
+        $now = $this->clock->now();
+
         if ($period === 'custom') {
-            $fromDate = ($from ?? date('Y-m-d', strtotime('-7 days'))) . ' 00:00:00';
-            $toDate   = ($to ?? date('Y-m-d')) . ' 23:59:59';
+            $fromDate = ($from ?? $now->modify('-7 days')->format('Y-m-d')) . ' 00:00:00';
+            $toDate   = ($to ?? $now->format('Y-m-d')) . ' 23:59:59';
 
             return [$fromDate, $toDate];
         }
@@ -126,8 +130,8 @@ final readonly class ScenarioAnalyticsUseCase
         };
 
         return [
-            date('Y-m-d H:i:s', strtotime("-{$days} days")),
-            date('Y-m-d H:i:s'),
+            $now->modify("-{$days} days")->format('Y-m-d H:i:s'),
+            $now->format('Y-m-d H:i:s'),
         ];
     }
 

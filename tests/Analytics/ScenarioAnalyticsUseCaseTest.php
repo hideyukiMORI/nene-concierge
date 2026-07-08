@@ -15,6 +15,7 @@ use NeNeConcierge\Tests\Scenario\InMemoryScenarioEdgeRepository;
 use NeNeConcierge\Tests\Scenario\InMemoryScenarioNodeRepository;
 use NeNeConcierge\Tests\Scenario\InMemoryScenarioRepository;
 use NeNeConcierge\Tests\Scenario\InMemoryScenarioRevisionRepository;
+use NeNeConcierge\Tests\Support\FixedClock;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -62,7 +63,7 @@ final class ScenarioAnalyticsUseCaseTest extends TestCase
 
     private function makeUseCase(DatabaseQueryExecutorInterface $executor): ScenarioAnalyticsUseCase
     {
-        return new ScenarioAnalyticsUseCase($executor, $this->scenarioRepo);
+        return new ScenarioAnalyticsUseCase($executor, $this->scenarioRepo, new FixedClock());
     }
 
     // ── 基本動作 ──────────────────────────────────────────────────────────────

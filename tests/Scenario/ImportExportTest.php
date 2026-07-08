@@ -13,6 +13,7 @@ use NeNeConcierge\Scenario\ScenarioNode;
 use NeNeConcierge\Scenario\ScenarioNodeType;
 use NeNeConcierge\Scenario\ScenarioNotFoundException;
 use NeNeConcierge\Scenario\ScenarioStatus;
+use NeNeConcierge\Tests\Support\FixedClock;
 use PHPUnit\Framework\TestCase;
 
 final class ImportExportTest extends TestCase
@@ -37,6 +38,7 @@ final class ImportExportTest extends TestCase
             $this->scenarioRepo,
             $this->nodeRepo,
             $this->edgeRepo,
+            new FixedClock(),
         );
 
         $this->importUseCase = new ImportScenarioUseCase(

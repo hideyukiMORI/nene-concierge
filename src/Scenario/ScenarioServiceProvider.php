@@ -10,6 +10,7 @@ use Nene2\Database\DatabaseTransactionManagerInterface;
 use Nene2\DependencyInjection\ContainerBuilder;
 use Nene2\DependencyInjection\ServiceProviderInterface;
 use Nene2\Error\ProblemDetailsResponseFactory;
+use Nene2\Http\ClockInterface;
 use Nene2\Http\JsonResponseFactory;
 use Psr\Container\ContainerInterface;
 
@@ -211,6 +212,7 @@ final readonly class ScenarioServiceProvider implements ServiceProviderInterface
                     $scenarios = $c->get(ScenarioRepositoryInterface::class);
                     $nodes     = $c->get(ScenarioNodeRepositoryInterface::class);
                     $edges     = $c->get(ScenarioEdgeRepositoryInterface::class);
+                    $clock     = $c->get(ClockInterface::class);
 
                     if (!$scenarios instanceof ScenarioRepositoryInterface) {
                         throw new LogicException('Scenario repository service is invalid.');
@@ -224,7 +226,11 @@ final readonly class ScenarioServiceProvider implements ServiceProviderInterface
                         throw new LogicException('Scenario edge repository service is invalid.');
                     }
 
-                    return new ExportScenarioUseCase($scenarios, $nodes, $edges);
+                    if (!$clock instanceof ClockInterface) {
+                        throw new LogicException('ClockInterface service is invalid.');
+                    }
+
+                    return new ExportScenarioUseCase($scenarios, $nodes, $edges, $clock);
                 },
             )
             ->set(

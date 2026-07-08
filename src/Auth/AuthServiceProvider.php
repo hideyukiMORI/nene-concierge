@@ -10,6 +10,7 @@ use Nene2\Database\DatabaseQueryExecutorInterface;
 use Nene2\DependencyInjection\ContainerBuilder;
 use Nene2\DependencyInjection\ServiceProviderInterface;
 use Nene2\Error\ProblemDetailsResponseFactory;
+use Nene2\Http\ClockInterface;
 use Nene2\Http\JsonResponseFactory;
 use Psr\Container\ContainerInterface;
 
@@ -22,10 +23,14 @@ final readonly class AuthServiceProvider implements ServiceProviderInterface
                 UserRepositoryInterface::class,
                 static function (ContainerInterface $container): UserRepositoryInterface {
                     $query = $container->get(DatabaseQueryExecutorInterface::class);
+                    $clock = $container->get(ClockInterface::class);
                     if (!$query instanceof DatabaseQueryExecutorInterface) {
                         throw new LogicException('DatabaseQueryExecutorInterface service is invalid.');
                     }
-                    return new PdoUserRepository($query);
+                    if (!$clock instanceof ClockInterface) {
+                        throw new LogicException('ClockInterface service is invalid.');
+                    }
+                    return new PdoUserRepository($query, $clock);
                 },
             )
             // ── LoginUseCase / LoginHandler ─────────────────────────────────
@@ -34,13 +39,17 @@ final readonly class AuthServiceProvider implements ServiceProviderInterface
                 static function (ContainerInterface $container): LoginUseCase {
                     $users       = $container->get(UserRepositoryInterface::class);
                     $tokenIssuer = $container->get('nene-concierge.token_issuer');
+                    $clock       = $container->get(ClockInterface::class);
                     if (!$users instanceof UserRepositoryInterface) {
                         throw new LogicException('UserRepositoryInterface service is invalid.');
                     }
                     if (!$tokenIssuer instanceof TokenIssuerInterface) {
                         throw new LogicException('TokenIssuerInterface service is invalid.');
                     }
-                    return new LoginUseCase($users, $tokenIssuer);
+                    if (!$clock instanceof ClockInterface) {
+                        throw new LogicException('ClockInterface service is invalid.');
+                    }
+                    return new LoginUseCase($users, $tokenIssuer, $clock);
                 },
             )
             ->set(

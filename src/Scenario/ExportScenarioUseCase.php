@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace NeNeConcierge\Scenario;
 
+use Nene2\Http\ClockInterface;
+
 /**
  * Builds a portable ScenarioExportDocument from a stored scenario.
  *
@@ -16,6 +18,7 @@ final readonly class ExportScenarioUseCase
         private ScenarioRepositoryInterface     $scenarios,
         private ScenarioNodeRepositoryInterface $nodes,
         private ScenarioEdgeRepositoryInterface $edges,
+        private ClockInterface                  $clock,
     ) {
     }
 
@@ -54,7 +57,7 @@ final readonly class ExportScenarioUseCase
 
         return new ScenarioExportDocument(
             name:        $scenario->name,
-            exportedAt:  (new \DateTimeImmutable())->format(\DateTimeInterface::ATOM),
+            exportedAt:  $this->clock->now()->format(\DateTimeInterface::ATOM),
             nodes:       $nodeData,
             edges:       $edgeData,
             description: $scenario->description,
