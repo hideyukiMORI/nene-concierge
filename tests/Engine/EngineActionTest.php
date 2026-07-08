@@ -19,6 +19,7 @@ use NeNeConcierge\Tests\Action\SpyActionAdapter;
 use NeNeConcierge\Tests\Scenario\InMemoryScenarioEdgeRepository;
 use NeNeConcierge\Tests\Scenario\InMemoryScenarioNodeRepository;
 use NeNeConcierge\Tests\Scenario\InMemoryScenarioRepository;
+use NeNeConcierge\Tests\Support\FixedClock;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -53,7 +54,7 @@ final class EngineActionTest extends TestCase
 
     private function makeEngine(SpyActionAdapter ...$adapters): ScenarioEngine
     {
-        $dispatcher = new ActionDispatcher(array_values($adapters), $this->actionLogRepo);
+        $dispatcher = new ActionDispatcher(array_values($adapters), $this->actionLogRepo, new FixedClock());
 
         return new ScenarioEngine(
             $this->scenarioRepo,
@@ -64,6 +65,7 @@ final class EngineActionTest extends TestCase
             new ConditionEvaluator(),
             new VariableInterpolator(),
             $dispatcher,
+            new FixedClock(),
         );
     }
 

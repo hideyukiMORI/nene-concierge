@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace NeNeConcierge\Auth;
 
 use Nene2\Auth\TokenIssuerInterface;
+use Nene2\Http\ClockInterface;
 
 final readonly class LoginUseCase
 {
@@ -13,6 +14,7 @@ final readonly class LoginUseCase
     public function __construct(
         private UserRepositoryInterface $users,
         private TokenIssuerInterface $tokenIssuer,
+        private ClockInterface $clock,
     ) {
     }
 
@@ -30,13 +32,14 @@ final readonly class LoginUseCase
             throw new InvalidCredentialsException();
         }
 
-        $expiresAt = time() + self::TOKEN_TTL_SECONDS;
+        $now       = $this->clock->now()->getTimestamp();
+        $expiresAt = $now + self::TOKEN_TTL_SECONDS;
 
         $token = $this->tokenIssuer->issue([
             'sub'     => $user->email,
             'user_id' => $user->id,
             'role'    => $role->value,
-            'iat'     => time(),
+            'iat'     => $now,
             'exp'     => $expiresAt,
         ]);
 

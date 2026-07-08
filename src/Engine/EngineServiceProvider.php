@@ -9,6 +9,7 @@ use Nene2\Database\DatabaseQueryExecutorInterface;
 use Nene2\DependencyInjection\ContainerBuilder;
 use Nene2\DependencyInjection\ServiceProviderInterface;
 use Nene2\Error\ProblemDetailsResponseFactory;
+use Nene2\Http\ClockInterface;
 use Nene2\Http\JsonResponseFactory;
 use NeNeConcierge\Action\ActionDispatcher;
 use NeNeConcierge\Scenario\ScenarioEdgeRepositoryInterface;
@@ -87,6 +88,7 @@ final readonly class EngineServiceProvider implements ServiceProviderInterface
                     $conditions       = $c->get(ConditionEvaluator::class);
                     $interpolator     = $c->get(VariableInterpolator::class);
                     $actionDispatcher = $c->get(ActionDispatcher::class);
+                    $clock            = $c->get(ClockInterface::class);
 
                     if (!$scenarios instanceof ScenarioRepositoryInterface) {
                         throw new LogicException('Scenario repository service is invalid.');
@@ -120,7 +122,11 @@ final readonly class EngineServiceProvider implements ServiceProviderInterface
                         throw new LogicException('ActionDispatcher service is invalid.');
                     }
 
-                    return new ScenarioEngine($scenarios, $nodes, $edges, $sessions, $events, $conditions, $interpolator, $actionDispatcher);
+                    if (!$clock instanceof ClockInterface) {
+                        throw new LogicException('ClockInterface service is invalid.');
+                    }
+
+                    return new ScenarioEngine($scenarios, $nodes, $edges, $sessions, $events, $conditions, $interpolator, $actionDispatcher, $clock);
                 },
             )
             // ── Handlers ───────────────────────────────────────────────────────

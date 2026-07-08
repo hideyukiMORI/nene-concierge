@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace NeNeConcierge\Engine;
 
+use Nene2\Http\ClockInterface;
 use NeNeConcierge\Action\ActionDispatcher;
 use NeNeConcierge\Action\ActionException;
 use NeNeConcierge\Scenario\ScenarioEdge;
@@ -49,6 +50,7 @@ final readonly class ScenarioEngine
         private ConditionEvaluator                  $conditionEvaluator,
         private VariableInterpolator                $interpolator,
         private ActionDispatcher                    $actionDispatcher,
+        private ClockInterface                      $clock,
     ) {
     }
 
@@ -80,7 +82,7 @@ final readonly class ScenarioEngine
 
         $startNode = $this->findStartNode($allNodes, $allEdges);
         $sessionId = $this->generateUuid();
-        $now       = date('Y-m-d H:i:s');
+        $now       = $this->clock->now()->format('Y-m-d H:i:s');
         $outcome   = $preview ? SessionOutcome::Preview : SessionOutcome::Active;
 
         $session = new ChatSession(
@@ -169,7 +171,7 @@ final readonly class ScenarioEngine
             throw new EngineException("Node '{$nextNodeId}' not found in scenario {$session->scenarioId}.");
         }
 
-        $now      = date('Y-m-d H:i:s.v');
+        $now      = $this->clock->now()->format('Y-m-d H:i:s.v');
         $allEdges = $this->edges->findByScenario($session->scenarioId, $organizationId);
         $nodeView = $this->buildNodeView($nextNode, $allEdges, $variables, $branchTaken);
 
@@ -211,7 +213,7 @@ final readonly class ScenarioEngine
             hasConversion:  $hasConversion,
             startedAt:      $session->startedAt,
             variables:      $variables,
-            endedAt:        ($nodeView->isTerminal && !$isPreview) ? date('Y-m-d H:i:s') : null,
+            endedAt:        ($nodeView->isTerminal && !$isPreview) ? $this->clock->now()->format('Y-m-d H:i:s') : null,
         );
 
         $this->sessions->update($updatedSession);
@@ -389,7 +391,7 @@ final readonly class ScenarioEngine
         bool    $isTerminal,
         ?string $branchTaken,
     ): void {
-        $exitedAt = $isTerminal ? date('Y-m-d H:i:s.v') : null;
+        $exitedAt = $isTerminal ? $this->clock->now()->format('Y-m-d H:i:s.v') : null;
 
         $this->events->record(new SessionNodeEvent(
             sessionId:      $sessionId,

@@ -20,6 +20,7 @@ use NeNeConcierge\Auth\LoginHandler;
 use NeNeConcierge\Auth\LoginUseCase;
 use NeNeConcierge\Auth\UpdateUserHandler;
 use NeNeConcierge\Auth\UpdateUserUseCase;
+use NeNeConcierge\Tests\Support\FixedClock;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
@@ -87,7 +88,7 @@ final class AuthHandlerTest extends TestCase
     public function testLoginHandlerThrowsValidationExceptionForEmptyEmail(): void
     {
         $tokenIssuer = $this->createStub(TokenIssuerInterface::class);
-        $handler     = new LoginHandler(new LoginUseCase($this->repo, $tokenIssuer), $this->json);
+        $handler     = new LoginHandler(new LoginUseCase($this->repo, $tokenIssuer, new FixedClock()), $this->json);
 
         $this->expectException(ValidationException::class);
         $handler->handle($this->postJson('/api/v1/auth/login', ['email' => '', 'password' => 'pass']));
@@ -96,7 +97,7 @@ final class AuthHandlerTest extends TestCase
     public function testLoginHandlerThrowsValidationExceptionForEmptyPassword(): void
     {
         $tokenIssuer = $this->createStub(TokenIssuerInterface::class);
-        $handler     = new LoginHandler(new LoginUseCase($this->repo, $tokenIssuer), $this->json);
+        $handler     = new LoginHandler(new LoginUseCase($this->repo, $tokenIssuer, new FixedClock()), $this->json);
 
         $this->expectException(ValidationException::class);
         $handler->handle($this->postJson('/api/v1/auth/login', ['email' => 'a@x.com', 'password' => '']));
@@ -110,7 +111,7 @@ final class AuthHandlerTest extends TestCase
         $tokenIssuer = $this->createStub(TokenIssuerInterface::class);
         $tokenIssuer->method('issue')->willReturn('jwt-token-123');
 
-        $handler  = new LoginHandler(new LoginUseCase($this->repo, $tokenIssuer), $this->json);
+        $handler  = new LoginHandler(new LoginUseCase($this->repo, $tokenIssuer, new FixedClock()), $this->json);
         $response = $handler->handle($this->postJson('/api/v1/auth/login', ['email' => 'owner@x.com', 'password' => 'correct']));
         $body     = json_decode((string) $response->getBody(), true);
 

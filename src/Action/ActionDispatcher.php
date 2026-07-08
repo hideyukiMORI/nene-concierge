@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace NeNeConcierge\Action;
 
+use Nene2\Http\ClockInterface;
+
 /**
  * Dispatches an action node to the appropriate adapter, writes the action log,
  * and surfaces success/failure to the Engine.
@@ -18,8 +20,9 @@ final readonly class ActionDispatcher
      * @param list<ActionAdapterInterface> $adapters
      */
     public function __construct(
-        private array                    $adapters,
+        private array                        $adapters,
         private ActionLogRepositoryInterface $logs,
+        private ClockInterface               $clock,
     ) {
     }
 
@@ -41,7 +44,7 @@ final readonly class ActionDispatcher
 
         /** @var array<string, mixed> $params */
         $params  = (array) ($nodeData['params'] ?? []);
-        $now     = date('Y-m-d H:i:s');
+        $now     = $this->clock->now()->format('Y-m-d H:i:s');
         $adapter = $this->findAdapter($adapterType);
 
         if ($adapter === null) {

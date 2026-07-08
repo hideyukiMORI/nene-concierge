@@ -18,6 +18,7 @@ use NeNeConcierge\Session\SessionOutcome;
 use NeNeConcierge\Tests\Scenario\InMemoryScenarioEdgeRepository;
 use NeNeConcierge\Tests\Scenario\InMemoryScenarioNodeRepository;
 use NeNeConcierge\Tests\Scenario\InMemoryScenarioRepository;
+use NeNeConcierge\Tests\Support\FixedClock;
 use PHPUnit\Framework\TestCase;
 
 final class EngineTest extends TestCase
@@ -45,7 +46,8 @@ final class EngineTest extends TestCase
             $this->eventRepo,
             new ConditionEvaluator(),
             new VariableInterpolator(),
-            new ActionDispatcher([], $this->createStub(ActionLogRepositoryInterface::class)),
+            new ActionDispatcher([], $this->createStub(ActionLogRepositoryInterface::class), new FixedClock()),
+            new FixedClock(),
         );
     }
 

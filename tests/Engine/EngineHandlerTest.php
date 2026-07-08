@@ -27,6 +27,7 @@ use NeNeConcierge\Scenario\ScenarioStatus;
 use NeNeConcierge\Tests\Scenario\InMemoryScenarioEdgeRepository;
 use NeNeConcierge\Tests\Scenario\InMemoryScenarioNodeRepository;
 use NeNeConcierge\Tests\Scenario\InMemoryScenarioRepository;
+use NeNeConcierge\Tests\Support\FixedClock;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
@@ -60,7 +61,8 @@ final class EngineHandlerTest extends TestCase
             $this->eventRepo,
             new ConditionEvaluator(),
             new VariableInterpolator(),
-            new ActionDispatcher([], $this->createStub(ActionLogRepositoryInterface::class)),
+            new ActionDispatcher([], $this->createStub(ActionLogRepositoryInterface::class), new FixedClock()),
+            new FixedClock(),
         );
     }
 

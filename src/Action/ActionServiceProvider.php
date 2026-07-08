@@ -9,6 +9,7 @@ use Nene2\Database\DatabaseQueryExecutorInterface;
 use Nene2\DependencyInjection\ContainerBuilder;
 use Nene2\DependencyInjection\ServiceProviderInterface;
 use Nene2\Error\ProblemDetailsResponseFactory;
+use Nene2\Http\ClockInterface;
 use Nene2\Http\JsonResponseFactory;
 use NeNeConcierge\Analytics\ScenarioAnalyticsHandler;
 use NeNeConcierge\Analytics\ScenarioAnalyticsUseCase;
@@ -168,6 +169,7 @@ final readonly class ActionServiceProvider implements ServiceProviderInterface
                     $chatwork  = $c->get(ChatworkActionAdapter::class);
                     $qr        = $c->get(QrCodeActionAdapter::class);
                     $logs      = $c->get(ActionLogRepositoryInterface::class);
+                    $clock     = $c->get(ClockInterface::class);
 
                     if (!$http instanceof HttpActionAdapter) {
                         throw new LogicException('HttpActionAdapter service is invalid.');
@@ -193,7 +195,11 @@ final readonly class ActionServiceProvider implements ServiceProviderInterface
                         throw new LogicException('ActionLog repository service is invalid.');
                     }
 
-                    return new ActionDispatcher([$http, $email, $slack, $chatwork, $qr], $logs);
+                    if (!$clock instanceof ClockInterface) {
+                        throw new LogicException('ClockInterface service is invalid.');
+                    }
+
+                    return new ActionDispatcher([$http, $email, $slack, $chatwork, $qr], $logs, $clock);
                 },
             )
             // ── Action credential CRUD handlers ────────────────────────────────
@@ -284,6 +290,7 @@ final readonly class ActionServiceProvider implements ServiceProviderInterface
                 static function (ContainerInterface $c): ScenarioAnalyticsUseCase {
                     $query     = $c->get(DatabaseQueryExecutorInterface::class);
                     $scenarios = $c->get(ScenarioRepositoryInterface::class);
+                    $clock     = $c->get(ClockInterface::class);
 
                     if (!$query instanceof DatabaseQueryExecutorInterface) {
                         throw new LogicException('Database query executor service is invalid.');
@@ -293,7 +300,11 @@ final readonly class ActionServiceProvider implements ServiceProviderInterface
                         throw new LogicException('Scenario repository service is invalid.');
                     }
 
-                    return new ScenarioAnalyticsUseCase($query, $scenarios);
+                    if (!$clock instanceof ClockInterface) {
+                        throw new LogicException('ClockInterface service is invalid.');
+                    }
+
+                    return new ScenarioAnalyticsUseCase($query, $scenarios, $clock);
                 },
             )
             ->set(
