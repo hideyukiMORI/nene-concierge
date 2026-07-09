@@ -40,20 +40,24 @@ Embed widget            ─┘             │
 
 ## Current Status
 
-**Phase 0 — Governance and Foundation: in progress**
+**Phases 0–2 complete; Phases 3–4 mostly complete** (last verified: 2026-07-09)
 
 | Area | State |
 | --- | --- |
 | Product vision and roadmap | ✅ |
 | Engineering governance (NENE2 inheritance) | ✅ |
 | Repository scaffold | ✅ |
-| Backend scaffold (NENE2 consumer) | 🔲 |
-| OpenAPI baseline | 🔲 |
-| Scenario engine MVP | 🔲 |
-| Scenario editor UI | 🔲 |
-| Embed widget | 🔲 |
-| Action engine (email / Slack / Chatwork) | 🔲 |
-| MCP tools | 🔲 |
+| Backend scaffold (NENE2 consumer) | ✅ |
+| OpenAPI baseline | ✅ |
+| Scenario engine MVP | ✅ |
+| Scenario editor UI (React Flow visual editor) | ✅ |
+| Admin SPA (React Router, 6-language localization) | ✅ |
+| Analytics overlay + session / action logs | ✅ |
+| Embed widget (`widget.js`) | ✅ |
+| Action engine (email / Slack / Chatwork / HTTP) | ✅ |
+| MCP tools (27-tool catalog) | ✅ |
+| AI scenario generation endpoint | 🔲 |
+| Frontend CI + tests | 🔶 (unit tests done; component tests remain — #58) |
 
 See [`docs/roadmap.md`](./docs/roadmap.md) and [`docs/todo/current.md`](./docs/todo/current.md).
 
