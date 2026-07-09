@@ -1,8 +1,8 @@
 # Current Work
 
-Last updated: 2026-07-05 (JWT フェイルクローズ + NENE2 GuardedJwtSecretResolver 移行 完了)
+Last updated: 2026-07-09 (README Current Status を実態に同期)
 
-## 直近の完了（2026-05-31 → 2026-07-05）
+## 直近の完了（2026-05-31 → 2026-07-09）
 
 | 項目 | 状態 | Issue / PR |
 | --- | --- | --- |
@@ -13,6 +13,7 @@ Last updated: 2026-07-05 (JWT フェイルクローズ + NENE2 GuardedJwtSecretR
 | フロントエンド共通スタイル定数・RightPane / CloseIcon 抽出（重複排除） | ✅ | #140 (PR #141) |
 | 本番 JWT フェイルクローズ — dev secret フォールバック廃止 | ✅ | #144 (PR #145) |
 | 自前 resolveJwtSecret を撤去し NENE2 GuardedJwtSecretResolver へ移行 | ✅ | #146 (PR #147) |
+| README Current Status 節を実態（Phase 0-2 完了・Phase 3-4 ほぼ完了）に同期 | ✅ | #155 (PR #156) |
 
 ---
 
