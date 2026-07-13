@@ -68,7 +68,7 @@ git clone https://github.com/hideyukiMORI/nene-concierge.git
 cd nene-concierge
 cp .env.example .env
 docker compose up --build -d
-curl -fsS http://localhost:8080/health
+curl -fsS http://localhost:8790/health
 ```
 
 > See [`docs/development/docker.md`](./docs/development/docker.md) for full setup details.
