@@ -22,6 +22,16 @@ NeNe Concierge is a self-hosted, open-source chat scenario platform built on [NE
 - **Self-hosted OSS** — MIT licensed; run on shared hosting (Tier A) or Docker/VPS (Tier B)
 - **Secure by design** — API boundaries, audit logs, no DB bypass for AI tools
 
+## Non-goals
+
+- Rebuilding a general-purpose chatbot SaaS or LLM platform
+- WordPress plugin integration (coexist on same domain is fine)
+- Embedding chat inside NeNe Records or NeNe Corpus
+- Exposing MCP protocol to embed widget visitors
+- Direct database access for AI or MCP tools
+
+Full list: [`docs/explanation/product-vision.md#non-goals`](./docs/explanation/product-vision.md#non-goals)
+
 ## Architecture
 
 ```
@@ -72,6 +82,16 @@ curl -fsS http://localhost:8790/health
 ```
 
 > See [`docs/development/docker.md`](./docs/development/docker.md) for full setup details.
+
+## Local ports
+
+NeNe Concierge owns the **`87**` port lane**; sibling products use their own lanes so several apps can run locally side by side (full policy: [`CLAUDE.md`](./CLAUDE.md)). Override via `NENE_CONCIERGE_*` in `.env`.
+
+| Service | Port |
+| --- | --- |
+| PHP app (Docker) | 8790 |
+| phpMyAdmin (Docker) | 8791 |
+| MySQL (Docker) | 3790 |
 
 ## Contributing
 
