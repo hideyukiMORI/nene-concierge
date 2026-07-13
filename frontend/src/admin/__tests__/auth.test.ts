@@ -1,8 +1,9 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { getToken, setToken, getStoredEmail, setStoredEmail, clearToken, isAuthenticated } from '../auth.js'
 
-// jsdom が localStorage を提供する
+// jsdom が sessionStorage / localStorage を提供する
 beforeEach(() => {
+    sessionStorage.clear()
     localStorage.clear()
 })
 
@@ -63,10 +64,22 @@ describe('isAuthenticated', () => {
     })
 
     it('空文字列トークンは falsy だが setToken が呼ばれると true になる', () => {
-        // localStorage は空文字列もそのまま保存する
+        // sessionStorage は空文字列もそのまま保存する
         setToken('')
         expect(getToken()).toBe('')
         // isAuthenticated は getToken() !== null をチェック
         expect(isAuthenticated()).toBe(true)
+    })
+})
+
+describe('storage backend', () => {
+    it('setToken / setStoredEmail は localStorage に書き込まない (XSS 時の窃取面を localStorage 経由に広げない)', () => {
+        setToken('secret-token')
+        setStoredEmail('user@example.com')
+        expect(localStorage.getItem('nene_admin_token')).toBeNull()
+        expect(localStorage.getItem('nene_admin_email')).toBeNull()
+        // sessionStorage には保存されている
+        expect(sessionStorage.getItem('nene_admin_token')).toBe('secret-token')
+        expect(sessionStorage.getItem('nene_admin_email')).toBe('user@example.com')
     })
 })

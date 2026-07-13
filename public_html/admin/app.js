@@ -24605,20 +24605,20 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var TOKEN_KEY = "nene_admin_token";
   var EMAIL_KEY = "nene_admin_email";
   function getToken() {
-    return localStorage.getItem(TOKEN_KEY);
+    return sessionStorage.getItem(TOKEN_KEY);
   }
   function setToken(token) {
-    localStorage.setItem(TOKEN_KEY, token);
+    sessionStorage.setItem(TOKEN_KEY, token);
   }
   function getStoredEmail() {
-    return localStorage.getItem(EMAIL_KEY);
+    return sessionStorage.getItem(EMAIL_KEY);
   }
   function setStoredEmail(email) {
-    localStorage.setItem(EMAIL_KEY, email);
+    sessionStorage.setItem(EMAIL_KEY, email);
   }
   function clearToken() {
-    localStorage.removeItem(TOKEN_KEY);
-    localStorage.removeItem(EMAIL_KEY);
+    sessionStorage.removeItem(TOKEN_KEY);
+    sessionStorage.removeItem(EMAIL_KEY);
   }
   function isAuthenticated() {
     return getToken() !== null;
@@ -26750,7 +26750,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       }
     );
   }
-  var MONO = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
+  var MONO = T.fontMono;
   function OrgIndicator({
     me,
     showLabels,
@@ -27584,10 +27584,132 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       e.currentTarget.style.background = "";
     }
   };
+  var TH = {
+    padding: "8px 14px",
+    textAlign: "left",
+    fontSize: T.fontXs,
+    fontWeight: 700,
+    color: T.textMuted,
+    fontFamily: T.fontMono,
+    letterSpacing: "0.05em",
+    textTransform: "uppercase",
+    background: T.surfaceAlt,
+    borderBottom: `1px solid ${T.border}`
+  };
+  var TD = {
+    padding: "9px 14px",
+    fontSize: T.fontSm,
+    color: T.text
+  };
+  var PAG_BTN = {
+    height: T.controlHeightSm,
+    padding: "0 14px",
+    boxSizing: "border-box",
+    borderRadius: T.radiusMd,
+    border: `1px solid ${T.border}`,
+    background: T.surface,
+    color: T.text,
+    fontSize: T.fontSm,
+    fontWeight: 500,
+    cursor: "pointer",
+    transition: "filter 150ms ease"
+  };
+  var FILTER_SELECT = {
+    height: 26,
+    padding: "0 8px",
+    borderRadius: T.radiusMd,
+    border: `1px solid ${T.border}`,
+    background: T.surface,
+    color: T.text,
+    fontSize: T.fontXs,
+    fontFamily: T.fontMono,
+    cursor: "pointer",
+    outline: "none"
+  };
+  var FILTER_INPUT = {
+    height: 28,
+    padding: "0 8px",
+    borderRadius: T.radiusMd,
+    border: `1px solid ${T.borderInput}`,
+    background: T.surface,
+    color: T.text,
+    fontSize: T.fontXs,
+    outline: "none",
+    boxSizing: "border-box"
+  };
+  function CloseIcon({ size = 11 }) {
+    return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
+      "svg",
+      {
+        width: size,
+        height: size,
+        viewBox: "0 0 24 24",
+        fill: "none",
+        stroke: "currentColor",
+        strokeWidth: "2.2",
+        strokeLinecap: "round",
+        "aria-hidden": true,
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("line", { x1: "6", y1: "6", x2: "18", y2: "18" }),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("line", { x1: "18", y1: "6", x2: "6", y2: "18" })
+        ]
+      }
+    );
+  }
+  function RightPane({
+    mode,
+    onClose,
+    children: children2,
+    zIndex = 100
+  }) {
+    if (mode === "pane") {
+      return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("aside", { style: {
+        width: 480,
+        flexShrink: 0,
+        borderLeft: `1px solid ${T.border}`,
+        background: T.surface,
+        height: "100vh",
+        position: "sticky",
+        top: 0,
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden"
+      }, children: children2 });
+    }
+    return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+      "div",
+      {
+        role: "dialog",
+        "aria-modal": true,
+        style: {
+          position: "fixed",
+          inset: 0,
+          zIndex,
+          background: "oklch(0% 0 0 / 0.35)",
+          backdropFilter: "blur(2px)",
+          display: "flex",
+          justifyContent: "flex-end"
+        },
+        onClick: (e) => {
+          if (e.target === e.currentTarget) onClose();
+        },
+        children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { style: {
+          width: 480,
+          maxWidth: "95vw",
+          height: "100vh",
+          background: T.surface,
+          boxShadow: "-10px 0 40px -10px rgba(15,23,42,.25)",
+          display: "flex",
+          flexDirection: "column",
+          borderLeft: `1px solid ${T.border}`
+        }, children: children2 })
+      }
+    );
+  }
 
   // src/admin/components/modal/Modal.tsx
   var import_jsx_runtime4 = __toESM(require_jsx_runtime());
-  var MONO2 = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
+  var MONO2 = T.fontMono;
   var IconTrash = () => /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("svg", { width: "18", height: "18", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round", "aria-hidden": true, children: [
     /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("polyline", { points: "3 6 5 6 21 6" }),
     /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("path", { d: "M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" }),
@@ -28197,7 +28319,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   // src/admin/components/mobile/Mobile.tsx
   var import_react7 = __toESM(require_react());
   var import_jsx_runtime7 = __toESM(require_jsx_runtime());
-  var MONO3 = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
+  var MONO3 = T.fontMono;
   function MobileHeader({
     title,
     subtitle,
@@ -28933,18 +29055,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   // src/admin/components/ScenariosPage.tsx
   var import_jsx_runtime8 = __toESM(require_jsx_runtime());
   var MONO4 = T.fontMono;
-  var TH = {
-    padding: "8px 14px",
-    textAlign: "left",
-    fontSize: T.fontXs,
-    fontWeight: 700,
-    color: T.textMuted,
-    fontFamily: MONO4,
-    letterSpacing: "0.05em",
-    textTransform: "uppercase",
-    background: T.surfaceAlt,
-    borderBottom: `1px solid ${T.border}`
-  };
   var STATUS_TO_PILL = {
     published: "success",
     draft: "draft",
@@ -28996,18 +29106,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const filtered = statusFilter ? scenarios.filter((s) => s.status === statusFilter) : scenarios;
     const published = scenarios.filter((s) => s.status === "published").length;
     const subtitle = loading ? "\u2026" : `${scenarios.length} total \xB7 ${published} published`;
-    const filterSelectStyle2 = {
-      height: 26,
-      padding: "0 8px",
-      borderRadius: T.radiusMd,
-      border: `1px solid ${T.border}`,
-      background: T.surface,
-      color: T.text,
-      fontSize: T.fontXs,
-      fontFamily: MONO4,
-      cursor: "pointer",
-      outline: "none"
-    };
+    const filterSelectStyle2 = FILTER_SELECT;
     if (isMobile) {
       const countAll = scenarios.length;
       const countPublished = scenarios.filter((s) => s.status === "published").length;
@@ -38161,7 +38260,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     if (rate >= 0.2) return "oklch(62% 0.16 65)";
     return "oklch(56% 0.16 145)";
   }
-  var MONO5 = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
+  var MONO5 = T.fontMono;
   function NodeShell({
     type,
     label,
@@ -38410,7 +38509,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   // src/admin/components/editor/NodeConfigPanel.tsx
   var import_react12 = __toESM(require_react());
   var import_jsx_runtime11 = __toESM(require_jsx_runtime());
-  var MONO6 = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
+  var MONO6 = T.fontMono;
   var S = {
     label: {
       display: "block",
@@ -38470,23 +38569,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   };
   var onF = (e) => applyFocus(e.currentTarget);
   var onB = (e) => removeFocus(e.currentTarget);
-  var CloseIcon = () => /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(
-    "svg",
-    {
-      width: "12",
-      height: "12",
-      viewBox: "0 0 24 24",
-      fill: "none",
-      stroke: "currentColor",
-      strokeWidth: "2.2",
-      strokeLinecap: "round",
-      "aria-hidden": true,
-      children: [
-        /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("line", { x1: "6", y1: "6", x2: "18", y2: "18" }),
-        /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("line", { x1: "18", y1: "6", x2: "6", y2: "18" })
-      ]
-    }
-  );
   var TrashIcon = () => /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(
     "svg",
     {
@@ -38624,7 +38706,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               cursor: "pointer",
               flexShrink: 0
             },
-            children: /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(CloseIcon, {})
+            children: /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(CloseIcon, { size: 12 })
           }
         )
       ] }),
@@ -38999,7 +39081,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     action: ActionNode,
     end: EndNode
   };
-  var MONO7 = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
+  var MONO7 = T.fontMono;
   function apiNodeToRF(n) {
     return {
       id: n.node_id,
@@ -39676,7 +39758,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   // src/admin/components/RevisionDiffPanel.tsx
   var import_react15 = __toESM(require_react());
   var import_jsx_runtime13 = __toESM(require_jsx_runtime());
-  var MONO8 = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
+  var MONO8 = T.fontMono;
   function diffNodes(before, after) {
     const beforeMap = new Map(before.map((n) => [n.node_id, n]));
     const afterMap = new Map(after.map((n) => [n.node_id, n]));
@@ -39804,23 +39886,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               alignItems: "center",
               justifyContent: "center"
             },
-            children: /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(
-              "svg",
-              {
-                width: "11",
-                height: "11",
-                viewBox: "0 0 24 24",
-                fill: "none",
-                stroke: "currentColor",
-                strokeWidth: "2.2",
-                strokeLinecap: "round",
-                "aria-hidden": true,
-                children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("line", { x1: "6", y1: "6", x2: "18", y2: "18" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("line", { x1: "18", y1: "6", x2: "6", y2: "18" })
-                ]
-              }
-            )
+            children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(CloseIcon, {})
           }
         )
       ] }),
@@ -39913,49 +39979,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         ] })
       ] })
     ] });
-    if (mode === "pane") {
-      return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("aside", { style: {
-        width: 480,
-        flexShrink: 0,
-        borderLeft: `1px solid ${T.border}`,
-        background: T.surface,
-        height: "100vh",
-        position: "sticky",
-        top: 0,
-        display: "flex",
-        flexDirection: "column",
-        overflow: "hidden"
-      }, children: inner });
-    }
-    return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
-      "div",
-      {
-        role: "dialog",
-        "aria-modal": "true",
-        style: {
-          position: "fixed",
-          inset: 0,
-          zIndex: 900,
-          background: "oklch(0% 0 0 / 0.35)",
-          backdropFilter: "blur(2px)",
-          display: "flex",
-          justifyContent: "flex-end"
-        },
-        onClick: (e) => {
-          if (e.target === e.currentTarget) onClose();
-        },
-        children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: {
-          width: 480,
-          maxWidth: "95vw",
-          height: "100vh",
-          background: T.surface,
-          boxShadow: "-10px 0 40px -10px rgba(15,23,42,.25)",
-          display: "flex",
-          flexDirection: "column",
-          borderLeft: `1px solid ${T.border}`
-        }, children: inner })
-      }
-    );
+    return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(RightPane, { mode, onClose, zIndex: 900, children: inner });
   }
   function DiffMeta({ revision, previous, t }) {
     return /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: {
@@ -40036,7 +40060,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // src/admin/components/ScenarioHistoryPanel.tsx
   var import_jsx_runtime14 = __toESM(require_jsx_runtime());
-  var MONO9 = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
+  var MONO9 = T.fontMono;
   var OPERATION_COLORS = {
     create: { bg: "rgba(34,197,94,0.15)", fg: "#16a34a" },
     update: { bg: "rgba(59,130,246,0.15)", fg: "#2563eb" },
@@ -40110,24 +40134,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 color: T.textMuted,
                 padding: 4
               },
-              children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(
-                "svg",
-                {
-                  width: "20",
-                  height: "20",
-                  viewBox: "0 0 24 24",
-                  fill: "none",
-                  stroke: "currentColor",
-                  strokeWidth: "2",
-                  strokeLinecap: "round",
-                  strokeLinejoin: "round",
-                  "aria-hidden": true,
-                  children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("line", { x1: "18", y1: "6", x2: "6", y2: "18" }),
-                    /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("line", { x1: "6", y1: "6", x2: "18", y2: "18" })
-                  ]
-                }
-              )
+              children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(CloseIcon, { size: 16 })
             }
           )
         ] }),
@@ -40241,7 +40248,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     WebkitTapHighlightColor: "transparent",
     textAlign: "left"
   };
-  var MONO10 = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
+  var MONO10 = T.fontMono;
   var IconBack = () => /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
     "svg",
     {
@@ -42045,23 +42052,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     chatwork: "chatwork"
   };
   var MONO12 = T.fontMono;
-  var TH2 = {
-    padding: "8px 14px",
-    textAlign: "left",
-    fontSize: T.fontXs,
-    fontWeight: 700,
-    color: T.textMuted,
-    fontFamily: MONO12,
-    letterSpacing: "0.05em",
-    textTransform: "uppercase",
-    background: T.surfaceAlt,
-    borderBottom: `1px solid ${T.border}`
-  };
-  var TD = {
-    padding: "9px 14px",
-    fontSize: T.fontSm,
-    color: T.text
-  };
   function CredentialsPage() {
     const { t } = useTranslation();
     const { isMobile } = useLayout();
@@ -42351,12 +42341,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ] }),
       loading ? /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("p", { style: { color: T.textMuted }, children: t("common.loading") }) : creds.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Card, { children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("p", { style: { color: T.textMuted, textAlign: "center", padding: "40px 0" }, children: t("credentials.empty") }) }) : /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Card, { style: { padding: 0, overflow: "hidden" }, children: /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("table", { style: { width: "100%", borderCollapse: "collapse" }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("tr", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("th", { style: { ...TH2, width: 44 }, children: "id" }),
-          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("th", { style: TH2, children: "name" }),
-          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("th", { style: { ...TH2, width: 130 }, children: "adapter" }),
-          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("th", { style: { ...TH2, width: 140 }, children: "created" }),
-          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("th", { style: { ...TH2, width: 140 }, children: "last used" }),
-          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("th", { style: { ...TH2, width: 90, textAlign: "right" } })
+          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("th", { style: { ...TH, width: 44 }, children: "id" }),
+          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("th", { style: TH, children: "name" }),
+          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("th", { style: { ...TH, width: 130 }, children: "adapter" }),
+          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("th", { style: { ...TH, width: 140 }, children: "created" }),
+          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("th", { style: { ...TH, width: 140 }, children: "last used" }),
+          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("th", { style: { ...TH, width: 90, textAlign: "right" } })
         ] }) }),
         /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("tbody", { children: creds.map((c, i) => /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(
           "tr",
@@ -42728,36 +42718,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     chatwork: "\u270E"
   };
   var MONO14 = T.fontMono;
-  var TH3 = {
-    padding: "8px 14px",
-    textAlign: "left",
-    fontSize: T.fontXs,
-    fontWeight: 700,
-    color: T.textMuted,
-    fontFamily: MONO14,
-    letterSpacing: "0.05em",
-    textTransform: "uppercase",
-    background: T.surfaceAlt,
-    borderBottom: `1px solid ${T.border}`
-  };
-  var TD2 = {
-    padding: "9px 14px",
-    fontSize: T.fontSm,
-    color: T.text
-  };
-  var PAG_BTN = {
-    height: T.controlHeightSm,
-    padding: "0 14px",
-    boxSizing: "border-box",
-    borderRadius: T.radiusMd,
-    border: `1px solid ${T.border}`,
-    background: T.surface,
-    color: T.text,
-    fontSize: T.fontSm,
-    fontWeight: 500,
-    cursor: "pointer",
-    transition: "filter 150ms ease"
-  };
   function ActionLogDetailView({
     log,
     onClose,
@@ -42835,10 +42795,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               alignItems: "center",
               justifyContent: "center"
             },
-            children: /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)("svg", { width: "11", height: "11", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round", "aria-hidden": true, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("line", { x1: "6", y1: "6", x2: "18", y2: "18" }),
-              /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("line", { x1: "18", y1: "6", x2: "6", y2: "18" })
-            ] })
+            children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(CloseIcon, {})
           }
         )
       ] }),
@@ -42920,47 +42877,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         ] })
       ] })
     ] });
-    if (mode === "pane") {
-      return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("aside", { style: {
-        width: 480,
-        flexShrink: 0,
-        borderLeft: `1px solid ${T.border}`,
-        background: T.surface,
-        height: "100vh",
-        position: "sticky",
-        top: 0,
-        display: "flex",
-        flexDirection: "column",
-        overflow: "hidden"
-      }, children: inner });
-    }
-    return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
-      "div",
-      {
-        style: {
-          position: "fixed",
-          inset: 0,
-          zIndex: 100,
-          background: "oklch(0% 0 0 / 0.35)",
-          backdropFilter: "blur(2px)",
-          display: "flex",
-          justifyContent: "flex-end"
-        },
-        onClick: (e) => {
-          if (e.target === e.currentTarget) onClose();
-        },
-        children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("div", { style: {
-          width: 480,
-          maxWidth: "95vw",
-          height: "100vh",
-          background: T.surface,
-          boxShadow: "-10px 0 40px -10px rgba(15,23,42,.25)",
-          display: "flex",
-          flexDirection: "column",
-          borderLeft: `1px solid ${T.border}`
-        }, children: inner })
-      }
-    );
+    return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(RightPane, { mode, onClose, children: inner });
   }
   function ActionLogsPage() {
     const { t } = useTranslation();
@@ -43006,18 +42923,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const totalPages = Math.ceil(total / limit);
     const currentPage = Math.floor(offset / limit) + 1;
     const subtitle = loading ? "\u2026" : `${range} \xB7 ${total} records \xB7 ${failures} failed`;
-    const filterSelectStyle2 = {
-      height: 26,
-      padding: "0 8px",
-      borderRadius: T.radiusMd,
-      border: `1px solid ${T.border}`,
-      background: T.surface,
-      color: T.text,
-      fontSize: T.fontXs,
-      fontFamily: MONO14,
-      cursor: "pointer",
-      outline: "none"
-    };
+    const filterSelectStyle2 = FILTER_SELECT;
     if (isMobile) {
       return /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)("div", { style: { minHeight: "100vh", background: T.bg }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
@@ -43263,12 +43169,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(Card, { style: { padding: 0, overflow: "hidden" }, children: loading ? /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("p", { style: { padding: "20px 18px", color: T.textMuted }, children: t("common.loading") }) : logs.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("p", { style: { padding: "20px 18px", color: T.textMuted }, children: t("actionLogs.empty") }) : /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("div", { style: { overflowX: "auto" }, children: /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)("table", { style: { width: "100%", borderCollapse: "collapse" }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)("tr", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("th", { style: { ...TH3, width: 100 }, children: "status" }),
-          /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("th", { style: { ...TH3, width: 110 }, children: "adapter" }),
-          /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("th", { style: { ...TH3, width: 130 }, children: "session" }),
-          /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("th", { style: { ...TH3, width: 80 }, children: "scenario" }),
-          /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("th", { style: { ...TH3, width: 150 }, children: "executed" }),
-          /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("th", { style: TH3, children: "error / detail" })
+          /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("th", { style: { ...TH, width: 100 }, children: "status" }),
+          /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("th", { style: { ...TH, width: 110 }, children: "adapter" }),
+          /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("th", { style: { ...TH, width: 130 }, children: "session" }),
+          /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("th", { style: { ...TH, width: 80 }, children: "scenario" }),
+          /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("th", { style: { ...TH, width: 150 }, children: "executed" }),
+          /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("th", { style: TH, children: "error / detail" })
         ] }) }),
         /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("tbody", { children: logs.map((log, i) => {
           const isSel = log.id !== null && log.id === selectedId;
@@ -43289,19 +43195,19 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 e.currentTarget.style.background = isSel ? fail ? T.dangerBg : T.primaryTint : "transparent";
               },
               children: [
-                /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("td", { style: { ...TD2, boxShadow: isSel ? `inset 2px 0 0 ${fail ? T.dangerFg : T.primary}` : "none" }, children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(StatusPill, { variant: log.status }) }),
-                /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("td", { style: TD2, children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(AdapterTag, { adapter: log.adapter }) }),
-                /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)("td", { style: { ...TD2, fontFamily: MONO14, fontSize: T.fontXs, color: T.textFaint }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("td", { style: { ...TD, boxShadow: isSel ? `inset 2px 0 0 ${fail ? T.dangerFg : T.primary}` : "none" }, children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(StatusPill, { variant: log.status }) }),
+                /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("td", { style: TD, children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(AdapterTag, { adapter: log.adapter }) }),
+                /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)("td", { style: { ...TD, fontFamily: MONO14, fontSize: T.fontXs, color: T.textFaint }, children: [
                   log.session_id.slice(0, 8),
                   "\u2026"
                 ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)("td", { style: { ...TD2, fontFamily: MONO14, fontSize: T.fontSm, color: T.text }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)("td", { style: { ...TD, fontFamily: MONO14, fontSize: T.fontSm, color: T.text }, children: [
                   "#",
                   log.scenario_id
                 ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("td", { style: { ...TD2, fontFamily: MONO14, fontSize: T.fontSm, color: T.textMuted, whiteSpace: "nowrap" }, children: log.executed_at }),
+                /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("td", { style: { ...TD, fontFamily: MONO14, fontSize: T.fontSm, color: T.textMuted, whiteSpace: "nowrap" }, children: log.executed_at }),
                 /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("td", { style: {
-                  ...TD2,
+                  ...TD,
                   fontFamily: MONO14,
                   fontSize: T.fontXs,
                   color: fail ? T.dangerFg : T.textMuted,
@@ -43429,19 +43335,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var import_react22 = __toESM(require_react());
   var import_jsx_runtime20 = __toESM(require_jsx_runtime());
   var MONO15 = T.fontMono;
-  var TH4 = {
-    padding: "8px 14px",
-    textAlign: "left",
-    fontSize: T.fontXs,
-    fontWeight: 700,
-    color: T.textMuted,
-    fontFamily: MONO15,
-    letterSpacing: "0.05em",
-    textTransform: "uppercase",
-    background: T.surfaceAlt,
-    borderBottom: `1px solid ${T.border}`
-  };
-  var TD3 = {
+  var TD2 = {
     padding: "9px 14px",
     fontSize: T.fontSm,
     color: T.text,
@@ -43906,19 +43800,19 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             ] }),
             /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("table", { style: { width: "100%", borderCollapse: "collapse" }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("tr", { children: [
-                /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("th", { style: TH4, children: "name" }),
-                /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("th", { style: { ...TH4, textAlign: "right" }, children: "sessions" }),
-                /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("th", { style: { ...TH4, textAlign: "right" }, children: "cv" })
+                /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("th", { style: TH, children: "name" }),
+                /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("th", { style: { ...TH, textAlign: "right" }, children: "sessions" }),
+                /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("th", { style: { ...TH, textAlign: "right" }, children: "cv" })
               ] }) }),
               /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("tbody", { children: [
                 scenarios.map((s, i) => /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("tr", { style: {
                   borderBottom: i < scenarios.length - 1 ? `1px solid ${T.border}` : "none"
                 }, children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("td", { style: TD3, children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(Link, { to: `/scenarios/${s.id}`, style: { color: T.primary, textDecoration: "none", fontWeight: 600 }, children: s.name }) }),
-                  /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("td", { style: { ...TD3, textAlign: "right", fontFamily: MONO15, fontSize: T.fontSm, color: T.text }, children: "\u2014" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("td", { style: { ...TD3, textAlign: "right", fontFamily: MONO15, fontSize: T.fontSm, color: T.textMuted }, children: "\u2014" })
+                  /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("td", { style: TD2, children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(Link, { to: `/scenarios/${s.id}`, style: { color: T.primary, textDecoration: "none", fontWeight: 600 }, children: s.name }) }),
+                  /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("td", { style: { ...TD2, textAlign: "right", fontFamily: MONO15, fontSize: T.fontSm, color: T.text }, children: "\u2014" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("td", { style: { ...TD2, textAlign: "right", fontFamily: MONO15, fontSize: T.fontSm, color: T.textMuted }, children: "\u2014" })
                 ] }, s.id)),
-                scenarios.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("tr", { children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("td", { colSpan: 3, style: { ...TD3, color: T.textMuted, textAlign: "center" }, children: "\u2014" }) })
+                scenarios.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("tr", { children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("td", { colSpan: 3, style: { ...TD2, color: T.textMuted, textAlign: "center" }, children: "\u2014" }) })
               ] })
             ] })
           ] }),
@@ -43947,11 +43841,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               failures.map((log, i) => /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("tr", { style: {
                 borderBottom: i < failures.length - 1 ? `1px solid ${T.border}` : "none"
               }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("td", { style: { ...TD3, width: 90 }, children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(AdapterTag, { adapter: log.adapter }) }),
-                /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("td", { style: { ...TD3, fontFamily: MONO15, fontSize: T.fontXs, color: T.textMuted, maxWidth: 160, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }, children: log.error_message ?? "\u2014" }),
-                /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("td", { style: { ...TD3, textAlign: "right", fontFamily: MONO15, fontSize: T.fontXs, color: T.textMuted, whiteSpace: "nowrap" }, children: log.executed_at?.slice(11, 16) ?? "\u2014" })
+                /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("td", { style: { ...TD2, width: 90 }, children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(AdapterTag, { adapter: log.adapter }) }),
+                /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("td", { style: { ...TD2, fontFamily: MONO15, fontSize: T.fontXs, color: T.textMuted, maxWidth: 160, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }, children: log.error_message ?? "\u2014" }),
+                /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("td", { style: { ...TD2, textAlign: "right", fontFamily: MONO15, fontSize: T.fontXs, color: T.textMuted, whiteSpace: "nowrap" }, children: log.executed_at?.slice(11, 16) ?? "\u2014" })
               ] }, log.id ?? i)),
-              failures.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("tr", { children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("td", { colSpan: 3, style: { ...TD3, color: T.textMuted, textAlign: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(SectionHead, { label: "no failures" }) }) })
+              failures.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("tr", { children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("td", { colSpan: 3, style: { ...TD2, color: T.textMuted, textAlign: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(SectionHead, { label: "no failures" }) }) })
             ] }) })
           ] })
         ] })
@@ -43973,23 +43867,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     if (m === 0) return `${s}s`;
     return `${m}m ${s}s`;
   }
-  var TH5 = {
-    padding: "8px 14px",
-    textAlign: "left",
-    fontSize: T.fontXs,
-    fontWeight: 700,
-    color: T.textMuted,
-    fontFamily: MONO16,
-    letterSpacing: "0.05em",
-    textTransform: "uppercase",
-    background: T.surfaceAlt,
-    borderBottom: `1px solid ${T.border}`
-  };
-  var TD4 = {
-    padding: "9px 14px",
-    fontSize: T.fontSm,
-    color: T.text
-  };
   function SessionDetailView({
     sessionId,
     onClose,
@@ -44009,10 +43886,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const SessionIcon = /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("svg", { width: "14", height: "14", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round", children: [
       /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("circle", { cx: "12", cy: "12", r: "9" }),
       /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("circle", { cx: "12", cy: "12", r: "3" })
-    ] });
-    const CloseIcon2 = /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("svg", { width: "11", height: "11", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("line", { x1: "6", y1: "6", x2: "18", y2: "18" }),
-      /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("line", { x1: "18", y1: "6", x2: "6", y2: "18" })
     ] });
     const shortId = sessionId.slice(0, 8);
     const isPane = mode === "pane";
@@ -44065,7 +43938,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               alignItems: "center",
               justifyContent: "center"
             },
-            children: CloseIcon2
+            children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(CloseIcon, {})
           }
         )
       ] }),
@@ -44191,47 +44064,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         ] })
       ] })
     ] });
-    if (isPane) {
-      return /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("aside", { style: {
-        width: 480,
-        flexShrink: 0,
-        borderLeft: `1px solid ${T.border}`,
-        background: T.surface,
-        height: "100vh",
-        position: "sticky",
-        top: 0,
-        display: "flex",
-        flexDirection: "column",
-        overflow: "hidden"
-      }, children: inner });
-    }
-    return /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
-      "div",
-      {
-        style: {
-          position: "fixed",
-          inset: 0,
-          zIndex: 100,
-          background: "oklch(0% 0 0 / 0.35)",
-          backdropFilter: "blur(2px)",
-          display: "flex",
-          justifyContent: "flex-end"
-        },
-        onClick: (e) => {
-          if (e.target === e.currentTarget) onClose();
-        },
-        children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("div", { style: {
-          width: 480,
-          maxWidth: "95vw",
-          height: "100vh",
-          background: T.surface,
-          boxShadow: "-10px 0 40px -10px rgba(15,23,42,.25)",
-          display: "flex",
-          flexDirection: "column",
-          borderLeft: `1px solid ${T.border}`
-        }, children: inner })
-      }
-    );
+    return /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(RightPane, { mode: isPane ? "pane" : "overlay", onClose, children: inner });
   }
   function outcomeToPillVariant(o) {
     if (o === "converted") return "success";
@@ -44409,31 +44242,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const currentPage = Math.floor(offset / limit) + 1;
     const scenarioIds = [...new Set(sessions.map((s) => s.scenario_id))].sort((a, b) => a - b);
     const filtered = scenarioFilter ? sessions.filter((s) => String(s.scenario_id) === scenarioFilter) : sessions;
-    const filterSelectStyle2 = {
-      height: 26,
-      padding: "0 8px",
-      borderRadius: T.radiusMd,
-      border: `1px solid ${T.border}`,
-      background: T.surface,
-      color: T.text,
-      fontSize: T.fontXs,
-      fontFamily: MONO16,
-      cursor: "pointer",
-      outline: "none"
-    };
-    const PAG_BTN3 = {
-      height: T.controlHeightSm,
-      padding: "0 14px",
-      boxSizing: "border-box",
-      borderRadius: T.radiusMd,
-      border: `1px solid ${T.border}`,
-      background: T.surface,
-      color: T.text,
-      fontSize: T.fontSm,
-      fontWeight: 500,
-      cursor: "pointer",
-      transition: "filter 150ms ease"
-    };
+    const filterSelectStyle2 = FILTER_SELECT;
     if (isMobile) {
       const countActive = sessions.filter((s) => s.outcome === "active").length;
       const countConverted = sessions.filter((s) => s.outcome === "converted").length;
@@ -44519,7 +44328,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               disabled: currentPage <= 1,
               onClick: () => setOffset(Math.max(0, offset - limit)),
               style: {
-                ...PAG_BTN3,
+                ...PAG_BTN,
                 opacity: currentPage <= 1 ? 0.45 : 1,
                 cursor: currentPage <= 1 ? "not-allowed" : "pointer"
               },
@@ -44537,7 +44346,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               disabled: currentPage >= totalPages,
               onClick: () => setOffset(offset + limit),
               style: {
-                ...PAG_BTN3,
+                ...PAG_BTN,
                 opacity: currentPage >= totalPages ? 0.45 : 1,
                 cursor: currentPage >= totalPages ? "not-allowed" : "pointer"
               },
@@ -44698,13 +44507,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(Card, { style: { padding: 0, overflow: "hidden" }, children: loading ? /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("p", { style: { padding: "20px 18px", color: T.textMuted }, children: t("common.loading") }) : filtered.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("p", { style: { padding: "20px 18px", color: T.textMuted }, children: t("sessions.empty") }) : /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("div", { style: { overflowX: "auto" }, children: /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("table", { style: { width: "100%", borderCollapse: "collapse" }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("tr", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("th", { style: { ...TH5, width: 130 }, children: "outcome" }),
-          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("th", { style: { ...TH5, width: 80 }, children: "scenario" }),
-          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("th", { style: { ...TH5, width: 100 }, children: "cv" }),
-          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("th", { style: { ...TH5, width: 150 }, children: "started" }),
-          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("th", { style: { ...TH5, width: 150 }, children: "ended" }),
-          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("th", { style: { ...TH5, width: 90 }, children: "duration" }),
-          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("th", { style: TH5 })
+          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("th", { style: { ...TH, width: 130 }, children: "outcome" }),
+          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("th", { style: { ...TH, width: 80 }, children: "scenario" }),
+          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("th", { style: { ...TH, width: 100 }, children: "cv" }),
+          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("th", { style: { ...TH, width: 150 }, children: "started" }),
+          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("th", { style: { ...TH, width: 150 }, children: "ended" }),
+          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("th", { style: { ...TH, width: 90 }, children: "duration" }),
+          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("th", { style: TH })
         ] }) }),
         /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("tbody", { children: filtered.map((s, i) => {
           const isSelected = s.id === selectedId;
@@ -44725,16 +44534,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 e.currentTarget.style.background = isSelected ? T.primaryTint : "transparent";
               },
               children: [
-                /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("td", { style: { ...TD4, boxShadow: isSelected ? `inset 2px 0 0 ${T.primary}` : "none" }, children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(StatusPill, { variant: pillVariant }) }),
-                /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("td", { style: { ...TD4, fontFamily: MONO16, fontSize: T.fontSm, color: T.text }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("td", { style: { ...TD, boxShadow: isSelected ? `inset 2px 0 0 ${T.primary}` : "none" }, children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(StatusPill, { variant: pillVariant }) }),
+                /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("td", { style: { ...TD, fontFamily: MONO16, fontSize: T.fontSm, color: T.text }, children: [
                   "#",
                   s.scenario_id
                 ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("td", { style: { ...TD4, fontFamily: MONO16, fontSize: T.fontSm, color: s.has_conversion ? T.successFg : T.textMuted }, children: s.has_conversion ? "\u2713 yes" : "\u2014 no" }),
-                /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("td", { style: { ...TD4, fontFamily: MONO16, fontSize: T.fontSm, color: T.textMuted, whiteSpace: "nowrap" }, children: s.started_at }),
-                /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("td", { style: { ...TD4, fontFamily: MONO16, fontSize: T.fontSm, color: T.textMuted, whiteSpace: "nowrap" }, children: s.ended_at ?? "\u2014" }),
-                /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("td", { style: { ...TD4, fontFamily: MONO16, fontSize: T.fontSm, color: T.textMuted }, children: calcDuration(s.started_at, s.ended_at) }),
-                /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("td", { style: { ...TD4, color: T.textMuted, fontSize: T.fontXs }, children: isSelected ? "\u2192 selected" : "" })
+                /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("td", { style: { ...TD, fontFamily: MONO16, fontSize: T.fontSm, color: s.has_conversion ? T.successFg : T.textMuted }, children: s.has_conversion ? "\u2713 yes" : "\u2014 no" }),
+                /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("td", { style: { ...TD, fontFamily: MONO16, fontSize: T.fontSm, color: T.textMuted, whiteSpace: "nowrap" }, children: s.started_at }),
+                /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("td", { style: { ...TD, fontFamily: MONO16, fontSize: T.fontSm, color: T.textMuted, whiteSpace: "nowrap" }, children: s.ended_at ?? "\u2014" }),
+                /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("td", { style: { ...TD, fontFamily: MONO16, fontSize: T.fontSm, color: T.textMuted }, children: calcDuration(s.started_at, s.ended_at) }),
+                /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("td", { style: { ...TD, color: T.textMuted, fontSize: T.fontXs }, children: isSelected ? "\u2192 selected" : "" })
               ]
             },
             s.id
@@ -44757,7 +44566,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             disabled: currentPage <= 1,
             onClick: () => setOffset(Math.max(0, offset - limit)),
             style: {
-              ...PAG_BTN3,
+              ...PAG_BTN,
               cursor: currentPage <= 1 ? "not-allowed" : "pointer",
               opacity: currentPage <= 1 ? 0.45 : 1
             },
@@ -44782,7 +44591,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             disabled: currentPage >= totalPages,
             onClick: () => setOffset(offset + limit),
             style: {
-              ...PAG_BTN3,
+              ...PAG_BTN,
               cursor: currentPage >= totalPages ? "not-allowed" : "pointer",
               opacity: currentPage >= totalPages ? 0.45 : 1
             },
@@ -44926,23 +44735,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               alignItems: "center",
               justifyContent: "center"
             },
-            children: /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)(
-              "svg",
-              {
-                width: "11",
-                height: "11",
-                viewBox: "0 0 24 24",
-                fill: "none",
-                stroke: "currentColor",
-                strokeWidth: "2.2",
-                strokeLinecap: "round",
-                "aria-hidden": true,
-                children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("line", { x1: "6", y1: "6", x2: "18", y2: "18" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("line", { x1: "18", y1: "6", x2: "6", y2: "18" })
-                ]
-              }
-            )
+            children: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(CloseIcon, {})
           }
         )
       ] }),
@@ -44984,49 +44777,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         )
       ] })
     ] });
-    if (mode === "pane") {
-      return /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("aside", { style: {
-        width: 480,
-        flexShrink: 0,
-        borderLeft: `1px solid ${T.border}`,
-        background: T.surface,
-        height: "100vh",
-        position: "sticky",
-        top: 0,
-        display: "flex",
-        flexDirection: "column",
-        overflow: "hidden"
-      }, children: inner });
-    }
-    return /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
-      "div",
-      {
-        role: "dialog",
-        "aria-modal": "true",
-        style: {
-          position: "fixed",
-          inset: 0,
-          zIndex: 900,
-          background: "oklch(0% 0 0 / 0.35)",
-          backdropFilter: "blur(2px)",
-          display: "flex",
-          justifyContent: "flex-end"
-        },
-        onClick: (e) => {
-          if (e.target === e.currentTarget) onClose();
-        },
-        children: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("div", { style: {
-          width: 480,
-          maxWidth: "95vw",
-          height: "100vh",
-          background: T.surface,
-          boxShadow: "-10px 0 40px -10px rgba(15,23,42,.25)",
-          display: "flex",
-          flexDirection: "column",
-          borderLeft: `1px solid ${T.border}`
-        }, children: inner })
-      }
-    );
+    return /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(RightPane, { mode, onClose, zIndex: 900, children: inner });
   }
   function UserFormInner({
     initial,
@@ -45165,23 +44916,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   // src/admin/components/UsersPage.tsx
   var import_jsx_runtime23 = __toESM(require_jsx_runtime());
   var MONO18 = T.fontMono;
-  var TH6 = {
-    padding: "8px 14px",
-    textAlign: "left",
-    fontSize: T.fontXs,
-    fontWeight: 700,
-    color: T.textMuted,
-    fontFamily: MONO18,
-    letterSpacing: "0.05em",
-    textTransform: "uppercase",
-    background: T.surfaceAlt,
-    borderBottom: `1px solid ${T.border}`
-  };
-  var TD5 = {
-    padding: "9px 14px",
-    fontSize: T.fontSm,
-    color: T.text
-  };
   var ROLE_TO_PILL = {
     superadmin: "active",
     owner: "active",
@@ -45506,11 +45240,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(SuccessMsg, { msg: saved }),
       /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Card, { style: { padding: 0, overflow: "hidden" }, children: loading ? /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("p", { style: { padding: "20px 18px", color: T.textMuted }, children: t("common.loading") }) : users.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("p", { style: { padding: "20px 18px", color: T.textMuted }, children: t("users.empty") }) : /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("div", { style: { overflowX: "auto" }, children: /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("table", { style: { width: "100%", borderCollapse: "collapse" }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("tr", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("th", { style: TH6, children: t("users.colEmail") }),
-          /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("th", { style: { ...TH6, width: 120 }, children: t("users.colRole") }),
-          /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("th", { style: { ...TH6, width: 100 }, children: t("users.colStatus") }),
-          /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("th", { style: { ...TH6, width: 120 }, children: t("users.colCreated") }),
-          /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("th", { style: { ...TH6, width: 160, textAlign: "right" } })
+          /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("th", { style: TH, children: t("users.colEmail") }),
+          /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("th", { style: { ...TH, width: 120 }, children: t("users.colRole") }),
+          /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("th", { style: { ...TH, width: 100 }, children: t("users.colStatus") }),
+          /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("th", { style: { ...TH, width: 120 }, children: t("users.colCreated") }),
+          /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("th", { style: { ...TH, width: 160, textAlign: "right" } })
         ] }) }),
         /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("tbody", { children: users.map((u, i) => {
           const isMe = myEmail !== null && myEmail === u.email;
@@ -45522,7 +45256,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 background: isMe ? T.primaryTint : "transparent"
               },
               children: [
-                /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("td", { style: { ...TD5, fontWeight: 600 }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("td", { style: { ...TD, fontWeight: 600 }, children: [
                   u.email,
                   isMe && /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("span", { style: {
                     marginLeft: 8,
@@ -45532,10 +45266,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                     fontWeight: 700
                   }, children: "(you)" })
                 ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("td", { style: TD5, children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Pill, { variant: ROLE_TO_PILL[u.role], label: u.role }) }),
-                /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("td", { style: { ...TD5, fontFamily: MONO18, fontSize: T.fontXs, color: u.status === "active" ? T.successFg : T.textFaint }, children: u.status === "active" ? t("users.status.active") : t("users.status.disabled") }),
-                /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("td", { style: { ...TD5, fontFamily: MONO18, fontSize: T.fontSm, color: T.textMuted }, children: formatDate(u.created_at) }),
-                /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("td", { style: { ...TD5, textAlign: "right" }, children: /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("div", { style: { display: "flex", gap: 6, justifyContent: "flex-end" }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("td", { style: TD, children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Pill, { variant: ROLE_TO_PILL[u.role], label: u.role }) }),
+                /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("td", { style: { ...TD, fontFamily: MONO18, fontSize: T.fontXs, color: u.status === "active" ? T.successFg : T.textFaint }, children: u.status === "active" ? t("users.status.active") : t("users.status.disabled") }),
+                /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("td", { style: { ...TD, fontFamily: MONO18, fontSize: T.fontSm, color: T.textMuted }, children: formatDate(u.created_at) }),
+                /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("td", { style: { ...TD, textAlign: "right" }, children: /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("div", { style: { display: "flex", gap: 6, justifyContent: "flex-end" }, children: [
                   /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
                     Btn,
                     {
@@ -45608,7 +45342,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   // src/admin/components/HistoryPage.tsx
   var import_react26 = __toESM(require_react());
   var import_jsx_runtime24 = __toESM(require_jsx_runtime());
-  var MONO19 = 'ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace';
+  var MONO19 = T.fontMono;
   var OPERATIONS = ["create", "update", "graph_save", "status_change", "delete"];
   function opPillVariant(op) {
     switch (op) {
@@ -45624,20 +45358,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         return "failure";
     }
   }
-  var PAG_BTN2 = {
-    height: T.controlHeightSm,
-    padding: "0 14px",
-    boxSizing: "border-box",
-    borderRadius: T.radiusMd,
-    border: `1px solid ${T.border}`,
-    background: T.surface,
-    color: T.text,
-    fontSize: T.fontSm,
-    fontWeight: 500,
-    cursor: "pointer",
-    transition: "filter 150ms ease"
-  };
-  var TH7 = {
+  var TH2 = {
     textAlign: "left",
     padding: "10px 12px",
     fontFamily: MONO19,
@@ -45650,7 +45371,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     borderBottom: `1px solid ${T.border}`,
     whiteSpace: "nowrap"
   };
-  var TD6 = {
+  var TD3 = {
     padding: "10px 12px",
     fontSize: T.fontSm,
     color: T.text,
@@ -45757,7 +45478,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         {
           disabled: currentPage <= 1,
           onClick: () => setOffset(Math.max(0, offset - limit)),
-          style: { ...PAG_BTN2, opacity: currentPage <= 1 ? 0.45 : 1, cursor: currentPage <= 1 ? "not-allowed" : "pointer" },
+          style: { ...PAG_BTN, opacity: currentPage <= 1 ? 0.45 : 1, cursor: currentPage <= 1 ? "not-allowed" : "pointer" },
           children: [
             "\u2190 ",
             t("common.prev")
@@ -45774,7 +45495,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         {
           disabled: currentPage >= totalPages,
           onClick: () => setOffset(offset + limit),
-          style: { ...PAG_BTN2, opacity: currentPage >= totalPages ? 0.45 : 1, cursor: currentPage >= totalPages ? "not-allowed" : "pointer" },
+          style: { ...PAG_BTN, opacity: currentPage >= totalPages ? 0.45 : 1, cursor: currentPage >= totalPages ? "not-allowed" : "pointer" },
           children: [
             t("common.next"),
             " \u2192"
@@ -46000,12 +45721,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Card, { style: { padding: 0, overflow: "hidden" }, children: loading ? /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("p", { style: { padding: "20px 18px", color: T.textMuted }, children: t("common.loading") }) : items.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("p", { style: { padding: "20px 18px", color: T.textMuted }, children: t("history.empty") }) : /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("div", { style: { overflowX: "auto" }, children: /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)("table", { style: { width: "100%", borderCollapse: "collapse" }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)("tr", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("th", { style: { ...TH7, width: 60 }, children: "#" }),
-          /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("th", { style: { ...TH7, width: 120 }, children: t("history.col.operation") }),
-          /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("th", { style: TH7, children: t("history.col.scenario") }),
-          /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("th", { style: { ...TH7, width: 220 }, children: t("history.col.user") }),
-          /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("th", { style: { ...TH7, width: 90 }, children: t("history.col.nodes") }),
-          /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("th", { style: { ...TH7, width: 170 }, children: t("history.col.when") })
+          /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("th", { style: { ...TH2, width: 60 }, children: "#" }),
+          /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("th", { style: { ...TH2, width: 120 }, children: t("history.col.operation") }),
+          /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("th", { style: TH2, children: t("history.col.scenario") }),
+          /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("th", { style: { ...TH2, width: 220 }, children: t("history.col.user") }),
+          /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("th", { style: { ...TH2, width: 90 }, children: t("history.col.nodes") }),
+          /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("th", { style: { ...TH2, width: 170 }, children: t("history.col.when") })
         ] }) }),
         /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("tbody", { children: items.map((r, i) => /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)(
           "tr",
@@ -46022,9 +45743,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               e.currentTarget.style.background = "";
             },
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("td", { style: { ...TD6, fontFamily: MONO19, color: T.textFaint }, children: r.revision_no }),
-              /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("td", { style: TD6, children: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Pill, { variant: opPillVariant(r.operation), label: t(`history.op.${r.operation}`) }) }),
-              /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)("td", { style: TD6, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("td", { style: { ...TD3, fontFamily: MONO19, color: T.textFaint }, children: r.revision_no }),
+              /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("td", { style: TD3, children: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Pill, { variant: opPillVariant(r.operation), label: t(`history.op.${r.operation}`) }) }),
+              /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)("td", { style: TD3, children: [
                 /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(
                   Link,
                   {
@@ -46035,14 +45756,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 ),
                 r.name && r.name !== r.scenario_name && /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("div", { style: { fontSize: T.fontXs, color: T.textMuted, marginTop: 2 }, children: r.name })
               ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("td", { style: { ...TD6, color: T.textMuted, fontSize: T.fontXs }, children: r.user_email ?? t("history.unknownUser") }),
-              /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)("td", { style: { ...TD6, fontFamily: MONO19, fontSize: T.fontXs, color: T.textMuted }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("td", { style: { ...TD3, color: T.textMuted, fontSize: T.fontXs }, children: r.user_email ?? t("history.unknownUser") }),
+              /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)("td", { style: { ...TD3, fontFamily: MONO19, fontSize: T.fontXs, color: T.textMuted }, children: [
                 r.node_count,
                 "N \xB7 ",
                 r.edge_count,
                 "E"
               ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("td", { style: { ...TD6, fontFamily: MONO19, fontSize: T.fontXs, color: T.textMuted }, children: r.created_at ?? "\u2014" })
+              /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("td", { style: { ...TD3, fontFamily: MONO19, fontSize: T.fontXs, color: T.textMuted }, children: r.created_at ?? "\u2014" })
             ]
           },
           r.id
