@@ -1,3 +1,4 @@
+import { createNene2Transport, isNene2ClientError, type TokenStore } from '@hideyukimori/nene2-client';
 import { getToken, clearToken } from './auth.js';
 
 // ── Dashboard ─────────────────────────────────────────────────────────────────
@@ -21,8 +22,6 @@ export interface DashboardResponse {
     data: DashboardStats;
 }
 
-const BASE = window.location.origin;
-
 export class ApiError extends Error {
     constructor(public status: number, message: string) {
         super(message);
@@ -30,28 +29,68 @@ export class ApiError extends Error {
     }
 }
 
-async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
-    const token = getToken();
-    const headers: Record<string, string> = {
-        'Content-Type': 'application/json',
-        'Accept':       'application/json',
-        ...(init.headers as Record<string, string> | undefined),
-    };
-    if (token) headers['Authorization'] = `Bearer ${token}`;
+// admin/auth.ts already owns the sessionStorage pair (`nene_admin_token` /
+// `nene_admin_email`, Issue #161 / PR #162) and is consumed directly by
+// App.tsx / Layout.tsx / LoginPage.tsx / UsersPage.tsx for isAuthenticated()
+// and the stored email. Adapting its getToken/clearToken to the transport's
+// minimal TokenStore contract keeps that module — and every one of its other
+// callers — untouched. This is the smaller diff versus switching to
+// createSessionTokenStore({ key: 'nene_admin_token' }), which would only
+// cover the token half of the pair and would still need auth.ts kept around
+// for the email key and isAuthenticated().
+const tokenStore: TokenStore = {
+    getToken:   () => getToken(),
+    clearToken: () => clearToken(),
+};
 
-    const res = await fetch(`${BASE}${path}`, { ...init, headers });
-
-    if (res.status === 401) {
-        clearToken();
+// baseUrl '' = same-origin relative paths; equivalent to the previous
+// `window.location.origin` prefix since this admin SPA is always served
+// same-origin with its API.
+const transport = createNene2Transport({
+    baseUrl: '',
+    tokenStore,
+    // Indirection instead of passing `window.fetch`/`globalThis.fetch`
+    // directly: createNene2Transport resolves and binds its fetch once at
+    // creation time, so a direct reference would freeze whatever `fetch`
+    // was global at module-import time. This wrapper re-reads the `fetch`
+    // binding on every call, matching call-time lookup — the same semantics
+    // as the plain `fetch(...)` calls it replaces (and what lets tests use
+    // vi.stubGlobal('fetch', ...)).
+    fetch: (...args: Parameters<typeof fetch>) => fetch(...args),
+    // Fires only for a 401 on a request that carried a token (session
+    // expiry) — matches the previous unconditional 401 handler's intent.
+    // A 401 with no token attached (e.g. a wrong-password login attempt)
+    // no longer clears/redirects; see PR description "挙動変化".
+    onUnauthorized: () => {
         window.location.href = '/admin/';
-        throw new ApiError(401, 'Unauthorized');
+    },
+});
+
+async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
+    const method = (init.method ?? 'GET').toUpperCase();
+    // Every call site in this file JSON.stringify()s its body before handing
+    // it to this RequestInit-shaped helper; transport.post/put/patch accept
+    // (and re-serialize) a plain value themselves, so it is parsed back here.
+    // This keeps all ~30 call sites below unchanged — the smallest diff for
+    // this migration.
+    const body = typeof init.body === 'string' ? JSON.parse(init.body) as unknown : undefined;
+
+    try {
+        switch (method) {
+            case 'GET':    return await transport.get<T>(path);
+            case 'POST':   return await transport.post<T>(path, body);
+            case 'PUT':    return await transport.put<T>(path, body);
+            case 'PATCH':  return await transport.patch<T>(path, body);
+            case 'DELETE': return await transport.delete<T>(path);
+            default:       throw new Error(`admin/api.ts request(): unsupported method ${method}`);
+        }
+    } catch (err) {
+        if (isNene2ClientError(err)) {
+            // Same fallback chain as the previous body.title ?? `HTTP ${status}`.
+            throw new ApiError(err.status, err.problem?.title ?? `HTTP ${err.status}`);
+        }
+        throw err;
     }
-    if (!res.ok) {
-        const body = await res.json().catch(() => ({})) as { title?: string };
-        throw new ApiError(res.status, body.title ?? `HTTP ${res.status}`);
-    }
-    if (res.status === 204) return undefined as unknown as T;
-    return res.json() as Promise<T>;
 }
 
 // ── Auth ──────────────────────────────────────────────────────────────────────

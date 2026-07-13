@@ -21876,7 +21876,7 @@ var NeNeAdmin = (() => {
 
   // src/admin/index.tsx
   var import_react28 = __toESM(require_react());
-  var import_client = __toESM(require_client());
+  var import_client2 = __toESM(require_client());
 
   // node_modules/react-router/dist/development/chunk-4N6VE7H7.mjs
   var React = __toESM(require_react(), 1);
@@ -24905,8 +24905,331 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   // src/admin/components/Layout.tsx
   var import_react3 = __toESM(require_react());
 
+  // node_modules/@hideyukimori/nene2-client/dist/problem/guards.js
+  function isPlainObject(value) {
+    return typeof value === "object" && value !== null && !Array.isArray(value);
+  }
+  function isHttpStatus(value) {
+    return typeof value === "number" && Number.isInteger(value) && value >= 400 && value <= 599;
+  }
+  function isProblemDetails(value) {
+    if (!isPlainObject(value)) {
+      return false;
+    }
+    const { type, title, status, detail, instance } = value;
+    if (typeof type !== "string" || typeof title !== "string" || !isHttpStatus(status)) {
+      return false;
+    }
+    if (detail !== void 0 && typeof detail !== "string") {
+      return false;
+    }
+    if (instance !== void 0 && typeof instance !== "string") {
+      return false;
+    }
+    return true;
+  }
+  function parseProblemDetails(value) {
+    return isProblemDetails(value) ? value : void 0;
+  }
+  async function parseProblemDetailsResponse(response) {
+    const contentType = response.headers.get("content-type") ?? "";
+    if (!contentType.includes("application/problem+json") && !contentType.includes("application/json")) {
+      return void 0;
+    }
+    try {
+      const body = await response.json();
+      return parseProblemDetails(body);
+    } catch {
+      return void 0;
+    }
+  }
+
+  // node_modules/@hideyukimori/nene2-client/dist/client/errors.js
+  var Nene2ClientError = class extends Error {
+    status;
+    problem;
+    url;
+    /** Present when the response included Retry-After or X-RateLimit-* headers. */
+    rateLimit;
+    constructor(message, options) {
+      super(message);
+      this.name = "Nene2ClientError";
+      this.status = options.status;
+      this.url = options.url;
+      this.problem = options.problem;
+      this.rateLimit = options.rateLimit;
+    }
+  };
+  function isNene2ClientError(error) {
+    return error instanceof Nene2ClientError;
+  }
+
+  // node_modules/@hideyukimori/nene2-client/dist/client/rate-limit.js
+  function parseHeaderInt(value) {
+    if (value === null || value.trim() === "") {
+      return void 0;
+    }
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : void 0;
+  }
+  function parseRateLimitHeaders(headers) {
+    const retryAfterSeconds = parseHeaderInt(headers.get("Retry-After"));
+    const limit = parseHeaderInt(headers.get("X-RateLimit-Limit"));
+    const remaining = parseHeaderInt(headers.get("X-RateLimit-Remaining"));
+    const reset = parseHeaderInt(headers.get("X-RateLimit-Reset"));
+    if (retryAfterSeconds === void 0 && limit === void 0 && remaining === void 0 && reset === void 0) {
+      return void 0;
+    }
+    return {
+      ...retryAfterSeconds !== void 0 ? { retryAfterSeconds } : {},
+      ...limit !== void 0 ? { limit } : {},
+      ...remaining !== void 0 ? { remaining } : {},
+      ...reset !== void 0 ? { reset } : {}
+    };
+  }
+
+  // node_modules/@hideyukimori/nene2-client/dist/client/signal.js
+  function mergeRequestSignal(userSignal, timeoutMs) {
+    const parts = [];
+    if (userSignal !== void 0) {
+      parts.push(userSignal);
+    }
+    if (timeoutMs !== void 0) {
+      if (timeoutMs <= 0) {
+        throw new Error("Nene2ClientConfig.timeoutMs must be positive");
+      }
+      parts.push(AbortSignal.timeout(timeoutMs));
+    }
+    if (parts.length === 0) {
+      return void 0;
+    }
+    if (parts.length === 1) {
+      return parts[0];
+    }
+    const controller = new AbortController();
+    const abortFromParts = () => {
+      controller.abort();
+    };
+    for (const part of parts) {
+      if (part.aborted) {
+        abortFromParts();
+        return controller.signal;
+      }
+      part.addEventListener("abort", abortFromParts, { once: true });
+    }
+    return controller.signal;
+  }
+
+  // node_modules/@hideyukimori/nene2-client/dist/client/request.js
+  function wrapFetchError(error, url) {
+    if (error instanceof Nene2ClientError) {
+      return error;
+    }
+    if (error instanceof Error) {
+      const prefix = error.name === "AbortError" || error.name === "TimeoutError" ? "NENE2 request aborted or timed out" : "NENE2 network request failed";
+      return new Nene2ClientError(`${prefix}: ${error.message}`, { status: 0, url });
+    }
+    return new Nene2ClientError("NENE2 network request failed", { status: 0, url });
+  }
+
+  // node_modules/@hideyukimori/nene2-client/dist/transport/headers.js
+  function buildTransportHeaders(input) {
+    const headers = new Headers(input.staticHeaders);
+    if (input.requestHeaders !== void 0) {
+      for (const [name, value] of Object.entries(input.requestHeaders)) {
+        headers.set(name, value);
+      }
+    }
+    if (input.apiKey !== void 0) {
+      headers.set("X-NENE2-API-Key", input.apiKey);
+    }
+    if (input.token !== null) {
+      headers.set("Authorization", `Bearer ${input.token}`);
+      headers.set("X-Authorization", `Bearer ${input.token}`);
+    }
+    return headers;
+  }
+
+  // node_modules/@hideyukimori/nene2-client/dist/transport/transport.js
+  function resolveTransportConfig(config) {
+    const fetchFn = config.fetch ?? globalThis.fetch;
+    if (typeof fetchFn !== "function") {
+      throw new Error("fetch is not available; pass Nene2TransportConfig.fetch");
+    }
+    return {
+      baseUrl: (config.baseUrl ?? "").replace(/\/+$/, ""),
+      tokenStore: config.tokenStore,
+      apiKey: config.apiKey,
+      headers: config.headers ?? {},
+      credentials: config.credentials,
+      // Bind so an extracted browser `window.fetch` keeps its required receiver.
+      fetch: fetchFn.bind(globalThis),
+      timeoutMs: config.timeoutMs,
+      onUnauthorized: config.onUnauthorized,
+      onForbidden: config.onForbidden,
+      clearTokenOnStatuses: config.clearTokenOnStatuses ?? [401]
+    };
+  }
+  async function send(config, init2) {
+    const url = `${config.baseUrl}${init2.path}`;
+    const token = config.tokenStore?.getToken() ?? null;
+    const headers = buildTransportHeaders({
+      staticHeaders: config.headers,
+      requestHeaders: init2.options?.headers,
+      apiKey: config.apiKey,
+      token
+    });
+    if (init2.accept !== void 0 && !headers.has("Accept")) {
+      headers.set("Accept", init2.accept);
+    }
+    if (init2.contentType !== void 0) {
+      headers.set("Content-Type", init2.contentType);
+    }
+    const requestInit = { method: init2.method, headers };
+    if (init2.body !== void 0) {
+      requestInit.body = init2.body;
+    }
+    if (config.credentials !== void 0) {
+      requestInit.credentials = config.credentials;
+    }
+    const signal = mergeRequestSignal(init2.options?.signal, config.timeoutMs);
+    if (signal !== void 0) {
+      requestInit.signal = signal;
+    }
+    let response;
+    try {
+      response = await config.fetch(url, requestInit);
+    } catch (error) {
+      throw wrapFetchError(error, url);
+    }
+    if (response.ok || (init2.options?.alsoOkStatuses?.includes(response.status) ?? false)) {
+      return response;
+    }
+    const problem = await parseProblemDetailsResponse(response);
+    const status = response.status;
+    const tokenAttached = token !== null;
+    if (tokenAttached && config.clearTokenOnStatuses.includes(status)) {
+      config.tokenStore?.clearToken();
+    }
+    const context = { status, path: init2.path, url, tokenAttached, problem };
+    if (status === 401 && tokenAttached) {
+      config.onUnauthorized?.(context);
+    }
+    if (status === 403) {
+      config.onForbidden?.(context);
+    }
+    const detail = problem?.detail ?? problem?.title ?? response.statusText;
+    throw new Nene2ClientError(`NENE2 request failed: ${detail}`, {
+      status,
+      url,
+      problem,
+      rateLimit: parseRateLimitHeaders(response.headers)
+    });
+  }
+  async function parseJsonBody(response, url) {
+    if (response.status === 204) {
+      return void 0;
+    }
+    const text = await response.text();
+    if (text === "") {
+      return void 0;
+    }
+    let body;
+    try {
+      body = JSON.parse(text);
+    } catch {
+      const contentType = response.headers.get("content-type") ?? "";
+      const hint = contentType.includes("text/html") || contentType.includes("text/plain") ? " \u2014 response looks like HTML/text; check baseUrl points at the JSON API" : "";
+      throw new Nene2ClientError(`NENE2 response is not valid JSON${hint}`, {
+        status: response.status,
+        url
+      });
+    }
+    return body;
+  }
+  function parseContentDispositionFilename(header) {
+    if (header === null) {
+      return null;
+    }
+    const match = /filename\*?=(?:UTF-8'')?"?([^";]+)"?/i.exec(header);
+    if (match?.[1] === void 0) {
+      return null;
+    }
+    try {
+      return decodeURIComponent(match[1]);
+    } catch {
+      return match[1];
+    }
+  }
+  async function toBlobDownload(response) {
+    const blob = await response.blob();
+    const filename = parseContentDispositionFilename(response.headers.get("Content-Disposition"));
+    return { blob, filename };
+  }
+  function jsonBody(body) {
+    if (body === void 0) {
+      return { body: void 0, contentType: void 0 };
+    }
+    return { body: JSON.stringify(body), contentType: "application/json" };
+  }
+  function createNene2Transport(config = {}) {
+    const resolved = resolveTransportConfig(config);
+    async function requestJson(method, path, body, options) {
+      const response = await send(resolved, {
+        method,
+        path,
+        ...jsonBody(body),
+        accept: "application/json",
+        options
+      });
+      return parseJsonBody(response, `${resolved.baseUrl}${path}`);
+    }
+    async function requestRaw(path, body, options) {
+      const response = await send(resolved, {
+        method: "POST",
+        path,
+        body,
+        contentType: options?.contentType ?? "text/csv",
+        accept: "application/json",
+        options
+      });
+      return parseJsonBody(response, `${resolved.baseUrl}${path}`);
+    }
+    return {
+      get: (path, options) => requestJson("GET", path, void 0, options),
+      post: (path, body, options) => requestJson("POST", path, body, options),
+      put: (path, body, options) => requestJson("PUT", path, body, options),
+      patch: (path, body, options) => requestJson("PATCH", path, body, options),
+      delete: (path, options) => requestJson("DELETE", path, void 0, options),
+      getBlob: async (path, options) => {
+        const response = await send(resolved, { method: "GET", path, options });
+        return toBlobDownload(response);
+      },
+      postBlob: async (path, body, options) => {
+        const response = await send(resolved, {
+          method: "POST",
+          path,
+          ...jsonBody(body),
+          options
+        });
+        return toBlobDownload(response);
+      },
+      upload: async (path, formData, options) => {
+        const response = await send(resolved, {
+          method: "POST",
+          path,
+          body: formData,
+          accept: "application/json",
+          options
+        });
+        return parseJsonBody(response, `${resolved.baseUrl}${path}`);
+      },
+      postCsv: (path, csv, options) => requestRaw(path, csv, options),
+      postBytes: (path, body, options) => requestRaw(path, body, options)
+    };
+  }
+
   // src/admin/api.ts
-  var BASE = window.location.origin;
   var ApiError = class extends Error {
     constructor(status, message) {
       super(message);
@@ -24914,26 +25237,53 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       this.name = "ApiError";
     }
   };
-  async function request(path, init2 = {}) {
-    const token = getToken();
-    const headers = {
-      "Content-Type": "application/json",
-      "Accept": "application/json",
-      ...init2.headers
-    };
-    if (token) headers["Authorization"] = `Bearer ${token}`;
-    const res = await fetch(`${BASE}${path}`, { ...init2, headers });
-    if (res.status === 401) {
-      clearToken();
+  var tokenStore = {
+    getToken: () => getToken(),
+    clearToken: () => clearToken()
+  };
+  var transport = createNene2Transport({
+    baseUrl: "",
+    tokenStore,
+    // Indirection instead of passing `window.fetch`/`globalThis.fetch`
+    // directly: createNene2Transport resolves and binds its fetch once at
+    // creation time, so a direct reference would freeze whatever `fetch`
+    // was global at module-import time. This wrapper re-reads the `fetch`
+    // binding on every call, matching call-time lookup — the same semantics
+    // as the plain `fetch(...)` calls it replaces (and what lets tests use
+    // vi.stubGlobal('fetch', ...)).
+    fetch: (...args) => fetch(...args),
+    // Fires only for a 401 on a request that carried a token (session
+    // expiry) — matches the previous unconditional 401 handler's intent.
+    // A 401 with no token attached (e.g. a wrong-password login attempt)
+    // no longer clears/redirects; see PR description "挙動変化".
+    onUnauthorized: () => {
       window.location.href = "/admin/";
-      throw new ApiError(401, "Unauthorized");
     }
-    if (!res.ok) {
-      const body = await res.json().catch(() => ({}));
-      throw new ApiError(res.status, body.title ?? `HTTP ${res.status}`);
+  });
+  async function request(path, init2 = {}) {
+    const method = (init2.method ?? "GET").toUpperCase();
+    const body = typeof init2.body === "string" ? JSON.parse(init2.body) : void 0;
+    try {
+      switch (method) {
+        case "GET":
+          return await transport.get(path);
+        case "POST":
+          return await transport.post(path, body);
+        case "PUT":
+          return await transport.put(path, body);
+        case "PATCH":
+          return await transport.patch(path, body);
+        case "DELETE":
+          return await transport.delete(path);
+        default:
+          throw new Error(`admin/api.ts request(): unsupported method ${method}`);
+      }
+    } catch (err) {
+      if (isNene2ClientError(err)) {
+        throw new ApiError(err.status, err.problem?.title ?? `HTTP ${err.status}`);
+      }
+      throw err;
     }
-    if (res.status === 204) return void 0;
-    return res.json();
   }
   function login(email, password) {
     return request("/api/v1/auth/login", {
@@ -46125,7 +46475,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   applyAdminTheme(themeId, themeVariant);
   var container = document.getElementById("root");
   if (!container) throw new Error("Root element #root not found");
-  (0, import_client.createRoot)(container).render(
+  (0, import_client2.createRoot)(container).render(
     /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(import_react28.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(I18nProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(App, {}) }) })
   );
 })();
