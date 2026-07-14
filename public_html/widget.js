@@ -1,33 +1,380 @@
 "use strict";
 var NeNeWidget = (() => {
-  // src/widget/api.ts
-  async function fetchJson(url, init) {
-    const res = await fetch(url, {
-      headers: { "Content-Type": "application/json", "Accept": "application/json" },
-      ...init
-    });
-    if (!res.ok) {
-      throw new Error(`API error: ${res.status} ${res.statusText} (${url})`);
+  var __defProp = Object.defineProperty;
+  var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+  var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
+
+  // node_modules/@hideyukimori/nene2-client/dist/problem/guards.js
+  function isPlainObject(value) {
+    return typeof value === "object" && value !== null && !Array.isArray(value);
+  }
+  function isHttpStatus(value) {
+    return typeof value === "number" && Number.isInteger(value) && value >= 400 && value <= 599;
+  }
+  function isProblemDetails(value) {
+    if (!isPlainObject(value)) {
+      return false;
     }
-    return res.json();
+    const { type, title, status, detail, instance } = value;
+    if (typeof type !== "string" || typeof title !== "string" || !isHttpStatus(status)) {
+      return false;
+    }
+    if (detail !== void 0 && typeof detail !== "string") {
+      return false;
+    }
+    if (instance !== void 0 && typeof instance !== "string") {
+      return false;
+    }
+    return true;
+  }
+  function parseProblemDetails(value) {
+    return isProblemDetails(value) ? value : void 0;
+  }
+  async function parseProblemDetailsResponse(response) {
+    const contentType = response.headers.get("content-type") ?? "";
+    if (!contentType.includes("application/problem+json") && !contentType.includes("application/json")) {
+      return void 0;
+    }
+    try {
+      const body = await response.json();
+      return parseProblemDetails(body);
+    } catch {
+      return void 0;
+    }
+  }
+
+  // node_modules/@hideyukimori/nene2-client/dist/client/errors.js
+  var Nene2ClientError = class extends Error {
+    constructor(message, options) {
+      super(message);
+      __publicField(this, "status");
+      __publicField(this, "problem");
+      __publicField(this, "url");
+      /** Present when the response included Retry-After or X-RateLimit-* headers. */
+      __publicField(this, "rateLimit");
+      this.name = "Nene2ClientError";
+      this.status = options.status;
+      this.url = options.url;
+      this.problem = options.problem;
+      this.rateLimit = options.rateLimit;
+    }
+  };
+  function isNene2ClientError(error) {
+    return error instanceof Nene2ClientError;
+  }
+
+  // node_modules/@hideyukimori/nene2-client/dist/client/rate-limit.js
+  function parseHeaderInt(value) {
+    if (value === null || value.trim() === "") {
+      return void 0;
+    }
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : void 0;
+  }
+  function parseRateLimitHeaders(headers) {
+    const retryAfterSeconds = parseHeaderInt(headers.get("Retry-After"));
+    const limit = parseHeaderInt(headers.get("X-RateLimit-Limit"));
+    const remaining = parseHeaderInt(headers.get("X-RateLimit-Remaining"));
+    const reset = parseHeaderInt(headers.get("X-RateLimit-Reset"));
+    if (retryAfterSeconds === void 0 && limit === void 0 && remaining === void 0 && reset === void 0) {
+      return void 0;
+    }
+    return {
+      ...retryAfterSeconds !== void 0 ? { retryAfterSeconds } : {},
+      ...limit !== void 0 ? { limit } : {},
+      ...remaining !== void 0 ? { remaining } : {},
+      ...reset !== void 0 ? { reset } : {}
+    };
+  }
+
+  // node_modules/@hideyukimori/nene2-client/dist/client/signal.js
+  function mergeRequestSignal(userSignal, timeoutMs) {
+    const parts = [];
+    if (userSignal !== void 0) {
+      parts.push(userSignal);
+    }
+    if (timeoutMs !== void 0) {
+      if (timeoutMs <= 0) {
+        throw new Error("Nene2ClientConfig.timeoutMs must be positive");
+      }
+      parts.push(AbortSignal.timeout(timeoutMs));
+    }
+    if (parts.length === 0) {
+      return void 0;
+    }
+    if (parts.length === 1) {
+      return parts[0];
+    }
+    const controller = new AbortController();
+    const abortFromParts = () => {
+      controller.abort();
+    };
+    for (const part of parts) {
+      if (part.aborted) {
+        abortFromParts();
+        return controller.signal;
+      }
+      part.addEventListener("abort", abortFromParts, { once: true });
+    }
+    return controller.signal;
+  }
+
+  // node_modules/@hideyukimori/nene2-client/dist/client/request.js
+  function wrapFetchError(error, url) {
+    if (error instanceof Nene2ClientError) {
+      return error;
+    }
+    if (error instanceof Error) {
+      const prefix = error.name === "AbortError" || error.name === "TimeoutError" ? "NENE2 request aborted or timed out" : "NENE2 network request failed";
+      return new Nene2ClientError(`${prefix}: ${error.message}`, { status: 0, url });
+    }
+    return new Nene2ClientError("NENE2 network request failed", { status: 0, url });
+  }
+
+  // node_modules/@hideyukimori/nene2-client/dist/transport/headers.js
+  function buildTransportHeaders(input) {
+    const headers = new Headers(input.staticHeaders);
+    if (input.requestHeaders !== void 0) {
+      for (const [name, value] of Object.entries(input.requestHeaders)) {
+        headers.set(name, value);
+      }
+    }
+    if (input.apiKey !== void 0) {
+      headers.set("X-NENE2-API-Key", input.apiKey);
+    }
+    if (input.token !== null) {
+      headers.set("Authorization", `Bearer ${input.token}`);
+      headers.set("X-Authorization", `Bearer ${input.token}`);
+    }
+    return headers;
+  }
+
+  // node_modules/@hideyukimori/nene2-client/dist/transport/transport.js
+  function resolveTransportConfig(config) {
+    const fetchFn = config.fetch ?? globalThis.fetch;
+    if (typeof fetchFn !== "function") {
+      throw new Error("fetch is not available; pass Nene2TransportConfig.fetch");
+    }
+    return {
+      baseUrl: (config.baseUrl ?? "").replace(/\/+$/, ""),
+      tokenStore: config.tokenStore,
+      apiKey: config.apiKey,
+      headers: config.headers ?? {},
+      credentials: config.credentials,
+      // Bind so an extracted browser `window.fetch` keeps its required receiver.
+      fetch: fetchFn.bind(globalThis),
+      timeoutMs: config.timeoutMs,
+      onUnauthorized: config.onUnauthorized,
+      onForbidden: config.onForbidden,
+      clearTokenOnStatuses: config.clearTokenOnStatuses ?? [401]
+    };
+  }
+  async function send(config, init) {
+    var _a, _b, _c, _d, _e, _f, _g, _h;
+    const url = `${config.baseUrl}${init.path}`;
+    const token = ((_a = config.tokenStore) == null ? void 0 : _a.getToken()) ?? null;
+    const headers = buildTransportHeaders({
+      staticHeaders: config.headers,
+      requestHeaders: (_b = init.options) == null ? void 0 : _b.headers,
+      apiKey: config.apiKey,
+      token
+    });
+    if (init.accept !== void 0 && !headers.has("Accept")) {
+      headers.set("Accept", init.accept);
+    }
+    if (init.contentType !== void 0) {
+      headers.set("Content-Type", init.contentType);
+    }
+    const requestInit = { method: init.method, headers };
+    if (init.body !== void 0) {
+      requestInit.body = init.body;
+    }
+    if (config.credentials !== void 0) {
+      requestInit.credentials = config.credentials;
+    }
+    const signal = mergeRequestSignal((_c = init.options) == null ? void 0 : _c.signal, config.timeoutMs);
+    if (signal !== void 0) {
+      requestInit.signal = signal;
+    }
+    let response;
+    try {
+      response = await config.fetch(url, requestInit);
+    } catch (error) {
+      throw wrapFetchError(error, url);
+    }
+    if (response.ok || (((_e = (_d = init.options) == null ? void 0 : _d.alsoOkStatuses) == null ? void 0 : _e.includes(response.status)) ?? false)) {
+      return response;
+    }
+    const problem = await parseProblemDetailsResponse(response);
+    const status = response.status;
+    const tokenAttached = token !== null;
+    if (tokenAttached && config.clearTokenOnStatuses.includes(status)) {
+      (_f = config.tokenStore) == null ? void 0 : _f.clearToken();
+    }
+    const context = { status, path: init.path, url, tokenAttached, problem };
+    if (status === 401 && tokenAttached) {
+      (_g = config.onUnauthorized) == null ? void 0 : _g.call(config, context);
+    }
+    if (status === 403) {
+      (_h = config.onForbidden) == null ? void 0 : _h.call(config, context);
+    }
+    const detail = (problem == null ? void 0 : problem.detail) ?? (problem == null ? void 0 : problem.title) ?? response.statusText;
+    throw new Nene2ClientError(`NENE2 request failed: ${detail}`, {
+      status,
+      url,
+      problem,
+      rateLimit: parseRateLimitHeaders(response.headers)
+    });
+  }
+  async function parseJsonBody(response, url) {
+    if (response.status === 204) {
+      return void 0;
+    }
+    const text = await response.text();
+    if (text === "") {
+      return void 0;
+    }
+    let body;
+    try {
+      body = JSON.parse(text);
+    } catch {
+      const contentType = response.headers.get("content-type") ?? "";
+      const hint = contentType.includes("text/html") || contentType.includes("text/plain") ? " \u2014 response looks like HTML/text; check baseUrl points at the JSON API" : "";
+      throw new Nene2ClientError(`NENE2 response is not valid JSON${hint}`, {
+        status: response.status,
+        url
+      });
+    }
+    return body;
+  }
+  function parseContentDispositionFilename(header) {
+    if (header === null) {
+      return null;
+    }
+    const match = /filename\*?=(?:UTF-8'')?"?([^";]+)"?/i.exec(header);
+    if ((match == null ? void 0 : match[1]) === void 0) {
+      return null;
+    }
+    try {
+      return decodeURIComponent(match[1]);
+    } catch {
+      return match[1];
+    }
+  }
+  async function toBlobDownload(response) {
+    const blob = await response.blob();
+    const filename = parseContentDispositionFilename(response.headers.get("Content-Disposition"));
+    return { blob, filename };
+  }
+  function jsonBody(body) {
+    if (body === void 0) {
+      return { body: void 0, contentType: void 0 };
+    }
+    return { body: JSON.stringify(body), contentType: "application/json" };
+  }
+  function createNene2Transport(config = {}) {
+    const resolved = resolveTransportConfig(config);
+    async function requestJson(method, path, body, options) {
+      const response = await send(resolved, {
+        method,
+        path,
+        ...jsonBody(body),
+        accept: "application/json",
+        options
+      });
+      return parseJsonBody(response, `${resolved.baseUrl}${path}`);
+    }
+    async function requestRaw(path, body, options) {
+      const response = await send(resolved, {
+        method: "POST",
+        path,
+        body,
+        contentType: (options == null ? void 0 : options.contentType) ?? "text/csv",
+        accept: "application/json",
+        options
+      });
+      return parseJsonBody(response, `${resolved.baseUrl}${path}`);
+    }
+    return {
+      get: (path, options) => requestJson("GET", path, void 0, options),
+      post: (path, body, options) => requestJson("POST", path, body, options),
+      put: (path, body, options) => requestJson("PUT", path, body, options),
+      patch: (path, body, options) => requestJson("PATCH", path, body, options),
+      delete: (path, options) => requestJson("DELETE", path, void 0, options),
+      getBlob: async (path, options) => {
+        const response = await send(resolved, { method: "GET", path, options });
+        return toBlobDownload(response);
+      },
+      postBlob: async (path, body, options) => {
+        const response = await send(resolved, {
+          method: "POST",
+          path,
+          ...jsonBody(body),
+          options
+        });
+        return toBlobDownload(response);
+      },
+      upload: async (path, formData, options) => {
+        const response = await send(resolved, {
+          method: "POST",
+          path,
+          body: formData,
+          accept: "application/json",
+          options
+        });
+        return parseJsonBody(response, `${resolved.baseUrl}${path}`);
+      },
+      postCsv: (path, csv, options) => requestRaw(path, csv, options),
+      postBytes: (path, body, options) => requestRaw(path, body, options)
+    };
+  }
+
+  // src/widget/api.ts
+  var transports = /* @__PURE__ */ new Map();
+  function transportFor(baseUrl2) {
+    let transport = transports.get(baseUrl2);
+    if (transport === void 0) {
+      transport = createNene2Transport({
+        baseUrl: baseUrl2,
+        // No tokenStore → anonymous: no auth headers, no 401 token-clearing.
+        // Indirection instead of passing `fetch` directly: createNene2Transport
+        // resolves and binds fetch once at creation time, so a direct
+        // reference would freeze whatever `fetch` was global at import time.
+        // Re-reading the binding on every call preserves the call-time lookup
+        // semantics of the plain `fetch(...)` it replaces — and is what lets
+        // tests use vi.stubGlobal('fetch', ...) (same手筋 as admin #165).
+        fetch: (...args) => fetch(...args)
+      });
+      transports.set(baseUrl2, transport);
+    }
+    return transport;
+  }
+  async function run(op) {
+    var _a;
+    try {
+      return await op();
+    } catch (err) {
+      if (isNene2ClientError(err) && err.status !== 0) {
+        const title = (_a = err.problem) == null ? void 0 : _a.title;
+        const label = title !== void 0 && title !== "" ? `${err.status} ${title}` : `${err.status}`;
+        throw new Error(`API error: ${label} (${err.url})`);
+      }
+      throw err;
+    }
   }
   function fetchAppearance(baseUrl2) {
-    return fetchJson(`${baseUrl2}/api/v1/public/appearance`);
+    return run(() => transportFor(baseUrl2).get("/api/v1/public/appearance"));
   }
   function startSession(baseUrl2, scenarioId2) {
-    return fetchJson(`${baseUrl2}/api/v1/public/sessions`, {
-      method: "POST",
-      body: JSON.stringify({ scenario_id: scenarioId2 })
-    });
+    return run(() => transportFor(baseUrl2).post("/api/v1/public/sessions", {
+      scenario_id: scenarioId2
+    }));
   }
   function stepSession(baseUrl2, sessionId, targetNodeId) {
-    return fetchJson(
-      `${baseUrl2}/api/v1/public/sessions/${sessionId}/step`,
-      {
-        method: "POST",
-        body: JSON.stringify({ target_node_id: targetNodeId })
-      }
-    );
+    return run(() => transportFor(baseUrl2).post(
+      `/api/v1/public/sessions/${sessionId}/step`,
+      { target_node_id: targetNodeId }
+    ));
   }
 
   // src/widget/style.ts
