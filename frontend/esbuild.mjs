@@ -17,7 +17,13 @@ const baseConfig = {
 // ── embed widget ──────────────────────────────────────────────────────────────
 await build({
     ...baseConfig,
-    target:      ['es2020', 'chrome90', 'firefox90', 'safari14'],
+    // safari14 → safari14.1: esbuild treats Safari 14.0 as lacking object/array
+    // destructuring (WebKit bug) and cannot lower it, so the build fails once
+    // @hideyukimori/nene2-client (bundled in by the W2a anonymous transport,
+    // #166) pulls destructuring into the widget. Raise the support floor to
+    // 14.1 (2021-04, where the bug is fixed — compat table checked). Other
+    // targets unchanged.
+    target:      ['es2020', 'chrome90', 'firefox90', 'safari14.1'],
     entryPoints: [resolve(__dirname, 'src/widget/index.ts')],
     outfile:     resolve(__dirname, '../public_html/widget.js'),
     globalName:  'NeNeWidget',
