@@ -364,6 +364,12 @@ final readonly class RuntimeServiceProvider implements ServiceProviderInterface
                         debug: $config->debug,
                         allowedOrigins: $allowedOrigins,
                         enableHsts: $enableHsts,
+                        // Opt-in の X-Authorization フォールバック受け口（NENE2 #1558・ADR 0019）。
+                        // 前段 proxy が標準 Authorization を剥がす共有ホスティング（HETEML 型 Tier A）で、
+                        // @hideyukimori/nene2-client v1.1.0（admin SPA が採用済み・#164）が全リクエストに
+                        // 付与する `X-Authorization: Bearer` ミラーを Authorization 不在/空のときのみ採用
+                        // する。標準ヘッダが届く環境ではバイト不変。
+                        enableAuthorizationHeaderFallback: true,
                     );
                 },
             )
