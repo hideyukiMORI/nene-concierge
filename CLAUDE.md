@@ -64,7 +64,7 @@ git commit \
 ```
 
 **絶対禁止:**
-- `main` への直接 commit/push（例外: `docs/todo/current.md` の状態更新のみ）
+- `main` への直接 commit/push（`main` は保護ブランチ。`docs/todo/current.md` の状態更新も含め、変更は**必ず PR 経由**でマージする）
 - Issue なしのコード・ドキュメント変更（例外: 複数の UI 微調整は 1 Issue にまとめてよい）
 - `.env` / トークン / パスワードのコミット
 
