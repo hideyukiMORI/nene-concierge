@@ -50,6 +50,7 @@ export default tseslint.config(
       'coverage',
       'eslint.config.js',
       'esbuild.mjs',
+      'scripts/**',
       'vitest.config.ts',
     ],
   },

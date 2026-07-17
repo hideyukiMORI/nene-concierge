@@ -8,9 +8,10 @@
     "build": "node esbuild.mjs",
     "type-check": "tsc --noEmit",
     "lint": "eslint . --max-warnings 0",
+    "lint:ratchet": "node scripts/eslint-suppressions-ratchet.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
-    "check": "npm run type-check && npm run lint && npm run test && npm run build"
+    "check": "npm run type-check && npm run lint && npm run lint:ratchet && npm run test && npm run build"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
