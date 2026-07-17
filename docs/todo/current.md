@@ -1,6 +1,6 @@
 # Current Work
 
-Last updated: 2026-07-09 (README Current Status を実態に同期)
+Last updated: 2026-07-18 (suppressions 増量防止 ratchet #182 完了を反映)
 
 ## 直近の完了（2026-05-31 → 2026-07-09）
 
@@ -308,6 +308,7 @@ Last updated: 2026-07-09 (README Current Status を実態に同期)
 | 全機能ユニットテスト実装 + CI に `npm run test` ステップ追加 | ✅ | #57 #58 (PR #136 #137) |
 | 追加のコンポーネントテスト（ScenarioCanvas / NodeConfigPanel / SessionsPage 等）拡充 | 🔲 | #58 (open) |
 | **ESLint ゲート導入**（nene2-standards 共有 config・既存 522 違反を native bulk-suppressions で凍結・CI を `npm run check` 経由に集約）フリート 13/13 達成 | ✅ | #178 (PR #179) |
+| **suppressions 増量防止 ratchet**（`eslint-suppressions.json` を origin/main と diff・エントリ追加/件数増=FAIL・削除のみ PASS・`check` に組込） | ✅ | #182 (PR #183) |
 
 ---
 
