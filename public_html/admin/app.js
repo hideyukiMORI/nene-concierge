@@ -21875,8 +21875,8 @@ var NeNeAdmin = (() => {
   });
 
   // src/admin/index.tsx
-  var import_react28 = __toESM(require_react());
-  var import_client2 = __toESM(require_client());
+  var import_react28 = __toESM(require_react(), 1);
+  var import_client2 = __toESM(require_client(), 1);
 
   // node_modules/react-router/dist/development/chunk-4N6VE7H7.mjs
   var React = __toESM(require_react(), 1);
@@ -24625,7 +24625,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/theme/theme-context.tsx
-  var import_react = __toESM(require_react());
+  var import_react = __toESM(require_react(), 1);
 
   // src/admin/theme/admin-theme-config.ts
   var ADMIN_THEME_DEFS = [
@@ -24695,7 +24695,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/theme/theme-context.tsx
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var import_jsx_runtime = __toESM(require_jsx_runtime(), 1);
   var ThemeContext = (0, import_react.createContext)(null);
   var STORAGE_KEY = "nca-admin-theme";
   function detectAdminTheme() {
@@ -24762,7 +24762,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/modal/Modal.tsx
-  var import_react4 = __toESM(require_react());
+  var import_react4 = __toESM(require_react(), 1);
 
   // src/admin/theme.ts
   var T = {
@@ -24903,7 +24903,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   };
 
   // src/admin/components/Layout.tsx
-  var import_react3 = __toESM(require_react());
+  var import_react3 = __toESM(require_react(), 1);
 
   // node_modules/@hideyukimori/nene2-client/dist/problem/guards.js
   function isPlainObject(value) {
@@ -25397,7 +25397,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/i18n/i18n-context.tsx
-  var import_react2 = __toESM(require_react());
+  var import_react2 = __toESM(require_react(), 1);
 
   // src/admin/i18n/locales.ts
   var LOCALES = {
@@ -26259,7 +26259,136 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     // ── Settings ──────────────────────────────────────────────────────────────
     "settings.pageTitle": "Param\xE8tres",
     "settings.adminTheme": "Th\xE8me d'administration",
-    "theme.label": "Th\xE8me"
+    "theme.label": "Th\xE8me",
+    // ══ Locale parity fill (#168) ══════════════════════════════════════════
+    // ── Common (locale parity fill) ──
+    "common.id": "ID",
+    "common.name": "Nom",
+    "common.description": "Description",
+    "common.createdAt": "Cr\xE9\xE9 le",
+    "common.required": "*",
+    // ── Auth placeholders ──
+    "auth.emailPlaceholder": "admin@example.com",
+    "auth.pwPlaceholder": "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022",
+    // ── Scenario form ──
+    "scenarioForm.loadError": "\xC9chec du chargement du sc\xE9nario.",
+    // ── Appearance ──
+    "appearance.iconPlaceholder": "https://example.com/icon.png",
+    "appearance.welcomePlaceholder": "Comment puis-je vous aider ?",
+    "appearance.loadError": "\xC9chec du chargement de l'apparence.",
+    // ── Credentials ──
+    "credentials.namePlaceholder": "ex. : webhook de notification Slack",
+    "credentials.loadError": "\xC9chec du chargement des identifiants.",
+    "credentials.deleteError": "\xC9chec de la suppression.",
+    "credentials.adapter.http": "HTTP (API externe)",
+    "credentials.adapter.email": "E-mail",
+    "credentials.adapter.slack": "Slack",
+    "credentials.adapter.chatwork": "Chatwork",
+    // ── Node editor ──
+    "node.messagePlaceholder": "Message \xE0 afficher au visiteur\u2026",
+    "node.addChoicePrompt": "Saisir le texte du choix",
+    "node.variablePlaceholder": "ex. : user_name",
+    "node.conditionVarPlaceholder": "ex. : user_answer",
+    "node.compareValuePlaceholder": "Valeur \xE0 comparer",
+    "node.conditionHint": "Poign\xE9es du bas : gauche = true / droite = false",
+    "node.credentialNone": "\u2014 S\xE9lectionner \u2014",
+    "node.outcome.completed": "completed \u2014 Termin\xE9",
+    "node.outcome.abandoned": "abandoned \u2014 Abandonn\xE9",
+    "node.operator.eq": "= \xC9gal",
+    "node.operator.neq": "\u2260 Diff\xE9rent",
+    "node.operator.contains": "contains contient",
+    "node.operator.exists": "exists existe",
+    "node.operator.not_exists": "not_exists absent",
+    "node.addToCanvas": "Ajouter un n\u0153ud {{type}}",
+    // ── Action Logs ──
+    "actionLogs.pageTitle": "Journaux d'action",
+    "actionLogs.empty": "Aucun journal d'action pour le moment.",
+    "actionLogs.loadError": "\xC9chec du chargement des journaux d'action.",
+    "actionLogs.filterAdapter": "Adaptateur",
+    "actionLogs.filterStatus": "Statut",
+    "actionLogs.all": "Tous",
+    "actionLogs.sessionId": "Session",
+    "actionLogs.scenarioId": "Sc\xE9nario",
+    "actionLogs.executedAt": "Ex\xE9cut\xE9 le",
+    "actionLogs.error": "Erreur",
+    // ── History (list page) ──
+    "nav.history": "Historique",
+    "history.pageTitle": "Historique des modifications",
+    "history.subtitle": "{{total}} r\xE9visions",
+    "history.searchPlaceholder": "Rechercher par nom ou utilisateur\u2026",
+    "history.allOps": "Toutes les op\xE9rations",
+    "history.allScenarios": "Tous les sc\xE9narios",
+    "history.filter.scenario": "sc\xE9nario",
+    "history.filter.operation": "op\xE9ration",
+    "history.filter.from": "Du",
+    "history.filter.to": "Au",
+    "history.col.operation": "Op\xE9ration",
+    "history.col.scenario": "Sc\xE9nario",
+    "history.col.user": "Utilisateur",
+    "history.col.nodes": "Taille",
+    "history.col.when": "Date",
+    // ── Pagination ──
+    "common.prev": "pr\xE9c.",
+    "common.next": "suiv.",
+    // ── Users ──
+    "nav.users": "Utilisateurs",
+    "users.pageTitle": "Gestion des utilisateurs",
+    "users.subtitle": "{{total}} utilisateurs \xB7 {{active}} actifs",
+    "users.empty": "Aucun utilisateur pour le moment.",
+    "users.loadError": "\xC9chec du chargement des utilisateurs.",
+    "users.saveError": "\xC9chec de l'enregistrement de l'utilisateur.",
+    "users.deleteError": "\xC9chec de la suppression de l'utilisateur.",
+    "users.colEmail": "E-mail",
+    "users.colRole": "R\xF4le",
+    "users.colStatus": "Statut",
+    "users.colCreated": "Cr\xE9\xE9 le",
+    "users.new": "+ Nouvel utilisateur",
+    "users.create.title": "Nouvel utilisateur",
+    "users.edit.title": "Modifier l'utilisateur",
+    "users.field.email": "E-mail",
+    "users.field.password": "Mot de passe",
+    "users.field.passwordHint": "Au moins 8 caract\xE8res. Laissez vide lors de la modification pour conserver le mot de passe actuel.",
+    "users.field.role": "R\xF4le",
+    "users.field.status": "Statut",
+    "users.role.superadmin": "Super-administrateur",
+    "users.role.owner": "Propri\xE9taire",
+    "users.role.editor": "\xC9diteur",
+    "users.role.viewer": "Lecteur",
+    "users.status.active": "Actif",
+    "users.status.disabled": "D\xE9sactiv\xE9",
+    "users.confirmDeleteTitle": "Supprimer l'utilisateur",
+    "users.confirmDelete": "Supprimer \xAB {{email}} \xBB ? Son acc\xE8s sera r\xE9voqu\xE9 imm\xE9diatement.",
+    "users.noSelection.title": "Aucun utilisateur s\xE9lectionn\xE9",
+    "users.noSelection.hint": "Cliquez sur une ligne pour modifier, ou sur + Nouveau pour cr\xE9er.",
+    // ── Org switcher ──
+    "me.currentOrg": "Organisation actuelle",
+    "me.moreOrgs": "de plus",
+    "me.noOrg": "Aucune organisation",
+    // ── History (drawer / timeline) ──
+    "history.title": "Historique des modifications",
+    "history.empty": "Aucun historique pour le moment.",
+    "history.unknownUser": "Utilisateur inconnu",
+    "history.op.create": "Cr\xE9\xE9",
+    "history.op.update": "Modifi\xE9",
+    "history.op.graph_save": "Graphe enregistr\xE9",
+    "history.op.status_change": "Statut modifi\xE9",
+    "history.op.delete": "Supprim\xE9",
+    // ── Revision diff ──
+    "diff.title": "R\xE9vision #{{rev}}",
+    "diff.loading": "Chargement de la r\xE9vision\u2026",
+    "diff.noSnapshot": "Aucune donn\xE9e de capture n\u2019a \xE9t\xE9 enregistr\xE9e pour cette r\xE9vision \u2014 diff\xE9rence indisponible.",
+    "diff.noChanges": "Aucune modification structurelle entre cette r\xE9vision et la pr\xE9c\xE9dente.",
+    "diff.noPrevious": "(r\xE9vision initiale \u2014 rien \xE0 comparer)",
+    "diff.fields": "Modifications de champs",
+    "diff.nodes": "Modifications de n\u0153uds",
+    "diff.edges": "Modifications de liens",
+    "diff.changed": "modifi\xE9",
+    "diff.meta.operation": "op\xE9ration",
+    "diff.meta.by": "par",
+    "diff.meta.when": "date",
+    "diff.meta.comparedTo": "compar\xE9 \xE0",
+    "diff.noSelection.title": "Aucune r\xE9vision s\xE9lectionn\xE9e",
+    "diff.noSelection.hint": "Cliquez sur une ligne pour voir les modifications."
   };
 
   // src/admin/i18n/messages/zh-Hans.ts
@@ -26445,7 +26574,136 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     // ── Settings ──────────────────────────────────────────────────────────────
     "settings.pageTitle": "\u8BBE\u7F6E",
     "settings.adminTheme": "\u7BA1\u7406\u754C\u9762\u4E3B\u9898",
-    "theme.label": "\u4E3B\u9898"
+    "theme.label": "\u4E3B\u9898",
+    // ══ Locale parity fill (#171) ══════════════════════════════════════════
+    // ── Common (locale parity fill) ──
+    "common.id": "ID",
+    "common.name": "\u540D\u79F0",
+    "common.description": "\u63CF\u8FF0",
+    "common.createdAt": "\u521B\u5EFA\u65F6\u95F4",
+    "common.required": "*",
+    // ── Auth placeholders ──
+    "auth.emailPlaceholder": "admin@example.com",
+    "auth.pwPlaceholder": "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022",
+    // ── Scenario form ──
+    "scenarioForm.loadError": "\u52A0\u8F7D\u573A\u666F\u5931\u8D25\u3002",
+    // ── Appearance ──
+    "appearance.iconPlaceholder": "https://example.com/icon.png",
+    "appearance.welcomePlaceholder": "\u6709\u4EC0\u4E48\u53EF\u4EE5\u5E2E\u60A8\uFF1F",
+    "appearance.loadError": "\u52A0\u8F7D\u5916\u89C2\u8BBE\u7F6E\u5931\u8D25\u3002",
+    // ── Credentials ──
+    "credentials.namePlaceholder": "\u4F8B\uFF1ASlack \u901A\u77E5 webhook",
+    "credentials.loadError": "\u52A0\u8F7D\u51ED\u8BC1\u5931\u8D25\u3002",
+    "credentials.deleteError": "\u5220\u9664\u5931\u8D25\u3002",
+    "credentials.adapter.http": "HTTP\uFF08\u5916\u90E8 API\uFF09",
+    "credentials.adapter.email": "\u90AE\u4EF6",
+    "credentials.adapter.slack": "Slack",
+    "credentials.adapter.chatwork": "Chatwork",
+    // ── Node editor ──
+    "node.messagePlaceholder": "\u5411\u8BBF\u5BA2\u663E\u793A\u7684\u6D88\u606F\u2026",
+    "node.addChoicePrompt": "\u8F93\u5165\u9009\u9879\u6587\u672C",
+    "node.variablePlaceholder": "\u4F8B\uFF1Auser_name",
+    "node.conditionVarPlaceholder": "\u4F8B\uFF1Auser_answer",
+    "node.compareValuePlaceholder": "\u8981\u6BD4\u8F83\u7684\u503C",
+    "node.conditionHint": "\u5E95\u90E8\u8FDE\u63A5\u70B9\uFF1A\u5DE6 = true / \u53F3 = false",
+    "node.credentialNone": "\u2014 \u9009\u62E9 \u2014",
+    "node.outcome.completed": "completed \u2014 \u5B8C\u6210",
+    "node.outcome.abandoned": "abandoned \u2014 \u653E\u5F03",
+    "node.operator.eq": "= \u7B49\u4E8E",
+    "node.operator.neq": "\u2260 \u4E0D\u7B49\u4E8E",
+    "node.operator.contains": "contains \u5305\u542B",
+    "node.operator.exists": "exists \u5B58\u5728",
+    "node.operator.not_exists": "not_exists \u4E0D\u5B58\u5728",
+    "node.addToCanvas": "\u6DFB\u52A0 {{type}} \u8282\u70B9",
+    // ── Action Logs ──
+    "actionLogs.pageTitle": "\u64CD\u4F5C\u65E5\u5FD7",
+    "actionLogs.empty": "\u6682\u65E0\u64CD\u4F5C\u65E5\u5FD7\u3002",
+    "actionLogs.loadError": "\u52A0\u8F7D\u64CD\u4F5C\u65E5\u5FD7\u5931\u8D25\u3002",
+    "actionLogs.filterAdapter": "\u9002\u914D\u5668",
+    "actionLogs.filterStatus": "\u72B6\u6001",
+    "actionLogs.all": "\u5168\u90E8",
+    "actionLogs.sessionId": "\u4F1A\u8BDD",
+    "actionLogs.scenarioId": "\u573A\u666F",
+    "actionLogs.executedAt": "\u6267\u884C\u65F6\u95F4",
+    "actionLogs.error": "\u9519\u8BEF",
+    // ── History (list page) ──
+    "nav.history": "\u5386\u53F2",
+    "history.pageTitle": "\u7F16\u8F91\u5386\u53F2",
+    "history.subtitle": "{{total}} \u6761\u4FEE\u8BA2",
+    "history.searchPlaceholder": "\u6309\u540D\u79F0\u6216\u7528\u6237\u641C\u7D22\u2026",
+    "history.allOps": "\u6240\u6709\u64CD\u4F5C",
+    "history.allScenarios": "\u6240\u6709\u573A\u666F",
+    "history.filter.scenario": "\u573A\u666F",
+    "history.filter.operation": "\u64CD\u4F5C",
+    "history.filter.from": "\u5F00\u59CB\u65E5\u671F",
+    "history.filter.to": "\u7ED3\u675F\u65E5\u671F",
+    "history.col.operation": "\u64CD\u4F5C",
+    "history.col.scenario": "\u573A\u666F",
+    "history.col.user": "\u7528\u6237",
+    "history.col.nodes": "\u5927\u5C0F",
+    "history.col.when": "\u65F6\u95F4",
+    // ── Pagination ──
+    "common.prev": "\u4E0A\u4E00\u9875",
+    "common.next": "\u4E0B\u4E00\u9875",
+    // ── Users ──
+    "nav.users": "\u7528\u6237",
+    "users.pageTitle": "\u7528\u6237\u7BA1\u7406",
+    "users.subtitle": "{{total}} \u4F4D\u7528\u6237 \xB7 {{active}} \u4E2A\u6709\u6548",
+    "users.empty": "\u6682\u65E0\u7528\u6237\u3002",
+    "users.loadError": "\u52A0\u8F7D\u7528\u6237\u5931\u8D25\u3002",
+    "users.saveError": "\u4FDD\u5B58\u7528\u6237\u5931\u8D25\u3002",
+    "users.deleteError": "\u5220\u9664\u7528\u6237\u5931\u8D25\u3002",
+    "users.colEmail": "\u90AE\u7BB1\u5730\u5740",
+    "users.colRole": "\u89D2\u8272",
+    "users.colStatus": "\u72B6\u6001",
+    "users.colCreated": "\u521B\u5EFA\u65F6\u95F4",
+    "users.new": "\uFF0B \u65B0\u5EFA\u7528\u6237",
+    "users.create.title": "\u65B0\u5EFA\u7528\u6237",
+    "users.edit.title": "\u7F16\u8F91\u7528\u6237",
+    "users.field.email": "\u90AE\u7BB1\u5730\u5740",
+    "users.field.password": "\u5BC6\u7801",
+    "users.field.passwordHint": "\u81F3\u5C11 8 \u4E2A\u5B57\u7B26\u3002\u7F16\u8F91\u65F6\u7559\u7A7A\u5219\u4FDD\u7559\u5F53\u524D\u5BC6\u7801\u3002",
+    "users.field.role": "\u89D2\u8272",
+    "users.field.status": "\u72B6\u6001",
+    "users.role.superadmin": "\u8D85\u7EA7\u7BA1\u7406\u5458",
+    "users.role.owner": "\u6240\u6709\u8005",
+    "users.role.editor": "\u7F16\u8F91\u8005",
+    "users.role.viewer": "\u67E5\u770B\u8005",
+    "users.status.active": "\u6709\u6548",
+    "users.status.disabled": "\u65E0\u6548",
+    "users.confirmDeleteTitle": "\u5220\u9664\u7528\u6237",
+    "users.confirmDelete": '\u5220\u9664"{{email}}"\uFF1F\u8BE5\u7528\u6237\u7684\u8BBF\u95EE\u6743\u9650\u5C06\u7ACB\u5373\u88AB\u64A4\u9500\u3002',
+    "users.noSelection.title": "\u672A\u9009\u62E9\u7528\u6237",
+    "users.noSelection.hint": "\u70B9\u51FB\u67D0\u884C\u8FDB\u884C\u7F16\u8F91\uFF0C\u6216\u4F7F\u7528 \uFF0B \u65B0\u5EFA \u521B\u5EFA\u3002",
+    // ── Org switcher ──
+    "me.currentOrg": "\u5F53\u524D\u7EC4\u7EC7",
+    "me.moreOrgs": "\u5176\u4ED6",
+    "me.noOrg": "\u65E0\u7EC4\u7EC7",
+    // ── History (drawer / timeline) ──
+    "history.title": "\u7F16\u8F91\u5386\u53F2",
+    "history.empty": "\u6682\u65E0\u5386\u53F2\u8BB0\u5F55\u3002",
+    "history.unknownUser": "\u672A\u77E5\u7528\u6237",
+    "history.op.create": "\u521B\u5EFA",
+    "history.op.update": "\u7F16\u8F91",
+    "history.op.graph_save": "\u6D41\u7A0B\u56FE\u4FDD\u5B58",
+    "history.op.status_change": "\u72B6\u6001\u53D8\u66F4",
+    "history.op.delete": "\u5220\u9664",
+    // ── Revision diff ──
+    "diff.title": "\u4FEE\u8BA2 #{{rev}}",
+    "diff.loading": "\u6B63\u5728\u52A0\u8F7D\u4FEE\u8BA2\u2026",
+    "diff.noSnapshot": "\u6B64\u4FEE\u8BA2\u672A\u4FDD\u5B58\u5FEB\u7167\u6570\u636E \u2014 \u65E0\u6CD5\u663E\u793A\u5DEE\u5F02\u3002",
+    "diff.noChanges": "\u6B64\u4FEE\u8BA2\u4E0E\u4E0A\u4E00\u4FEE\u8BA2\u4E4B\u95F4\u6CA1\u6709\u7ED3\u6784\u6027\u53D8\u66F4\u3002",
+    "diff.noPrevious": "\uFF08\u521D\u59CB\u4FEE\u8BA2 \u2014 \u65E0\u53EF\u6BD4\u8F83\u5BF9\u8C61\uFF09",
+    "diff.fields": "\u5B57\u6BB5\u53D8\u66F4",
+    "diff.nodes": "\u8282\u70B9\u53D8\u66F4",
+    "diff.edges": "\u8FDE\u7EBF\u53D8\u66F4",
+    "diff.changed": "\u5DF2\u53D8\u66F4",
+    "diff.meta.operation": "\u64CD\u4F5C",
+    "diff.meta.by": "\u64CD\u4F5C\u8005",
+    "diff.meta.when": "\u65F6\u95F4",
+    "diff.meta.comparedTo": "\u5BF9\u6BD4\u5BF9\u8C61",
+    "diff.noSelection.title": "\u672A\u9009\u62E9\u4FEE\u8BA2",
+    "diff.noSelection.hint": "\u70B9\u51FB\u67D0\u884C\u67E5\u770B\u53D8\u66F4\u5185\u5BB9\u3002"
   };
 
   // src/admin/i18n/messages/pt-BR.ts
@@ -26631,7 +26889,136 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     // ── Settings ──────────────────────────────────────────────────────────────
     "settings.pageTitle": "Configura\xE7\xF5es",
     "settings.adminTheme": "Tema do painel",
-    "theme.label": "Tema"
+    "theme.label": "Tema",
+    // ══ Locale parity fill (#170) ══════════════════════════════════════════
+    // ── Common (locale parity fill) ──
+    "common.id": "ID",
+    "common.name": "Nome",
+    "common.description": "Descri\xE7\xE3o",
+    "common.createdAt": "Criado em",
+    "common.required": "*",
+    // ── Auth placeholders ──
+    "auth.emailPlaceholder": "admin@example.com",
+    "auth.pwPlaceholder": "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022",
+    // ── Scenario form ──
+    "scenarioForm.loadError": "Falha ao carregar o cen\xE1rio.",
+    // ── Appearance ──
+    "appearance.iconPlaceholder": "https://example.com/icon.png",
+    "appearance.welcomePlaceholder": "Como posso ajudar?",
+    "appearance.loadError": "Falha ao carregar a apar\xEAncia.",
+    // ── Credentials ──
+    "credentials.namePlaceholder": "ex.: webhook de notifica\xE7\xE3o do Slack",
+    "credentials.loadError": "Falha ao carregar as credenciais.",
+    "credentials.deleteError": "Falha ao excluir.",
+    "credentials.adapter.http": "HTTP (API externa)",
+    "credentials.adapter.email": "E-mail",
+    "credentials.adapter.slack": "Slack",
+    "credentials.adapter.chatwork": "Chatwork",
+    // ── Node editor ──
+    "node.messagePlaceholder": "Mensagem a exibir ao visitante\u2026",
+    "node.addChoicePrompt": "Digite o texto da op\xE7\xE3o",
+    "node.variablePlaceholder": "ex.: user_name",
+    "node.conditionVarPlaceholder": "ex.: user_answer",
+    "node.compareValuePlaceholder": "Valor a comparar",
+    "node.conditionHint": "Al\xE7as inferiores: esquerda = true / direita = false",
+    "node.credentialNone": "\u2014 Selecionar \u2014",
+    "node.outcome.completed": "completed \u2014 Conclu\xEDdo",
+    "node.outcome.abandoned": "abandoned \u2014 Abandonado",
+    "node.operator.eq": "= Igual",
+    "node.operator.neq": "\u2260 Diferente",
+    "node.operator.contains": "contains cont\xE9m",
+    "node.operator.exists": "exists existe",
+    "node.operator.not_exists": "not_exists ausente",
+    "node.addToCanvas": "Adicionar n\xF3 {{type}}",
+    // ── Action Logs ──
+    "actionLogs.pageTitle": "Registros de a\xE7\xE3o",
+    "actionLogs.empty": "Nenhum registro de a\xE7\xE3o ainda.",
+    "actionLogs.loadError": "Falha ao carregar os registros de a\xE7\xE3o.",
+    "actionLogs.filterAdapter": "Adaptador",
+    "actionLogs.filterStatus": "Status",
+    "actionLogs.all": "Todos",
+    "actionLogs.sessionId": "Sess\xE3o",
+    "actionLogs.scenarioId": "Cen\xE1rio",
+    "actionLogs.executedAt": "Executado em",
+    "actionLogs.error": "Erro",
+    // ── History (list page) ──
+    "nav.history": "Hist\xF3rico",
+    "history.pageTitle": "Hist\xF3rico de edi\xE7\xF5es",
+    "history.subtitle": "{{total}} revis\xF5es",
+    "history.searchPlaceholder": "Buscar por nome ou usu\xE1rio\u2026",
+    "history.allOps": "Todas as opera\xE7\xF5es",
+    "history.allScenarios": "Todos os cen\xE1rios",
+    "history.filter.scenario": "cen\xE1rio",
+    "history.filter.operation": "opera\xE7\xE3o",
+    "history.filter.from": "De",
+    "history.filter.to": "At\xE9",
+    "history.col.operation": "Opera\xE7\xE3o",
+    "history.col.scenario": "Cen\xE1rio",
+    "history.col.user": "Usu\xE1rio",
+    "history.col.nodes": "Tamanho",
+    "history.col.when": "Data",
+    // ── Pagination ──
+    "common.prev": "ant.",
+    "common.next": "pr\xF3x.",
+    // ── Users ──
+    "nav.users": "Usu\xE1rios",
+    "users.pageTitle": "Gerenciamento de usu\xE1rios",
+    "users.subtitle": "{{total}} usu\xE1rios \xB7 {{active}} ativos",
+    "users.empty": "Nenhum usu\xE1rio ainda.",
+    "users.loadError": "Falha ao carregar os usu\xE1rios.",
+    "users.saveError": "Falha ao salvar o usu\xE1rio.",
+    "users.deleteError": "Falha ao excluir o usu\xE1rio.",
+    "users.colEmail": "E-mail",
+    "users.colRole": "Fun\xE7\xE3o",
+    "users.colStatus": "Status",
+    "users.colCreated": "Criado em",
+    "users.new": "+ Novo usu\xE1rio",
+    "users.create.title": "Novo usu\xE1rio",
+    "users.edit.title": "Editar usu\xE1rio",
+    "users.field.email": "E-mail",
+    "users.field.password": "Senha",
+    "users.field.passwordHint": "M\xEDn. 8 caracteres. Deixe em branco ao editar para manter a senha atual.",
+    "users.field.role": "Fun\xE7\xE3o",
+    "users.field.status": "Status",
+    "users.role.superadmin": "Superadministrador",
+    "users.role.owner": "Propriet\xE1rio",
+    "users.role.editor": "Editor",
+    "users.role.viewer": "Visualizador",
+    "users.status.active": "Ativo",
+    "users.status.disabled": "Desativado",
+    "users.confirmDeleteTitle": "Excluir usu\xE1rio",
+    "users.confirmDelete": 'Excluir "{{email}}"? O acesso ser\xE1 revogado imediatamente.',
+    "users.noSelection.title": "Nenhum usu\xE1rio selecionado",
+    "users.noSelection.hint": "Clique em uma linha para editar, ou use + Novo para criar.",
+    // ── Org switcher ──
+    "me.currentOrg": "Organiza\xE7\xE3o atual",
+    "me.moreOrgs": "mais",
+    "me.noOrg": "Nenhuma organiza\xE7\xE3o",
+    // ── History (drawer / timeline) ──
+    "history.title": "Hist\xF3rico de edi\xE7\xF5es",
+    "history.empty": "Nenhum hist\xF3rico ainda.",
+    "history.unknownUser": "Usu\xE1rio desconhecido",
+    "history.op.create": "Criado",
+    "history.op.update": "Editado",
+    "history.op.graph_save": "Grafo salvo",
+    "history.op.status_change": "Status alterado",
+    "history.op.delete": "Exclu\xEDdo",
+    // ── Revision diff ──
+    "diff.title": "Revis\xE3o #{{rev}}",
+    "diff.loading": "Carregando revis\xE3o\u2026",
+    "diff.noSnapshot": "Nenhum dado de snapshot foi armazenado para esta revis\xE3o \u2014 diferen\xE7a indispon\xEDvel.",
+    "diff.noChanges": "Nenhuma altera\xE7\xE3o estrutural entre esta revis\xE3o e a anterior.",
+    "diff.noPrevious": "(revis\xE3o inicial \u2014 nada para comparar)",
+    "diff.fields": "Altera\xE7\xF5es de campos",
+    "diff.nodes": "Altera\xE7\xF5es de n\xF3s",
+    "diff.edges": "Altera\xE7\xF5es de conex\xF5es",
+    "diff.changed": "alterado",
+    "diff.meta.operation": "opera\xE7\xE3o",
+    "diff.meta.by": "por",
+    "diff.meta.when": "data",
+    "diff.meta.comparedTo": "comparado a",
+    "diff.noSelection.title": "Nenhuma revis\xE3o selecionada",
+    "diff.noSelection.hint": "Clique em uma linha para ver o que mudou."
   };
 
   // src/admin/i18n/messages/de.ts
@@ -26817,7 +27204,136 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     // ── Settings ──────────────────────────────────────────────────────────────
     "settings.pageTitle": "Einstellungen",
     "settings.adminTheme": "Admin-Design",
-    "theme.label": "Design"
+    "theme.label": "Design",
+    // ══ Locale parity fill (#169) ══════════════════════════════════════════
+    // ── Common (locale parity fill) ──
+    "common.id": "ID",
+    "common.name": "Name",
+    "common.description": "Beschreibung",
+    "common.createdAt": "Erstellt am",
+    "common.required": "*",
+    // ── Auth placeholders ──
+    "auth.emailPlaceholder": "admin@example.com",
+    "auth.pwPlaceholder": "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022",
+    // ── Scenario form ──
+    "scenarioForm.loadError": "Szenario konnte nicht geladen werden.",
+    // ── Appearance ──
+    "appearance.iconPlaceholder": "https://example.com/icon.png",
+    "appearance.welcomePlaceholder": "Wie kann ich Ihnen helfen?",
+    "appearance.loadError": "Erscheinungsbild konnte nicht geladen werden.",
+    // ── Credentials ──
+    "credentials.namePlaceholder": "z. B. Slack-Benachrichtigungs-Webhook",
+    "credentials.loadError": "Zugangsdaten konnten nicht geladen werden.",
+    "credentials.deleteError": "L\xF6schen fehlgeschlagen.",
+    "credentials.adapter.http": "HTTP (Externe API)",
+    "credentials.adapter.email": "E-Mail",
+    "credentials.adapter.slack": "Slack",
+    "credentials.adapter.chatwork": "Chatwork",
+    // ── Node editor ──
+    "node.messagePlaceholder": "Nachricht, die dem Besucher angezeigt wird\u2026",
+    "node.addChoicePrompt": "Auswahltext eingeben",
+    "node.variablePlaceholder": "z. B. user_name",
+    "node.conditionVarPlaceholder": "z. B. user_answer",
+    "node.compareValuePlaceholder": "Zu vergleichender Wert",
+    "node.conditionHint": "Untere Griffe: links = true / rechts = false",
+    "node.credentialNone": "\u2014 Ausw\xE4hlen \u2014",
+    "node.outcome.completed": "completed \u2014 Abgeschlossen",
+    "node.outcome.abandoned": "abandoned \u2014 Abgebrochen",
+    "node.operator.eq": "= Gleich",
+    "node.operator.neq": "\u2260 Ungleich",
+    "node.operator.contains": "contains enth\xE4lt",
+    "node.operator.exists": "exists vorhanden",
+    "node.operator.not_exists": "not_exists nicht vorhanden",
+    "node.addToCanvas": "{{type}}-Knoten hinzuf\xFCgen",
+    // ── Action Logs ──
+    "actionLogs.pageTitle": "Aktionsprotokolle",
+    "actionLogs.empty": "Noch keine Aktionsprotokolle.",
+    "actionLogs.loadError": "Aktionsprotokolle konnten nicht geladen werden.",
+    "actionLogs.filterAdapter": "Adapter",
+    "actionLogs.filterStatus": "Status",
+    "actionLogs.all": "Alle",
+    "actionLogs.sessionId": "Sitzung",
+    "actionLogs.scenarioId": "Szenario",
+    "actionLogs.executedAt": "Ausgef\xFChrt am",
+    "actionLogs.error": "Fehler",
+    // ── History (list page) ──
+    "nav.history": "Verlauf",
+    "history.pageTitle": "Bearbeitungsverlauf",
+    "history.subtitle": "{{total}} Revisionen",
+    "history.searchPlaceholder": "Nach Name oder Benutzer suchen\u2026",
+    "history.allOps": "Alle Vorg\xE4nge",
+    "history.allScenarios": "Alle Szenarien",
+    "history.filter.scenario": "Szenario",
+    "history.filter.operation": "Vorgang",
+    "history.filter.from": "Von",
+    "history.filter.to": "Bis",
+    "history.col.operation": "Vorgang",
+    "history.col.scenario": "Szenario",
+    "history.col.user": "Benutzer",
+    "history.col.nodes": "Gr\xF6\xDFe",
+    "history.col.when": "Zeitpunkt",
+    // ── Pagination ──
+    "common.prev": "Zur\xFCck",
+    "common.next": "Weiter",
+    // ── Users ──
+    "nav.users": "Benutzer",
+    "users.pageTitle": "Benutzerverwaltung",
+    "users.subtitle": "{{total}} Benutzer \xB7 {{active}} aktiv",
+    "users.empty": "Noch keine Benutzer.",
+    "users.loadError": "Benutzer konnten nicht geladen werden.",
+    "users.saveError": "Benutzer konnte nicht gespeichert werden.",
+    "users.deleteError": "Benutzer konnte nicht gel\xF6scht werden.",
+    "users.colEmail": "E-Mail",
+    "users.colRole": "Rolle",
+    "users.colStatus": "Status",
+    "users.colCreated": "Erstellt am",
+    "users.new": "+ Neuer Benutzer",
+    "users.create.title": "Neuer Benutzer",
+    "users.edit.title": "Benutzer bearbeiten",
+    "users.field.email": "E-Mail",
+    "users.field.password": "Passwort",
+    "users.field.passwordHint": "Mindestens 8 Zeichen. Beim Bearbeiten leer lassen, um das aktuelle Passwort beizubehalten.",
+    "users.field.role": "Rolle",
+    "users.field.status": "Status",
+    "users.role.superadmin": "Superadministrator",
+    "users.role.owner": "Eigent\xFCmer",
+    "users.role.editor": "Bearbeiter",
+    "users.role.viewer": "Betrachter",
+    "users.status.active": "Aktiv",
+    "users.status.disabled": "Deaktiviert",
+    "users.confirmDeleteTitle": "Benutzer l\xF6schen",
+    "users.confirmDelete": "\u201E{{email}}\u201C l\xF6schen? Der Zugriff wird sofort entzogen.",
+    "users.noSelection.title": "Kein Benutzer ausgew\xE4hlt",
+    "users.noSelection.hint": "Klicken Sie auf eine Zeile zum Bearbeiten oder auf + Neu zum Erstellen.",
+    // ── Org switcher ──
+    "me.currentOrg": "Aktuelle Organisation",
+    "me.moreOrgs": "weitere",
+    "me.noOrg": "Keine Organisation",
+    // ── History (drawer / timeline) ──
+    "history.title": "Bearbeitungsverlauf",
+    "history.empty": "Noch kein Verlauf.",
+    "history.unknownUser": "Unbekannter Benutzer",
+    "history.op.create": "Erstellt",
+    "history.op.update": "Bearbeitet",
+    "history.op.graph_save": "Graph gespeichert",
+    "history.op.status_change": "Status ge\xE4ndert",
+    "history.op.delete": "Gel\xF6scht",
+    // ── Revision diff ──
+    "diff.title": "Revision #{{rev}}",
+    "diff.loading": "Revision wird geladen\u2026",
+    "diff.noSnapshot": "F\xFCr diese Revision wurden keine Snapshot-Daten gespeichert \u2014 Diff nicht verf\xFCgbar.",
+    "diff.noChanges": "Keine strukturellen \xC4nderungen zwischen dieser und der vorherigen Revision.",
+    "diff.noPrevious": "(erste Revision \u2014 kein Vergleich m\xF6glich)",
+    "diff.fields": "Feld\xE4nderungen",
+    "diff.nodes": "Knoten\xE4nderungen",
+    "diff.edges": "Kanten\xE4nderungen",
+    "diff.changed": "ge\xE4ndert",
+    "diff.meta.operation": "Vorgang",
+    "diff.meta.by": "von",
+    "diff.meta.when": "Zeitpunkt",
+    "diff.meta.comparedTo": "verglichen mit",
+    "diff.noSelection.title": "Keine Revision ausgew\xE4hlt",
+    "diff.noSelection.hint": "Klicken Sie auf eine Zeile, um die \xC4nderungen anzuzeigen."
   };
 
   // src/admin/i18n/messages/index.ts
@@ -26844,7 +27360,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/i18n/i18n-context.tsx
-  var import_jsx_runtime2 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime2 = __toESM(require_jsx_runtime(), 1);
   var I18nContext = (0, import_react2.createContext)(null);
   var STORAGE_KEY2 = "nca-locale";
   function detectLocale() {
@@ -26889,7 +27405,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/Layout.tsx
-  var import_jsx_runtime3 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime3 = __toESM(require_jsx_runtime(), 1);
   var LayoutContext = (0, import_react3.createContext)(null);
   function useLayout() {
     const ctx = (0, import_react3.useContext)(LayoutContext);
@@ -28058,7 +28574,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/modal/Modal.tsx
-  var import_jsx_runtime4 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime4 = __toESM(require_jsx_runtime(), 1);
   var MONO2 = T.fontMono;
   var IconTrash = () => /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("svg", { width: "18", height: "18", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round", "aria-hidden": true, children: [
     /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("polyline", { points: "3 6 5 6 21 6" }),
@@ -28529,8 +29045,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/modal/ModalProvider.tsx
-  var import_react5 = __toESM(require_react());
-  var import_jsx_runtime5 = __toESM(require_jsx_runtime());
+  var import_react5 = __toESM(require_react(), 1);
+  var import_jsx_runtime5 = __toESM(require_jsx_runtime(), 1);
   var ModalContext = (0, import_react5.createContext)(null);
   function useModals() {
     const ctx = (0, import_react5.useContext)(ModalContext);
@@ -28580,8 +29096,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/LoginPage.tsx
-  var import_react6 = __toESM(require_react());
-  var import_jsx_runtime6 = __toESM(require_jsx_runtime());
+  var import_react6 = __toESM(require_react(), 1);
+  var import_jsx_runtime6 = __toESM(require_jsx_runtime(), 1);
   function LoginPage() {
     const nav = useNavigate();
     const { t } = useTranslation();
@@ -28664,11 +29180,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/ScenariosPage.tsx
-  var import_react8 = __toESM(require_react());
+  var import_react8 = __toESM(require_react(), 1);
 
   // src/admin/components/mobile/Mobile.tsx
-  var import_react7 = __toESM(require_react());
-  var import_jsx_runtime7 = __toESM(require_jsx_runtime());
+  var import_react7 = __toESM(require_react(), 1);
+  var import_jsx_runtime7 = __toESM(require_jsx_runtime(), 1);
   var MONO3 = T.fontMono;
   function MobileHeader({
     title,
@@ -29403,7 +29919,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/ScenariosPage.tsx
-  var import_jsx_runtime8 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime8 = __toESM(require_jsx_runtime(), 1);
   var MONO4 = T.fontMono;
   var STATUS_TO_PILL = {
     published: "success",
@@ -29662,7 +30178,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/ScenarioFormPage.tsx
-  var import_react17 = __toESM(require_react());
+  var import_react17 = __toESM(require_react(), 1);
 
   // node_modules/@xyflow/react/dist/esm/index.js
   var import_jsx_runtime9 = __toESM(require_jsx_runtime());
@@ -38498,7 +39014,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var NodeResizeControl = (0, import_react10.memo)(ResizeControl);
 
   // src/admin/components/editor/ScenarioCanvas.tsx
-  var import_react14 = __toESM(require_react());
+  var import_react14 = __toESM(require_react(), 1);
 
   // node_modules/uuid/dist/stringify.js
   var byteToHex = [];
@@ -38545,7 +39061,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var v4_default = v4;
 
   // src/admin/components/editor/NodeTypes.tsx
-  var import_jsx_runtime10 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime10 = __toESM(require_jsx_runtime(), 1);
   var NODE_COLORS = {
     message: { bg: NODE_TOKENS.message.body, header: NODE_TOKENS.message.stripe, text: T.text },
     condition: { bg: NODE_TOKENS.condition.body, header: NODE_TOKENS.condition.stripe, text: T.text },
@@ -38857,8 +39373,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/editor/NodeConfigPanel.tsx
-  var import_react12 = __toESM(require_react());
-  var import_jsx_runtime11 = __toESM(require_jsx_runtime());
+  var import_react12 = __toESM(require_react(), 1);
+  var import_jsx_runtime11 = __toESM(require_jsx_runtime(), 1);
   var MONO6 = T.fontMono;
   var S = {
     label: {
@@ -39424,7 +39940,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/editor/ScenarioCanvas.tsx
-  var import_jsx_runtime12 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime12 = __toESM(require_jsx_runtime(), 1);
   var nodeTypes = {
     message: MessageNode,
     condition: ConditionNode,
@@ -40103,11 +40619,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var ScenarioCanvas_default = ScenarioCanvas;
 
   // src/admin/components/ScenarioHistoryPanel.tsx
-  var import_react16 = __toESM(require_react());
+  var import_react16 = __toESM(require_react(), 1);
 
   // src/admin/components/RevisionDiffPanel.tsx
-  var import_react15 = __toESM(require_react());
-  var import_jsx_runtime13 = __toESM(require_jsx_runtime());
+  var import_react15 = __toESM(require_react(), 1);
+  var import_jsx_runtime13 = __toESM(require_jsx_runtime(), 1);
   var MONO8 = T.fontMono;
   function diffNodes(before, after) {
     const beforeMap = new Map(before.map((n) => [n.node_id, n]));
@@ -40409,7 +40925,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/ScenarioHistoryPanel.tsx
-  var import_jsx_runtime14 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime14 = __toESM(require_jsx_runtime(), 1);
   var MONO9 = T.fontMono;
   var OPERATION_COLORS = {
     create: { bg: "rgba(34,197,94,0.15)", fg: "#16a34a" },
@@ -40583,7 +41099,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/ScenarioFormPage.tsx
-  var import_jsx_runtime15 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime15 = __toESM(require_jsx_runtime(), 1);
   var kebabItemStyle = {
     display: "flex",
     alignItems: "center",
@@ -41706,8 +42222,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/AppearancePage.tsx
-  var import_react18 = __toESM(require_react());
-  var import_jsx_runtime16 = __toESM(require_jsx_runtime());
+  var import_react18 = __toESM(require_react(), 1);
+  var import_jsx_runtime16 = __toESM(require_jsx_runtime(), 1);
   var MONO11 = T.fontMono;
   var COLOR_PRESETS = [
     "#2563EB",
@@ -42387,8 +42903,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/CredentialsPage.tsx
-  var import_react19 = __toESM(require_react());
-  var import_jsx_runtime17 = __toESM(require_jsx_runtime());
+  var import_react19 = __toESM(require_react(), 1);
+  var import_jsx_runtime17 = __toESM(require_jsx_runtime(), 1);
   var ADAPTER_ICON = {
     http: "\u2192",
     email: "\u2709",
@@ -42741,8 +43257,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/SettingsPage.tsx
-  var import_react20 = __toESM(require_react());
-  var import_jsx_runtime18 = __toESM(require_jsx_runtime());
+  var import_react20 = __toESM(require_react(), 1);
+  var import_jsx_runtime18 = __toESM(require_jsx_runtime(), 1);
   var MONO13 = T.fontMono;
   function ThemeCard({ def, isSelected, currentVariant, onSelect, onToggle }) {
     const { t } = useTranslation();
@@ -43059,8 +43575,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/ActionLogsPage.tsx
-  var import_react21 = __toESM(require_react());
-  var import_jsx_runtime19 = __toESM(require_jsx_runtime());
+  var import_react21 = __toESM(require_react(), 1);
+  var import_jsx_runtime19 = __toESM(require_jsx_runtime(), 1);
   var ADAPTER_ICON2 = {
     http: "\u2192",
     email: "\u2709",
@@ -43682,8 +44198,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/DashboardPage.tsx
-  var import_react22 = __toESM(require_react());
-  var import_jsx_runtime20 = __toESM(require_jsx_runtime());
+  var import_react22 = __toESM(require_react(), 1);
+  var import_jsx_runtime20 = __toESM(require_jsx_runtime(), 1);
   var MONO15 = T.fontMono;
   var TD2 = {
     padding: "9px 14px",
@@ -44204,8 +44720,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/SessionsPage.tsx
-  var import_react23 = __toESM(require_react());
-  var import_jsx_runtime21 = __toESM(require_jsx_runtime());
+  var import_react23 = __toESM(require_react(), 1);
+  var import_jsx_runtime21 = __toESM(require_jsx_runtime(), 1);
   var MONO16 = T.fontMono;
   function calcDuration(start2, end) {
     if (!end) return "in progress";
@@ -45010,11 +45526,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/UsersPage.tsx
-  var import_react25 = __toESM(require_react());
+  var import_react25 = __toESM(require_react(), 1);
 
   // src/admin/components/UserEditPanel.tsx
-  var import_react24 = __toESM(require_react());
-  var import_jsx_runtime22 = __toESM(require_jsx_runtime());
+  var import_react24 = __toESM(require_react(), 1);
+  var import_jsx_runtime22 = __toESM(require_jsx_runtime(), 1);
   var MONO17 = T.fontMono;
   function UserEditPanel({
     editing,
@@ -45264,7 +45780,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/UsersPage.tsx
-  var import_jsx_runtime23 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime23 = __toESM(require_jsx_runtime(), 1);
   var MONO18 = T.fontMono;
   var ROLE_TO_PILL = {
     superadmin: "active",
@@ -45690,8 +46206,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/HistoryPage.tsx
-  var import_react26 = __toESM(require_react());
-  var import_jsx_runtime24 = __toESM(require_jsx_runtime());
+  var import_react26 = __toESM(require_react(), 1);
+  var import_jsx_runtime24 = __toESM(require_jsx_runtime(), 1);
   var MONO19 = T.fontMono;
   var OPERATIONS = ["create", "update", "graph_save", "status_change", "delete"];
   function opPillVariant(op) {
@@ -46149,8 +46665,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/components/ThemeSwitcher.tsx
-  var import_react27 = __toESM(require_react());
-  var import_jsx_runtime25 = __toESM(require_jsx_runtime());
+  var import_react27 = __toESM(require_react(), 1);
+  var import_jsx_runtime25 = __toESM(require_jsx_runtime(), 1);
   var MONO20 = T.fontMono;
   function ThemeSwitcher() {
     const { adminThemeId, themeVariant: themeVariant2, setAdminTheme, toggleVariant } = useTheme();
@@ -46427,7 +46943,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/App.tsx
-  var import_jsx_runtime26 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime26 = __toESM(require_jsx_runtime(), 1);
   function RequireAuth() {
     if (!isAuthenticated()) return /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(Navigate, { to: "/", replace: true });
     return /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(Outlet, {});
@@ -46460,7 +46976,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // src/admin/index.tsx
-  var import_jsx_runtime27 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime27 = __toESM(require_jsx_runtime(), 1);
   var storedLocale = (() => {
     try {
       return localStorage.getItem("nca-locale") ?? navigator.language;
