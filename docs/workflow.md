@@ -7,7 +7,7 @@ See also: `docs/inheritance-from-nene2.md`.
 ## Standard Flow
 
 1. Create or reuse a focused GitHub Issue.
-2. Confirm context in `docs/roadmap.md`, `docs/milestones/`, and `docs/todo/current.md`.
+2. Confirm context in `docs/roadmap.md`, `docs/milestones/`, and the private handoff (`nene-origin/internal-docs/concierge/todo/current.md`).
 3. Create a branch from `main` named like `type/issue-number-summary`.
 4. Implement the smallest useful change.
 5. Update docs, roadmap, milestone, or TODO files when the decision or state changes.
@@ -21,7 +21,6 @@ See also: `docs/inheritance-from-nene2.md`.
 **Do not commit directly to `main`.** Every merge to `main` goes through a PR tied to an Issue.
 
 **Exceptions (direct `main` commit is allowed):**
-- `docs/todo/current.md` status-only updates (task state changes, no new decisions)
 - Typo fixes in documentation with zero behavior change
 
 **Issue granularity:** Multiple related UI micro-adjustments (spacing, color, radius tweaks) may share a single Issue and be batched into one PR. Use judgment — if two changes can be reviewed together without confusion, they belong in the same Issue.
@@ -100,7 +99,7 @@ Every PR should include:
 
 - `docs/roadmap.md`: long-lived direction and phases
 - `docs/milestones/`: medium-sized goals and acceptance criteria
-- `docs/todo/current.md`: current task board
+- private `nene-origin/internal-docs/concierge/todo/current.md`: current task board (operational logs moved to the private mirror in P3, 2026-07-18)
 - `docs/adr/`: major architecture decisions
 - `docs/inheritance-from-nene2.md`: NENE2 governance inheritance map
 
@@ -113,4 +112,4 @@ When asked to complete work, AI agents should run the **full lifecycle** unless 
 3. Implement the smallest useful change.
 4. Run verification commands.
 5. Commit, push, create PR, wait for CI, merge, sync `main`.
-6. Update `docs/todo/current.md`.
+6. Update the private handoff (`nene-origin/internal-docs/concierge/todo/current.md`, PR on nene-origin).

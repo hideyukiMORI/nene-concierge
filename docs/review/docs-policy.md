@@ -7,7 +7,7 @@ Use this checklist for PRs that primarily change documentation (README, roadmap,
 - [ ] New terms are added to `docs/explanation/glossary.md`
 - [ ] Decisions are recorded in `docs/adr/` if they affect architecture or strategy
 - [ ] `docs/roadmap.md` reflects the current phase state
-- [ ] `docs/todo/current.md` reflects the current task state
+- [ ] The private handoff (`nene-origin/internal-docs/concierge/todo/current.md`) reflects the current task state
 - [ ] No contradictions with `docs/inheritance-from-nene2.md`
 
 ## Language
