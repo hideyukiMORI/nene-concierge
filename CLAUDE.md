@@ -175,3 +175,5 @@ npm run check --prefix frontend              # type-check + test + build
 | ロードマップ | `docs/roadmap.md` |
 | 現在のタスク | `docs/todo/current.md` |
 | ADR | `docs/adr/` |
+
+- **日報**: `docs/daily/<YYYY-MM-DD>.md`。置き場・書式・運用は `_work/daily-report-convention.md` が正。
