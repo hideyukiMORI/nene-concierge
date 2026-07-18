@@ -21,7 +21,7 @@ Embed widget             ─┘                    │
 
 ## 現在の開発状況
 
-> **最終更新: 2026-07-05**（`docs/todo/current.md` が正本）
+> **最終更新: 2026-07-18**（正本 = private `nene-origin/internal-docs/concierge/todo/current.md`・運用ログは private へ移設・末尾注記参照）
 
 | フェーズ / 領域 | 状態 |
 | --- | --- |
@@ -42,12 +42,12 @@ Embed widget             ─┘                    │
 ## ワークフロー（守れない場合は作業しない）
 
 1. **GitHub Issue を作成**（または番号を確認）する。Issue なしに編集しない。
-2. `docs/roadmap.md`, `docs/todo/current.md`, 関連 Issue/PR を確認する。
+2. `docs/roadmap.md`、private `nene-origin/internal-docs/concierge/todo/current.md`、関連 Issue/PR を確認する。
 3. `main` から `type/issue-number-summary` ブランチを切る。
 4. 実装 → 品質チェック（後述）→ commit。
 5. PR 作成：`Closes #N` + セルフレビューチェックリスト名を本文に記載。
 6. CI green → merge → ローカル `main` sync。
-7. `docs/todo/current.md` を最新状態に更新する。
+7. private `nene-origin/internal-docs/concierge/todo/current.md` を最新状態に更新する（nene-origin 側 PR）。
 
 **コミット形式（Conventional Commits）:**
 ```
@@ -64,7 +64,7 @@ git commit \
 ```
 
 **絶対禁止:**
-- `main` への直接 commit/push（`main` は保護ブランチ。`docs/todo/current.md` の状態更新も含め、変更は**必ず PR 経由**でマージする）
+- `main` への直接 commit/push（`main` は保護ブランチ。変更は**必ず PR 経由**でマージする）
 - Issue なしのコード・ドキュメント変更（例外: 複数の UI 微調整は 1 Issue にまとめてよい）
 - `.env` / トークン / パスワードのコミット
 
@@ -173,7 +173,10 @@ npm run check --prefix frontend              # type-check + test + build
 | コミット規約 | `docs/development/commit-conventions.md` |
 | NENE2 継承マップ | `docs/inheritance-from-nene2.md` |
 | ロードマップ | `docs/roadmap.md` |
-| 現在のタスク | `docs/todo/current.md` |
+| 現在のタスク・引き継ぎ | private `nene-origin/internal-docs/concierge/todo/current.md`（運用ログは private へ移設・下記注記参照） |
 | ADR | `docs/adr/` |
 
-- **日報**: `docs/daily/<YYYY-MM-DD>.md`。置き場・書式・運用は `_work/daily-report-convention.md` が正。
+- **日報**: private `nene-origin/internal-docs/concierge/daily/<YYYY-MM-DD>.md`（日報規約 v3 §11・P3 移設済み）。書式・運用は `_work/daily-report-convention.md` が正。
+
+> **運用ログ（`docs/todo`・`docs/daily` 相当）は private `nene-origin/internal-docs/concierge/` に移設済み**（P3・2026-07-18）。最新の作業状況・申し送り・引き継ぎはそちらを読むこと。公開リポの docs は Diátaxis（tutorial/howto/reference/explanation）＋ADR/CHANGELOG のみを正とする。
+> 現在の作業レーンと未処理 Issue は必ず private `nene-origin/internal-docs/concierge/todo/current.md` を先に読むこと。
