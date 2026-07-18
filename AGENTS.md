@@ -4,7 +4,7 @@ This file is the entry point for AI agents working on NeNe Concierge.
 
 ## Read First
 
-- **Current work & status:** `docs/todo/current.md`
+- **Current work & status:** private `nene-origin/internal-docs/concierge/todo/current.md` (operational logs — `docs/todo`, `docs/daily` — moved to the private mirror in P3, 2026-07-18; the public repo keeps only Diátaxis docs + ADR/CHANGELOG)
 - **Product vision:** `docs/explanation/product-vision.md`
 - **Glossary:** `docs/explanation/glossary.md`
 - Inheritance map: `docs/inheritance-from-nene2.md`
@@ -24,7 +24,7 @@ This file is the entry point for AI agents working on NeNe Concierge.
 - Read NENE2 upstream docs for framework behavior; read local docs for product rules.
 - **Never expose MCP protocol to embed widget visitors.** MCP is for operator/AI tooling only. See ADR 0002.
 - **Never bypass the API layer for AI or MCP tools.** DB access is only through documented HTTP boundaries.
-- Keep `docs/todo/current.md` and milestones aligned with Issues and PRs.
+- Keep the private handoff (`nene-origin/internal-docs/concierge/todo/current.md`) and milestones aligned with Issues and PRs.
 - Keep changes focused. Do not mix governance, feature work, and unrelated cleanup in one PR.
 - Do not commit secrets, credentials, local `.env` files, or generated build outputs.
 - Prefer explicit, typed, testable code over hidden framework behavior.
