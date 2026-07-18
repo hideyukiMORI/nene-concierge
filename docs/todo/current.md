@@ -1,6 +1,6 @@
 # Current Work
 
-Last updated: 2026-07-18 (suppressions 増量防止 ratchet #182 完了を反映)
+Last updated: 2026-07-18 (S2: CI job 名分離 #191・日報規約 v2 #189・T1-lite テスト拡充 #193/#195 完了を反映)
 
 ## 直近の完了（2026-05-31 → 2026-07-09）
 
@@ -309,6 +309,10 @@ Last updated: 2026-07-18 (suppressions 増量防止 ratchet #182 完了を反映
 | 追加のコンポーネントテスト（ScenarioCanvas / NodeConfigPanel / SessionsPage 等）拡充 | 🔲 | #58 (open) |
 | **ESLint ゲート導入**（nene2-standards 共有 config・既存 522 違反を native bulk-suppressions で凍結・CI を `npm run check` 経由に集約）フリート 13/13 達成 | ✅ | #178 (PR #179) |
 | **suppressions 増量防止 ratchet**（`eslint-suppressions.json` を origin/main と diff・エントリ追加/件数増=FAIL・削除のみ PASS・`check` に組込） | ✅ | #182 (PR #183) |
+| **CI job 名を backend-check / frontend-check に分離**（required context の同名衝突解消・required は置換済み） | ✅ | #191 (PR #192) |
+| **T1-lite ① admin/api.ts リクエスト層テスト拡充**（PD フォールバック・401 の token 有無挙動差・メソッド経路・クエリ構築。3→16 本） | ✅ | #193 (PR #194) |
+| **T1-lite ② widget/index.ts bootstrap テスト**（訪問者導線 9 本・resetModules＋動的 import 方式。フロント全体 154→176 本） | ✅ | #195 (PR #196) |
+| CLAUDE.md に日報の1行参照を追加（フリート日報規約 v2 D1・concierge 分完了） | ✅ | #189 (PR #190) |
 
 ---
 
