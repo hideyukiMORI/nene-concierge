@@ -69,7 +69,7 @@ Embed widget            ─┘             │
 | AI scenario generation endpoint | 🔲 |
 | Frontend CI + tests | 🔶 (unit tests done; component tests remain — #58) |
 
-See [`docs/roadmap.md`](./docs/roadmap.md) and [`docs/todo/current.md`](./docs/todo/current.md).
+See [`docs/roadmap.md`](./docs/roadmap.md). Current work status and handoff live in the private operational mirror (`nene-origin/internal-docs/concierge/todo/current.md`).
 
 ## Quick Start
 

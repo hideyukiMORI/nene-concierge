@@ -6,7 +6,7 @@ NeNe Concierge inherits NENE2 engineering discipline. This guide covers what is 
 
 1. Read `AGENTS.md` (entry point for AI agents).
 2. Read `docs/explanation/product-vision.md`.
-3. Read `docs/todo/current.md` for current state.
+3. Read the private handoff (`nene-origin/internal-docs/concierge/todo/current.md`) for current state.
 4. Read `docs/inheritance-from-nene2.md` to understand what comes from NENE2.
 
 ## Issue-Driven Development
@@ -40,7 +40,7 @@ See `docs/workflow.md` for the full standard flow.
 
 ## Documentation
 
-- Update `docs/todo/current.md` when a milestone changes state.
+- Update the private handoff (`nene-origin/internal-docs/concierge/todo/current.md`) when a milestone changes state.
 - Add an ADR (`docs/adr/`) for any architecture, dependency, or deployment decision.
 - Update `docs/explanation/glossary.md` when introducing new canonical terms.
 - English for public docs, OpenAPI, and API errors. Japanese is fine in Issues, PRs, commits, and `.cursor/rules/`.
