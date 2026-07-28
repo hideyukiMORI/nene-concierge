@@ -67,6 +67,16 @@ export default tseslint.config(
       parserOptions: { projectService: true, tsconfigRootDir: __dirname },
     },
   },
+  // ツールチェーン健全性ガード（#208）。製品ソースではないので Node グローバルを許し、型情報は
+  // 専用の tsconfig.tools.json から取る（製品側 tsconfig に @types/node を混ぜないための分割）。
+  {
+    name: 'concierge/toolchain-guard',
+    files: ['tests/**/*.ts'],
+    languageOptions: {
+      globals: globals.node,
+      parserOptions: { projectService: true, tsconfigRootDir: __dirname },
+    },
+  },
   // ── 条件付き公認差異（非FSD 経過措置・registries transition kind・A2 で canonical へ戻す） ──
   // canonical の `nene2/restrictions/syntax-messages` は JP literal 免除を FSD パス
   // `src/shared/i18n/messages/**` に限定する。concierge の locale table は非FSD の

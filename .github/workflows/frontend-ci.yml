@@ -28,7 +28,9 @@ jobs:
         run: npm ci
 
       # フリート同形（payout ほか）: 全チェックを npm run check 経由で回す。
-      # check = type-check → lint（ESLint ゲート・#178）→ test → build。
+      # check = type-check → lint（ESLint ゲート・#178）→ lint:ratchet（#182）
+      #         → test（ツールチェーン健全性ガードを含む・#208）
+      #         → audit（依存脆弱性ゲート audit-ci・#208）→ build。
       - name: Run checks
         working-directory: frontend
         run: npm run check
