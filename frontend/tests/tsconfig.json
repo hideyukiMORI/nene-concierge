@@ -1,0 +1,17 @@
+// ツールチェーン健全性ガード（tests/）専用の型検査設定（#208）。
+//
+// 製品用 ../tsconfig.json とは分ける。ガードは node:fs / node:module を使うため @types/node が
+// 要るが、それを製品側に入れると src/ 全域で Node グローバルが解決してしまい、ブラウザに無い
+// API の型エラーを取り逃がす。射程を tests/ に閉じるための分割。
+//
+// このディレクトリに置いてあるのは、typescript-eslint の projectService が
+// 「各ファイルの最寄り tsconfig.json」を探す仕様のため。ここに無いと tests/ が
+// "was not found by the project service" で parse error になる。
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "types": ["node"],
+    "noEmit": true
+  },
+  "include": ["./**/*.ts"]
+}

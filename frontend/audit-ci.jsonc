@@ -1,0 +1,75 @@
+{
+  // Dependency-vulnerability gate for CI (replaces a bare `npm audit --audit-level=high`,
+  // which has no way to record a reasoned exception).
+  //
+  // The gate stays sharp: anything high/critical that is NOT listed below fails the build.
+  // `allowlist` is per-advisory (GHSA id), never per-severity — we do not lower the level.
+  //
+  // Adding an entry requires, in this file: (1) the advisory id, (2) why it does not apply to
+  // THIS codebase, measured — not assumed, (3) an expiry date, (4) what removes the need for it.
+  // An expired entry is a task, not a renewal: re-check it, do not extend it by reflex.
+  //
+  // Everything that a bump could fix was bumped first (#208): react-router 7.15.1 → 7.18.1
+  // (clears four RR advisories), esbuild 0.28.0 → 0.28.1, postcss → ^8.5.24, undici → ^7.29.0,
+  // vite → ^8.1.5, brace-expansion@5 → ^5.0.8. That took the audit from 9 findings to 2.
+  "$schema": "https://github.com/IBM/audit-ci/raw/main/docs/schema.json",
+  "moderate": false,
+  "high": true,
+  "critical": true,
+  "allowlist": [
+    // GHSA-qwww-vcr4-c8h2 — react-router "RSC Mode CSRF Bypass Allows Action Execution Before
+    // 400 Response" (high). Vulnerable range 7.12.0–8.2.0. There is NO fix in the 7.x line:
+    // react-router 7 ends at 7.18.1 and the fix lands in v8 >= 8.3.0, a breaking upgrade.
+    //
+    // Why it does not apply here (measured 2026-07-29): the admin console is a **static SPA
+    // built by esbuild** and served from `public_html/admin/` by Apache, with no server
+    // runtime of any kind. The router is `<BrowserRouter basename="/admin">` wrapping
+    // `<Routes>/<Route element={…}>` — element-only. Measured in `frontend/src`:
+    //   - `react-server-dom` / "react-server" imports .......... 0
+    //   - createFromFetch / renderToPipeableStream /
+    //     matchRSCServerRequest / StaticHandler .................. 0
+    //   - createBrowserRouter ................................... 0
+    //   - `@react-router/dev` ................................... 0
+    //   - route-level `action:` / `loader:` keys ................ 0
+    // The advisory's attack path is a *server* executing a route action before returning 400.
+    // There is no server here to execute one.
+    //
+    // 🔴 Two grep traps, recorded so the next person does not "correct" this entry wrongly:
+    //   - `grep 'action:'` DOES hit 6 times in src/ — every one is this product's own
+    //     scenario **action node** (`action_type`, NODE_TOKENS.action …), not a router action.
+    //   - `grep -i 'rsc'` hits the German locale string `Erscheinungsbild`. Judge by real API
+    //     names, never by the substring "rsc".
+    //
+    // Expiry: 2026-08-31. Removed by the react-router v8 migration wave (bundled with the
+    // NENE2 RR8 re-evaluation). If that wave slips past the expiry, re-argue this entry in a
+    // PR — do not silently extend it.
+    "GHSA-qwww-vcr4-c8h2",
+
+    // GHSA-mh99-v99m-4gvg — brace-expansion "DoS via unbounded expansion length" (high).
+    // Vulnerable range <=5.0.7 covers the entire v1 line, which has NO fixed release (v1 stops
+    // at 1.1.16). Only the v5 line has a fix and we take it: `brace-expansion@5: ^5.0.8`,
+    // scoped per major.
+    //
+    // 🔴 Do NOT "fix" this by collapsing the override to a flat `brace-expansion: ^5.0.8`.
+    // That forces v5 onto `minimatch@3`, which expects the v1 callable CJS export and dies
+    // with `TypeError: expand is not a function`. minimatch@3 only reaches brace-expansion for
+    // patterns containing `{…}`, so lint/check/codegen all stay GREEN while the toolchain is
+    // broken — this is why `npm run check` is not evidence here (invoice #732, clear, serve).
+    // `tests/toolchain/brace-expansion-override.test.ts` probes every installed minimatch
+    // directly; that test, not a green build, is the evidence.
+    //
+    // Why the residue does not apply here (measured 2026-07-29): v1 reaches us only through
+    // **dev tooling** — eslint-plugin-jsx-a11y → minimatch@3 → brace-expansion@1.1.16.
+    //   - `npm ls --omit=dev` hits for eslint-plugin-jsx-a11y / minimatch /
+    //     brace-expansion ....................................... 0
+    //   - occurrences of "brace-expansion" / "minimatch" in the shipped bundles
+    //     `public_html/admin/app.js` and `public_html/widget.js` ... 0 each
+    // The DoS needs attacker-controlled glob patterns; ours are static config in the repo,
+    // expanded on our own CI machines.
+    //
+    // Expiry: 2026-08-31. Removed when **eslint-plugin-jsx-a11y stops depending on
+    // minimatch@3** (or the v1 line gets a patch release) — stated as the broken real path,
+    // not as a tool-generation name. Re-check at expiry; do not extend by reflex.
+    "GHSA-mh99-v99m-4gvg",
+  ],
+}

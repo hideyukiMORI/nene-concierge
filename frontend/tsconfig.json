@@ -14,5 +14,7 @@
     "skipLibCheck": true,
     "outDir": "../public_html"
   },
+  // 製品ソースのみ。Node グローバルを混入させないため types は既定の DOM/ES2020 に限る。
+  // ツールチェーン健全性ガード（tests/）は tsconfig.tools.json 側で型検査する（#208）。
   "include": ["src/**/*.ts", "src/**/*.tsx"]
 }
