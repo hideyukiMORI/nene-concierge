@@ -49,6 +49,7 @@ export default tseslint.config(
       'dist',
       'coverage',
       'eslint.config.js',
+      'stylelint.config.js',
       'esbuild.mjs',
       'scripts/**',
       'vitest.config.ts',

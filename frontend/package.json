@@ -15,7 +15,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@hideyukimori/nene2-standards": "^1.1.0",
+    "@hideyukimori/nene2-standards": "^2.1.1",
     "@types/react": "^19.2.15",
     "@types/react-dom": "^19.2.3",
     "@types/uuid": "^10.0.0",
@@ -30,6 +30,8 @@
     "eslint-plugin-react-refresh": "^0.5.3",
     "globals": "^17.7.0",
     "jsdom": "^29.1.1",
+    "postcss-html": "^1.8.1",
+    "stylelint": "^16.26.1",
     "typescript": "^5.6.0",
     "typescript-eslint": "^8.64.0",
     "vitest": "^4.1.7"

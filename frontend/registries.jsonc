@@ -1,0 +1,6 @@
+{
+  "schema": "nene2-registries/1",
+  "generatedBy": "nene2-check init --scan",
+  "repo": "nene-concierge",
+  "entries": [],
+}
