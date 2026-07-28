@@ -28,8 +28,8 @@ Embed widget             ─┘                    │
 | Phase 0 ガバナンス・基盤 | ✅ 完了 |
 | Phase 1 シナリオエンジン MVP | ✅ 完了 |
 | Phase 2 条件ノード・変数・プレビュー | ✅ 完了 |
-| Phase 3 Embed Widget + アクションエンジン | 🔶 一部完了（widget JS のみ残） |
-| Phase 4 MCP ツール・AI シナリオ生成 | 🔶 一部完了（AI 生成 EP のみ残） |
+| Phase 3 Embed Widget + アクションエンジン | ✅ 完了（widget JS は #21 で着地・`public_html/widget.js`） |
+| Phase 4 MCP ツール・AI シナリオ生成 | 🔶 一部完了（MCP 27 ツール済 / AI 生成 EP のみ残） |
 | 管理画面 SPA（React + React Router） | ✅ 完了 |
 | ビジュアルシナリオエディタ（React Flow） | ✅ 完了 |
 | アナリティクスオーバーレイ | ✅ 完了 |
@@ -96,7 +96,7 @@ Handler → UseCase → RepositoryInterface → PdoRepository
 | Handler | HTTP パース・DTO 構築・UseCase 呼び出し・JSON レスポンス | SQL・ビジネスロジック・外部 API 直呼び出し |
 | UseCase | ビジネスロジック・シナリオ実行オーケストレーション | `$_SERVER`・PDO・生 HTTP クライアント |
 | Repository | SQL / 永続化のみ | HTTP・セッションロジック |
-| Action アダプター (`Action/`) | 外部サービス（Email・Slack・Chatwork・HTTP）呼び出し | ドメイン不変条件 |
+| Action アダプター (`Action/`) | 外部サービス（Email・Slack・Chatwork・HTTP・QR コード）呼び出し | ドメイン不変条件 |
 
 **全 PHP ファイルに `declare(strict_types=1);`。クラスは `final readonly` 推奨。**
 
@@ -106,16 +106,21 @@ Handler → UseCase → RepositoryInterface → PdoRepository
 src/
   ApplicationServiceProvider.php   # DI ルート
   Http/               # フロントコントローラー・RuntimeContainerFactory
-  AdminAuth/          # JWT Bearer 認証
-  Scenario/           # シナリオ CRUD・バージョン管理
-  Node/               # ノード定義（メッセージ・条件・アクション・終端）
-  Session/            # 訪問者チャットセッション管理
-  Message/            # セッション内メッセージ履歴
-  Engine/             # シナリオ実行エンジン（ステート機械）
-  Action/             # アクションアダプター（Email・Slack・Chatwork・HTTP）
+  Auth/               # JWT Bearer 認証・ユーザー管理・CapabilityResolver
+  Me/                 # GET /api/v1/me（認証ユーザー + 所属組織）
+  Organization/       # 組織・OrgResolverMiddleware（マルチテナント ADR 0004）
+  Scenario/           # シナリオ CRUD・グラフ保存・バージョン管理・編集履歴・import/export
+  Session/            # 訪問者チャットセッション管理・セッションログ
+  Engine/             # シナリオ実行エンジン（ステート機械）・訪問者向け public EP
+  Action/             # アクションアダプター（Email・Slack・Chatwork・HTTP・QR コード）
+  Analytics/          # ノード分析（訪問数・滞在・離脱率・分岐割合）
+  Dashboard/          # 管理画面ダッシュボード集計
   Appearance/         # ウィジェット外観設定
-  Install/            # Web インストーラー（Tier A 専用）
 ```
+
+> ノード定義は `Scenario/` 配下、メッセージ履歴は `Session/` 配下にある（独立した `Node/` /
+> `Message/` モジュールは存在しない）。Tier A の Web インストーラー（`Install/` /
+> `public_html/install.php`）は**未実装**。
 
 ### ドメインルール
 
@@ -180,3 +185,8 @@ npm run check --prefix frontend              # type-check + test + build
 
 > **運用ログ（`docs/todo`・`docs/daily` 相当）は private `nene-origin/internal-docs/concierge/` に移設済み**（P3・2026-07-18）。最新の作業状況・申し送り・引き継ぎはそちらを読むこと。公開リポの docs は Diátaxis（tutorial/howto/reference/explanation）＋ADR/CHANGELOG のみを正とする。
 > 現在の作業レーンと未処理 Issue は必ず private `nene-origin/internal-docs/concierge/todo/current.md` を先に読むこと。
+
+> **Diátaxis 整理は未完（2026-07-29 実測）**: 上記の「Diátaxis ＋ADR/CHANGELOG のみを正とする」は
+> P3 で定めた**到達目標**であり、現状はまだそうなっていない。実測では `tutorial/` `howto/`
+> `reference/` は未作成、`CHANGELOG.md` は未作成、`docs/` には `designs/` `design-handoff/`
+> `review/` `integrations/` `milestones/` が残っている。整理は別 Issue で行う。
