@@ -2,6 +2,24 @@
 
 NeNe Concierge is a self-hosted, multi-tenant chat scenario platform on NENE2 — build guided chat flows visually, let AI author them via MCP, embed them at conversion points, and trigger real-world actions.
 
+> **Status last verified: 2026-07-29** (measured against `main`, not self-reported).
+>
+> **Phase numbering warning.** This document's phases (0–7) are the *original plan* numbering.
+> `CLAUDE.md` and the private handover doc (`nene-origin/internal-docs/concierge/todo/current.md`)
+> use a *shipping* numbering that diverged as work landed out of order. They are not
+> interchangeable — always state which numbering you mean. Mapping:
+>
+> | Roadmap (this file) | Shipping numbering (CLAUDE.md / current.md) |
+> | --- | --- |
+> | Phase 3 Action Engine + Analytics API | part of "Phase 3 Embed Widget + アクションエンジン" |
+> | Phase 4 Embed Widget and Admin UI | rest of "Phase 3" + 管理画面 SPA / エディタ / オーバーレイ |
+> | Phase 5 MCP Tools and AI Authoring | "Phase 4 MCP ツール・AI シナリオ生成" + "Phase 5 Import/Export" |
+> | Phase 6 Upstream Integrations | (not represented) |
+> | Phase 7 Embedded AI Optimization | (not represented) |
+>
+> Reconciling the two numbering schemes into one is deliberately **out of scope** of the
+> 2026-07-29 sync (it is a naming decision, not a fact); the mapping above is the interim contract.
+
 ## North Star
 
 Operators and AI agents can:
@@ -46,6 +64,8 @@ Goal: smallest vertical slice — define a scenario, run it, track a session, an
 - `message` and `end` node types
 - PHPUnit + SQLite tests
 
+**Status: ✅ completed** (#7 / #8).
+
 ## Phase 2: Condition Nodes and Variables
 
 Goal: branching flows and visitor-collected state.
@@ -55,6 +75,8 @@ Goal: branching flows and visitor-collected state.
 - Session variable collection from `message` nodes
 - Variable interpolation in message text
 - Admin preview endpoint (simulate scenario without a real session)
+
+**Status: ✅ completed** (#11).
 
 ## Phase 3: Action Engine + Analytics API
 
@@ -70,6 +92,12 @@ Goal: connect scenarios to the outside world and surface performance data.
   - `period`: `1d` / `7d` / `30d` / `90d` / `custom` (with `from` / `to`)
   - Response: visit counts, avg dwell, drop-off rates, branch percentages, `bottlenecks[]`
 - Operator docs for each action type
+
+**Status: 🔶 mostly completed.** Shipped: all five adapters incl. `QrCodeActionAdapter` (#13),
+`has_conversion`, credential CRUD + UI (#13), `action_logs` + admin page (#42), the analytics
+endpoint with period filtering and `bottlenecks[]` (#13).
+**Not shipped:** action retry / failure-handling policy (no retry logic exists in `src/`),
+and operator docs per action type.
 
 ## Phase 4: Embed Widget and Admin UI
 
@@ -87,6 +115,17 @@ Goal: operable product without curl; Tier A install path; visual scenario analyt
 - Trigger configuration (page load, scroll, exit intent)
 - Tier A deliverables: web installer, release ZIP, shared-hosting docs
 
+**Status: 🔶 mostly completed.** Shipped: React Flow canvas editor with 4 node types (#26),
+analytics overlay with period selector and bottleneck badges (#40), the full admin SPA
+(scenarios / sessions / action logs / credentials / appearance / settings / users / history),
+6-locale i18n (#30), and `public_html/widget.js` (#21, 27 KB IIFE — the widget is **done**;
+older docs that list it as outstanding are stale).
+**Not shipped:** rich media node UI (slider / carousel / PDF viewer); **trigger parity** —
+`AppearanceTrigger` accepts `page_load` / `scroll` / `exit_intent` / `manual` but the widget
+only implements `page_load` and manual (#204); Tier A deliverables
+(web installer, release ZIP, shared-hosting docs) are **entirely unimplemented** —
+there is no `public_html/install.php` and no `src/Install/`.
+
 ## Phase 5: MCP Tools and AI Authoring
 
 Goal: AI-native scenario management — full GUI parity via API/MCP; LLM-driven optimization.
@@ -99,6 +138,13 @@ Goal: AI-native scenario management — full GUI parity via API/MCP; LLM-driven 
 - Operator docs: "let AI optimize your scenario" — example prompts and MCP call sequences
 - **Goal state**: AI can create an organization, build a complete scenario (rich media, actions, QR), configure credentials, analyse performance, and propose improvements — entirely via MCP in one pass
 
+**Status: 🔶 partially completed.** Shipped: MCP catalog with **27 tools** (`docs/mcp/tools.json`,
+validated in `composer check`), `getScenarioAnalytics`, `saveScenarioGraph`, preview
+(`startPreviewSession` / `stepPreviewSession`), and scenario import/export round-trip (#17).
+**Not shipped:** the AI authoring and AI optimization workflows — there is **no scenario
+generation endpoint** (measured: zero generation operations across the 31 OpenAPI operations
+and the 27 MCP tools) — and the operator docs for AI-driven optimization.
+
 ## Phase 6: Upstream Integrations
 
 Goal: connect scenarios to NeNe Records ecosystem for sales and reservation flows.
@@ -110,6 +156,8 @@ Goal: connect scenarios to NeNe Records ecosystem for sales and reservation flow
 - Unified variable context (visitor answers + upstream data)
 - Integration contract documentation (OpenAPI for each upstream)
 
+**Status: 🔲 not started.**
+
 ## Phase 7: Embedded AI Optimization Engine (optional)
 
 Goal: one-click AI scenario improvement for operators who do not run external agents.
@@ -119,3 +167,5 @@ Goal: one-click AI scenario improvement for operators who do not run external ag
 - Nightly optimization cron (opt-in per organization via `OPTIMIZATION_AUTO_DRAFT=1`)
 - Analytics snapshots table for long-term trend data beyond the 180-day event retention window
 - `GET /api/v1/scenarios/{id}/analytics/trends` — week-over-week and month-over-month deltas
+
+**Status: 🔲 not started.** (Optional phase — gated on Phase 5's AI authoring workflow landing first.)
