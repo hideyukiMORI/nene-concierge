@@ -4,6 +4,9 @@
 
 accepted
 
+The SQLite-compatibility item under *Consequences → Benefits* is superseded by
+[ADR 0006](0006-mysql-only-database-support.md). Everything else stands.
+
 ## Context
 
 NeNe Concierge targets multiple operators (organizations) who may share a single deployed instance — for example, an agency managing chat scenarios for several clients, or a SaaS-style hosting service. At the same time, self-hosted single-operator installs must remain simple.
@@ -97,7 +100,9 @@ CREATE TABLE organization_users (
 - Consistent pattern with NeNe Records; AI agents and contributors transfer knowledge.
 - `DEFAULT 0` sentinel means Tier A single-org installs require zero tenant configuration.
 - Pluggable resolution strategy covers subdomain, custom-domain, and env-based hosting.
-- Row-level isolation is MySQL / SQLite compatible (Tier A + Tier B dev).
+- ~~Row-level isolation is MySQL / SQLite compatible (Tier A + Tier B dev).~~ **Superseded by
+  [ADR 0006](0006-mysql-only-database-support.md)** — the isolation design is unchanged, but
+  SQLite is not a supported engine.
 
 **Costs**
 

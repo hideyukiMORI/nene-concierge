@@ -4,6 +4,9 @@
 
 accepted
 
+The SQLite-compatibility item under *Consequences → Costs* is superseded by
+[ADR 0006](0006-mysql-only-database-support.md). Everything else stands.
+
 ## Context
 
 NeNe Concierge targets Japan SMB operators who already run company websites on PHP-capable shared hosting. Developers and VPS operators prefer Docker Compose. Both audiences need the same product: scenario engine, action triggers, admin UI, and embed widget.
@@ -51,7 +54,9 @@ NeNe Concierge supports **two deployment tiers** with one runtime codebase:
 
 - Release ZIP build process must bundle `vendor/` for Tier A upload.
 - Web installer is a Phase 0 deliverable for Tier A.
-- Must validate MySQL and SQLite compatibility in tests.
+- ~~Must validate MySQL and SQLite compatibility in tests.~~ **Superseded by
+  [ADR 0006](0006-mysql-only-database-support.md)** — SQLite cannot build the schema and was
+  never exercised; MySQL only.
 
 **Follow-up**
 
