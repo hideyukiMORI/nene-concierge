@@ -120,9 +120,13 @@ analytics overlay with period selector and bottleneck badges (#40), the full adm
 (scenarios / sessions / action logs / credentials / appearance / settings / users / history),
 6-locale i18n (#30), and `public_html/widget.js` (#21, 27 KB IIFE — the widget is **done**;
 older docs that list it as outstanding are stale).
-**Not shipped:** rich media node UI (slider / carousel / PDF viewer); **trigger parity** —
-`AppearanceTrigger` accepts `page_load` / `scroll` / `exit_intent` / `manual` but the widget
-only implements `page_load` and manual (#204); Tier A deliverables
+**Trigger parity: reached (#204).** The widget now implements all four `AppearanceTrigger`
+values — `page_load`, `scroll` (opens once past 50 % read depth), `exit_intent` (opens once
+when the pointer leaves the top of the viewport), and `manual`. Verified in a real browser,
+not only in unit tests. Note that `exit_intent` cannot fire on pointerless devices, and
+`scroll` cannot fire on a page that is shorter than the viewport — the widget logs a warning
+in that case rather than failing silently.
+**Not shipped:** rich media node UI (slider / carousel / PDF viewer); Tier A deliverables
 (web installer, release ZIP, shared-hosting docs) are **entirely unimplemented** —
 there is no `public_html/install.php` and no `src/Install/`.
 

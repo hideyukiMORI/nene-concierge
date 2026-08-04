@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach, type MockInstance } from 'vitest'
 import type { AppearanceConfig, NodeView } from '../types.js'
 
 // T1-lite ② (#195): widget/index.ts = embed bootstrap ＋ session step ループ。
@@ -279,5 +279,185 @@ describe('widget/index.ts — bootstrap (#195)', () => {
             expect(shadow().querySelector('.status-msg')?.textContent).toBe('セッションを開始できませんでした。')
         })
         expect(error).toHaveBeenCalled()
+    })
+})
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe('widget/index.ts — 自動オープンのトリガー (#204)', () => {
+    // resetModules で再 import しても、前のインスタンスが document / window に張った
+    // listener は残り続ける（モジュールの寿命とリスナーの寿命が別）。実ブラウザでは
+    // 1 ページ 1 インスタンスなので製品側の漏れではないが、テストでは前のテストの
+    // widget が一緒に発火してしまうため、張られた listener を毎回剥がす。
+    type AddEventListenerSpy = MockInstance<(type: string, listener: EventListener) => void>
+
+    let docAddEventListener: AddEventListenerSpy
+    let winAddEventListener: AddEventListenerSpy
+
+    beforeEach(() => {
+        docAddEventListener = vi.spyOn(document, 'addEventListener')
+        winAddEventListener = vi.spyOn(window, 'addEventListener')
+    })
+
+    afterEach(() => {
+        for (const [type, listener] of docAddEventListener.mock.calls) {
+            document.removeEventListener(type, listener)
+        }
+        for (const [type, listener] of winAddEventListener.mock.calls) {
+            window.removeEventListener(type, listener)
+        }
+    })
+
+    /** jsdom の scrollHeight / innerHeight / scrollY を差し替えて「スクロールできるページ」にする */
+    function makeScrollable(scrollHeight: number, innerHeight = 800): void {
+        Object.defineProperty(document.documentElement, 'scrollHeight', {
+            value:        scrollHeight,
+            configurable: true,
+        })
+        Object.defineProperty(window, 'innerHeight', { value: innerHeight, configurable: true })
+        Object.defineProperty(window, 'scrollY', { value: 0, configurable: true, writable: true })
+    }
+
+    function scrollTo(y: number): void {
+        Object.defineProperty(window, 'scrollY', { value: y, configurable: true, writable: true })
+        window.dispatchEvent(new Event('scroll'))
+    }
+
+    /** ビューポート上端からマウスが抜ける（離脱意図） */
+    function leaveViewportTop(): void {
+        const event = new MouseEvent('mouseout', { clientY: 0, relatedTarget: null, bubbles: true })
+        document.dispatchEvent(event)
+    }
+
+    function overlayHidden(): boolean {
+        return shadow().querySelector<HTMLElement>('.chat-overlay')?.hidden !== false
+    }
+
+    function startedSessions(): unknown[] {
+        return mockFetch.mock.calls.filter(c => (c as [string])[0] === `${WIDGET_ORIGIN}/api/v1/public/sessions`)
+    }
+
+    const openingRoutes = {
+        start: jsonResponse(201, {
+            session_id: 's-204',
+            node:       messageNode('n1', 'こんにちは', []),
+        }),
+    }
+
+    describe('scroll', () => {
+        it('しきい値（50%）に届くまでは開かず、超えたら開く', async () => {
+            makeScrollable(2400) // scrollableDistance = 1600 → しきい値は scrollY 800
+            stubRoutes({ ...openingRoutes, appearance: jsonResponse(200, { ...defaultAppearance, trigger_type: 'scroll' }) })
+            await importWidget({ scenarioId: '1' })
+
+            expect(overlayHidden()).toBe(true)
+
+            scrollTo(700) // 43.75% — まだ
+            await Promise.resolve()
+            expect(overlayHidden()).toBe(true)
+            expect(startedSessions()).toHaveLength(0)
+
+            scrollTo(900) // 56.25% — 到達
+            await vi.waitFor(() => {
+                expect(overlayHidden()).toBe(false)
+            })
+            expect(startedSessions()).toHaveLength(1)
+        })
+
+        it('しきい値を超えた後にさらにスクロールしても二重に開始しない', async () => {
+            makeScrollable(2400)
+            stubRoutes({ ...openingRoutes, appearance: jsonResponse(200, { ...defaultAppearance, trigger_type: 'scroll' }) })
+            await importWidget({ scenarioId: '1' })
+
+            scrollTo(900)
+            await vi.waitFor(() => {
+                expect(startedSessions()).toHaveLength(1)
+            })
+
+            scrollTo(1500)
+            scrollTo(1600)
+            await Promise.resolve()
+
+            expect(startedSessions()).toHaveLength(1)
+        })
+
+        it('🔴 スクロールできないページでは黙って諦めず警告する（無言の失敗を作らない）', async () => {
+            const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined)
+            makeScrollable(600, 800) // コンテンツがビューポートに収まる＝スクロール不能
+            stubRoutes({ ...openingRoutes, appearance: jsonResponse(200, { ...defaultAppearance, trigger_type: 'scroll' }) })
+            await importWidget({ scenarioId: '1' })
+
+            expect(warn).toHaveBeenCalledWith(expect.stringContaining('trigger_type=scroll'))
+            expect(overlayHidden()).toBe(true)
+        })
+    })
+
+    describe('exit_intent', () => {
+        it('マウスがビューポート上端から抜けたら開く', async () => {
+            stubRoutes({ ...openingRoutes, appearance: jsonResponse(200, { ...defaultAppearance, trigger_type: 'exit_intent' }) })
+            await importWidget({ scenarioId: '1' })
+
+            expect(overlayHidden()).toBe(true)
+
+            leaveViewportTop()
+            await vi.waitFor(() => {
+                expect(overlayHidden()).toBe(false)
+            })
+            expect(startedSessions()).toHaveLength(1)
+        })
+
+        it('ページ内の要素間の mouseout では開かない（relatedTarget が居る）', async () => {
+            stubRoutes({ ...openingRoutes, appearance: jsonResponse(200, { ...defaultAppearance, trigger_type: 'exit_intent' }) })
+            await importWidget({ scenarioId: '1' })
+
+            document.dispatchEvent(new MouseEvent('mouseout', {
+                clientY:       0,
+                relatedTarget: document.createElement('div'),
+                bubbles:       true,
+            }))
+            await Promise.resolve()
+
+            expect(overlayHidden()).toBe(true)
+            expect(startedSessions()).toHaveLength(0)
+        })
+
+        it('下端・左右へ抜けた mouseout では開かない（上端だけが離脱意図）', async () => {
+            stubRoutes({ ...openingRoutes, appearance: jsonResponse(200, { ...defaultAppearance, trigger_type: 'exit_intent' }) })
+            await importWidget({ scenarioId: '1' })
+
+            document.dispatchEvent(new MouseEvent('mouseout', { clientY: 500, relatedTarget: null, bubbles: true }))
+            await Promise.resolve()
+
+            expect(overlayHidden()).toBe(true)
+            expect(startedSessions()).toHaveLength(0)
+        })
+
+        it('二度抜けても二重に開始しない', async () => {
+            stubRoutes({ ...openingRoutes, appearance: jsonResponse(200, { ...defaultAppearance, trigger_type: 'exit_intent' }) })
+            await importWidget({ scenarioId: '1' })
+
+            leaveViewportTop()
+            await vi.waitFor(() => {
+                expect(startedSessions()).toHaveLength(1)
+            })
+
+            leaveViewportTop()
+            await Promise.resolve()
+
+            expect(startedSessions()).toHaveLength(1)
+        })
+    })
+
+    it('manual は自動で開かない（スクロールしても離脱しても）', async () => {
+        makeScrollable(2400)
+        stubRoutes({ ...openingRoutes, appearance: jsonResponse(200, { ...defaultAppearance, trigger_type: 'manual' }) })
+        await importWidget({ scenarioId: '1' })
+
+        scrollTo(2000)
+        leaveViewportTop()
+        await Promise.resolve()
+
+        expect(overlayHidden()).toBe(true)
+        expect(startedSessions()).toHaveLength(0)
     })
 })
