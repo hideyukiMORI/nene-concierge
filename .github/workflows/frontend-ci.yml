@@ -34,3 +34,17 @@ jobs:
       - name: Run checks
         working-directory: frontend
         run: npm run check
+
+      # 生成物ドリフト検知ゲート（#163）。直前の `npm run check` 末尾が build なので、
+      # ここでの public_html/ は「クリーンビルドの出力」になっている。それがコミット済みの
+      # 内容と一致するか（#185 の再発防止）と、2つのビルドが互いの成果物を壊していないかを見る。
+      #
+      # 🔴 なぜ `npm run check` の中に入れないか: check はローカルでも回すもので、
+      # ソースを編集して再ビルドした直後は生成物が「未コミット」なのが正常な状態になる。
+      # そこで赤くすると check が日常的に落ち、開発者が check を回さなくなる。
+      # 一方 CI はコミット済みの状態を checkout しているので、ここでの差分は本物のドリフトだけ。
+      # フリート配布原則の「ゲートは npm run check に集約」は *別ジョブを増やすと required の
+      # 追加依頼が要る* ことが理由なので、**既存ジョブへのステップ追加**でその意図は満たしている。
+      - name: Check generated artifact drift
+        working-directory: frontend
+        run: npm run check:artifacts

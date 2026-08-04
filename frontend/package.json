@@ -9,6 +9,7 @@
     "type-check": "tsc --noEmit && tsc --noEmit -p tests/tsconfig.json",
     "lint": "eslint . --max-warnings 0",
     "lint:ratchet": "node scripts/eslint-suppressions-ratchet.mjs",
+    "check:artifacts": "node scripts/check-artifact-drift.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "audit": "audit-ci --config audit-ci.jsonc",
