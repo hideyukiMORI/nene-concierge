@@ -64,7 +64,8 @@ Do not create a flat `Controllers/`, `Services/`, or `Repositories/` top-level f
 
 ## Testing
 
-- Use case and domain unit tests: SQLite in-memory, no real HTTP
+- Use case and domain unit tests: in-memory fakes, **no database and no real HTTP**
+  (the PHPUnit suite does not open a PDO connection at all — measured 2026-08-04, #217)
 - HTTP contract tests for public API endpoints
 - Tests must be deterministic and independent
 
@@ -77,7 +78,8 @@ Do not create a flat `Controllers/`, `Services/`, or `Repositories/` top-level f
 
 ## Database
 
-- MySQL (Tier A production) and SQLite (tests and Tier B dev)
+- **MySQL only.** SQLite cannot build the schema — Phinx's SQLite adapter rejects the `enum`
+  column in migration 5, so migrations stop there (#217). Tests need no database.
 - Migrations: `database/migrations/`, seeds: `database/seeds/`
 - Migration tool: Phinx
 - No raw DB access outside Repository classes

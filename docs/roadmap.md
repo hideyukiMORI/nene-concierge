@@ -62,7 +62,7 @@ Goal: smallest vertical slice — define a scenario, run it, track a session, an
 - Session create / step / end API (visitor-facing)
 - Engine records a `session_node_event` on every node transition
 - `message` and `end` node types
-- PHPUnit + SQLite tests
+- PHPUnit tests (in-memory fakes — the suite needs no database)
 
 **Status: ✅ completed** (#7 / #8).
 
