@@ -34,7 +34,7 @@ See `docs/workflow.md` for the full standard flow.
 
 ## Testing
 
-- Unit tests for use cases and domain logic (SQLite, no real HTTP).
+- Unit tests for use cases and domain logic (in-memory fakes — no database, no real HTTP).
 - HTTP contract tests for public API endpoints.
 - Run: `docker compose run --rm app composer check`
 
