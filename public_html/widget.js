@@ -755,13 +755,66 @@ var NeNeWidget = (() => {
         elements.launcherBtn.setAttribute("aria-expanded", "false");
       }
     });
-    if (appearance.trigger_type === "page_load") {
-      if (document.readyState === "complete" || document.readyState === "interactive") {
-        void openChat();
-      } else {
-        document.addEventListener("DOMContentLoaded", () => void openChat(), { once: true });
-      }
+    let autoOpened = false;
+    function autoOpen() {
+      if (autoOpened || started) return;
+      autoOpened = true;
+      void openChat();
     }
+    switch (appearance.trigger_type) {
+      case "page_load":
+        onDocumentReady(autoOpen);
+        break;
+      case "scroll":
+        wireScrollTrigger(autoOpen);
+        break;
+      case "exit_intent":
+        wireExitIntentTrigger(autoOpen);
+        break;
+      case "manual":
+        break;
+    }
+  }
+  var SCROLL_TRIGGER_RATIO = 0.5;
+  function onDocumentReady(open) {
+    if (document.readyState === "complete" || document.readyState === "interactive") {
+      open();
+    } else {
+      document.addEventListener("DOMContentLoaded", open, { once: true });
+    }
+  }
+  function wireScrollTrigger(open) {
+    const onScroll = () => {
+      if (scrolledRatio() < SCROLL_TRIGGER_RATIO) return;
+      window.removeEventListener("scroll", onScroll);
+      open();
+    };
+    if (!isScrollable()) {
+      console.warn(
+        "[NeNe Widget] trigger_type=scroll, but this page cannot scroll. The widget will only open from the launcher button."
+      );
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+  }
+  function wireExitIntentTrigger(open) {
+    const onMouseOut = (event) => {
+      if (event.relatedTarget !== null || event.clientY > 0) return;
+      document.removeEventListener("mouseout", onMouseOut);
+      open();
+    };
+    document.addEventListener("mouseout", onMouseOut);
+  }
+  function isScrollable() {
+    return scrollableDistance() > 0;
+  }
+  function scrolledRatio() {
+    const distance = scrollableDistance();
+    if (distance <= 0) return 0;
+    return window.scrollY / distance;
+  }
+  function scrollableDistance() {
+    return document.documentElement.scrollHeight - window.innerHeight;
   }
 })();
 //# sourceMappingURL=widget.js.map
