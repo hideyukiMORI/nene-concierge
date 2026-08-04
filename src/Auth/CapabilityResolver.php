@@ -31,12 +31,12 @@ final class CapabilityResolver
         }
 
         // Scenario reads: all authenticated operators
-        if (str_starts_with($path, '/api/v1/scenarios') && $method === 'GET') {
+        if (str_starts_with($path, '/api/v1/scenarios') && self::isReadMethod($method)) {
             return Capability::ViewScenarios;
         }
 
         // Scenario revisions (cross-scenario history): read access for all viewers
-        if (str_starts_with($path, '/api/v1/scenario-revisions') && $method === 'GET') {
+        if (str_starts_with($path, '/api/v1/scenario-revisions') && self::isReadMethod($method)) {
             return Capability::ViewScenarios;
         }
 
@@ -46,5 +46,18 @@ final class CapabilityResolver
     private static function isMutationMethod(string $method): bool
     {
         return !in_array($method, ['GET', 'HEAD', 'OPTIONS'], true);
+    }
+
+    /**
+     * 読み取りメソッドの判定。
+     *
+     * 🔴 `$method === 'GET'` の単一等値で書いてはいけない（#212 / records #1023）。
+     * HEAD は mutation 判定からも除外されているため、単一等値だと read / mutation の
+     * どちらの分岐にも落ちず `resolve()` が null を返し、認可段を素通りする。
+     * GET と HEAD は必ず同じ扱いにする（列挙で書く）。
+     */
+    private static function isReadMethod(string $method): bool
+    {
+        return in_array($method, ['GET', 'HEAD'], true);
     }
 }
