@@ -7,6 +7,22 @@ on:
   pull_request:
     branches:
       - main
+  # 週次 schedule（フリート配布・_work/handoff-nene2-python-2026-08-12-schedule-rollout-note.md）。
+  # 🔴 60日ルール: public リポでは 60 日間 activity が無いと schedule は自動無効化される。
+  #    休眠すると「配ったのに動いていない」が静かに起きるので、外部からの死活監視は hub 側の別課題。
+  schedule:
+    - cron: '45 0 * * 1'   # 月曜 00:45 UTC = 09:45 JST（フリート内で他艦とずらし済み）
+  workflow_dispatch:
+    inputs:
+      simulate_failure:
+        description: '意図的に frontend-check を失敗させ、失敗通知の経路を検証する'
+        type: boolean
+        default: false
+
+# 🔴 github.event_name を含めないと、schedule/workflow_dispatch の実行が push に cancel される。
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
+  cancel-in-progress: true
 
 jobs:
   frontend-check:
@@ -15,6 +31,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      # 踏み台は Checkout の直後（先頭ではない）。working-directory: frontend を持つ後続ステップの
+      # 前だと、Checkout 前は frontend/ が存在せず cd 失敗で原因表示が嘘になる（nene-deal #207 の教訓）。
+      - name: Simulate failure (validation only)
+        if: inputs.simulate_failure
+        run: exit 1
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -48,3 +70,28 @@ jobs:
       - name: Check generated artifact drift
         working-directory: frontend
         run: npm run check:artifacts
+
+  notify-failure:
+    name: Open an issue when the scheduled run fails
+    if: failure() && (github.event_name == 'schedule' || inputs.simulate_failure)
+    needs: [frontend-check]
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    env:
+      ISSUE_TITLE: '🔴 nene-concierge: 週次 CI（schedule）が失敗しています'
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_REPO: ${{ github.repository }}
+      RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    steps:
+      - name: Create or update the failure issue
+        run: |
+          set -euo pipefail
+          existing="$(gh issue list --state open --limit 100 --json number,title \
+            | jq -r --arg t "$ISSUE_TITLE" 'map(select(.title == $t)) | .[0].number // empty')"
+          body="週次の schedule 実行が失敗しました。 実行: ${RUN_URL}"
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "$body"
+          else
+            gh issue create --title "$ISSUE_TITLE" --body "$body"
+          fi
