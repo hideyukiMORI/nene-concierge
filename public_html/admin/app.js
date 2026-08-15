@@ -21882,7 +21882,7 @@ var NeNeAdmin = (() => {
   var import_react28 = __toESM(require_react(), 1);
   var import_client2 = __toESM(require_client(), 1);
 
-  // node_modules/react-router/dist/development/chunk-KS7C4IRE.mjs
+  // node_modules/react-router/dist/development/chunk-62JRHF6Z.mjs
   var React = __toESM(require_react(), 1);
   var React2 = __toESM(require_react(), 1);
   var React3 = __toESM(require_react(), 1);
@@ -24032,7 +24032,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   try {
     if (isBrowser2) {
       window.__reactRouterVersion = // @ts-expect-error
-      "7.18.1";
+      "7.18.2";
     }
   } catch (e) {
   }
@@ -47130,10 +47130,10 @@ use-sync-external-store/cjs/use-sync-external-store-shim/with-selector.developme
    * LICENSE file in the root directory of this source tree.
    *)
 
-react-router/dist/development/chunk-KS7C4IRE.mjs:
+react-router/dist/development/chunk-62JRHF6Z.mjs:
 react-router/dist/development/index.mjs:
   (**
-   * react-router v7.18.1
+   * react-router v7.18.2
    *
    * Copyright (c) Remix Software Inc.
    *
