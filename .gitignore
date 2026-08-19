@@ -1,6 +1,6 @@
 # PHP
 vendor/
-composer.lock
+# composer.lock は追跡する（type=project のアプリはビルド再現性のため lock をコミットする・#229）
 
 # Environment
 .env
